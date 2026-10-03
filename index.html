@@ -736,7 +736,7 @@ section[hidden]{display:none}
         <div class="sresult" aria-live="polite"></div>
       </div>`;
   }
-  function placeMarks(p){ return p[5] ? [{ lat: p[2], lon: p[3], color: '#D62828' }] : []; }
+  function placeMarks(p){ return (p[5] || p[4] <= 50) ? [{ lat: p[2], lon: p[3], color: '#D62828' }] : []; }   // point rouge : position vérifiée ou exacte (phares)
   function redraw(li, p, extra){
     const view = li.querySelector('.pview');
     loadMap().then(img => drawPreview(view, p[1], img, placeMarks(p).concat(extra || [])), () => {});
