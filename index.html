@@ -112,6 +112,18 @@ section[hidden]{display:none}
 .place{padding:.9rem 1.1rem;border-top:1px solid var(--line)}
 .place:first-child{border-top:0}
 .place h3{margin:0;font:600 1.08rem/1.25 var(--sans)}
+.place{cursor:pointer}
+.ptitle{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem}
+.ptitle::after{content:"";width:.5rem;height:.5rem;border-right:2px solid var(--granite);border-bottom:2px solid var(--granite);
+  transform:rotate(45deg) translateY(-2px);transition:transform .15s}
+.ptitle[aria-expanded="true"]::after{transform:rotate(-135deg) translate(-2px,-1px)}
+.ptitle:focus-visible{outline:3px solid var(--heather);outline-offset:3px;border-radius:4px}
+.pmap{margin:.75rem 0 .2rem}
+.pmap[hidden]{display:none}
+.pmap canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:var(--foam)}
+.pmap p{margin:.35rem 0 0;font-size:.82rem;color:var(--granite)}
+.pmap .err{color:var(--warn)}
+@media (prefers-reduced-motion:reduce){.ptitle::after{transition:none}}
 .place .grid{color:var(--granite);font-size:.9rem;margin:.1rem 0 .5rem}
 .coords{font:500 1rem/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;color:var(--ink)}
 .coords small{display:block;font:400 .85rem/1.4 var(--sans);color:var(--granite)}
@@ -229,6 +241,9 @@ section[hidden]{display:none}
       ledePlaces: "Cherche un lieu-dit de l'île pour obtenir ses coordonnées GPS <strong>APPROXIMATIVES</strong>.",
       locTip: "« Loc SVP » reste le meilleur moyen de savoir où aller.",
       openIslandMap: "Ouvrir la carte de l'île (PDF)",
+      mapCaption: c => `${c.length > 1 ? 'Carrés' : 'Carré'} ${c.join(', ')} encadré${c.length > 1 ? 's' : ''} en rouge, extrait de la carte de l'Association Naturaliste d'Ouessant.`,
+      mapLoading: 'Chargement de la carte…',
+      mapMissing: "Aperçu indisponible : le fichier carte_ouessant.jpg est introuvable à côté de l'appli.",
       pPlaceholder: 'Nom du lieu (ex. Pern, Stiff, Kadoran)', pLabel: 'Rechercher un lieu',
       pCount: n => n + ' lieu' + (n>1?'x':''), pNone: q => `Aucun lieu ne correspond à « ${q} ».`,
       square: n => n > 1 ? 'Carrés' : 'Carré', approx: m => `Position approximative : ± ${m} m (centre du carré sur la carte)`,
@@ -260,6 +275,9 @@ section[hidden]{display:none}
       ledePlaces: 'Search for a place name on the island to get its <strong>APPROXIMATE</strong> GPS coordinates.',
       locTip: 'Asking “Loc SVP” (location please) in the group is still the best way to know where to go.',
       openIslandMap: 'Open the island map (PDF)',
+      mapCaption: c => `${c.length > 1 ? 'Squares' : 'Square'} ${c.join(', ')} outlined in red, from the map by the Association Naturaliste d’Ouessant.`,
+      mapLoading: 'Loading the map…',
+      mapMissing: 'Preview unavailable: the file carte_ouessant.jpg cannot be found next to the app.',
       pPlaceholder: 'Place name (e.g. Pern, Stiff, Kadoran)', pLabel: 'Search for a place',
       pCount: n => n + ' place' + (n>1?'s':''), pNone: q => `No place matches “${q}”.`,
       square: n => n > 1 ? 'Squares' : 'Square', approx: m => `Approximate position: ± ${m} m (centre of the map square)`,
@@ -456,8 +474,8 @@ section[hidden]{display:none}
       const [n, cells, lat, lon, prec] = p;
       const dec = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
       const exact = prec <= 50;
-      return `<li class="place">
-        <h3>${highlight(n, raw)}</h3>
+      return `<li class="place" data-i="${i}">
+        <h3><button type="button" class="ptitle" aria-expanded="false"><span>${highlight(n, raw)}</span></button></h3>
         <div class="grid">${esc(T('square')(cells.length))} ${esc(cells.join(', '))}</div>
         <div class="coords">${dec}<small>${dms(lat,'N','S')} ${dms(lon,'E','W')}</small></div>
         <div class="prec${exact ? ' exact' : ''}">${esc(exact ? T('exact') : T('approx')(prec))}</div>
@@ -465,12 +483,75 @@ section[hidden]{display:none}
           <button type="button" data-copy="${dec}">${esc(T('copy'))}</button>
           <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lon}" target="_blank" rel="noopener">${esc(T('openMap'))}</a>
         </div>
+        <div class="pmap" hidden></div>
       </li>`;
     }).join('') + '</ul>' : '';
+    shownPlaces = list;
+  }
+
+  // ---------- Aperçu de la carte (3 × 3 carrés autour du lieu) ----------
+  // Bords des colonnes A→S et des lignes 1→13, en pixels de la carte d'origine (7015 × 4944)
+  const GRID_X = [357,708,1055,1409,1761,2123,2477,2819,3183,3535,3881,4243,4587,4949,5301,5655,6009,6353,6715,7015];
+  const GRID_Y = [357,717,1067,1413,1761,2113,2467,2829,3183,3531,3883,4245,4591,4944];
+  const MAP_W = 7015, MAP_SRC = 'carte_ouessant.jpg';
+  let shownPlaces = [], mapPromise = null;
+  function loadMap(){
+    if (!mapPromise) mapPromise = new Promise((ok, ko) => {
+      const im = new Image(); im.onload = () => ok(im); im.onerror = () => { mapPromise = null; ko(); }; im.src = MAP_SRC;
+    });
+    return mapPromise;
+  }
+  function cellIdx(c){ return [c.charCodeAt(0) - 65, parseInt(c.slice(1), 10) - 1]; }
+
+  function drawPreview(box, cells, img){
+    const idx = cells.map(cellIdx);
+    const c0 = Math.max(0, Math.min(...idx.map(x => x[0])) - 1), c1 = Math.min(GRID_X.length - 2, Math.max(...idx.map(x => x[0])) + 1);
+    const r0 = Math.max(0, Math.min(...idx.map(x => x[1])) - 1), r1 = Math.min(GRID_Y.length - 2, Math.max(...idx.map(x => x[1])) + 1);
+    const sx = GRID_X[c0], ex = GRID_X[c1 + 1], sy = GRID_Y[r0], ey = GRID_Y[r1 + 1];
+    const f = img.naturalWidth / MAP_W;              // échelle de l'image allégée
+    const W = Math.max(260, Math.round(box.clientWidth || 320)), M = 20;   // marge pour les lettres et chiffres
+    const k = (W - M) / (ex - sx), H = Math.round(M + (ey - sy) * k);
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    const cv = document.createElement('canvas');
+    cv.width = W * dpr; cv.height = H * dpr;
+    cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T('mapCaption')(cells));
+    const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue('--ink').trim() || '#16232C', paper = css.getPropertyValue('--paper').trim() || '#fff';
+    ctx.fillStyle = paper; ctx.fillRect(0, 0, W, H);
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, sx * f, sy * f, (ex - sx) * f, (ey - sy) * f, M, M, (ex - sx) * k, (ey - sy) * k);
+    // repères de colonnes et de lignes
+    ctx.fillStyle = ink; ctx.font = '600 12px "Public Sans", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (let c = c0; c <= c1; c++) ctx.fillText(String.fromCharCode(65 + c), M + ((GRID_X[c] + GRID_X[c + 1]) / 2 - sx) * k, M / 2);
+    for (let r = r0; r <= r1; r++) ctx.fillText(String(r + 1), M / 2, M + ((GRID_Y[r] + GRID_Y[r + 1]) / 2 - sy) * k);
+    // carré(s) du lieu
+    ctx.lineWidth = 3; ctx.strokeStyle = '#D62828'; ctx.fillStyle = 'rgba(214,40,40,.06)';
+    idx.forEach(([c, r]) => {
+      const x = M + (GRID_X[c] - sx) * k, y = M + (GRID_Y[r] - sy) * k, w = (GRID_X[c + 1] - GRID_X[c]) * k, h = (GRID_Y[r + 1] - GRID_Y[r]) * k;
+      ctx.fillRect(x, y, w, h); ctx.strokeRect(x + 1.5, y + 1.5, w - 3, h - 3);
+    });
+    box.innerHTML = ''; box.appendChild(cv);
+    const cap = document.createElement('p'); cap.textContent = T('mapCaption')(cells); box.appendChild(cap);
+  }
+
+  function togglePlace(li){
+    const box = li.querySelector('.pmap'), btn = li.querySelector('.ptitle');
+    const open = box.hidden;
+    box.hidden = !open; btn.setAttribute('aria-expanded', String(open));
+    if (!open) return;
+    const p = shownPlaces[+li.dataset.i]; if (!p) return;
+    box.innerHTML = `<p>${esc(T('mapLoading'))}</p>`;
+    loadMap().then(img => drawPreview(box, p[1], img), () => { box.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
 
   presults.addEventListener('click', e => {
-    const b = e.target.closest('button[data-copy]'); if (!b) return;
+    const b = e.target.closest('button[data-copy]');
+    if (!b) {
+      if (e.target.closest('.actions a, .pmap')) return;
+      const li = e.target.closest('.place'); if (li) togglePlace(li);
+      return;
+    }
     const txt = b.dataset.copy;
     const done = () => { b.textContent = T('copied'); setTimeout(() => { b.textContent = T('copy'); }, 1500); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, () => fallbackCopy(txt, done));
