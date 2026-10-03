@@ -702,7 +702,7 @@ section[hidden]{display:none}
     for (let c = c0; c <= c1; c++) ctx.fillText(String.fromCharCode(65 + c), M + ((GRID_X[c] + GRID_X[c + 1]) / 2 - sx) * k, M / 2);
     for (let r = r0; r <= r1; r++) ctx.fillText(String(r + 1), M / 2, M + ((GRID_Y[r] + GRID_Y[r + 1]) / 2 - sy) * k);
     // carré(s) du lieu
-    ctx.lineWidth = 3; ctx.strokeStyle = '#D62828'; ctx.fillStyle = 'rgba(214,40,40,.06)';
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(214,40,40,.5)'; ctx.fillStyle = 'rgba(214,40,40,.05)';
     idx.forEach(([c, r]) => {
       const x = M + (GRID_X[c] - sx) * k, y = M + (GRID_Y[r] - sy) * k, w = (GRID_X[c + 1] - GRID_X[c]) * k, h = (GRID_Y[r + 1] - GRID_Y[r]) * k;
       ctx.fillRect(x, y, w, h); ctx.strokeRect(x + 1.5, y + 1.5, w - 3, h - 3);
