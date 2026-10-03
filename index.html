@@ -121,6 +121,10 @@ section[hidden]{display:none}
 .actions a,.actions button{display:inline-flex;align-items:center;gap:.35rem;border:1px solid var(--line);background:var(--foam);
   color:var(--ink);font:600 .88rem var(--sans);padding:.45rem .8rem;border-radius:8px;cursor:pointer;text-decoration:none}
 .actions a:focus-visible,.actions button:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
+.ptip{margin:.9rem 0 0;padding:.7rem 1rem;border-left:4px solid var(--ocean);background:var(--paper);border-radius:0 10px 10px 0;font-weight:600;color:var(--ink)}
+.maplink{margin:.7rem 0 0}
+.maplink a{display:inline-flex;align-items:center;gap:.45rem;color:var(--ocean-2);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.maplink a:focus-visible{outline:3px solid var(--heather);outline-offset:2px;border-radius:4px}
 .pnote{margin-top:1.5rem;color:var(--granite);font-size:.85rem;max-width:62ch}
 .foot{margin-top:2rem;color:var(--granite);font-size:.85rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;align-items:center}
 .link{background:none;border:0;padding:0;color:var(--ocean-2);text-decoration:underline;font:inherit;cursor:pointer}
@@ -184,6 +188,8 @@ section[hidden]{display:none}
         <button id="pclear" type="button" hidden data-t="clear">Effacer</button>
       </div>
     </div>
+    <p class="ptip" data-t="locTip"></p>
+    <p class="maplink"><a href="Map_Ouessant.pdf" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg><span data-t="openPdf">Ouvrir la carte de l'île (PDF)</span></a></p>
     <p class="status" id="pstatus" aria-live="polite"></p>
     <div id="presults"></div>
     <p class="pnote" data-t="placesNote"></p>
@@ -220,7 +226,9 @@ section[hidden]{display:none}
       badFile: "Ce fichier n'est pas lisible. Il doit contenir une liste d'espèces avec au moins les champs « Nom Français », « Nom Scientifique » et « Proposition de Canal de Diffusion Ouessant ».",
       channels: { telegram: 'Telegram', whatsapp: 'WhatsApp', none: "Pas d'annonce", unknown: 'Non renseigné' },
       tabBirds: 'Oiseaux', tabPlaces: 'Lieux',
-      ledePlaces: "Cherche un lieu-dit de l'île pour obtenir ses coordonnées GPS.",
+      ledePlaces: "Cherche un lieu-dit de l'île pour obtenir ses coordonnées GPS <strong>APPROXIMATIVES</strong>.",
+      locTip: "« Loc SVP » reste le meilleur moyen de savoir où aller.",
+      openPdf: "Ouvrir la carte de l'île (PDF)",
       pPlaceholder: 'Nom du lieu (ex. Pern, Stiff, Kadoran)', pLabel: 'Rechercher un lieu',
       pCount: n => n + ' lieu' + (n>1?'x':''), pNone: q => `Aucun lieu ne correspond à « ${q} ».`,
       square: n => n > 1 ? 'Carrés' : 'Carré', approx: m => `Position approximative : ± ${m} m (centre du carré sur la carte)`,
@@ -249,7 +257,9 @@ section[hidden]{display:none}
       badFile: 'This file cannot be read. It must contain a list of species with at least the fields “Nom Français”, “Nom Scientifique” and “Proposition de Canal de Diffusion Ouessant”.',
       channels: { telegram: 'Telegram', whatsapp: 'WhatsApp', none: 'No report needed', unknown: 'Not specified' },
       tabBirds: 'Birds', tabPlaces: 'Places',
-      ledePlaces: 'Search for a place name on the island to get its GPS coordinates.',
+      ledePlaces: 'Search for a place name on the island to get its <strong>APPROXIMATE</strong> GPS coordinates.',
+      locTip: 'Asking “Loc SVP” (location please) in the group is still the best way to know where to go.',
+      openPdf: 'Open the island map (PDF)',
       pPlaceholder: 'Place name (e.g. Pern, Stiff, Kadoran)', pLabel: 'Search for a place',
       pCount: n => n + ' place' + (n>1?'s':''), pNone: q => `No place matches “${q}”.`,
       square: n => n > 1 ? 'Squares' : 'Square', approx: m => `Approximate position: ± ${m} m (centre of the map square)`,
@@ -300,7 +310,7 @@ section[hidden]{display:none}
     document.documentElement.lang = lang;
     document.title = T('docTitle');
     document.querySelectorAll('[data-t]').forEach(el => { el.textContent = T(el.dataset.t); });
-    document.querySelector('.lede').textContent = T(tab === 'places' ? 'ledePlaces' : 'lede');
+    document.querySelector('.lede').innerHTML = T(tab === 'places' ? 'ledePlaces' : 'lede');
     pq.placeholder = T('pPlaceholder'); pq.setAttribute('aria-label', T('pLabel'));
     renderPlaces();
     q.placeholder = T('placeholder');
@@ -480,7 +490,7 @@ section[hidden]{display:none}
     document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
     $('tab-birds').hidden = tab !== 'birds';
     $('tab-places').hidden = tab !== 'places';
-    document.querySelector('.lede').textContent = T(tab === 'places' ? 'ledePlaces' : 'lede');
+    document.querySelector('.lede').innerHTML = T(tab === 'places' ? 'ledePlaces' : 'lede');
     if (location.hash !== '#' + (tab === 'places' ? 'lieux' : 'oiseaux')) history.replaceState(null, '', '#' + (tab === 'places' ? 'lieux' : 'oiseaux'));
   }
   document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
