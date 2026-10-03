@@ -131,7 +131,7 @@ mark{background:color-mix(in srgb,var(--heather) 22%,transparent);color:inherit;
   <div class="search" role="search">
     <div class="field">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
-      <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="" aria-label="" disabled>
+      <input id="q" type="search" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="" aria-label="" disabled>
       <button id="clear" type="button" hidden data-t="clear">Effacer</button>
     </div>
     <div class="chips" id="chips" role="group" aria-label="Filtrer par canal de diffusion"></div>
@@ -165,7 +165,7 @@ mark{background:color-mix(in srgb,var(--heather) 22%,transparent);color:inherit;
       clear: 'Effacer', all: 'Toutes', showSsp: 'Afficher les sous-espèces', ssp: 'sous-espèce',
       channelsLabel: 'Filtrer par canal de diffusion',
       loading: 'Chargement de la liste des espèces…',
-      found: 'Espèce trouvée',
+      found: 'Espèce trouvée', noMatch: 'Aucune espèce ne correspond pour l’instant.',
       near: n => n + ' nom' + (n>1?'s':'') + ' proche' + (n>1?'s':''),
       count: (n, filtered) => n + ' taxon' + (n>1?'s':'') + (filtered ? ' sur ce canal' : ''),
       fuzzyNear: q => `Aucune espèce ne s'appelle exactement « ${q} ». Vérifie l'orthographe parmi les noms proches ci-dessous. Si ce n'est aucun d'eux, ce serait probablement une première pour l'île : <strong>annonce-la sur Telegram</strong>.`,
@@ -187,7 +187,7 @@ mark{background:color-mix(in srgb,var(--heather) 22%,transparent);color:inherit;
       clear: 'Clear', all: 'All', showSsp: 'Show subspecies', ssp: 'subspecies',
       channelsLabel: 'Filter by reporting channel',
       loading: 'Loading the species list…',
-      found: 'Species found',
+      found: 'Species found', noMatch: 'No matching species yet.',
       near: n => n + ' similar name' + (n>1?'s':''),
       count: (n, filtered) => n + (n>1 ? ' taxa' : ' taxon') + (filtered ? ' on this channel' : ''),
       fuzzyNear: q => `No species is called exactly “${q}”. Check the spelling against the similar names below. If it is none of them, it would probably be a first for the island: <strong>report it on Telegram</strong>.`,
@@ -207,6 +207,7 @@ mark{background:color-mix(in srgb,var(--heather) 22%,transparent);color:inherit;
   if (!I18N[lang]) lang = (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en';
   const T = k => I18N[lang][k];
 
+  let submitted = false;
   let birds = [], fuse = null, channels = [], counts = {}, activeChannel = null, colorOf = {}, sourceKey = null, showingImport = false;
 
   const $ = id => document.getElementById(id);
@@ -305,12 +306,13 @@ mark{background:color-mix(in srgb,var(--heather) 22%,transparent);color:inherit;
     if(!sspBox.checked && mode !== 'exact') list = list.filter(b => !isSsp(b));
     if(mode !== 'fuzzy') list.sort((a,b) => mainName(a).localeCompare(mainName(b), lang));
 
-    if(mode === 'fuzzy'){
+    // Le message « première pour l'île » n'apparaît qu'une fois la recherche validée (Entrée)
+    if(mode === 'fuzzy' && submitted){
       notice.innerHTML = `<div class="notice"><p>${(list.length ? T('fuzzyNear') : T('fuzzyNone'))(esc(raw))}</p></div>`;
     }
 
     status.textContent = mode === 'exact' ? T('found')
-      : mode === 'fuzzy' ? (list.length ? T('near')(list.length) : '')
+      : mode === 'fuzzy' ? (list.length ? T('near')(list.length) : (submitted ? '' : T('noMatch')))
       : T('count')(list.length, !!activeChannel);
 
     if(!list.length){ results.innerHTML = ''; return; }
@@ -355,8 +357,11 @@ mark{background:color-mix(in srgb,var(--heather) 22%,transparent);color:inherit;
   }
 
   let t;
-  q.addEventListener('input', () => { clearTimeout(t); t = setTimeout(render, 120); });
-  clearBtn.addEventListener('click', () => { q.value = ''; render(); q.focus(); });
+  q.addEventListener('input', () => { submitted = false; clearTimeout(t); t = setTimeout(render, 120); });
+  q.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); clearTimeout(t); submitted = !!q.value.trim(); render(); q.blur(); }
+  });
+  clearBtn.addEventListener('click', () => { q.value = ''; submitted = false; render(); q.focus(); });
   sspBox.addEventListener('change', render);
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
     lang = b.dataset.lang;
