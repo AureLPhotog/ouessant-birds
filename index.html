@@ -696,9 +696,12 @@ section[hidden]{display:none}
     const d = distM(p[2], p[3], lat, lon);
     const comment = li.querySelector('.scomment').value.trim();
     const prec = how && how.acc ? Math.max(10, Math.round(how.acc)) : 25;
-    const line = JSON.stringify({ nom: p[0], carres: p[1], lat: +lat.toFixed(5), lon: +lon.toFixed(5), precision_m: prec, verifie: true });
+    const newCell = cellName(cell), oldCells = p[1].join(', ');
+    const cellsTxt = oldCells === newCell ? newCell : `${oldCells} → ${newCell}`;
+    const line = JSON.stringify({ nom: p[0], carres: [newCell], lat: +lat.toFixed(5), lon: +lon.toFixed(5), precision_m: prec, verifie: true });
     const body = [
-      `Lieu : ${p[0]} (${T('square')(p[1].length)} ${p[1].join(', ')})`,
+      `Lieu : ${p[0]}`,
+      `Carré : ${cellsTxt}`,
       `Position actuelle : ${p[2].toFixed(5)}, ${p[3].toFixed(5)}`,
       `Position proposée : ${lat.toFixed(5)}, ${lon.toFixed(5)} (carré ${cellName(cell)}, à ${fmtDist(d)} de la position actuelle)`,
       `Méthode : ${how && how.acc ? 'GPS du téléphone, précision ± ' + Math.round(how.acc) + ' m' : 'coordonnées saisies'}`,
@@ -706,11 +709,11 @@ section[hidden]{display:none}
       '',
       'Ligne à remplacer dans lieux_ouessant.json :',
       line
-    ].filter((l, i) => l !== '' || i === 5).join('\n');
+    ].filter((l, i) => l !== '' || i === 6).join('\n');
     let link;
     if (FORM){
       const href = formUrl({
-        LIEU: p[0], CARRES: p[1].join(', '),
+        LIEU: p[0], CARRES: cellsTxt,
         ACTUELLE: `${p[2].toFixed(5)}, ${p[3].toFixed(5)}`,
         PROPOSEE: `${lat.toFixed(5)}, ${lon.toFixed(5)} (carré ${cellName(cell)}, à ${fmtDist(d)})`,
         METHODE: how && how.acc ? 'GPS du téléphone, précision ± ' + Math.round(how.acc) + ' m' : 'coordonnées saisies',
