@@ -29,6 +29,8 @@
  {"nom":"Ar Gouizou","carres":["J9"],"lat":48.44963,"lon":-5.08527,"precision_m":25,"verifie":true},
  {"nom":"Ar Gouzoul","carres":["E7"],"lat":48.45727,"lon":-5.1226,"precision_m":25,"verifie":true},
  {"nom":"Ar Groaz Rus","carres":["H6"],"lat":48.45969,"lon":-5.0987,"precision_m":25,"verifie":true},
+ ,
+ {"nom":"Maison de la Comtesse","carres":["C8"],"lat":48.453823,"lon":-5.130869 ,"precision_m":25,"verifie":true},
  {
   "nom": "Ar Maneur",
   "carres": [
