@@ -186,8 +186,8 @@
   "lon": -5.0724,
   "precision_m": 550
  },
- {"nom":"Aérodrome Sud Ouest","carres":["M5","M6","N5"],"lat":48.46041,"lon":-5.06875,"precision_m":25,"verifie":true},
-{"nom":"Aérodrome Nord Est","carres":["M5","M6","N5"],"lat":48.4656,"lon":-5.05904,"precision_m":25,"verifie":true},
+ {"nom":"Aérodrome Sud Ouest","carres":["M6","N5"],"lat":48.46041,"lon":-5.06875,"precision_m":25,"verifie":true},
+{"nom":"Aérodrome Nord Est","carres":["M6","N5"],"lat":48.4656,"lon":-5.05904,"precision_m":25,"verifie":true},
  {
   "nom": "Baie de Beninou",
   "carres": [
