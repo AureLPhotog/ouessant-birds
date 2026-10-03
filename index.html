@@ -189,7 +189,7 @@ section[hidden]{display:none}
       </div>
     </div>
     <p class="ptip" data-t="locTip"></p>
-    <p class="maplink"><a href="Map_Ouessant.pdf" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg><span data-t="openPdf">Ouvrir la carte de l'île (PDF)</span></a></p>
+    <p class="maplink"><a href="Map_Ouessant.pdf" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span data-t="openIslandMap">Ouvrir la carte de l'île (PDF)</span></a></p>
     <p class="status" id="pstatus" aria-live="polite"></p>
     <div id="presults"></div>
     <p class="pnote" data-t="placesNote"></p>
@@ -228,7 +228,7 @@ section[hidden]{display:none}
       tabBirds: 'Oiseaux', tabPlaces: 'Lieux',
       ledePlaces: "Cherche un lieu-dit de l'île pour obtenir ses coordonnées GPS <strong>APPROXIMATIVES</strong>.",
       locTip: "« Loc SVP » reste le meilleur moyen de savoir où aller.",
-      openPdf: "Ouvrir la carte de l'île (PDF)",
+      openIslandMap: "Ouvrir la carte de l'île (PDF)",
       pPlaceholder: 'Nom du lieu (ex. Pern, Stiff, Kadoran)', pLabel: 'Rechercher un lieu',
       pCount: n => n + ' lieu' + (n>1?'x':''), pNone: q => `Aucun lieu ne correspond à « ${q} ».`,
       square: n => n > 1 ? 'Carrés' : 'Carré', approx: m => `Position approximative : ± ${m} m (centre du carré sur la carte)`,
@@ -259,7 +259,7 @@ section[hidden]{display:none}
       tabBirds: 'Birds', tabPlaces: 'Places',
       ledePlaces: 'Search for a place name on the island to get its <strong>APPROXIMATE</strong> GPS coordinates.',
       locTip: 'Asking “Loc SVP” (location please) in the group is still the best way to know where to go.',
-      openPdf: 'Open the island map (PDF)',
+      openIslandMap: 'Open the island map (PDF)',
       pPlaceholder: 'Place name (e.g. Pern, Stiff, Kadoran)', pLabel: 'Search for a place',
       pCount: n => n + ' place' + (n>1?'s':''), pNone: q => `No place matches “${q}”.`,
       square: n => n > 1 ? 'Squares' : 'Square', approx: m => `Approximate position: ± ${m} m (centre of the map square)`,
