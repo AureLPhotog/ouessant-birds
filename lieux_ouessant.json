@@ -869,6 +869,7 @@
   "lon": -5.08987,
   "precision_m": 750
  },
+ {
  "nom":"Kinzi","carres":["G2"],"lat":48.48046,"lon":-5.10653,"precision_m":25,"verifie":true},
  {
   "nom": "Korz",
