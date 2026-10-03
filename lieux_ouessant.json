@@ -1,105 +1,26 @@
 [
- {
-  "nom": "Add ar Skav",
-  "carres": [
-   "G7"
-  ],
-  "lat": 48.45575,
-  "lon": -5.10647,
-  "precision_m": 550
- },
- {
-  "nom": "An Aod Bihan",
-  "carres": [
-   "G5"
-  ],
-  "lat": 48.46486,
-  "lon": -5.10679,
-  "precision_m": 550
- },
- {
-  "nom": "An Aod Meur",
-  "carres": [
-   "G5"
-  ],
-  "lat": 48.46486,
-  "lon": -5.10679,
-  "precision_m": 550
- },
- {
-  "nom": "An Dalar",
-  "carres": [
-   "I9"
-  ],
-  "lat": 48.44688,
-  "lon": -5.09244,
-  "precision_m": 550
- },
- {
-  "nom": "An Doullou",
-  "carres": [
-   "H6"
-  ],
-  "lat": 48.46044,
-  "lon": -5.09983,
-  "precision_m": 550
- },
- {
-  "nom": "An Drudec",
-  "carres": [
-   "G7"
-  ],
-  "lat": 48.45575,
-  "lon": -5.10647,
-  "precision_m": 550
- },
- {
-  "nom": "An Tremuchou",
-  "carres": [
-   "C9"
-  ],
-  "lat": 48.44624,
-  "lon": -5.13346,
-  "precision_m": 550
- },
- {
-  "nom": "An Truc Bihan",
-  "carres": [
-   "G8"
-  ],
-  "lat": 48.45116,
-  "lon": -5.10631,
-  "precision_m": 550
- },
- {
-  "nom": "An Truc Bras",
-  "carres": [
-   "G8"
-  ],
-  "lat": 48.45116,
-  "lon": -5.10631,
-  "precision_m": 550
- },
- {
-  "nom": "Ar C'hernic",
-  "carres": [
-   "J4",
-   "K4"
-  ],
-  "lat": 48.46971,
-  "lon": -5.0831,
-  "precision_m": 750
- },
- {
-  "nom": "Ar C'hoz Ker",
-  "carres": [
-   "N8",
-   "N9"
-  ],
-  "lat": 48.44965,
-  "lon": -5.05846,
-  "precision_m": 750
- },
+{"nom":"Aod ar Skav","carres":["G7"],"lat":48.4552,"lon":-5.10538,"precision_m":25,"verifie":true}
+,
+ {"nom":"An Aod Bihan","carres":["G5"],"lat":48.46572,"lon":-5.10691,"precision_m":25,"verifie":true}
+,
+ {"nom":"An Aod Meur","carres":["G5"],"lat":48.46641,"lon":-5.10629,"precision_m":25,"verifie":true}
+,
+ {"nom":"An Dalar","carres":["I9"],"lat":48.44656,"lon":-5.09459,"precision_m":25,"verifie":true}
+,
+ {"nom":"An Doullou","carres":["H6"],"lat":48.46114,"lon":-5.09972,"precision_m":25,"verifie":true}
+,
+ {"nom":"An Drudec","carres":["G7"],"lat":48.45642,"lon":-5.10608,"precision_m":25,"verifie":true}
+,
+ {"nom":"An Tremuchou","carres":["C9"],"lat":48.44809,"lon":-5.13125,"precision_m":25,"verifie":true}
+,
+ {"nom":"An Truc Bihan","carres":["G8"],"lat":48.45154,"lon":-5.10395,"precision_m":25,"verifie":true}
+,
+ {"nom":"An Truc Bras","carres":["G8"],"lat":48.45054,"lon":-5.10651,"precision_m":25,"verifie":true}
+,
+ {"nom":"Ar C'hernic","carres":["J4","K4"],"lat":48.47087,"lon":-5.08279,"precision_m":25,"verifie":true}
+,
+ {"nom":"Ar C'hoz Ker","carres":["N8"],"lat":48.45022,"lon":-5.05998,"precision_m":25,"verifie":true}
+,
  {
   "nom": "Ar C'hregnou",
   "carres": [
