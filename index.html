@@ -270,10 +270,9 @@ section[hidden]{display:none}
       badFormat: 'Coordonnées illisibles. Exemple : 48.45606, -5.08603',
       okIn: (c, d) => `Le point est bien dans la zone (carré ${c}), à ${d} de la position actuelle.`,
       outZone: (c, n) => c ? `Ce point est dans le carré ${c}, en dehors des carrés affichés : il est trop loin de « ${n} ». Vérifie les coordonnées.` : "Ce point est en dehors de la carte d'Ouessant. Vérifie les coordonnées.",
-      send: 'Envoyer la proposition par e-mail',
-      mailNote: "Ta messagerie va s'ouvrir avec un message prêt à envoyer à Aurélien.",
+      sendOff: "L'envoi des propositions est momentanément indisponible.",
       sendForm: 'Envoyer la proposition',
-      formNote: "Le formulaire va s'ouvrir, déjà rempli : il ne reste qu'à cliquer sur « Envoyer ».",
+      formNote: "Le formulaire va s'ouvrir, déjà rempli : il ne reste qu'à cliquer sur « Envoyer ». Ta proposition sera vérifiée, puis la mise à jour sera prise en compte dans les prochains jours.",
       mapMissing: "Aperçu indisponible : le fichier carte_ouessant.jpg est introuvable à côté de l'appli.",
       pPlaceholder: 'Nom du lieu (ex. Pern, Stiff, Kadoran)', pLabel: 'Rechercher un lieu',
       pCount: n => n + ' lieu' + (n>1?'x':''), pNone: q => `Aucun lieu ne correspond à « ${q} ».`,
@@ -321,10 +320,9 @@ section[hidden]{display:none}
       badFormat: 'Coordinates not recognised. Example: 48.45606, -5.08603',
       okIn: (c, d) => `The point is within the area (square ${c}), ${d} from the current position.`,
       outZone: (c, n) => c ? `This point is in square ${c}, outside the squares shown: it is too far from “${n}”. Check the coordinates.` : 'This point is outside the Ouessant map. Check the coordinates.',
-      send: 'Send the suggestion by email',
-      mailNote: 'Your email app will open with a message ready to send to Aurélien.',
+      sendOff: 'Sending suggestions is temporarily unavailable.',
       sendForm: 'Send the suggestion',
-      formNote: 'The form will open already filled in: just press “Submit”.',
+      formNote: 'The form will open already filled in: just press “Submit”. Your suggestion will be checked, and the update will be applied within the next few days.',
       mapMissing: 'Preview unavailable: the file carte_ouessant.jpg cannot be found next to the app.',
       pPlaceholder: 'Place name (e.g. Pern, Stiff, Kadoran)', pLabel: 'Search for a place',
       pCount: n => n + ' place' + (n>1?'s':''), pNone: q => `No place matches “${q}”.`,
@@ -501,9 +499,8 @@ section[hidden]{display:none}
   function buildPfuse(){ pfuse = window.Fuse ? new Fuse(PLACES.map(p => ({ n: p[0], p })), { keys:['n'], threshold:0.3, ignoreLocation:true }) : null; }
   buildPfuse();
   const PLACES_URL = 'https://raw.githubusercontent.com/AureLPhotog/ouessant-birds/refs/heads/main/lieux_ouessant.json';
-  const CONTACT = 'aurelphotog@gmail.com';
   // Formulaire Google : colle ici le « lien prérempli » obtenu en tapant LIEU, CARRES, ACTUELLE, PROPOSEE,
-  // METHODE, COMMENTAIRE et JSON dans les champs. Laisse vide pour envoyer les propositions par e-mail.
+  // METHODE, COMMENTAIRE et JSON dans les champs.
   const FORM_PREFILL = 'https://docs.google.com/forms/d/e/1FAIpQLScOxBBEcdsk4Z2v-LVrY8xLXXabd04wU5Y1RU30lyCRPXbvsA/viewform?usp=pp_url&entry.1650810107=LIEU&entry.1922090503=CARRES&entry.1319372064=ACTUELLE&entry.1632270140=PROPOSEE&entry.1990808669=METHODE&entry.1661757736=COMMENTAIRE&entry.1256600801=JSON';
   const FORM = (() => {
     try {
@@ -699,17 +696,6 @@ section[hidden]{display:none}
     const newCell = cellName(cell), oldCells = p[1].join(', ');
     const cellsTxt = oldCells === newCell ? newCell : `${oldCells} → ${newCell}`;
     const line = JSON.stringify({ nom: p[0], carres: [newCell], lat: +lat.toFixed(5), lon: +lon.toFixed(5), precision_m: prec, verifie: true });
-    const body = [
-      `Lieu : ${p[0]}`,
-      `Carré : ${cellsTxt}`,
-      `Position actuelle : ${p[2].toFixed(5)}, ${p[3].toFixed(5)}`,
-      `Position proposée : ${lat.toFixed(5)}, ${lon.toFixed(5)} (carré ${cellName(cell)}, à ${fmtDist(d)} de la position actuelle)`,
-      `Méthode : ${how && how.acc ? 'GPS du téléphone, précision ± ' + Math.round(how.acc) + ' m' : 'coordonnées saisies'}`,
-      comment ? `Commentaire : ${comment}` : '',
-      '',
-      'Ligne à remplacer dans lieux_ouessant.json :',
-      line
-    ].filter((l, i) => l !== '' || i === 6).join('\n');
     let link;
     if (FORM){
       const href = formUrl({
@@ -721,8 +707,7 @@ section[hidden]{display:none}
       });
       link = `<a class="smail" href="${esc(href)}" target="_blank" rel="noopener">${esc(T('sendForm'))}</a><p class="snote">${esc(T('formNote'))}</p>`;
     } else {
-      const href = `mailto:${CONTACT}?subject=${encodeURIComponent('Ouessant – position de « ' + p[0] + ' »')}&body=${encodeURIComponent(body)}`;
-      link = `<a class="smail" href="${href}">${esc(T('send'))}</a><p class="snote">${esc(T('mailNote'))}</p>`;
+      link = `<p class="bad">${esc(T('sendOff'))}</p>`;
     }
     res.innerHTML = `<p class="good">${esc(T('okIn')(cellName(cell), fmtDist(d)))}</p>` + link;
     redraw(li, p, [{ lat, lon, color: '#1F7A5A' }]);
