@@ -123,6 +123,20 @@ section[hidden]{display:none}
 .pmap canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:var(--foam)}
 .pmap p{margin:.35rem 0 0;font-size:.82rem;color:var(--granite)}
 .pmap .err{color:var(--warn)}
+.suggest{margin-top:.7rem}
+.sbtn,.sgps,.scheck{border:1px solid var(--line);background:var(--paper);color:var(--ink);font:600 .88rem var(--sans);padding:.45rem .8rem;border-radius:8px;cursor:pointer}
+.sbtn{background:none;color:var(--ocean-2);border-style:dashed}
+.sform{margin-top:.6rem;padding:.8rem;border:1px solid var(--line);border-radius:10px;background:var(--foam);display:grid;gap:.6rem}
+.sform[hidden]{display:none}
+.sform label{display:grid;gap:.25rem;font-size:.85rem;color:var(--granite)}
+.sform input,.sform textarea{font:400 1rem var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.5rem .6rem;width:100%;box-sizing:border-box}
+.sform p{margin:0;font-size:.88rem}
+.sform .shelp{color:var(--granite)}
+.sform .good{color:#1F7A5A;font-weight:600}
+.sform .bad{color:var(--warn);font-weight:600}
+.sform .snote{color:var(--granite);font-size:.8rem;margin-top:.3rem}
+.smail{display:inline-block;margin-top:.4rem;background:var(--ocean);color:var(--foam);font:600 .9rem var(--sans);padding:.55rem .9rem;border-radius:8px;text-decoration:none}
+.sbtn:focus-visible,.sgps:focus-visible,.scheck:focus-visible,.smail:focus-visible,.sform input:focus-visible,.sform textarea:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.ptitle::after{transition:none}}
 .place .grid{color:var(--granite);font-size:.9rem;margin:.1rem 0 .5rem}
 .coords{font:500 1rem/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;color:var(--ink)}
@@ -243,6 +257,21 @@ section[hidden]{display:none}
       openIslandMap: "Ouvrir la carte de l'île (PDF)",
       mapCaption: c => `${c.length > 1 ? 'Carrés' : 'Carré'} ${c.join(', ')} encadré${c.length > 1 ? 's' : ''} en rouge, extrait de la carte de l'Association Naturaliste d'Ouessant.`,
       mapLoading: 'Chargement de la carte…',
+      verified: 'Position vérifiée sur le terrain',
+      suggest: 'Proposer une meilleure position',
+      sHelp: "Le nouveau point doit se trouver dans l'un des carrés affichés ci-dessus.",
+      useGps: 'Utiliser ma position GPS (sur place)',
+      gpsWait: 'Recherche de ta position…',
+      gpsErr: 'Position GPS indisponible. Autorise la localisation ou colle des coordonnées.',
+      gpsAcc: m => `Position GPS obtenue (précision ± ${m} m).` + (m > 100 ? ' Précision faible : attends quelques secondes à découvert et réessaie.' : ''),
+      pasteLabel: 'ou colle des coordonnées',
+      commentLabel: 'Commentaire (facultatif)',
+      check: 'Vérifier le point',
+      badFormat: 'Coordonnées illisibles. Exemple : 48.45606, -5.08603',
+      okIn: (c, d) => `Le point est bien dans la zone (carré ${c}), à ${d} de la position actuelle.`,
+      outZone: (c, n) => c ? `Ce point est dans le carré ${c}, en dehors des carrés affichés : il est trop loin de « ${n} ». Vérifie les coordonnées.` : "Ce point est en dehors de la carte d'Ouessant. Vérifie les coordonnées.",
+      send: 'Envoyer la proposition par e-mail',
+      mailNote: "Ta messagerie va s'ouvrir avec un message prêt à envoyer à Aurélien.",
       mapMissing: "Aperçu indisponible : le fichier carte_ouessant.jpg est introuvable à côté de l'appli.",
       pPlaceholder: 'Nom du lieu (ex. Pern, Stiff, Kadoran)', pLabel: 'Rechercher un lieu',
       pCount: n => n + ' lieu' + (n>1?'x':''), pNone: q => `Aucun lieu ne correspond à « ${q} ».`,
@@ -277,6 +306,21 @@ section[hidden]{display:none}
       openIslandMap: 'Open the island map (PDF)',
       mapCaption: c => `${c.length > 1 ? 'Squares' : 'Square'} ${c.join(', ')} outlined in red, from the map by the Association Naturaliste d’Ouessant.`,
       mapLoading: 'Loading the map…',
+      verified: 'Position checked on the ground',
+      suggest: 'Suggest a better position',
+      sHelp: 'The new point must lie within one of the squares shown above.',
+      useGps: 'Use my GPS position (on site)',
+      gpsWait: 'Getting your position…',
+      gpsErr: 'GPS position unavailable. Allow location access or paste coordinates.',
+      gpsAcc: m => `GPS position found (accuracy ± ${m} m).` + (m > 100 ? ' Low accuracy: wait a few seconds in the open and try again.' : ''),
+      pasteLabel: 'or paste coordinates',
+      commentLabel: 'Comment (optional)',
+      check: 'Check the point',
+      badFormat: 'Coordinates not recognised. Example: 48.45606, -5.08603',
+      okIn: (c, d) => `The point is within the area (square ${c}), ${d} from the current position.`,
+      outZone: (c, n) => c ? `This point is in square ${c}, outside the squares shown: it is too far from “${n}”. Check the coordinates.` : 'This point is outside the Ouessant map. Check the coordinates.',
+      send: 'Send the suggestion by email',
+      mailNote: 'Your email app will open with a message ready to send to Aurélien.',
       mapMissing: 'Preview unavailable: the file carte_ouessant.jpg cannot be found next to the app.',
       pPlaceholder: 'Place name (e.g. Pern, Stiff, Kadoran)', pLabel: 'Search for a place',
       pCount: n => n + ' place' + (n>1?'s':''), pNone: q => `No place matches “${q}”.`,
@@ -445,9 +489,24 @@ section[hidden]{display:none}
 
   // ---------- Lieux d'Ouessant ----------
   // [nom, carrés de la carte, latitude, longitude, précision en mètres (20 = position exacte)]
-  const PLACES = [["Add ar Skav",["G7"],48.45575,-5.10647,550],["An Aod Bihan",["G5"],48.46486,-5.10679,550],["An Aod Meur",["G5"],48.46486,-5.10679,550],["An Dalar",["I9"],48.44688,-5.09244,550],["An Doullou",["H6"],48.46044,-5.09983,550],["An Drudec",["G7"],48.45575,-5.10647,550],["An Tremuchou",["C9"],48.44624,-5.13346,550],["An Truc Bihan",["G8"],48.45116,-5.10631,550],["An Truc Bras",["G8"],48.45116,-5.10631,550],["Ar C'hernic",["J4","K4"],48.46971,-5.0831,750],["Ar C'hoz Ker",["N8","N9"],48.44965,-5.05846,750],["Ar C'hregnou",["K4","L4"],48.46982,-5.07628,750],["Ar C'hroassen",["N3","N4"],48.47231,-5.05926,750],["Ar Chaor",["M1"],48.48343,-5.06654,550],["Ar Godec",["I9"],48.44688,-5.09244,550],["Ar Goubars",["I8"],48.45137,-5.0926,550],["Ar Gouizou",["J9"],48.44698,-5.08571,550],["Ar Gouzoul",["D7","E7"],48.45548,-5.12353,750],["Ar Groaz Rus",["H6"],48.46044,-5.09983,550],["Ar Maneur",["M7"],48.45638,-5.06559,550],["Ar Merdi",["K6"],48.46076,-5.07936,550],["Ar Picard",["G6","H6"],48.46039,-5.10323,750],["Ar Pilligek",["E10"],48.44197,-5.11961,550],["Ar Piloun Bihan",["I3"],48.474,-5.0934,550],["Ar Prad",["H10"],48.44228,-5.09918,550],["Ar Reun",["N6"],48.46108,-5.05887,550],["Ar Rilouet (Nord)",["H3"],48.47389,-5.1003,550],["Ar Rilouet (Sud)",["N9"],48.44741,-5.05838,550],["Ar Roc'h",["J11"],48.43792,-5.08539,550],["Ar Ru (nord)",["D8","E8"],48.45089,-5.12337,750],["Ar Ru (sud)",["G10"],48.44218,-5.10599,550],["Ar Skoulan",["J3"],48.4741,-5.08667,550],["Ar Stankou",["C7"],48.45532,-5.13378,550],["Ar Stiff",["N4"],48.47008,-5.05918,550],["Ar Zantinel",["E6"],48.46012,-5.12025,550],["Ar Zourn",["L7"],48.45628,-5.0724,550],["Aérodrome",["M5","M6","N5"],48.46402,-5.06356,900],["Baie de Beninou",["J2","K2"],48.47862,-5.08341,750],["Baie de Lampaul",["F9","G9"],48.44661,-5.10951,750],["Beg Piniglou",["G4"],48.46934,-5.10695,550],["Bouge An Dour",["J9"],48.44698,-5.08571,550],["Bouge ar Pepr",["P5"],48.46581,-5.04539,550],["Bouge C'hlan",["E8"],48.45095,-5.11992,550],["Bouge Dalagougn",["F8"],48.45105,-5.11302,550],["Bouge Fourn",["J3","K3"],48.47416,-5.08325,750],["Bouge L'Fezen",["E8"],48.45095,-5.11992,550],["Bouge Redek",["D9"],48.44634,-5.12665,550],["Bouge Ru",["L2"],48.47877,-5.07319,550],["Bouge Wrest",["F8"],48.45105,-5.11302,550],["Bouge Zen",["D8","E8"],48.45089,-5.12337,750],["Bouge Zoun",["D8","D9"],48.44859,-5.12673,750],["Bras Vein",["P8"],48.45212,-5.04491,550],["Calgrac'h",["I3"],48.474,-5.0934,550],["Caraes",["E7"],48.45553,-5.12008,550],["Carrière",["N3"],48.47453,-5.05934,550],["CEMO",["D7"],48.45543,-5.12697,550],["Chapelle de Saint Gwennole",["G10"],48.44218,-5.10599,550],["Chapelle Saint Gildas",["C8","D8"],48.45079,-5.13021,750],["Chapelle Saint Pierre",["M7"],48.45638,-5.06559,550],["Château d'eau",["J6"],48.46065,-5.08619,550],["Cost ar Prad",["I7"],48.45596,-5.09276,550],["Cost ar Reun",["D7"],48.45543,-5.12697,550],["Creac'h Meur",["F10","G10"],48.44213,-5.10935,750],["Croaz ar C'halvar",["P7","Q8"],48.45446,-5.04162,900],["Cromlec'h",["Q6"],48.46139,-5.0385,550],["Dizro",["F7"],48.45564,-5.11318,550],["Embarcadère du Stiff",["O4"],48.47019,-5.05238,550],["Enez an Ein",["N10"],48.44292,-5.05823,550],["Enez an Nenv",["O8"],48.45201,-5.05174,550],["Enez ar Bouyou Glas",["N2"],48.47899,-5.0595,550],["Enez Kadoran",["L1"],48.48332,-5.07335,550],["Enez Penn",["J11"],48.43792,-5.08539,550],["Fort de Trebechou",["C8","D8"],48.45079,-5.13021,750],["Fort Saint Michel",["K5"],48.46528,-5.07952,550],["Frugullou",["L5"],48.46539,-5.07272,550],["Kejou",["I9"],48.44688,-5.09244,550],["Keller Vihan",["G1","H1"],48.48285,-5.10402,750],["Ker al Loj",["M7"],48.45638,-5.06559,550],["Ker Here",["J5"],48.46517,-5.08635,550],["Ker Radenec",["M4"],48.46998,-5.06607,550],["Ker Yegu",["M7"],48.45638,-5.06559,550],["Keranchas",["I4"],48.46955,-5.09324,550],["Kerandraon",["H10"],48.44228,-5.09918,550],["Kerber",["M6"],48.46097,-5.06575,550],["Kerbrat",["D7","E7"],48.45548,-5.12353,750],["Kerc'here",["G7"],48.45575,-5.10647,550],["Kerdrall",["N6"],48.46108,-5.05887,550],["Kerdraon",["I4"],48.46955,-5.09324,550],["Kergadou",["H5"],48.46496,-5.09998,550],["Kergoff",["L7","M7"],48.45633,-5.06899,750],["Kerhuel",["I7"],48.45596,-5.09276,550],["Kerivarc'h",["K8"],48.45158,-5.07904,550],["Kerivin",["M4"],48.46998,-5.06607,550],["Kerlann",["H6"],48.46044,-5.09983,550],["Kerlann Sud",["N7"],48.45649,-5.0587,550],["Kerlaouen",["N6"],48.46108,-5.05887,550],["Kermansoun",["N5"],48.4656,-5.05903,550],["Kermein",["J7"],48.45606,-5.08603,550],["Kermorvan",["J5"],48.46517,-5.08635,550],["Kernevez (nord)",["G5"],48.46486,-5.10679,550],["Kernevez (sud)",["H10"],48.44228,-5.09918,550],["Kernigou",["I6","J6"],48.4606,-5.08956,750],["Kernoas",["O6"],48.46118,-5.05206,550],["Kernonen",["J5"],48.46517,-5.08635,550],["Kerouat",["E6"],48.46012,-5.12025,550],["Kerscao",["M6"],48.46097,-5.06575,550],["Kervasdoue",["L6"],48.46086,-5.07256,550],["Kervegen",["K5"],48.46528,-5.07952,550],["Kervin",["L4"],48.46987,-5.07288,550],["Kerzoncou",["I4","J4"],48.46961,-5.08987,750],["Kinzi",["G2"],48.47824,-5.10726,550],["Korz",["I8"],48.45137,-5.0926,550],["Kun",["E7"],48.45553,-5.12008,550],["Lampaul",["H7"],48.45585,-5.09966,550],["Lann ar Bir",["G7"],48.45575,-5.10647,550],["Lann ar C'harc'h",["J7"],48.45606,-5.08603,550],["Lann Penn Arland",["P6","Q7"],48.45905,-5.04179,900],["Lann Vihan",["J6"],48.46065,-5.08619,550],["Lann Vraz",["I5"],48.46507,-5.09308,550],["Ledenez Arland",["R5","R6"],48.46376,-5.03177,750],["Ledenez Porz Coret",["F10"],48.44207,-5.1127,550],["Marais du Creac'h",["C7","D7"],48.45537,-5.13037,750],["Marais du Niou",["F6","G6"],48.46028,-5.10999,750],["Mean Arland",["P9"],48.44762,-5.04475,550],["Mean Du",["D9"],48.44634,-5.12665,550],["Mean Garo",["H3"],48.47389,-5.1003,550],["Mean Porz Gwenn",["K9"],48.44709,-5.07888,550],["Mez Caradec",["K8"],48.45158,-5.07904,550],["Mez Doun",["F6"],48.46023,-5.11334,550],["Mezareun",["G7","H7"],48.4558,-5.10307,750],["Mikeal",["K6"],48.46076,-5.07936,550],["Nerodin",["I9"],48.44688,-5.09244,550],["Niou Huella",["F6","G6"],48.46028,-5.10999,750],["Niou Izella",["E6","F6"],48.46017,-5.11679,750],["Palud Meur",["H4"],48.46945,-5.10014,550],["Park Raden",["N6"],48.46108,-5.05887,550],["Park Raden Ouest",["N6"],48.46108,-5.05887,550],["Parkou",["M6"],48.46097,-5.06575,550],["Parluc'hen",["E7","F7"],48.45559,-5.11663,750],["Penn ar Prat",["J4"],48.46966,-5.08651,550],["Penn ar Roc'h",["J10"],48.4425,-5.08555,550],["Penn ar Ru Meur",["I3"],48.474,-5.0934,550],["Penn Ar Ruguel",["I10"],48.44239,-5.09228,550],["Penn ar Viler",["E11"],48.43739,-5.11944,550],["Penn Jamet",["H5"],48.46496,-5.09998,550],["Pennorz",["I6"],48.46055,-5.09292,550],["Pern",["B8"],48.45063,-5.14037,550],["Phare de Kéréon",["Q9"],48.43737,-5.0257,20],["Phare de la Jument",["E13"],48.4225,-5.13417,20],["Phare de Nividic",["A9"],48.44556,-5.15083,20],["Phare du Creac'h",["D6"],48.4595083,-5.129278,20],["Phare du Stiff",["N3"],48.47451,-5.056774,20],["Plage de Korz",["I8"],48.45137,-5.0926,550],["Plage du Prad",["H10"],48.44228,-5.09918,550],["Pointe de Bac'haol",["O2","O3"],48.47686,-5.05261,750],["Pointe de Roc'h C'haro",["K8","K9","L8","L9"],48.44939,-5.07556,900],["Pointe de Velgoz",["M8","M9"],48.44955,-5.06535,750],["Porz Ac'hea",["O5","P5"],48.46576,-5.04881,750],["Porz an Dour",["O5"],48.46571,-5.05222,550],["Porz an Eijen",["H11","I11"],48.43776,-5.09557,750],["Porz Arland",["O7"],48.4566,-5.0519,550],["Porz Coret",["F10"],48.44207,-5.1127,550],["Porz Doun",["E11"],48.43739,-5.11944,550],["Porz Glas",["B8"],48.45063,-5.14037,550],["Porz Gwenn",["J8","K8"],48.45153,-5.08245,750],["Porz Kerac'h",["B8","C9"],48.44843,-5.13691,900],["Porz Kinzi",["H3","I3"],48.47395,-5.09685,750],["Porz Ligoudou",["N5"],48.4656,-5.05903,550],["Porz Mean",["B7","C7"],48.45527,-5.13716,750],["Porz Miin",["D6"],48.46001,-5.12713,550],["Porz Nenv",["B8"],48.45063,-5.14037,550],["Porz Noan",["H7"],48.45585,-5.09966,550],["Porz Paol",["H8"],48.45127,-5.0995,550],["Porzic Gwenn",["G10"],48.44218,-5.10599,550],["Poull Bojer",["N7"],48.45649,-5.0587,550],["Poull Brac",["I6"],48.46055,-5.09292,550],["Poull Bridig",["F5"],48.46475,-5.1135,550],["Poull Dragas",["H5","I5"],48.46502,-5.09653,750],["Poull Dravet",["H11"],48.43771,-5.09902,550],["Poull Feaz",["G6"],48.46033,-5.10663,550],["Poull Gweguen",["D8","E8"],48.45089,-5.12337,750],["Poull Jiliou",["H4"],48.46945,-5.10014,550],["Poull Yvern",["N4"],48.47008,-5.05918,550],["Pount",["J6"],48.46065,-5.08619,550],["Pount ar Rodez",["K7","L7"],48.45622,-5.0758,750],["Pount Cam",["J7"],48.45606,-5.08603,550],["Pount Salaun",["L5","L6"],48.46312,-5.07264,750],["Prad ar Roue",["L5","M5"],48.46544,-5.06931,750],["Prad Meur",["I7"],48.45596,-5.09276,550],["Punel",["J7"],48.45606,-5.08603,550],["Pyramide du Runiou",["F10","G11"],48.43984,-5.10927,900],["Roc'h an Aod Teuren",["G3"],48.47379,-5.10711,550],["Roc'h ar Baianet",["B7","C7"],48.45527,-5.13716,750],["Roc'h ar Vugalez",["G4","H4"],48.46939,-5.10355,750],["Roc'h C'hastellik",["K9"],48.44709,-5.07888,550],["Roc'h Ever",["O8"],48.45201,-5.05174,550],["Roc'h Hir",["G12"],48.43307,-5.10567,550],["Roc'h Kalet",["F5","G5"],48.4648,-5.11015,750],["Roc'h Mell",["L1"],48.48332,-5.07335,550],["Roc'h Nel",["J11"],48.43792,-5.08539,550],["Roc'h Vouillard",["B6","C6"],48.45986,-5.13732,750],["Roc'h Wark",["I3"],48.474,-5.0934,550],["Rulann",["K4"],48.46976,-5.07968,550],["Rumalic",["J4","K4"],48.46971,-5.0831,750],["Réservoir Amont",["K6"],48.46076,-5.07936,550],["Réservoir Aval",["J6"],48.46065,-5.08619,550],["Stang ar Merdi",["K6","L6"],48.46081,-5.07596,750],["Stang ar Stiff",["N4"],48.47008,-5.05918,550],["Stang Arland",["O6"],48.46118,-5.05206,550],["Stang Kadoran",["L2"],48.47877,-5.07319,550],["Stang Korz",["I8","J8"],48.45143,-5.08923,750],["Stang Laedroun",["N8"],48.4519,-5.05854,550],["Stang Meur",["J4"],48.46966,-5.08651,550],["Stang Porz Gwenn",["J8","K7"],48.45382,-5.08254,900],["Stang Yuzin",["G4","H4"],48.46939,-5.10355,750],["Terrain de Foot",["K7"],48.45617,-5.0792,550],["Ti Crann",["M4"],48.46998,-5.06607,550],["Ti Crenn",["I7"],48.45596,-5.09276,550],["Ti Huella",["O6"],48.46118,-5.05206,550],["Ti Korn",["G10"],48.44218,-5.10599,550],["Toull Al Lann",["J9"],48.44698,-5.08571,550],["Toull Aoroz",["N3"],48.47453,-5.05934,550],["Toull Dreiz",["L8"],48.45169,-5.07223,550],["Toull Rouez",["L3","M3"],48.47437,-5.06963,750],["Youc'h Arland",["R7"],48.45691,-5.03153,550],["Youc'h Korz",["E9","E10","F9","F10"],48.44426,-5.11623,900],["Youc'h Kreiz",["F4","G4"],48.46929,-5.11031,750],["Youc'h Meur",["F4"],48.46924,-5.11366,550],["Youc'h veur",["K9"],48.44709,-5.07888,550],["Yuzin",["G4"],48.46934,-5.10695,550]];
+  const PLACES_EMBEDDED = [["Add ar Skav",["G7"],48.45575,-5.10647,550],["An Aod Bihan",["G5"],48.46486,-5.10679,550],["An Aod Meur",["G5"],48.46486,-5.10679,550],["An Dalar",["I9"],48.44688,-5.09244,550],["An Doullou",["H6"],48.46044,-5.09983,550],["An Drudec",["G7"],48.45575,-5.10647,550],["An Tremuchou",["C9"],48.44624,-5.13346,550],["An Truc Bihan",["G8"],48.45116,-5.10631,550],["An Truc Bras",["G8"],48.45116,-5.10631,550],["Ar C'hernic",["J4","K4"],48.46971,-5.0831,750],["Ar C'hoz Ker",["N8","N9"],48.44965,-5.05846,750],["Ar C'hregnou",["K4","L4"],48.46982,-5.07628,750],["Ar C'hroassen",["N3","N4"],48.47231,-5.05926,750],["Ar Chaor",["M1"],48.48343,-5.06654,550],["Ar Godec",["I9"],48.44688,-5.09244,550],["Ar Goubars",["I8"],48.45137,-5.0926,550],["Ar Gouizou",["J9"],48.44698,-5.08571,550],["Ar Gouzoul",["D7","E7"],48.45548,-5.12353,750],["Ar Groaz Rus",["H6"],48.46044,-5.09983,550],["Ar Maneur",["M7"],48.45638,-5.06559,550],["Ar Merdi",["K6"],48.46076,-5.07936,550],["Ar Picard",["G6","H6"],48.46039,-5.10323,750],["Ar Pilligek",["E10"],48.44197,-5.11961,550],["Ar Piloun Bihan",["I3"],48.474,-5.0934,550],["Ar Prad",["H10"],48.44228,-5.09918,550],["Ar Reun",["N6"],48.46108,-5.05887,550],["Ar Rilouet (Nord)",["H3"],48.47389,-5.1003,550],["Ar Rilouet (Sud)",["N9"],48.44741,-5.05838,550],["Ar Roc'h",["J11"],48.43792,-5.08539,550],["Ar Ru (nord)",["D8","E8"],48.45089,-5.12337,750],["Ar Ru (sud)",["G10"],48.44218,-5.10599,550],["Ar Skoulan",["J3"],48.4741,-5.08667,550],["Ar Stankou",["C7"],48.45532,-5.13378,550],["Ar Stiff",["N4"],48.47008,-5.05918,550],["Ar Zantinel",["E6"],48.46012,-5.12025,550],["Ar Zourn",["L7"],48.45628,-5.0724,550],["Aérodrome",["M5","M6","N5"],48.46402,-5.06356,900],["Baie de Beninou",["J2","K2"],48.47862,-5.08341,750],["Baie de Lampaul",["F9","G9"],48.44661,-5.10951,750],["Beg Piniglou",["G4"],48.46934,-5.10695,550],["Bouge An Dour",["J9"],48.44698,-5.08571,550],["Bouge ar Pepr",["P5"],48.46581,-5.04539,550],["Bouge C'hlan",["E8"],48.45095,-5.11992,550],["Bouge Dalagougn",["F8"],48.45105,-5.11302,550],["Bouge Fourn",["J3","K3"],48.47416,-5.08325,750],["Bouge L'Fezen",["E8"],48.45095,-5.11992,550],["Bouge Redek",["D9"],48.44634,-5.12665,550],["Bouge Ru",["L2"],48.47877,-5.07319,550],["Bouge Wrest",["F8"],48.45105,-5.11302,550],["Bouge Zen",["D8","E8"],48.45089,-5.12337,750],["Bouge Zoun",["D8","D9"],48.44859,-5.12673,750],["Bras Vein",["P8"],48.45212,-5.04491,550],["Calgrac'h",["I3"],48.474,-5.0934,550],["Caraes",["E7"],48.45553,-5.12008,550],["Carrière",["N3"],48.47453,-5.05934,550],["CEMO",["D7"],48.45543,-5.12697,550],["Chapelle de Saint Gwennole",["G10"],48.44218,-5.10599,550],["Chapelle Saint Gildas",["C8","D8"],48.45079,-5.13021,750],["Chapelle Saint Pierre",["M7"],48.45638,-5.06559,550],["Château d'eau",["J6"],48.46065,-5.08619,550],["Cost ar Prad",["I7"],48.45596,-5.09276,550],["Cost ar Reun",["D7"],48.45543,-5.12697,550],["Creac'h Meur",["F10","G10"],48.44213,-5.10935,750],["Croaz ar C'halvar",["P7","Q8"],48.45446,-5.04162,900],["Cromlec'h",["Q6"],48.46139,-5.0385,550],["Dizro",["F7"],48.45564,-5.11318,550],["Embarcadère du Stiff",["O4"],48.47019,-5.05238,550],["Enez an Ein",["N10"],48.44292,-5.05823,550],["Enez an Nenv",["O8"],48.45201,-5.05174,550],["Enez ar Bouyou Glas",["N2"],48.47899,-5.0595,550],["Enez Kadoran",["L1"],48.48332,-5.07335,550],["Enez Penn",["J11"],48.43792,-5.08539,550],["Fort de Trebechou",["C8","D8"],48.45079,-5.13021,750],["Fort Saint Michel",["K5"],48.46528,-5.07952,550],["Frugullou",["L5"],48.46539,-5.07272,550],["Kejou",["I9"],48.44688,-5.09244,550],["Keller Vihan",["G1","H1"],48.48285,-5.10402,750],["Ker al Loj",["M7"],48.45638,-5.06559,550],["Ker Here",["J5"],48.46517,-5.08635,550],["Ker Radenec",["M4"],48.46998,-5.06607,550],["Ker Yegu",["M7"],48.45638,-5.06559,550],["Keranchas",["I4"],48.46955,-5.09324,550],["Kerandraon",["H10"],48.44228,-5.09918,550],["Kerber",["M6"],48.46097,-5.06575,550],["Kerbrat",["D7","E7"],48.45548,-5.12353,750],["Kerc'here",["G7"],48.45575,-5.10647,550],["Kerdrall",["N6"],48.46108,-5.05887,550],["Kerdraon",["I4"],48.46955,-5.09324,550],["Kergadou",["H5"],48.46496,-5.09998,550],["Kergoff",["L7","M7"],48.45633,-5.06899,750],["Kerhuel",["I7"],48.45596,-5.09276,550],["Kerivarc'h",["K8"],48.45158,-5.07904,550],["Kerivin",["M4"],48.46998,-5.06607,550],["Kerlann",["H6"],48.46044,-5.09983,550],["Kerlann Sud",["N7"],48.45649,-5.0587,550],["Kerlaouen",["N6"],48.46108,-5.05887,550],["Kermansoun",["N5"],48.4656,-5.05903,550],["Kermein",["J7"],48.45606,-5.08603,550],["Kermorvan",["J5"],48.46517,-5.08635,550],["Kernevez (nord)",["G5"],48.46486,-5.10679,550],["Kernevez (sud)",["H10"],48.44228,-5.09918,550],["Kernigou",["I6","J6"],48.4606,-5.08956,750],["Kernoas",["O6"],48.46118,-5.05206,550],["Kernonen",["J5"],48.46517,-5.08635,550],["Kerouat",["E6"],48.46012,-5.12025,550],["Kerscao",["M6"],48.46097,-5.06575,550],["Kervasdoue",["L6"],48.46086,-5.07256,550],["Kervegen",["K5"],48.46528,-5.07952,550],["Kervin",["L4"],48.46987,-5.07288,550],["Kerzoncou",["I4","J4"],48.46961,-5.08987,750],["Kinzi",["G2"],48.47824,-5.10726,550],["Korz",["I8"],48.45137,-5.0926,550],["Kun",["E7"],48.45553,-5.12008,550],["Lampaul",["H7"],48.45585,-5.09966,550],["Lann ar Bir",["G7"],48.45575,-5.10647,550],["Lann ar C'harc'h",["J7"],48.45606,-5.08603,550],["Lann Penn Arland",["P6","Q7"],48.45905,-5.04179,900],["Lann Vihan",["J6"],48.46065,-5.08619,550],["Lann Vraz",["I5"],48.46507,-5.09308,550],["Ledenez Arland",["R5","R6"],48.46376,-5.03177,750],["Ledenez Porz Coret",["F10"],48.44207,-5.1127,550],["Marais du Creac'h",["C7","D7"],48.45537,-5.13037,750],["Marais du Niou",["F6","G6"],48.46028,-5.10999,750],["Mean Arland",["P9"],48.44762,-5.04475,550],["Mean Du",["D9"],48.44634,-5.12665,550],["Mean Garo",["H3"],48.47389,-5.1003,550],["Mean Porz Gwenn",["K9"],48.44709,-5.07888,550],["Mez Caradec",["K8"],48.45158,-5.07904,550],["Mez Doun",["F6"],48.46023,-5.11334,550],["Mezareun",["G7","H7"],48.4558,-5.10307,750],["Mikeal",["K6"],48.46076,-5.07936,550],["Nerodin",["I9"],48.44688,-5.09244,550],["Niou Huella",["F6","G6"],48.46028,-5.10999,750],["Niou Izella",["E6","F6"],48.46017,-5.11679,750],["Palud Meur",["H4"],48.46945,-5.10014,550],["Park Raden",["N6"],48.46108,-5.05887,550],["Park Raden Ouest",["N6"],48.46108,-5.05887,550],["Parkou",["M6"],48.46097,-5.06575,550],["Parluc'hen",["E7","F7"],48.45559,-5.11663,750],["Penn ar Prat",["J4"],48.46966,-5.08651,550],["Penn ar Roc'h",["J10"],48.4425,-5.08555,550],["Penn ar Ru Meur",["I3"],48.474,-5.0934,550],["Penn Ar Ruguel",["I10"],48.44239,-5.09228,550],["Penn ar Viler",["E11"],48.43739,-5.11944,550],["Penn Jamet",["H5"],48.46496,-5.09998,550],["Pennorz",["I6"],48.46055,-5.09292,550],["Pern",["B8"],48.45063,-5.14037,550],["Phare de Kéréon",["Q9"],48.43737,-5.0257,20],["Phare de la Jument",["E13"],48.4225,-5.13417,20],["Phare de Nividic",["A9"],48.44556,-5.15083,20],["Phare du Creac'h",["D6"],48.4595083,-5.129278,20],["Phare du Stiff",["N3"],48.47451,-5.056774,20],["Plage de Korz",["I8"],48.45137,-5.0926,550],["Plage du Prad",["H10"],48.44228,-5.09918,550],["Pointe de Bac'haol",["O2","O3"],48.47686,-5.05261,750],["Pointe de Roc'h C'haro",["K8","K9","L8","L9"],48.44939,-5.07556,900],["Pointe de Velgoz",["M8","M9"],48.44955,-5.06535,750],["Porz Ac'hea",["O5","P5"],48.46576,-5.04881,750],["Porz an Dour",["O5"],48.46571,-5.05222,550],["Porz an Eijen",["H11","I11"],48.43776,-5.09557,750],["Porz Arland",["O7"],48.4566,-5.0519,550],["Porz Coret",["F10"],48.44207,-5.1127,550],["Porz Doun",["E11"],48.43739,-5.11944,550],["Porz Glas",["B8"],48.45063,-5.14037,550],["Porz Gwenn",["J8","K8"],48.45153,-5.08245,750],["Porz Kerac'h",["B8","C9"],48.44843,-5.13691,900],["Porz Kinzi",["H3","I3"],48.47395,-5.09685,750],["Porz Ligoudou",["N5"],48.4656,-5.05903,550],["Porz Mean",["B7","C7"],48.45527,-5.13716,750],["Porz Miin",["D6"],48.46001,-5.12713,550],["Porz Nenv",["B8"],48.45063,-5.14037,550],["Porz Noan",["H7"],48.45585,-5.09966,550],["Porz Paol",["H8"],48.45127,-5.0995,550],["Porzic Gwenn",["G10"],48.44218,-5.10599,550],["Poull Bojer",["N7"],48.45649,-5.0587,550],["Poull Brac",["I6"],48.46055,-5.09292,550],["Poull Bridig",["F5"],48.46475,-5.1135,550],["Poull Dragas",["H5","I5"],48.46502,-5.09653,750],["Poull Dravet",["H11"],48.43771,-5.09902,550],["Poull Feaz",["G6"],48.46033,-5.10663,550],["Poull Gweguen",["D8","E8"],48.45089,-5.12337,750],["Poull Jiliou",["H4"],48.46945,-5.10014,550],["Poull Yvern",["N4"],48.47008,-5.05918,550],["Pount",["J6"],48.46065,-5.08619,550],["Pount ar Rodez",["K7","L7"],48.45622,-5.0758,750],["Pount Cam",["J7"],48.45606,-5.08603,550],["Pount Salaun",["L5","L6"],48.46312,-5.07264,750],["Prad ar Roue",["L5","M5"],48.46544,-5.06931,750],["Prad Meur",["I7"],48.45596,-5.09276,550],["Punel",["J7"],48.45606,-5.08603,550],["Pyramide du Runiou",["F10","G11"],48.43984,-5.10927,900],["Roc'h an Aod Teuren",["G3"],48.47379,-5.10711,550],["Roc'h ar Baianet",["B7","C7"],48.45527,-5.13716,750],["Roc'h ar Vugalez",["G4","H4"],48.46939,-5.10355,750],["Roc'h C'hastellik",["K9"],48.44709,-5.07888,550],["Roc'h Ever",["O8"],48.45201,-5.05174,550],["Roc'h Hir",["G12"],48.43307,-5.10567,550],["Roc'h Kalet",["F5","G5"],48.4648,-5.11015,750],["Roc'h Mell",["L1"],48.48332,-5.07335,550],["Roc'h Nel",["J11"],48.43792,-5.08539,550],["Roc'h Vouillard",["B6","C6"],48.45986,-5.13732,750],["Roc'h Wark",["I3"],48.474,-5.0934,550],["Rulann",["K4"],48.46976,-5.07968,550],["Rumalic",["J4","K4"],48.46971,-5.0831,750],["Réservoir Amont",["K6"],48.46076,-5.07936,550],["Réservoir Aval",["J6"],48.46065,-5.08619,550],["Stang ar Merdi",["K6","L6"],48.46081,-5.07596,750],["Stang ar Stiff",["N4"],48.47008,-5.05918,550],["Stang Arland",["O6"],48.46118,-5.05206,550],["Stang Kadoran",["L2"],48.47877,-5.07319,550],["Stang Korz",["I8","J8"],48.45143,-5.08923,750],["Stang Laedroun",["N8"],48.4519,-5.05854,550],["Stang Meur",["J4"],48.46966,-5.08651,550],["Stang Porz Gwenn",["J8","K7"],48.45382,-5.08254,900],["Stang Yuzin",["G4","H4"],48.46939,-5.10355,750],["Terrain de Foot",["K7"],48.45617,-5.0792,550],["Ti Crann",["M4"],48.46998,-5.06607,550],["Ti Crenn",["I7"],48.45596,-5.09276,550],["Ti Huella",["O6"],48.46118,-5.05206,550],["Ti Korn",["G10"],48.44218,-5.10599,550],["Toull Al Lann",["J9"],48.44698,-5.08571,550],["Toull Aoroz",["N3"],48.47453,-5.05934,550],["Toull Dreiz",["L8"],48.45169,-5.07223,550],["Toull Rouez",["L3","M3"],48.47437,-5.06963,750],["Youc'h Arland",["R7"],48.45691,-5.03153,550],["Youc'h Korz",["E9","E10","F9","F10"],48.44426,-5.11623,900],["Youc'h Kreiz",["F4","G4"],48.46929,-5.11031,750],["Youc'h Meur",["F4"],48.46924,-5.11366,550],["Youc'h veur",["K9"],48.44709,-5.07888,550],["Yuzin",["G4"],48.46934,-5.10695,550]];
   const pq = $('pq'), pclear = $('pclear'), pstatus = $('pstatus'), presults = $('presults');
-  const pfuse = window.Fuse ? new Fuse(PLACES.map(p => ({ n: p[0], p })), { keys:['n'], threshold:0.3, ignoreLocation:true }) : null;
+  // Entrée interne : [nom, carrés, lat, lon, précision (m), vérifiée sur le terrain]
+  let PLACES = PLACES_EMBEDDED.map(p => [p[0], p[1], p[2], p[3], p[4], false]);
+  let pfuse = null;
+  function buildPfuse(){ pfuse = window.Fuse ? new Fuse(PLACES.map(p => ({ n: p[0], p })), { keys:['n'], threshold:0.3, ignoreLocation:true }) : null; }
+  buildPfuse();
+  const PLACES_URL = 'https://raw.githubusercontent.com/AureLPhotog/ouessant-birds/refs/heads/main/lieux_ouessant.json';
+  const CONTACT = 'aurelphotog@gmail.com';
+  function placesFromJson(arr){
+    if (!Array.isArray(arr)) return [];
+    return arr.filter(e => e && e.nom && Array.isArray(e.carres) && e.carres.length && isFinite(e.lat) && isFinite(e.lon))
+      .map(e => [String(e.nom), e.carres.map(String), +e.lat, +e.lon, +(e.precision_m || 550), !!e.verifie]);
+  }
+  fetch(PLACES_URL).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+    const l = placesFromJson(d); if (!l.length) return;
+    PLACES = l; buildPfuse(); renderPlaces();
+  }).catch(() => {});
   let tab = 'birds';
 
   function dms(v, pos, neg){
@@ -471,14 +530,14 @@ section[hidden]{display:none}
     });
     pstatus.innerHTML = list.length ? esc(T('pCount')(list.length)) : (raw ? esc(T('pNone')(raw)) : '');
     presults.innerHTML = list.length ? '<ul class="list">' + list.map((p, i) => {
-      const [n, cells, lat, lon, prec] = p;
+      const [n, cells, lat, lon, prec, checked] = p;
       const dec = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-      const exact = prec <= 50;
+      const exact = prec <= 50 || checked;
       return `<li class="place" data-i="${i}">
         <h3><button type="button" class="ptitle" aria-expanded="false"><span>${highlight(n, raw)}</span></button></h3>
         <div class="grid">${esc(T('square')(cells.length))} ${esc(cells.join(', '))}</div>
         <div class="coords">${dec}<small>${dms(lat,'N','S')} ${dms(lon,'E','W')}</small></div>
-        <div class="prec${exact ? ' exact' : ''}">${esc(exact ? T('exact') : T('approx')(prec))}</div>
+        <div class="prec${exact ? ' exact' : ''}">${esc(checked ? T('verified') : exact ? T('exact') : T('approx')(prec))}</div>
         <div class="actions">
           <button type="button" data-copy="${dec}">${esc(T('copy'))}</button>
           <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lon}" target="_blank" rel="noopener">${esc(T('openMap'))}</a>
@@ -495,6 +554,49 @@ section[hidden]{display:none}
   const GRID_Y = [357,717,1067,1413,1761,2113,2467,2829,3183,3531,3883,4245,4591,4944];
   const MAP_W = 7015, MAP_SRC = 'carte_ouessant.jpg';
   let shownPlaces = [], mapPromise = null;
+  // Recalage de la carte (similitude ajustée sur les phares du Créac'h et du Stiff, l'église de Lampaul et la pointe de Pern)
+  const SIM = [1.423839, 0.033371, -4336.445274, 4320.53531], MLAT = 111132, MLON = 111320 * Math.cos(48.45 * Math.PI / 180);
+  function toPixel(lat, lon){
+    const E = (lon + 5.1) * MLON - SIM[2], N = (lat - 48.45) * MLAT - SIM[3], q = SIM[0] * SIM[0] + SIM[1] * SIM[1];
+    return [(SIM[0] * E + SIM[1] * N) / q, -(SIM[0] * N - SIM[1] * E) / q];
+  }
+  function cellAt(x, y){
+    let c = -1, r = -1;
+    for (let i = 0; i < GRID_X.length - 1; i++) if (x >= GRID_X[i] && x < GRID_X[i + 1]) c = i;
+    for (let i = 0; i < GRID_Y.length - 1; i++) if (y >= GRID_Y[i] && y < GRID_Y[i + 1]) r = i;
+    return c < 0 || r < 0 ? null : [c, r];
+  }
+  const cellName = ([c, r]) => String.fromCharCode(65 + c) + (r + 1);
+  // Zone affichée dans l'aperçu : carrés du lieu + un carré tout autour
+  function zoneOf(cells){
+    const idx = cells.map(cellIdx);
+    return { c0: Math.max(0, Math.min(...idx.map(x => x[0])) - 1), c1: Math.min(GRID_X.length - 2, Math.max(...idx.map(x => x[0])) + 1),
+             r0: Math.max(0, Math.min(...idx.map(x => x[1])) - 1), r1: Math.min(GRID_Y.length - 2, Math.max(...idx.map(x => x[1])) + 1) };
+  }
+  function distM(a, b, c, d){
+    const R = 6371000, r = Math.PI / 180, dl = (c - a) * r, dn = (d - b) * r;
+    const h = Math.sin(dl / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin(dn / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
+  const fmtDist = d => d < 1000 ? (Math.round(d / 10) * 10) + ' m' : (d / 1000).toFixed(1).replace('.', lang === 'fr' ? ',' : '.') + ' km';
+  // Lecture de coordonnées collées : décimales (48.45606, -5.08603 ou 48,45606 -5,08603) ou degrés-minutes-secondes
+  function parseCoords(str){
+    const t = String(str || '').replace(/[′’]/g, "'").replace(/[″”]/g, '"').trim();
+    if (!t) return null;
+    const dms = [...t.matchAll(/(\d+(?:[.,]\d+)?)\s*°\s*(?:(\d+(?:[.,]\d+)?)\s*'\s*)?(?:(\d+(?:[.,]\d+)?)\s*"\s*)?([NSEWO])/gi)];
+    let lat, lon;
+    if (dms.length >= 2){
+      const val = m => (parseFloat(m[1].replace(',', '.')) + (m[2] ? parseFloat(m[2].replace(',', '.')) / 60 : 0) + (m[3] ? parseFloat(m[3].replace(',', '.')) / 3600 : 0)) * (/[SWO]/i.test(m[4]) ? -1 : 1);
+      dms.slice(0, 2).forEach(m => { if (/[NS]/i.test(m[4])) lat = val(m); else lon = val(m); });
+    } else {
+      const nums = t.match(/-?\d+(?:[.,]\d+)?/g);
+      if (!nums || nums.length < 2) return null;
+      lat = parseFloat(nums[0].replace(',', '.')); lon = parseFloat(nums[1].replace(',', '.'));
+      if (Math.abs(lat) < 10 && Math.abs(lon) > 40){ const x = lat; lat = lon; lon = x; }   // ordre inversé
+      if (lon > 0 && /[WO]/i.test(t)) lon = -lon;
+    }
+    return isFinite(lat) && isFinite(lon) ? [lat, lon] : null;
+  }
   function loadMap(){
     if (!mapPromise) mapPromise = new Promise((ok, ko) => {
       const im = new Image(); im.onload = () => ok(im); im.onerror = () => { mapPromise = null; ko(); }; im.src = MAP_SRC;
@@ -503,7 +605,8 @@ section[hidden]{display:none}
   }
   function cellIdx(c){ return [c.charCodeAt(0) - 65, parseInt(c.slice(1), 10) - 1]; }
 
-  function drawPreview(box, cells, img){
+  function drawPreview(box, cells, img, marks){
+    marks = marks || [];
     const idx = cells.map(cellIdx);
     const c0 = Math.max(0, Math.min(...idx.map(x => x[0])) - 1), c1 = Math.min(GRID_X.length - 2, Math.max(...idx.map(x => x[0])) + 1);
     const r0 = Math.max(0, Math.min(...idx.map(x => x[1])) - 1), r1 = Math.min(GRID_Y.length - 2, Math.max(...idx.map(x => x[1])) + 1);
@@ -531,8 +634,62 @@ section[hidden]{display:none}
       const x = M + (GRID_X[c] - sx) * k, y = M + (GRID_Y[r] - sy) * k, w = (GRID_X[c + 1] - GRID_X[c]) * k, h = (GRID_Y[r + 1] - GRID_Y[r]) * k;
       ctx.fillRect(x, y, w, h); ctx.strokeRect(x + 1.5, y + 1.5, w - 3, h - 3);
     });
+    // points : position vérifiée (rouge) et position proposée (vert)
+    marks.forEach(m => {
+      const [px, py] = toPixel(m.lat, m.lon);
+      if (px < sx || px > ex || py < sy || py > ey) return;
+      const X = M + (px - sx) * k, Y = M + (py - sy) * k;
+      ctx.beginPath(); ctx.arc(X, Y, 7, 0, Math.PI * 2); ctx.fillStyle = m.color; ctx.fill();
+      ctx.lineWidth = 2.5; ctx.strokeStyle = '#fff'; ctx.stroke();
+    });
     box.innerHTML = ''; box.appendChild(cv);
     const cap = document.createElement('p'); cap.textContent = T('mapCaption')(cells); box.appendChild(cap);
+  }
+
+  // ---------- Proposer une meilleure position ----------
+  function suggestHtml(){
+    return `<button type="button" class="sbtn" data-act="open">${esc(T('suggest'))}</button>
+      <div class="sform" hidden>
+        <p class="shelp">${esc(T('sHelp'))}</p>
+        <button type="button" class="sgps" data-act="gps">${esc(T('useGps'))}</button>
+        <label>${esc(T('pasteLabel'))}<input type="text" class="scoords" inputmode="decimal" autocomplete="off" placeholder="48.45606, -5.08603"></label>
+        <label>${esc(T('commentLabel'))}<textarea class="scomment" rows="2"></textarea></label>
+        <button type="button" class="scheck" data-act="check">${esc(T('check'))}</button>
+        <div class="sresult" aria-live="polite"></div>
+      </div>`;
+  }
+  function placeMarks(p){ return p[5] ? [{ lat: p[2], lon: p[3], color: '#D62828' }] : []; }
+  function redraw(li, p, extra){
+    const view = li.querySelector('.pview');
+    loadMap().then(img => drawPreview(view, p[1], img, placeMarks(p).concat(extra || [])), () => {});
+  }
+  function checkSuggestion(li, p, coords, how){
+    const res = li.querySelector('.sresult');
+    if (!coords){ res.innerHTML = `<p class="bad">${esc(T('badFormat'))}</p>`; return; }
+    const [lat, lon] = coords, [x, y] = toPixel(lat, lon), cell = cellAt(x, y), z = zoneOf(p[1]);
+    const inZone = cell && cell[0] >= z.c0 && cell[0] <= z.c1 && cell[1] >= z.r0 && cell[1] <= z.r1;
+    if (!inZone){
+      res.innerHTML = `<p class="bad">${esc(T('outZone')(cell ? cellName(cell) : null, p[0]))}</p>`;
+      redraw(li, p); return;
+    }
+    const d = distM(p[2], p[3], lat, lon);
+    const comment = li.querySelector('.scomment').value.trim();
+    const prec = how && how.acc ? Math.max(10, Math.round(how.acc)) : 25;
+    const line = JSON.stringify({ nom: p[0], carres: p[1], lat: +lat.toFixed(5), lon: +lon.toFixed(5), precision_m: prec, verifie: true });
+    const body = [
+      `Lieu : ${p[0]} (${T('square')(p[1].length)} ${p[1].join(', ')})`,
+      `Position actuelle : ${p[2].toFixed(5)}, ${p[3].toFixed(5)}`,
+      `Position proposée : ${lat.toFixed(5)}, ${lon.toFixed(5)} (carré ${cellName(cell)}, à ${fmtDist(d)} de la position actuelle)`,
+      `Méthode : ${how && how.acc ? 'GPS du téléphone, précision ± ' + Math.round(how.acc) + ' m' : 'coordonnées saisies'}`,
+      comment ? `Commentaire : ${comment}` : '',
+      '',
+      'Ligne à remplacer dans lieux_ouessant.json :',
+      line
+    ].filter((l, i) => l !== '' || i === 5).join('\n');
+    const href = `mailto:${CONTACT}?subject=${encodeURIComponent('Ouessant – position de « ' + p[0] + ' »')}&body=${encodeURIComponent(body)}`;
+    res.innerHTML = `<p class="good">${esc(T('okIn')(cellName(cell), fmtDist(d)))}</p>
+      <a class="smail" href="${href}">${esc(T('send'))}</a><p class="snote">${esc(T('mailNote'))}</p>`;
+    redraw(li, p, [{ lat, lon, color: '#1F7A5A' }]);
   }
 
   function togglePlace(li){
@@ -541,13 +698,35 @@ section[hidden]{display:none}
     box.hidden = !open; btn.setAttribute('aria-expanded', String(open));
     if (!open) return;
     const p = shownPlaces[+li.dataset.i]; if (!p) return;
-    box.innerHTML = `<p>${esc(T('mapLoading'))}</p>`;
-    loadMap().then(img => drawPreview(box, p[1], img), () => { box.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
+    const canSuggest = !(p[4] <= 50 && !p[5]);        // pas pour les phares, dont la position est déjà exacte
+    box.innerHTML = `<div class="pview"><p>${esc(T('mapLoading'))}</p></div>` + (canSuggest ? `<div class="suggest">${suggestHtml()}</div>` : '');
+    const view = box.querySelector('.pview');
+    loadMap().then(img => drawPreview(view, p[1], img, placeMarks(p)), () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
 
   presults.addEventListener('click', e => {
     const b = e.target.closest('button[data-copy]');
     if (!b) {
+      const act = e.target.closest('[data-act]');
+      if (act){
+        const li = act.closest('.place'), p = shownPlaces[+li.dataset.i]; if (!p) return;
+        const res = li.querySelector('.sresult');
+        if (act.dataset.act === 'open'){
+          const f = li.querySelector('.sform'); f.hidden = !f.hidden; act.setAttribute('aria-expanded', String(!f.hidden));
+        } else if (act.dataset.act === 'check'){
+          checkSuggestion(li, p, parseCoords(li.querySelector('.scoords').value));
+        } else if (act.dataset.act === 'gps'){
+          if (!navigator.geolocation){ res.innerHTML = `<p class="bad">${esc(T('gpsErr'))}</p>`; return; }
+          res.innerHTML = `<p>${esc(T('gpsWait'))}</p>`;
+          navigator.geolocation.getCurrentPosition(pos => {
+            const { latitude, longitude, accuracy } = pos.coords;
+            li.querySelector('.scoords').value = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+            checkSuggestion(li, p, [latitude, longitude], { acc: accuracy });
+            res.insertAdjacentHTML('afterbegin', `<p>${esc(T('gpsAcc')(Math.round(accuracy)))}</p>`);
+          }, () => { res.innerHTML = `<p class="bad">${esc(T('gpsErr'))}</p>`; }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+        }
+        return;
+      }
       if (e.target.closest('.actions a, .pmap')) return;
       const li = e.target.closest('.place'); if (li) togglePlace(li);
       return;
@@ -563,6 +742,12 @@ section[hidden]{display:none}
   }
   let pt;
   pq.addEventListener('input', () => { clearTimeout(pt); pt = setTimeout(renderPlaces, 100); });
+  presults.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.classList.contains('scoords')){
+      e.preventDefault(); const li = e.target.closest('.place'); const p = shownPlaces[+li.dataset.i];
+      if (p) checkSuggestion(li, p, parseCoords(e.target.value));
+    }
+  });
   pq.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderPlaces(); pq.blur(); } });
   pclear.addEventListener('click', () => { pq.value = ''; renderPlaces(); pq.focus(); });
 
