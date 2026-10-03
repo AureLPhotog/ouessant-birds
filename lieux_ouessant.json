@@ -21,81 +21,14 @@
 ,
  {"nom":"Ar C'hoz Ker","carres":["N8"],"lat":48.45022,"lon":-5.05998,"precision_m":25,"verifie":true}
 ,
- {
-  "nom": "Ar C'hregnou",
-  "carres": [
-   "K4",
-   "L4"
-  ],
-  "lat": 48.46982,
-  "lon": -5.07628,
-  "precision_m": 750
- },
- {
-  "nom": "Ar C'hroassen",
-  "carres": [
-   "N3",
-   "N4"
-  ],
-  "lat": 48.47231,
-  "lon": -5.05926,
-  "precision_m": 750
- },
- {
-  "nom": "Ar Chaor",
-  "carres": [
-   "M1"
-  ],
-  "lat": 48.48343,
-  "lon": -5.06654,
-  "precision_m": 550
- },
- {
-  "nom": "Ar Godec",
-  "carres": [
-   "I9"
-  ],
-  "lat": 48.44688,
-  "lon": -5.09244,
-  "precision_m": 550
- },
- {
-  "nom": "Ar Goubars",
-  "carres": [
-   "I8"
-  ],
-  "lat": 48.45137,
-  "lon": -5.0926,
-  "precision_m": 550
- },
- {
-  "nom": "Ar Gouizou",
-  "carres": [
-   "J9"
-  ],
-  "lat": 48.44698,
-  "lon": -5.08571,
-  "precision_m": 550
- },
- {
-  "nom": "Ar Gouzoul",
-  "carres": [
-   "D7",
-   "E7"
-  ],
-  "lat": 48.45548,
-  "lon": -5.12353,
-  "precision_m": 750
- },
- {
-  "nom": "Ar Groaz Rus",
-  "carres": [
-   "H6"
-  ],
-  "lat": 48.46044,
-  "lon": -5.09983,
-  "precision_m": 550
- },
+ {"nom":"Ar C'hregnou","carres":["K4"],"lat":48.46976,"lon":-5.07631,"precision_m":25,"verifie":true},
+ {"nom":"Ar C'hroassen","carres":["N4"],"lat":48.47246,"lon":-5.06114,"precision_m":25,"verifie":true},
+ {"nom":"Ar Chaor","carres":["M1"],"lat":48.48256,"lon":-5.06589,"precision_m":25,"verifie":true},
+ {"nom":"Ar Godec","carres":["I9"],"lat":48.44716,"lon":-5.092,"precision_m":25,"verifie":true},
+ {"nom":"Ar Goubars","carres":["I8"],"lat":48.45419,"lon":-5.09339,"precision_m":25,"verifie":true},
+ {"nom":"Ar Gouizou","carres":["J9"],"lat":48.44963,"lon":-5.08527,"precision_m":25,"verifie":true},
+ {"nom":"Ar Gouzoul","carres":["E7"],"lat":48.45727,"lon":-5.1226,"precision_m":25,"verifie":true},
+ {"nom":"Ar Groaz Rus","carres":["H6"],"lat":48.45969,"lon":-5.0987,"precision_m":25,"verifie":true},
  {
   "nom": "Ar Maneur",
   "carres": [
