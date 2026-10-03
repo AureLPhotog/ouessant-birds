@@ -562,7 +562,7 @@ section[hidden]{display:none}
   }
   fetch(PLACES_URL).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
     const l = placesFromJson(d); if (!l.length) return;
-    PLACES = l; buildPfuse(); renderPlaces();
+    PLACES = l.map(fixPlace); buildPfuse(); renderPlaces(); renderWhere();
   }).catch(() => {});
   let tab = 'birds';
 
@@ -611,11 +611,26 @@ section[hidden]{display:none}
   const GRID_Y = [357,717,1067,1413,1761,2113,2467,2829,3183,3531,3883,4245,4591,4944];
   const MAP_W = 7015, MAP_SRC = 'carte_ouessant.jpg';
   let shownPlaces = [], mapPromise = null;
-  // Recalage de la carte (similitude ajustée sur les phares du Créac'h et du Stiff, l'église de Lampaul et la pointe de Pern)
-  const SIM = [1.423839, 0.033371, -4336.445274, 4320.53531], MLAT = 111132, MLON = 111320 * Math.cos(48.45 * Math.PI / 180);
+    // Recalage affine ajusté sur 19 repères relevés sur le terrain (îlots, chapelles, phares, château d'eau, fort, piste) :
+  // écart moyen ≈ 30 m, au pire ≈ 95 m en validation croisée.
+  const AFF = [[0.709161048, -0.002042154, 2964.964458201], [-0.000573242, -0.712172752, 3202.871361484]], MLAT = 111132, MLON = 111320 * Math.cos(48.45 * Math.PI / 180);
   function toPixel(lat, lon){
-    const E = (lon + 5.1) * MLON - SIM[2], N = (lat - 48.45) * MLAT - SIM[3], q = SIM[0] * SIM[0] + SIM[1] * SIM[1];
-    return [(SIM[0] * E + SIM[1] * N) / q, -(SIM[0] * N - SIM[1] * E) / q];
+    const E = (lon + 5.1) * MLON, N = (lat - 48.45) * MLAT;
+    return [AFF[0][0] * E + AFF[0][1] * N + AFF[0][2], AFF[1][0] * E + AFF[1][1] * N + AFF[1][2]];
+  }
+  function fromPixel(x, y){
+    const a = AFF[0][0], b = AFF[0][1], d = AFF[1][0], e = AFF[1][1], det = a * e - b * d, X = x - AFF[0][2], Y = y - AFF[1][2];
+    const E = (e * X - b * Y) / det, N = (a * Y - d * X) / det;
+    return [48.45 + N / MLAT, -5.1 + E / MLON];
+  }
+  // Position d'un lieu non vérifié = centre de son (ses) carré(s), recalculé avec le recalage actuel
+  function cellsCenter(cells){
+    const pts = cells.map(cellIdx).map(([c, r]) => [(GRID_X[c] + GRID_X[c + 1]) / 2, (GRID_Y[r] + GRID_Y[r + 1]) / 2]);
+    return fromPixel(pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length);
+  }
+  function fixPlace(p){
+    if (p[5] || p[4] <= 50) return p;                        // vérifié ou exact (phares) : on garde
+    const [la, lo] = cellsCenter(p[1]); return [p[0], p[1], +la.toFixed(5), +lo.toFixed(5), p[4], p[5]];
   }
   function cellAt(x, y){
     let c = -1, r = -1;
@@ -624,6 +639,7 @@ section[hidden]{display:none}
     return c < 0 || r < 0 ? null : [c, r];
   }
   const cellName = ([c, r]) => String.fromCharCode(65 + c) + (r + 1);
+  PLACES = PLACES.map(fixPlace); buildPfuse();
   // Zone affichée dans l'aperçu : carrés du lieu + un carré tout autour
   function zoneOf(cells){
     const idx = cells.map(cellIdx);
