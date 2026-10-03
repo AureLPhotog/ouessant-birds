@@ -34,16 +34,12 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--foam);color:var(--ink);font:400 16px/1.5 var(--sans)}
 .wrap{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem}
 
-/* En-tête : bande rayée du phare du Créac'h */
+/* En-tête : illustration du phare du Créac'h (phare_creach.svg) */
 header{display:flex;gap:1rem;align-items:flex-end;padding:2.25rem 0 1.5rem}
 .phare{flex:0 0 auto;width:56px;height:auto;align-self:flex-end;overflow:visible}
 /* mode sombre : liseré clair pour que les bandes noires se détachent du fond */
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .phare{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))} }
 :root[data-theme="dark"] .phare{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))}
-@media (prefers-reduced-motion:no-preference){
-  .phare .beams{animation:beam 5s ease-in-out infinite;transform-origin:30px 20px}
-  @keyframes beam{0%,100%{opacity:.25}50%{opacity:1}}
-}
 header{position:relative}
 .lang{position:absolute;top:2.25rem;right:0;display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
 .lang button{border:0;background:none;color:var(--granite);font:600 .82rem var(--sans);padding:.35rem .75rem;cursor:pointer}
@@ -197,37 +193,7 @@ section[hidden]{display:none}
 <body>
 <div class="wrap">
   <header>
-    <svg class="phare" viewBox="0 0 60 140" aria-hidden="true" focusable="false">
-      <defs>
-        <linearGradient id="beamL" x1="1" x2="0" y1="0" y2="0"><stop offset="0" stop-color="#F6C844" stop-opacity=".85"/><stop offset="1" stop-color="#F6C844" stop-opacity="0"/></linearGradient>
-        <linearGradient id="beamR" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#F6C844" stop-opacity=".85"/><stop offset="1" stop-color="#F6C844" stop-opacity="0"/></linearGradient>
-        <linearGradient id="shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
-        <clipPath id="tower"><path d="M24.5 34 H35.5 L40 118 H20 Z"/></clipPath>
-      </defs>
-      <g class="beams">
-        <path d="M30 20 L-2 9 L-2 31 Z" fill="url(#beamL)"/>
-        <path d="M30 20 L62 9 L62 31 Z" fill="url(#beamR)"/>
-      </g>
-      <!-- tour rayée noir et blanc -->
-      <path d="M24.5 34 H35.5 L40 118 H20 Z" fill="#F7F6F2"/>
-      <g clip-path="url(#tower)"><rect x="0" y="34.0" width="60" height="12.0" fill="#1D2428"/><rect x="0" y="58.0" width="60" height="12.0" fill="#1D2428"/><rect x="0" y="82.0" width="60" height="12.0" fill="#1D2428"/><rect x="0" y="106.0" width="60" height="12.0" fill="#1D2428"/><rect x="0" y="30" width="60" height="90" fill="url(#shade)"/></g>
-      <path d="M24.5 34 H35.5 L40 118 H20 Z" fill="none" stroke="#1D2428" stroke-width="1.2" stroke-linejoin="round"/>
-      <!-- galerie et lanterne -->
-      <rect x="21" y="30.5" width="18" height="3.5" rx=".6" fill="#1D2428"/>
-      <path d="M22 30.5 V27 M26 30.5 V27 M30 30.5 V27 M34 30.5 V27 M38 30.5 V27 M21.5 27 H38.5" stroke="#1D2428" stroke-width=".9" fill="none"/>
-      <rect x="25.5" y="14" width="9" height="13" fill="#2B3A44"/>
-      <rect x="26.6" y="15.2" width="6.8" height="10.6" fill="#FBE7A1"/>
-      <circle class="lamp" cx="30" cy="20.5" r="2.6" fill="#F6C844"/>
-      <path d="M26.6 15.2 V25.8 M30 15.2 V25.8 M33.4 15.2 V25.8" stroke="#2B3A44" stroke-width=".6"/>
-      <path d="M24.5 14.2 Q30 6.5 35.5 14.2 Z" fill="#1D2428"/>
-      <path d="M30 8 V3.5" stroke="#1D2428" stroke-width="1"/>
-      <!-- maison du gardien -->
-      <path d="M5 122 L13 115.5 H47 L55 122 Z" fill="#5E676B"/>
-      <rect x="6" y="122" width="48" height="12" fill="#F7F6F2" stroke="#1D2428" stroke-width="1"/>
-      <rect x="27" y="125.5" width="6" height="8.5" fill="#1D2428"/>
-      <rect x="11" y="125" width="5" height="4" fill="#2B3A44"/><rect x="44" y="125" width="5" height="4" fill="#2B3A44"/>
-      <path d="M0 134.5 H60" stroke="var(--granite)" stroke-width="1.2"/>
-    </svg>
+    <img class="phare" src="phare_creach.svg" alt="" width="56" height="131">
     <div class="intro">
       <h1 data-t="title">Oiseaux d'Ouessant</h1>
       <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation sur l'île.</p>
