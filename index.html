@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oiseaux d'Ouessant · canal de diffusion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<style>
+:root{
+  --ocean:#1F3A4D; --ocean-2:#2C5168; --foam:#EEF2F0; --paper:#FFFFFF;
+  --granite:#5E676B; --line:#D3DAD8; --heather:#8C5E83; --warn:#B4532A; --warn-bg:#FBEFE8;
+  --ink:#16232C;
+  --serif:"Spectral", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#9FC3D9; --ocean-2:#7FAAC4; --foam:#0F1B23; --paper:#16252F;
+    --granite:#9AA6AB; --line:#2A3B46; --heather:#C9A1C0; --warn:#F0A07A; --warn-bg:#3A2219; --ink:#E6EEF0;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#9FC3D9; --ocean-2:#7FAAC4; --foam:#0F1B23; --paper:#16252F;
+  --granite:#9AA6AB; --line:#2A3B46; --heather:#C9A1C0; --warn:#F0A07A; --warn-bg:#3A2219; --ink:#E6EEF0;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--foam);color:var(--ink);font:400 16px/1.5 var(--sans)}
+.wrap{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem}
+
+/* En-tête : bande rayée du phare du Créac'h */
+header{display:flex;gap:1.1rem;align-items:stretch;padding:2.25rem 0 1.5rem}
+.phare{flex:0 0 14px;border-radius:2px;
+  background:repeating-linear-gradient(180deg,var(--ink) 0 16px,var(--paper) 16px 32px);
+  border:1px solid var(--ink)}
+h1{font:700 clamp(2rem,6vw,3.1rem)/1.02 var(--serif);margin:0;color:var(--ocean);letter-spacing:-.01em}
+.lede{margin:.6rem 0 0;color:var(--granite);max-width:52ch}
+
+/* Recherche */
+.search{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--foam);padding:.75rem 0 .6rem}
+.field{display:flex;align-items:center;background:var(--paper);border:2px solid var(--ocean);border-radius:12px;padding:0 .5rem 0 1rem}
+.field svg{flex:0 0 auto;color:var(--ocean)}
+#q{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:500 1.15rem var(--sans);padding:.85rem .7rem;outline:none}
+#q::placeholder{color:var(--granite);font-weight:400}
+#clear{border:0;background:none;color:var(--granite);font:500 .9rem var(--sans);padding:.5rem .6rem;cursor:pointer;border-radius:8px}
+#clear[hidden]{display:none}
+.field:focus-within{box-shadow:0 0 0 4px color-mix(in srgb,var(--ocean) 25%,transparent)}
+
+.chips{display:flex;gap:.45rem;overflow-x:auto;padding:.7rem 0 .15rem;scrollbar-width:thin}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  font:500 .9rem var(--sans);padding:.4rem .8rem;border-radius:999px;cursor:pointer;display:flex;gap:.45rem;align-items:center}
+.chip .dot{width:9px;height:9px;border-radius:50%}
+.chip .n{color:var(--granite);font-weight:400}
+.chip[aria-pressed="true"]{background:var(--ocean);border-color:var(--ocean);color:var(--foam)}
+.chip[aria-pressed="true"] .n{color:inherit;opacity:.8}
+
+button:focus-visible,.chip:focus-visible,label.btn:focus-within{outline:3px solid var(--heather);outline-offset:2px}
+
+/* Messages */
+.notice{margin:1rem 0 0;padding:1rem 1.1rem;border-left:4px solid var(--warn);background:var(--warn-bg);border-radius:0 10px 10px 0}
+.notice strong{color:var(--warn)}
+.notice p{margin:0}
+.status{color:var(--granite);font-size:.92rem;margin:1rem 0 .4rem}
+
+/* Résultats */
+ul.list{list-style:none;margin:0;padding:0;background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto;gap:.2rem 1rem;align-items:center;padding:.85rem 1.1rem;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.fr{font:600 1.08rem/1.25 var(--sans)}
+.sci{grid-column:1;font:italic 400 1rem/1.3 var(--serif);color:var(--granite)}
+.canal{grid-row:1 / span 2;grid-column:2;justify-self:end;display:flex;align-items:center;gap:.45rem;
+  font:600 .88rem var(--sans);padding:.35rem .7rem;border-radius:8px;background:var(--foam);text-align:right}
+.canal .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+mark{background:color-mix(in srgb,var(--heather) 22%,transparent);color:inherit;border-radius:3px;padding:0 .05em}
+
+/* État vide / import */
+.empty{background:var(--paper);border:1px dashed var(--line);border-radius:12px;padding:1.6rem 1.3rem;text-align:left}
+.empty h2{font:700 1.35rem var(--serif);color:var(--ocean);margin:0 0 .4rem}
+.empty p{margin:.2rem 0 1rem;color:var(--granite);max-width:60ch}
+.btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--ocean);color:var(--foam);border:0;border-radius:10px;
+  font:600 .95rem var(--sans);padding:.7rem 1.1rem;cursor:pointer}
+.btn input{position:absolute;width:1px;height:1px;opacity:0}
+.foot{margin-top:2rem;color:var(--granite);font-size:.85rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;align-items:center}
+.link{background:none;border:0;padding:0;color:var(--ocean-2);text-decoration:underline;font:inherit;cursor:pointer}
+.link input{position:absolute;width:1px;height:1px;opacity:0}
+
+@media (max-width:520px){
+  .row{grid-template-columns:1fr}
+  .canal{grid-row:auto;grid-column:1;justify-self:start;margin-top:.35rem}
+}
+@media (prefers-reduced-motion:no-preference){
+  .row{animation:in .18s ease-out both}
+  @keyframes in{from{opacity:0}to{opacity:1}}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="phare" aria-hidden="true"></div>
+    <div>
+      <h1>Oiseaux d'Ouessant</h1>
+      <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation sur l'île.</p>
+    </div>
+  </header>
+
+  <div class="search" role="search">
+    <div class="field">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+      <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Nom français ou scientifique" aria-label="Rechercher une espèce" disabled>
+      <button id="clear" type="button" hidden>Effacer</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filtrer par canal de diffusion"></div>
+  </div>
+
+  <div id="notice" aria-live="polite"></div>
+  <p class="status" id="status" aria-live="polite">Chargement de la liste des espèces…</p>
+  <div id="results"></div>
+
+  <div class="foot">
+    <span id="source"></span>
+    <label class="link">Importer un autre fichier JSON<input type="file" accept=".json,application/json" class="fileInput"></label>
+  </div>
+</div>
+
+<script>
+(function(){
+  const URL_DATA = 'https://raw.githubusercontent.com/AureLPhotog/ouessant-birds/refs/heads/main/ouessant_birds.json';
+  const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_CANAL = 'Proposition de Canal de Diffusion Ouessant';
+  const STORE = 'ouessant-birds-data';
+  const COLORS = ['#B4532A','#2C7A6B','#8C5E83','#3E6FA8','#A3802A','#5E676B','#B03A5B','#4F7A2C'];
+
+  let birds = [], fuse = null, channels = [], activeChannel = null, colorOf = {};
+
+  const $ = id => document.getElementById(id);
+  const q = $('q'), results = $('results'), notice = $('notice'), status = $('status'), chips = $('chips'), clearBtn = $('clear');
+
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm = s => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+
+  function highlight(text, query){
+    const t = String(text ?? '');
+    if(!query) return esc(t);
+    const i = norm(t).indexOf(norm(query));
+    if(i < 0) return esc(t);
+    return esc(t.slice(0,i)) + '<mark>' + esc(t.slice(i, i+query.length)) + '</mark>' + esc(t.slice(i+query.length));
+  }
+
+  function setData(data, sourceLabel){
+    if(!Array.isArray(data)) throw new Error('format');
+    birds = data.filter(b => b && b[K_FR]);
+    if(!birds.length) throw new Error('vide');
+    fuse = new Fuse(birds, { keys:[K_FR, K_SCI], threshold:0.2, ignoreLocation:true });
+
+    const counts = {};
+    birds.forEach(b => { const c = (b[K_CANAL] || 'Non renseigné').trim(); counts[c] = (counts[c]||0)+1; });
+    channels = Object.keys(counts).sort((a,b) => a.localeCompare(b,'fr'));
+    colorOf = {}; channels.forEach((c,i) => colorOf[c] = COLORS[i % COLORS.length]);
+
+    chips.innerHTML = '';
+    const mk = (label, value, n) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip';
+      b.setAttribute('aria-pressed', String(activeChannel === value));
+      b.innerHTML = (value ? `<span class="dot" style="background:${colorOf[value]}"></span>` : '') + esc(label) + ` <span class="n">${n}</span>`;
+      b.onclick = () => { activeChannel = value; [...chips.children].forEach(x => x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true'); render(); };
+      chips.appendChild(b);
+    };
+    mk('Toutes', null, birds.length);
+    channels.forEach(c => mk(c, c, counts[c]));
+
+    $('source').textContent = sourceLabel + ' · ' + birds.length + ' espèces';
+    q.disabled = false;
+    render();
+  }
+
+  function canalOf(b){ return (b[K_CANAL] || 'Non renseigné').trim(); }
+
+  function render(){
+    const raw = q.value.trim();
+    const query = norm(raw);
+    clearBtn.hidden = !raw;
+    notice.innerHTML = '';
+
+    let list, mode = 'all';
+    if(!query){
+      list = birds.slice();
+    } else {
+      const exact = birds.filter(b => norm(b[K_FR]) === query || norm(b[K_SCI]) === query);
+      if(exact.length){ list = exact; mode = 'exact'; }
+      else { list = fuse.search(raw).map(r => r.item); mode = 'fuzzy'; }
+    }
+    if(activeChannel) list = list.filter(b => canalOf(b) === activeChannel);
+    if(mode !== 'fuzzy') list.sort((a,b) => a[K_FR].localeCompare(b[K_FR],'fr'));
+
+    if(mode === 'fuzzy'){
+      notice.innerHTML = list.length
+        ? `<div class="notice"><p>Aucune espèce ne s'appelle exactement « ${esc(raw)} ». Vérifie l'orthographe parmi les noms proches ci-dessous. Si ce n'est aucun d'eux, ce serait probablement une première pour l'île : <strong>annonce-la sur Telegram</strong>.</p></div>`
+        : `<div class="notice"><p>« ${esc(raw)} » n'est pas dans la liste des espèces déjà vues sur l'île. Vérifie l'orthographe ; si elle est juste, ce serait probablement une première pour Ouessant : <strong>annonce-la sur Telegram</strong>.</p></div>`;
+    }
+
+    status.textContent = mode === 'exact' ? 'Espèce trouvée'
+      : mode === 'fuzzy' ? (list.length ? list.length + ' nom' + (list.length>1?'s':'') + ' proche' + (list.length>1?'s':'') : '')
+      : list.length + ' espèce' + (list.length>1?'s':'') + (activeChannel ? ' sur ce canal' : '');
+
+    if(!list.length){ results.innerHTML = ''; return; }
+    results.innerHTML = '<ul class="list">' + list.map(b => {
+      const c = canalOf(b);
+      return `<li class="row">
+        <span class="fr">${highlight(b[K_FR], raw)}</span>
+        <span class="sci">${highlight(b[K_SCI], raw)}</span>
+        <span class="canal"><span class="dot" style="background:${colorOf[c]||'#5E676B'}"></span>${esc(c)}</span>
+      </li>`;
+    }).join('') + '</ul>';
+  }
+
+  function showImport(){
+    status.textContent = '';
+    results.innerHTML = `<div class="empty">
+      <h2>Ajoute la liste des espèces</h2>
+      <p>La liste n'a pas pu être téléchargée depuis GitHub sur cette page. Importe le fichier <em>ouessant_birds.json</em> depuis ton ordinateur ou ton téléphone : il restera enregistré dans ce navigateur.</p>
+      <label class="btn">Importer le fichier JSON<input type="file" accept=".json,application/json" class="fileInput"></label>
+    </div>`;
+    bindFiles();
+  }
+
+  function bindFiles(){
+    document.querySelectorAll('.fileInput').forEach(inp => inp.onchange = e => {
+      const f = e.target.files && e.target.files[0]; if(!f) return;
+      const r = new FileReader();
+      r.onload = () => {
+        try{
+          const data = JSON.parse(r.result);
+          setData(data, 'Fichier importé');
+          try{ localStorage.setItem(STORE, JSON.stringify(data)); }catch(_){}
+        }catch(err){
+          notice.innerHTML = `<div class="notice"><p>Ce fichier n'est pas lisible. Il doit contenir une liste d'espèces avec les champs « ${K_FR} », « ${K_SCI} » et « ${K_CANAL} ».</p></div>`;
+        }
+      };
+      r.readAsText(f);
+      e.target.value = '';
+    });
+  }
+
+  let t;
+  q.addEventListener('input', () => { clearTimeout(t); t = setTimeout(render, 120); });
+  clearBtn.addEventListener('click', () => { q.value = ''; render(); q.focus(); });
+  bindFiles();
+
+  // 1) GitHub  2) copie enregistrée dans le navigateur  3) import manuel
+  fetch(URL_DATA)
+    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(data => setData(data, 'Liste à jour depuis GitHub'))
+    .catch(() => {
+      try{
+        const saved = localStorage.getItem(STORE);
+        if(saved){ setData(JSON.parse(saved), 'Copie enregistrée dans ce navigateur'); return; }
+      }catch(_){}
+      showImport();
+    });
+})();
+</script>
+</body>
+</html>
