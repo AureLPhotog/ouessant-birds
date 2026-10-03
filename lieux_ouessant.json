@@ -1,0 +1,2139 @@
+[
+ {
+  "nom": "Add ar Skav",
+  "carres": [
+   "G7"
+  ],
+  "lat": 48.45575,
+  "lon": -5.10647,
+  "precision_m": 550
+ },
+ {
+  "nom": "An Aod Bihan",
+  "carres": [
+   "G5"
+  ],
+  "lat": 48.46486,
+  "lon": -5.10679,
+  "precision_m": 550
+ },
+ {
+  "nom": "An Aod Meur",
+  "carres": [
+   "G5"
+  ],
+  "lat": 48.46486,
+  "lon": -5.10679,
+  "precision_m": 550
+ },
+ {
+  "nom": "An Dalar",
+  "carres": [
+   "I9"
+  ],
+  "lat": 48.44688,
+  "lon": -5.09244,
+  "precision_m": 550
+ },
+ {
+  "nom": "An Doullou",
+  "carres": [
+   "H6"
+  ],
+  "lat": 48.46044,
+  "lon": -5.09983,
+  "precision_m": 550
+ },
+ {
+  "nom": "An Drudec",
+  "carres": [
+   "G7"
+  ],
+  "lat": 48.45575,
+  "lon": -5.10647,
+  "precision_m": 550
+ },
+ {
+  "nom": "An Tremuchou",
+  "carres": [
+   "C9"
+  ],
+  "lat": 48.44624,
+  "lon": -5.13346,
+  "precision_m": 550
+ },
+ {
+  "nom": "An Truc Bihan",
+  "carres": [
+   "G8"
+  ],
+  "lat": 48.45116,
+  "lon": -5.10631,
+  "precision_m": 550
+ },
+ {
+  "nom": "An Truc Bras",
+  "carres": [
+   "G8"
+  ],
+  "lat": 48.45116,
+  "lon": -5.10631,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar C'hernic",
+  "carres": [
+   "J4",
+   "K4"
+  ],
+  "lat": 48.46971,
+  "lon": -5.0831,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ar C'hoz Ker",
+  "carres": [
+   "N8",
+   "N9"
+  ],
+  "lat": 48.44965,
+  "lon": -5.05846,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ar C'hregnou",
+  "carres": [
+   "K4",
+   "L4"
+  ],
+  "lat": 48.46982,
+  "lon": -5.07628,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ar C'hroassen",
+  "carres": [
+   "N3",
+   "N4"
+  ],
+  "lat": 48.47231,
+  "lon": -5.05926,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ar Chaor",
+  "carres": [
+   "M1"
+  ],
+  "lat": 48.48343,
+  "lon": -5.06654,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Godec",
+  "carres": [
+   "I9"
+  ],
+  "lat": 48.44688,
+  "lon": -5.09244,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Goubars",
+  "carres": [
+   "I8"
+  ],
+  "lat": 48.45137,
+  "lon": -5.0926,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Gouizou",
+  "carres": [
+   "J9"
+  ],
+  "lat": 48.44698,
+  "lon": -5.08571,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Gouzoul",
+  "carres": [
+   "D7",
+   "E7"
+  ],
+  "lat": 48.45548,
+  "lon": -5.12353,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ar Groaz Rus",
+  "carres": [
+   "H6"
+  ],
+  "lat": 48.46044,
+  "lon": -5.09983,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Maneur",
+  "carres": [
+   "M7"
+  ],
+  "lat": 48.45638,
+  "lon": -5.06559,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Merdi",
+  "carres": [
+   "K6"
+  ],
+  "lat": 48.46076,
+  "lon": -5.07936,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Picard",
+  "carres": [
+   "G6",
+   "H6"
+  ],
+  "lat": 48.46039,
+  "lon": -5.10323,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ar Pilligek",
+  "carres": [
+   "E10"
+  ],
+  "lat": 48.44197,
+  "lon": -5.11961,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Piloun Bihan",
+  "carres": [
+   "I3"
+  ],
+  "lat": 48.474,
+  "lon": -5.0934,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Prad",
+  "carres": [
+   "H10"
+  ],
+  "lat": 48.44228,
+  "lon": -5.09918,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Reun",
+  "carres": [
+   "N6"
+  ],
+  "lat": 48.46108,
+  "lon": -5.05887,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Rilouet (Nord)",
+  "carres": [
+   "H3"
+  ],
+  "lat": 48.47389,
+  "lon": -5.1003,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Rilouet (Sud)",
+  "carres": [
+   "N9"
+  ],
+  "lat": 48.44741,
+  "lon": -5.05838,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Roc'h",
+  "carres": [
+   "J11"
+  ],
+  "lat": 48.43792,
+  "lon": -5.08539,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Ru (nord)",
+  "carres": [
+   "D8",
+   "E8"
+  ],
+  "lat": 48.45089,
+  "lon": -5.12337,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ar Ru (sud)",
+  "carres": [
+   "G10"
+  ],
+  "lat": 48.44218,
+  "lon": -5.10599,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Skoulan",
+  "carres": [
+   "J3"
+  ],
+  "lat": 48.4741,
+  "lon": -5.08667,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Stankou",
+  "carres": [
+   "C7"
+  ],
+  "lat": 48.45532,
+  "lon": -5.13378,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Stiff",
+  "carres": [
+   "N4"
+  ],
+  "lat": 48.47008,
+  "lon": -5.05918,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Zantinel",
+  "carres": [
+   "E6"
+  ],
+  "lat": 48.46012,
+  "lon": -5.12025,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ar Zourn",
+  "carres": [
+   "L7"
+  ],
+  "lat": 48.45628,
+  "lon": -5.0724,
+  "precision_m": 550
+ },
+ {
+  "nom": "Aérodrome",
+  "carres": [
+   "M5",
+   "M6",
+   "N5"
+  ],
+  "lat": 48.46402,
+  "lon": -5.06356,
+  "precision_m": 900
+ },
+ {
+  "nom": "Baie de Beninou",
+  "carres": [
+   "J2",
+   "K2"
+  ],
+  "lat": 48.47862,
+  "lon": -5.08341,
+  "precision_m": 750
+ },
+ {
+  "nom": "Baie de Lampaul",
+  "carres": [
+   "F9",
+   "G9"
+  ],
+  "lat": 48.44661,
+  "lon": -5.10951,
+  "precision_m": 750
+ },
+ {
+  "nom": "Beg Piniglou",
+  "carres": [
+   "G4"
+  ],
+  "lat": 48.46934,
+  "lon": -5.10695,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge An Dour",
+  "carres": [
+   "J9"
+  ],
+  "lat": 48.44698,
+  "lon": -5.08571,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge ar Pepr",
+  "carres": [
+   "P5"
+  ],
+  "lat": 48.46581,
+  "lon": -5.04539,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge C'hlan",
+  "carres": [
+   "E8"
+  ],
+  "lat": 48.45095,
+  "lon": -5.11992,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge Dalagougn",
+  "carres": [
+   "F8"
+  ],
+  "lat": 48.45105,
+  "lon": -5.11302,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge Fourn",
+  "carres": [
+   "J3",
+   "K3"
+  ],
+  "lat": 48.47416,
+  "lon": -5.08325,
+  "precision_m": 750
+ },
+ {
+  "nom": "Bouge L'Fezen",
+  "carres": [
+   "E8"
+  ],
+  "lat": 48.45095,
+  "lon": -5.11992,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge Redek",
+  "carres": [
+   "D9"
+  ],
+  "lat": 48.44634,
+  "lon": -5.12665,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge Ru",
+  "carres": [
+   "L2"
+  ],
+  "lat": 48.47877,
+  "lon": -5.07319,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge Wrest",
+  "carres": [
+   "F8"
+  ],
+  "lat": 48.45105,
+  "lon": -5.11302,
+  "precision_m": 550
+ },
+ {
+  "nom": "Bouge Zen",
+  "carres": [
+   "D8",
+   "E8"
+  ],
+  "lat": 48.45089,
+  "lon": -5.12337,
+  "precision_m": 750
+ },
+ {
+  "nom": "Bouge Zoun",
+  "carres": [
+   "D8",
+   "D9"
+  ],
+  "lat": 48.44859,
+  "lon": -5.12673,
+  "precision_m": 750
+ },
+ {
+  "nom": "Bras Vein",
+  "carres": [
+   "P8"
+  ],
+  "lat": 48.45212,
+  "lon": -5.04491,
+  "precision_m": 550
+ },
+ {
+  "nom": "Calgrac'h",
+  "carres": [
+   "I3"
+  ],
+  "lat": 48.474,
+  "lon": -5.0934,
+  "precision_m": 550
+ },
+ {
+  "nom": "Caraes",
+  "carres": [
+   "E7"
+  ],
+  "lat": 48.45553,
+  "lon": -5.12008,
+  "precision_m": 550
+ },
+ {
+  "nom": "Carrière",
+  "carres": [
+   "N3"
+  ],
+  "lat": 48.47453,
+  "lon": -5.05934,
+  "precision_m": 550
+ },
+ {
+  "nom": "CEMO",
+  "carres": [
+   "D7"
+  ],
+  "lat": 48.45543,
+  "lon": -5.12697,
+  "precision_m": 550
+ },
+ {
+  "nom": "Chapelle de Saint Gwennole",
+  "carres": [
+   "G10"
+  ],
+  "lat": 48.44218,
+  "lon": -5.10599,
+  "precision_m": 550
+ },
+ {
+  "nom": "Chapelle Saint Gildas",
+  "carres": [
+   "C8",
+   "D8"
+  ],
+  "lat": 48.45079,
+  "lon": -5.13021,
+  "precision_m": 750
+ },
+ {
+  "nom": "Chapelle Saint Pierre",
+  "carres": [
+   "M7"
+  ],
+  "lat": 48.45638,
+  "lon": -5.06559,
+  "precision_m": 550
+ },
+ {
+  "nom": "Château d'eau",
+  "carres": [
+   "J6"
+  ],
+  "lat": 48.46065,
+  "lon": -5.08619,
+  "precision_m": 550
+ },
+ {
+  "nom": "Cost ar Prad",
+  "carres": [
+   "I7"
+  ],
+  "lat": 48.45596,
+  "lon": -5.09276,
+  "precision_m": 550
+ },
+ {
+  "nom": "Cost ar Reun",
+  "carres": [
+   "D7"
+  ],
+  "lat": 48.45543,
+  "lon": -5.12697,
+  "precision_m": 550
+ },
+ {
+  "nom": "Creac'h Meur",
+  "carres": [
+   "F10",
+   "G10"
+  ],
+  "lat": 48.44213,
+  "lon": -5.10935,
+  "precision_m": 750
+ },
+ {
+  "nom": "Croaz ar C'halvar",
+  "carres": [
+   "P7",
+   "Q8"
+  ],
+  "lat": 48.45446,
+  "lon": -5.04162,
+  "precision_m": 900
+ },
+ {
+  "nom": "Cromlec'h",
+  "carres": [
+   "Q6"
+  ],
+  "lat": 48.46139,
+  "lon": -5.0385,
+  "precision_m": 550
+ },
+ {
+  "nom": "Dizro",
+  "carres": [
+   "F7"
+  ],
+  "lat": 48.45564,
+  "lon": -5.11318,
+  "precision_m": 550
+ },
+ {
+  "nom": "Embarcadère du Stiff",
+  "carres": [
+   "O4"
+  ],
+  "lat": 48.47019,
+  "lon": -5.05238,
+  "precision_m": 550
+ },
+ {
+  "nom": "Enez an Ein",
+  "carres": [
+   "N10"
+  ],
+  "lat": 48.44292,
+  "lon": -5.05823,
+  "precision_m": 550
+ },
+ {
+  "nom": "Enez an Nenv",
+  "carres": [
+   "O8"
+  ],
+  "lat": 48.45201,
+  "lon": -5.05174,
+  "precision_m": 550
+ },
+ {
+  "nom": "Enez ar Bouyou Glas",
+  "carres": [
+   "N2"
+  ],
+  "lat": 48.47899,
+  "lon": -5.0595,
+  "precision_m": 550
+ },
+ {
+  "nom": "Enez Kadoran",
+  "carres": [
+   "L1"
+  ],
+  "lat": 48.48332,
+  "lon": -5.07335,
+  "precision_m": 550
+ },
+ {
+  "nom": "Enez Penn",
+  "carres": [
+   "J11"
+  ],
+  "lat": 48.43792,
+  "lon": -5.08539,
+  "precision_m": 550
+ },
+ {
+  "nom": "Fort de Trebechou",
+  "carres": [
+   "C8",
+   "D8"
+  ],
+  "lat": 48.45079,
+  "lon": -5.13021,
+  "precision_m": 750
+ },
+ {
+  "nom": "Fort Saint Michel",
+  "carres": [
+   "K5"
+  ],
+  "lat": 48.46528,
+  "lon": -5.07952,
+  "precision_m": 550
+ },
+ {
+  "nom": "Frugullou",
+  "carres": [
+   "L5"
+  ],
+  "lat": 48.46539,
+  "lon": -5.07272,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kejou",
+  "carres": [
+   "I9"
+  ],
+  "lat": 48.44688,
+  "lon": -5.09244,
+  "precision_m": 550
+ },
+ {
+  "nom": "Keller Vihan",
+  "carres": [
+   "G1",
+   "H1"
+  ],
+  "lat": 48.48285,
+  "lon": -5.10402,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ker al Loj",
+  "carres": [
+   "M7"
+  ],
+  "lat": 48.45638,
+  "lon": -5.06559,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ker Here",
+  "carres": [
+   "J5"
+  ],
+  "lat": 48.46517,
+  "lon": -5.08635,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ker Radenec",
+  "carres": [
+   "M4"
+  ],
+  "lat": 48.46998,
+  "lon": -5.06607,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ker Yegu",
+  "carres": [
+   "M7"
+  ],
+  "lat": 48.45638,
+  "lon": -5.06559,
+  "precision_m": 550
+ },
+ {
+  "nom": "Keranchas",
+  "carres": [
+   "I4"
+  ],
+  "lat": 48.46955,
+  "lon": -5.09324,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerandraon",
+  "carres": [
+   "H10"
+  ],
+  "lat": 48.44228,
+  "lon": -5.09918,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerber",
+  "carres": [
+   "M6"
+  ],
+  "lat": 48.46097,
+  "lon": -5.06575,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerbrat",
+  "carres": [
+   "D7",
+   "E7"
+  ],
+  "lat": 48.45548,
+  "lon": -5.12353,
+  "precision_m": 750
+ },
+ {
+  "nom": "Kerc'here",
+  "carres": [
+   "G7"
+  ],
+  "lat": 48.45575,
+  "lon": -5.10647,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerdrall",
+  "carres": [
+   "N6"
+  ],
+  "lat": 48.46108,
+  "lon": -5.05887,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerdraon",
+  "carres": [
+   "I4"
+  ],
+  "lat": 48.46955,
+  "lon": -5.09324,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kergadou",
+  "carres": [
+   "H5"
+  ],
+  "lat": 48.46496,
+  "lon": -5.09998,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kergoff",
+  "carres": [
+   "L7",
+   "M7"
+  ],
+  "lat": 48.45633,
+  "lon": -5.06899,
+  "precision_m": 750
+ },
+ {
+  "nom": "Kerhuel",
+  "carres": [
+   "I7"
+  ],
+  "lat": 48.45596,
+  "lon": -5.09276,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerivarc'h",
+  "carres": [
+   "K8"
+  ],
+  "lat": 48.45158,
+  "lon": -5.07904,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerivin",
+  "carres": [
+   "M4"
+  ],
+  "lat": 48.46998,
+  "lon": -5.06607,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerlann",
+  "carres": [
+   "H6"
+  ],
+  "lat": 48.46044,
+  "lon": -5.09983,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerlann Sud",
+  "carres": [
+   "N7"
+  ],
+  "lat": 48.45649,
+  "lon": -5.0587,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerlaouen",
+  "carres": [
+   "N6"
+  ],
+  "lat": 48.46108,
+  "lon": -5.05887,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kermansoun",
+  "carres": [
+   "N5"
+  ],
+  "lat": 48.4656,
+  "lon": -5.05903,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kermein",
+  "carres": [
+   "J7"
+  ],
+  "lat": 48.45606,
+  "lon": -5.08603,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kermorvan",
+  "carres": [
+   "J5"
+  ],
+  "lat": 48.46517,
+  "lon": -5.08635,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kernevez (nord)",
+  "carres": [
+   "G5"
+  ],
+  "lat": 48.46486,
+  "lon": -5.10679,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kernevez (sud)",
+  "carres": [
+   "H10"
+  ],
+  "lat": 48.44228,
+  "lon": -5.09918,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kernigou",
+  "carres": [
+   "I6",
+   "J6"
+  ],
+  "lat": 48.4606,
+  "lon": -5.08956,
+  "precision_m": 750
+ },
+ {
+  "nom": "Kernoas",
+  "carres": [
+   "O6"
+  ],
+  "lat": 48.46118,
+  "lon": -5.05206,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kernonen",
+  "carres": [
+   "J5"
+  ],
+  "lat": 48.46517,
+  "lon": -5.08635,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerouat",
+  "carres": [
+   "E6"
+  ],
+  "lat": 48.46012,
+  "lon": -5.12025,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerscao",
+  "carres": [
+   "M6"
+  ],
+  "lat": 48.46097,
+  "lon": -5.06575,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kervasdoue",
+  "carres": [
+   "L6"
+  ],
+  "lat": 48.46086,
+  "lon": -5.07256,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kervegen",
+  "carres": [
+   "K5"
+  ],
+  "lat": 48.46528,
+  "lon": -5.07952,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kervin",
+  "carres": [
+   "L4"
+  ],
+  "lat": 48.46987,
+  "lon": -5.07288,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kerzoncou",
+  "carres": [
+   "I4",
+   "J4"
+  ],
+  "lat": 48.46961,
+  "lon": -5.08987,
+  "precision_m": 750
+ },
+ {
+  "nom": "Kinzi",
+  "carres": [
+   "G2"
+  ],
+  "lat": 48.47824,
+  "lon": -5.10726,
+  "precision_m": 550
+ },
+ {
+  "nom": "Korz",
+  "carres": [
+   "I8"
+  ],
+  "lat": 48.45137,
+  "lon": -5.0926,
+  "precision_m": 550
+ },
+ {
+  "nom": "Kun",
+  "carres": [
+   "E7"
+  ],
+  "lat": 48.45553,
+  "lon": -5.12008,
+  "precision_m": 550
+ },
+ {
+  "nom": "Lampaul",
+  "carres": [
+   "H7"
+  ],
+  "lat": 48.45585,
+  "lon": -5.09966,
+  "precision_m": 550
+ },
+ {
+  "nom": "Lann ar Bir",
+  "carres": [
+   "G7"
+  ],
+  "lat": 48.45575,
+  "lon": -5.10647,
+  "precision_m": 550
+ },
+ {
+  "nom": "Lann ar C'harc'h",
+  "carres": [
+   "J7"
+  ],
+  "lat": 48.45606,
+  "lon": -5.08603,
+  "precision_m": 550
+ },
+ {
+  "nom": "Lann Penn Arland",
+  "carres": [
+   "P6",
+   "Q7"
+  ],
+  "lat": 48.45905,
+  "lon": -5.04179,
+  "precision_m": 900
+ },
+ {
+  "nom": "Lann Vihan",
+  "carres": [
+   "J6"
+  ],
+  "lat": 48.46065,
+  "lon": -5.08619,
+  "precision_m": 550
+ },
+ {
+  "nom": "Lann Vraz",
+  "carres": [
+   "I5"
+  ],
+  "lat": 48.46507,
+  "lon": -5.09308,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ledenez Arland",
+  "carres": [
+   "R5",
+   "R6"
+  ],
+  "lat": 48.46376,
+  "lon": -5.03177,
+  "precision_m": 750
+ },
+ {
+  "nom": "Ledenez Porz Coret",
+  "carres": [
+   "F10"
+  ],
+  "lat": 48.44207,
+  "lon": -5.1127,
+  "precision_m": 550
+ },
+ {
+  "nom": "Marais du Creac'h",
+  "carres": [
+   "C7",
+   "D7"
+  ],
+  "lat": 48.45537,
+  "lon": -5.13037,
+  "precision_m": 750
+ },
+ {
+  "nom": "Marais du Niou",
+  "carres": [
+   "F6",
+   "G6"
+  ],
+  "lat": 48.46028,
+  "lon": -5.10999,
+  "precision_m": 750
+ },
+ {
+  "nom": "Mean Arland",
+  "carres": [
+   "P9"
+  ],
+  "lat": 48.44762,
+  "lon": -5.04475,
+  "precision_m": 550
+ },
+ {
+  "nom": "Mean Du",
+  "carres": [
+   "D9"
+  ],
+  "lat": 48.44634,
+  "lon": -5.12665,
+  "precision_m": 550
+ },
+ {
+  "nom": "Mean Garo",
+  "carres": [
+   "H3"
+  ],
+  "lat": 48.47389,
+  "lon": -5.1003,
+  "precision_m": 550
+ },
+ {
+  "nom": "Mean Porz Gwenn",
+  "carres": [
+   "K9"
+  ],
+  "lat": 48.44709,
+  "lon": -5.07888,
+  "precision_m": 550
+ },
+ {
+  "nom": "Mez Caradec",
+  "carres": [
+   "K8"
+  ],
+  "lat": 48.45158,
+  "lon": -5.07904,
+  "precision_m": 550
+ },
+ {
+  "nom": "Mez Doun",
+  "carres": [
+   "F6"
+  ],
+  "lat": 48.46023,
+  "lon": -5.11334,
+  "precision_m": 550
+ },
+ {
+  "nom": "Mezareun",
+  "carres": [
+   "G7",
+   "H7"
+  ],
+  "lat": 48.4558,
+  "lon": -5.10307,
+  "precision_m": 750
+ },
+ {
+  "nom": "Mikeal",
+  "carres": [
+   "K6"
+  ],
+  "lat": 48.46076,
+  "lon": -5.07936,
+  "precision_m": 550
+ },
+ {
+  "nom": "Nerodin",
+  "carres": [
+   "I9"
+  ],
+  "lat": 48.44688,
+  "lon": -5.09244,
+  "precision_m": 550
+ },
+ {
+  "nom": "Niou Huella",
+  "carres": [
+   "F6",
+   "G6"
+  ],
+  "lat": 48.46028,
+  "lon": -5.10999,
+  "precision_m": 750
+ },
+ {
+  "nom": "Niou Izella",
+  "carres": [
+   "E6",
+   "F6"
+  ],
+  "lat": 48.46017,
+  "lon": -5.11679,
+  "precision_m": 750
+ },
+ {
+  "nom": "Palud Meur",
+  "carres": [
+   "H4"
+  ],
+  "lat": 48.46945,
+  "lon": -5.10014,
+  "precision_m": 550
+ },
+ {
+  "nom": "Park Raden",
+  "carres": [
+   "N6"
+  ],
+  "lat": 48.46108,
+  "lon": -5.05887,
+  "precision_m": 550
+ },
+ {
+  "nom": "Park Raden Ouest",
+  "carres": [
+   "N6"
+  ],
+  "lat": 48.46108,
+  "lon": -5.05887,
+  "precision_m": 550
+ },
+ {
+  "nom": "Parkou",
+  "carres": [
+   "M6"
+  ],
+  "lat": 48.46097,
+  "lon": -5.06575,
+  "precision_m": 550
+ },
+ {
+  "nom": "Parluc'hen",
+  "carres": [
+   "E7",
+   "F7"
+  ],
+  "lat": 48.45559,
+  "lon": -5.11663,
+  "precision_m": 750
+ },
+ {
+  "nom": "Penn ar Prat",
+  "carres": [
+   "J4"
+  ],
+  "lat": 48.46966,
+  "lon": -5.08651,
+  "precision_m": 550
+ },
+ {
+  "nom": "Penn ar Roc'h",
+  "carres": [
+   "J10"
+  ],
+  "lat": 48.4425,
+  "lon": -5.08555,
+  "precision_m": 550
+ },
+ {
+  "nom": "Penn ar Ru Meur",
+  "carres": [
+   "I3"
+  ],
+  "lat": 48.474,
+  "lon": -5.0934,
+  "precision_m": 550
+ },
+ {
+  "nom": "Penn Ar Ruguel",
+  "carres": [
+   "I10"
+  ],
+  "lat": 48.44239,
+  "lon": -5.09228,
+  "precision_m": 550
+ },
+ {
+  "nom": "Penn ar Viler",
+  "carres": [
+   "E11"
+  ],
+  "lat": 48.43739,
+  "lon": -5.11944,
+  "precision_m": 550
+ },
+ {
+  "nom": "Penn Jamet",
+  "carres": [
+   "H5"
+  ],
+  "lat": 48.46496,
+  "lon": -5.09998,
+  "precision_m": 550
+ },
+ {
+  "nom": "Pennorz",
+  "carres": [
+   "I6"
+  ],
+  "lat": 48.46055,
+  "lon": -5.09292,
+  "precision_m": 550
+ },
+ {
+  "nom": "Pern",
+  "carres": [
+   "B8"
+  ],
+  "lat": 48.45063,
+  "lon": -5.14037,
+  "precision_m": 550
+ },
+ {
+  "nom": "Phare de Kéréon",
+  "carres": [
+   "Q9"
+  ],
+  "lat": 48.43737,
+  "lon": -5.0257,
+  "precision_m": 20,
+  "source": "Wikipédia"
+ },
+ {
+  "nom": "Phare de la Jument",
+  "carres": [
+   "E13"
+  ],
+  "lat": 48.4225,
+  "lon": -5.13417,
+  "precision_m": 20,
+  "source": "Structurae"
+ },
+ {
+  "nom": "Phare de Nividic",
+  "carres": [
+   "A9"
+  ],
+  "lat": 48.44556,
+  "lon": -5.15083,
+  "precision_m": 20,
+  "source": "liste des phares de France (Wikipédia)"
+ },
+ {
+  "nom": "Phare du Creac'h",
+  "carres": [
+   "D6"
+  ],
+  "lat": 48.4595083,
+  "lon": -5.129278,
+  "precision_m": 20,
+  "source": "liste des phares de France (Wikipédia)"
+ },
+ {
+  "nom": "Phare du Stiff",
+  "carres": [
+   "N3"
+  ],
+  "lat": 48.47451,
+  "lon": -5.056774,
+  "precision_m": 20,
+  "source": "MarineTraffic"
+ },
+ {
+  "nom": "Plage de Korz",
+  "carres": [
+   "I8"
+  ],
+  "lat": 48.45137,
+  "lon": -5.0926,
+  "precision_m": 550
+ },
+ {
+  "nom": "Plage du Prad",
+  "carres": [
+   "H10"
+  ],
+  "lat": 48.44228,
+  "lon": -5.09918,
+  "precision_m": 550
+ },
+ {
+  "nom": "Pointe de Bac'haol",
+  "carres": [
+   "O2",
+   "O3"
+  ],
+  "lat": 48.47686,
+  "lon": -5.05261,
+  "precision_m": 750
+ },
+ {
+  "nom": "Pointe de Roc'h C'haro",
+  "carres": [
+   "K8",
+   "K9",
+   "L8",
+   "L9"
+  ],
+  "lat": 48.44939,
+  "lon": -5.07556,
+  "precision_m": 900
+ },
+ {
+  "nom": "Pointe de Velgoz",
+  "carres": [
+   "M8",
+   "M9"
+  ],
+  "lat": 48.44955,
+  "lon": -5.06535,
+  "precision_m": 750
+ },
+ {
+  "nom": "Porz Ac'hea",
+  "carres": [
+   "O5",
+   "P5"
+  ],
+  "lat": 48.46576,
+  "lon": -5.04881,
+  "precision_m": 750
+ },
+ {
+  "nom": "Porz an Dour",
+  "carres": [
+   "O5"
+  ],
+  "lat": 48.46571,
+  "lon": -5.05222,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz an Eijen",
+  "carres": [
+   "H11",
+   "I11"
+  ],
+  "lat": 48.43776,
+  "lon": -5.09557,
+  "precision_m": 750
+ },
+ {
+  "nom": "Porz Arland",
+  "carres": [
+   "O7"
+  ],
+  "lat": 48.4566,
+  "lon": -5.0519,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz Coret",
+  "carres": [
+   "F10"
+  ],
+  "lat": 48.44207,
+  "lon": -5.1127,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz Doun",
+  "carres": [
+   "E11"
+  ],
+  "lat": 48.43739,
+  "lon": -5.11944,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz Glas",
+  "carres": [
+   "B8"
+  ],
+  "lat": 48.45063,
+  "lon": -5.14037,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz Gwenn",
+  "carres": [
+   "J8",
+   "K8"
+  ],
+  "lat": 48.45153,
+  "lon": -5.08245,
+  "precision_m": 750
+ },
+ {
+  "nom": "Porz Kerac'h",
+  "carres": [
+   "B8",
+   "C9"
+  ],
+  "lat": 48.44843,
+  "lon": -5.13691,
+  "precision_m": 900
+ },
+ {
+  "nom": "Porz Kinzi",
+  "carres": [
+   "H3",
+   "I3"
+  ],
+  "lat": 48.47395,
+  "lon": -5.09685,
+  "precision_m": 750
+ },
+ {
+  "nom": "Porz Ligoudou",
+  "carres": [
+   "N5"
+  ],
+  "lat": 48.4656,
+  "lon": -5.05903,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz Mean",
+  "carres": [
+   "B7",
+   "C7"
+  ],
+  "lat": 48.45527,
+  "lon": -5.13716,
+  "precision_m": 750
+ },
+ {
+  "nom": "Porz Miin",
+  "carres": [
+   "D6"
+  ],
+  "lat": 48.46001,
+  "lon": -5.12713,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz Nenv",
+  "carres": [
+   "B8"
+  ],
+  "lat": 48.45063,
+  "lon": -5.14037,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz Noan",
+  "carres": [
+   "H7"
+  ],
+  "lat": 48.45585,
+  "lon": -5.09966,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porz Paol",
+  "carres": [
+   "H8"
+  ],
+  "lat": 48.45127,
+  "lon": -5.0995,
+  "precision_m": 550
+ },
+ {
+  "nom": "Porzic Gwenn",
+  "carres": [
+   "G10"
+  ],
+  "lat": 48.44218,
+  "lon": -5.10599,
+  "precision_m": 550
+ },
+ {
+  "nom": "Poull Bojer",
+  "carres": [
+   "N7"
+  ],
+  "lat": 48.45649,
+  "lon": -5.0587,
+  "precision_m": 550
+ },
+ {
+  "nom": "Poull Brac",
+  "carres": [
+   "I6"
+  ],
+  "lat": 48.46055,
+  "lon": -5.09292,
+  "precision_m": 550
+ },
+ {
+  "nom": "Poull Bridig",
+  "carres": [
+   "F5"
+  ],
+  "lat": 48.46475,
+  "lon": -5.1135,
+  "precision_m": 550
+ },
+ {
+  "nom": "Poull Dragas",
+  "carres": [
+   "H5",
+   "I5"
+  ],
+  "lat": 48.46502,
+  "lon": -5.09653,
+  "precision_m": 750
+ },
+ {
+  "nom": "Poull Dravet",
+  "carres": [
+   "H11"
+  ],
+  "lat": 48.43771,
+  "lon": -5.09902,
+  "precision_m": 550
+ },
+ {
+  "nom": "Poull Feaz",
+  "carres": [
+   "G6"
+  ],
+  "lat": 48.46033,
+  "lon": -5.10663,
+  "precision_m": 550
+ },
+ {
+  "nom": "Poull Gweguen",
+  "carres": [
+   "D8",
+   "E8"
+  ],
+  "lat": 48.45089,
+  "lon": -5.12337,
+  "precision_m": 750
+ },
+ {
+  "nom": "Poull Jiliou",
+  "carres": [
+   "H4"
+  ],
+  "lat": 48.46945,
+  "lon": -5.10014,
+  "precision_m": 550
+ },
+ {
+  "nom": "Poull Yvern",
+  "carres": [
+   "N4"
+  ],
+  "lat": 48.47008,
+  "lon": -5.05918,
+  "precision_m": 550
+ },
+ {
+  "nom": "Pount",
+  "carres": [
+   "J6"
+  ],
+  "lat": 48.46065,
+  "lon": -5.08619,
+  "precision_m": 550
+ },
+ {
+  "nom": "Pount ar Rodez",
+  "carres": [
+   "K7",
+   "L7"
+  ],
+  "lat": 48.45622,
+  "lon": -5.0758,
+  "precision_m": 750
+ },
+ {
+  "nom": "Pount Cam",
+  "carres": [
+   "J7"
+  ],
+  "lat": 48.45606,
+  "lon": -5.08603,
+  "precision_m": 550
+ },
+ {
+  "nom": "Pount Salaun",
+  "carres": [
+   "L5",
+   "L6"
+  ],
+  "lat": 48.46312,
+  "lon": -5.07264,
+  "precision_m": 750
+ },
+ {
+  "nom": "Prad ar Roue",
+  "carres": [
+   "L5",
+   "M5"
+  ],
+  "lat": 48.46544,
+  "lon": -5.06931,
+  "precision_m": 750
+ },
+ {
+  "nom": "Prad Meur",
+  "carres": [
+   "I7"
+  ],
+  "lat": 48.45596,
+  "lon": -5.09276,
+  "precision_m": 550
+ },
+ {
+  "nom": "Punel",
+  "carres": [
+   "J7"
+  ],
+  "lat": 48.45606,
+  "lon": -5.08603,
+  "precision_m": 550
+ },
+ {
+  "nom": "Pyramide du Runiou",
+  "carres": [
+   "F10",
+   "G11"
+  ],
+  "lat": 48.43984,
+  "lon": -5.10927,
+  "precision_m": 900
+ },
+ {
+  "nom": "Roc'h an Aod Teuren",
+  "carres": [
+   "G3"
+  ],
+  "lat": 48.47379,
+  "lon": -5.10711,
+  "precision_m": 550
+ },
+ {
+  "nom": "Roc'h ar Baianet",
+  "carres": [
+   "B7",
+   "C7"
+  ],
+  "lat": 48.45527,
+  "lon": -5.13716,
+  "precision_m": 750
+ },
+ {
+  "nom": "Roc'h ar Vugalez",
+  "carres": [
+   "G4",
+   "H4"
+  ],
+  "lat": 48.46939,
+  "lon": -5.10355,
+  "precision_m": 750
+ },
+ {
+  "nom": "Roc'h C'hastellik",
+  "carres": [
+   "K9"
+  ],
+  "lat": 48.44709,
+  "lon": -5.07888,
+  "precision_m": 550
+ },
+ {
+  "nom": "Roc'h Ever",
+  "carres": [
+   "O8"
+  ],
+  "lat": 48.45201,
+  "lon": -5.05174,
+  "precision_m": 550
+ },
+ {
+  "nom": "Roc'h Hir",
+  "carres": [
+   "G12"
+  ],
+  "lat": 48.43307,
+  "lon": -5.10567,
+  "precision_m": 550
+ },
+ {
+  "nom": "Roc'h Kalet",
+  "carres": [
+   "F5",
+   "G5"
+  ],
+  "lat": 48.4648,
+  "lon": -5.11015,
+  "precision_m": 750
+ },
+ {
+  "nom": "Roc'h Mell",
+  "carres": [
+   "L1"
+  ],
+  "lat": 48.48332,
+  "lon": -5.07335,
+  "precision_m": 550
+ },
+ {
+  "nom": "Roc'h Nel",
+  "carres": [
+   "J11"
+  ],
+  "lat": 48.43792,
+  "lon": -5.08539,
+  "precision_m": 550
+ },
+ {
+  "nom": "Roc'h Vouillard",
+  "carres": [
+   "B6",
+   "C6"
+  ],
+  "lat": 48.45986,
+  "lon": -5.13732,
+  "precision_m": 750
+ },
+ {
+  "nom": "Roc'h Wark",
+  "carres": [
+   "I3"
+  ],
+  "lat": 48.474,
+  "lon": -5.0934,
+  "precision_m": 550
+ },
+ {
+  "nom": "Rulann",
+  "carres": [
+   "K4"
+  ],
+  "lat": 48.46976,
+  "lon": -5.07968,
+  "precision_m": 550
+ },
+ {
+  "nom": "Rumalic",
+  "carres": [
+   "J4",
+   "K4"
+  ],
+  "lat": 48.46971,
+  "lon": -5.0831,
+  "precision_m": 750
+ },
+ {
+  "nom": "Réservoir Amont",
+  "carres": [
+   "K6"
+  ],
+  "lat": 48.46076,
+  "lon": -5.07936,
+  "precision_m": 550
+ },
+ {
+  "nom": "Réservoir Aval",
+  "carres": [
+   "J6"
+  ],
+  "lat": 48.46065,
+  "lon": -5.08619,
+  "precision_m": 550
+ },
+ {
+  "nom": "Stang ar Merdi",
+  "carres": [
+   "K6",
+   "L6"
+  ],
+  "lat": 48.46081,
+  "lon": -5.07596,
+  "precision_m": 750
+ },
+ {
+  "nom": "Stang ar Stiff",
+  "carres": [
+   "N4"
+  ],
+  "lat": 48.47008,
+  "lon": -5.05918,
+  "precision_m": 550
+ },
+ {
+  "nom": "Stang Arland",
+  "carres": [
+   "O6"
+  ],
+  "lat": 48.46118,
+  "lon": -5.05206,
+  "precision_m": 550
+ },
+ {
+  "nom": "Stang Kadoran",
+  "carres": [
+   "L2"
+  ],
+  "lat": 48.47877,
+  "lon": -5.07319,
+  "precision_m": 550
+ },
+ {
+  "nom": "Stang Korz",
+  "carres": [
+   "I8",
+   "J8"
+  ],
+  "lat": 48.45143,
+  "lon": -5.08923,
+  "precision_m": 750
+ },
+ {
+  "nom": "Stang Laedroun",
+  "carres": [
+   "N8"
+  ],
+  "lat": 48.4519,
+  "lon": -5.05854,
+  "precision_m": 550
+ },
+ {
+  "nom": "Stang Meur",
+  "carres": [
+   "J4"
+  ],
+  "lat": 48.46966,
+  "lon": -5.08651,
+  "precision_m": 550
+ },
+ {
+  "nom": "Stang Porz Gwenn",
+  "carres": [
+   "J8",
+   "K7"
+  ],
+  "lat": 48.45382,
+  "lon": -5.08254,
+  "precision_m": 900
+ },
+ {
+  "nom": "Stang Yuzin",
+  "carres": [
+   "G4",
+   "H4"
+  ],
+  "lat": 48.46939,
+  "lon": -5.10355,
+  "precision_m": 750
+ },
+ {
+  "nom": "Terrain de Foot",
+  "carres": [
+   "K7"
+  ],
+  "lat": 48.45617,
+  "lon": -5.0792,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ti Crann",
+  "carres": [
+   "M4"
+  ],
+  "lat": 48.46998,
+  "lon": -5.06607,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ti Crenn",
+  "carres": [
+   "I7"
+  ],
+  "lat": 48.45596,
+  "lon": -5.09276,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ti Huella",
+  "carres": [
+   "O6"
+  ],
+  "lat": 48.46118,
+  "lon": -5.05206,
+  "precision_m": 550
+ },
+ {
+  "nom": "Ti Korn",
+  "carres": [
+   "G10"
+  ],
+  "lat": 48.44218,
+  "lon": -5.10599,
+  "precision_m": 550
+ },
+ {
+  "nom": "Toull Al Lann",
+  "carres": [
+   "J9"
+  ],
+  "lat": 48.44698,
+  "lon": -5.08571,
+  "precision_m": 550
+ },
+ {
+  "nom": "Toull Aoroz",
+  "carres": [
+   "N3"
+  ],
+  "lat": 48.47453,
+  "lon": -5.05934,
+  "precision_m": 550
+ },
+ {
+  "nom": "Toull Dreiz",
+  "carres": [
+   "L8"
+  ],
+  "lat": 48.45169,
+  "lon": -5.07223,
+  "precision_m": 550
+ },
+ {
+  "nom": "Toull Rouez",
+  "carres": [
+   "L3",
+   "M3"
+  ],
+  "lat": 48.47437,
+  "lon": -5.06963,
+  "precision_m": 750
+ },
+ {
+  "nom": "Youc'h Arland",
+  "carres": [
+   "R7"
+  ],
+  "lat": 48.45691,
+  "lon": -5.03153,
+  "precision_m": 550
+ },
+ {
+  "nom": "Youc'h Korz",
+  "carres": [
+   "E9",
+   "E10",
+   "F9",
+   "F10"
+  ],
+  "lat": 48.44426,
+  "lon": -5.11623,
+  "precision_m": 900
+ },
+ {
+  "nom": "Youc'h Kreiz",
+  "carres": [
+   "F4",
+   "G4"
+  ],
+  "lat": 48.46929,
+  "lon": -5.11031,
+  "precision_m": 750
+ },
+ {
+  "nom": "Youc'h Meur",
+  "carres": [
+   "F4"
+  ],
+  "lat": 48.46924,
+  "lon": -5.11366,
+  "precision_m": 550
+ },
+ {
+  "nom": "Youc'h veur",
+  "carres": [
+   "K9"
+  ],
+  "lat": 48.44709,
+  "lon": -5.07888,
+  "precision_m": 550
+ },
+ {
+  "nom": "Yuzin",
+  "carres": [
+   "G4"
+  ],
+  "lat": 48.46934,
+  "lon": -5.10695,
+  "precision_m": 550
+ }
+]
