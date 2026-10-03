@@ -827,13 +827,8 @@
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
  },
- {
-  "Nom Français": "Cygne chanteur",
-  "Nom Scientifique": "Cygnus cygnus",
-  "Nom Anglais": "Whooper Swan",
-  "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
- },
+ {"Nom Français":"Cygne chanteur","Nom Scientifique":"Cygnus cygnus","Nom Anglais":"Whooper Swan","Type de taxon":"espèce","Proposition de Canal de Diffusion Ouessant":"Whatsapp"}
+,
  {
   "Nom Français": "Cygne noir",
   "Nom Scientifique": "Cygnus atratus",
