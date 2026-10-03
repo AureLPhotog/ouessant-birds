@@ -325,7 +325,7 @@ section[hidden]{display:none}
       importText: "La liste n'a pas pu être téléchargée depuis GitHub sur cette page. Importe le fichier <em>ouessant_birds.json</em> depuis ton ordinateur ou ton téléphone : il restera enregistré dans ce navigateur.",
       importBtn: 'Importer le fichier JSON', importOther: 'Importer un autre fichier JSON',
       badFile: "Ce fichier n'est pas lisible. Il doit contenir une liste d'espèces avec au moins les champs « Nom Français », « Nom Scientifique » et « Proposition de Canal de Diffusion Ouessant ».",
-      channels: { telegram: 'Telegram', whatsapp: 'WhatsApp', none: "Pas d'annonce", unknown: 'Non renseigné' },
+      channels: { telegram: 'Alerte Telegram', whatsapp: 'Alerte WhatsApp', none: "Pas d'alerte", unknown: 'Non renseigné' },
       tabBirds: 'Oiseaux', tabPlaces: 'Lieux', tabWhere: 'Où suis-je ?',
       ledeWhere: 'Trouve les 5 lieux-dits les plus proches de ta position.',
       locateBtn: 'Me localiser', relocateBtn: 'Actualiser ma position',
@@ -402,7 +402,7 @@ section[hidden]{display:none}
       importText: 'The list could not be downloaded from GitHub on this page. Import the <em>ouessant_birds.json</em> file from your computer or phone: it will stay saved in this browser.',
       importBtn: 'Import the JSON file', importOther: 'Import another JSON file',
       badFile: 'This file cannot be read. It must contain a list of species with at least the fields “Nom Français”, “Nom Scientifique” and “Proposition de Canal de Diffusion Ouessant”.',
-      channels: { telegram: 'Telegram', whatsapp: 'WhatsApp', none: 'No report needed', unknown: 'Not specified' },
+      channels: { telegram: 'Telegram alert', whatsapp: 'WhatsApp alert', none: 'No alert', unknown: 'Not specified' },
       tabBirds: 'Birds', tabPlaces: 'Places', tabWhere: 'Where am I?',
       ledeWhere: 'Find the 5 place names closest to where you are.',
       locateBtn: 'Locate me', relocateBtn: 'Update my position',
@@ -546,7 +546,8 @@ section[hidden]{display:none}
     fuse = new Fuse(birds, { keys:[K_FR, K_SCI, K_EN], threshold:0.2, ignoreLocation:true });
     counts = {};
     birds.forEach(b => { const c = canalOf(b); counts[c] = (counts[c]||0)+1; });
-    channels = Object.keys(counts).sort((a,b) => a.localeCompare(b,'fr'));
+    const RANK = { telegram: 0, whatsapp: 1, none: 2 };   // ordre : du plus rare au plus courant
+    channels = Object.keys(counts).sort((a,b) => ((RANK[canalKind(a)] ?? 3) - (RANK[canalKind(b)] ?? 3)) || a.localeCompare(b,'fr'));
     colorOf = {}; channels.forEach((c,i) => colorOf[c] = CHANNEL_COLORS[canalKind(c)] || COLORS[i % COLORS.length]);
     if (activeChannel && !counts[activeChannel]) activeChannel = null;
     q.disabled = false;
