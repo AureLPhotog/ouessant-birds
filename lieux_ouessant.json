@@ -1939,7 +1939,7 @@
   "lon": -5.05206,
   "precision_m": 550
  },
- {"nom":"Stang Kadoran","carres":["L2"],"lat":48.47741,"lon":-5.06873,"precision_m":25,"verifie":true},
+ {"nom":"Stang Kadoran","carres":["M2"],"lat":48.47741,"lon":-5.06873,"precision_m":25,"verifie":true},
  {
   "nom": "Stang Korz",
   "carres": [
