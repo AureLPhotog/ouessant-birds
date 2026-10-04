@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Carrefour",
+    "carres": [
+      "I7"
+    ],
+    "lat": 48.45672,
+    "lon": -5.09559,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Sémaphore du Stiff",
     "carres": [
       "N3"
