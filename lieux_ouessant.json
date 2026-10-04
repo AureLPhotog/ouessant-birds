@@ -1092,6 +1092,17 @@
     "precision_m": 550
   },
   {
+    "nom": "La Duchesse Anne",
+    "carres": [
+      "H7"
+    ],
+    "lat": 48.45501761129984,
+    "lon": -5.09715682189361,
+    "precision_m": 25,
+    "verifie": true,
+    "source": ""
+  },
+  {
     "nom": "Lampaul",
     "carres": [
       "H6",
