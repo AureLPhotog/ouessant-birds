@@ -2146,6 +2146,17 @@
     "precision_m": 750
   },
   {
+    "nom": "Ty Korn (Bar)",
+    "carres": [
+      "H7"
+    ],
+    "lat": 48.4572683756452,
+    "lon": -5.096932000930361,
+    "precision_m": 25,
+    "verifie": true,
+    "source": ""
+  },
+  {
     "nom": "Youc'h Arland",
     "carres": [
       "R7"
