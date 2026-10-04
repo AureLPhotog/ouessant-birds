@@ -648,6 +648,17 @@
     "precision_m": 550
   },
   {
+    "nom": "Église Saint Pol-Aurélien",
+    "carres": [
+      "H7"
+    ],
+    "lat": 48.45736,
+    "lon": -5.09608,
+    "precision_m": 25,
+    "verifie": true,
+    "source": ""
+  },
+  {
     "nom": "Embarcadère du Stiff",
     "carres": [
       "O4"
@@ -1433,7 +1444,7 @@
   {
     "nom": "Phare de Kéréon",
     "carres": [
-      "Q9"
+      "S11"
     ],
     "lat": 48.43737,
     "lon": -5.0257,
