@@ -34,7 +34,7 @@
 :root{
   --ocean:#1F3A4D; --ocean-2:#2C5168; --foam:#EEF2F0; --paper:#FFFFFF;
   --granite:#5E676B; --line:#D3DAD8; --heather:#8C5E83; --warn:#B4532A; --warn-bg:#FBEFE8;
-  --ink:#16232C;
+  --ink:#16232C; --ok:#1F7A5A;
   --serif:"Spectral", Georgia, "Times New Roman", serif;
   --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   box-sizing:border-box;
@@ -44,14 +44,17 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --ocean:#9FC3D9; --ocean-2:#7FAAC4; --foam:#0F1B23; --paper:#16252F;
-    --granite:#9AA6AB; --line:#2A3B46; --heather:#C9A1C0; --warn:#F0A07A; --warn-bg:#3A2219; --ink:#E6EEF0;
+    --granite:#9AA6AB; --line:#2A3B46; --heather:#C9A1C0; --warn:#F0A07A; --warn-bg:#3A2219; --ink:#E6EEF0; --ok:#5CC497;
   }
 }
 :root[data-theme="dark"]{
   --ocean:#9FC3D9; --ocean-2:#7FAAC4; --foam:#0F1B23; --paper:#16252F;
-  --granite:#9AA6AB; --line:#2A3B46; --heather:#C9A1C0; --warn:#F0A07A; --warn-bg:#3A2219; --ink:#E6EEF0;
+  --granite:#9AA6AB; --line:#2A3B46; --heather:#C9A1C0; --warn:#F0A07A; --warn-bg:#3A2219; --ink:#E6EEF0; --ok:#5CC497;
 }
 *,*::before,*::after{box-sizing:inherit}
+:root[data-cvd="1"]{--ok:#0072B2}
+:root[data-cvd="1"][data-theme="dark"]{--ok:#56B4E9}
+@media (prefers-color-scheme: dark){ :root[data-cvd="1"]:not([data-theme="light"]){--ok:#56B4E9} }
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--foam);color:var(--ink);font:400 16px/1.5 var(--sans)}
 .wrap{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem}
@@ -63,10 +66,24 @@ header{display:flex;gap:1rem;align-items:flex-end;padding:2.25rem 0 1.5rem}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .phare{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))} }
 :root[data-theme="dark"] .phare{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))}
 header{position:relative}
-.lang{position:absolute;top:2.25rem;right:0;display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.tools{position:absolute;top:2.25rem;right:0;display:flex;gap:.4rem;align-items:center}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.prefs-btn{display:grid;place-items:center;width:2.1rem;height:2.1rem;border:1px solid var(--line);border-radius:50%;background:var(--paper);color:var(--ink);cursor:pointer}
+.prefs-btn[aria-expanded="true"]{background:var(--ocean);color:var(--foam);border-color:var(--ocean)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.prefs{position:absolute;top:calc(100% + .5rem);right:0;z-index:20;width:15.5rem;background:var(--paper);border:1px solid var(--line);
+  border-radius:12px;padding:.8rem .9rem;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.prefs[hidden]{display:none}
+.prefs-t{margin:.2rem 0 .35rem;font:600 .8rem var(--sans);color:var(--granite);text-transform:uppercase;letter-spacing:.04em}
+.prefs-n{margin:.6rem 0 0;font-size:.78rem;color:var(--granite)}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:.5rem}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:500 .85rem var(--sans);padding:.45rem .3rem;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ocean);color:var(--foam);font-weight:600}
+.prefs-btn:focus-visible,.seg button:focus-visible,.lang button:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
 .lang button{border:0;background:none;color:var(--granite);font:600 .82rem var(--sans);padding:.35rem .75rem;cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--ocean);color:var(--foam)}
-.intro h1{padding-right:6.5rem}
+.intro h1{padding-right:8.5rem}
 h1{font:700 clamp(2rem,6vw,3.1rem)/1.02 var(--serif);margin:0;color:var(--ocean);letter-spacing:-.01em}
 .lede{margin:.6rem 0 0;color:var(--granite);max-width:52ch}
 
@@ -177,7 +194,7 @@ section[hidden]{display:none}
 .sform input,.sform textarea{font:400 1rem var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.5rem .6rem;width:100%;box-sizing:border-box}
 .sform p{margin:0;font-size:.88rem}
 .sform .shelp{color:var(--granite)}
-.sform .good{color:#1F7A5A;font-weight:600}
+.sform .good{color:var(--ok);font-weight:600}
 .sform .bad{color:var(--warn);font-weight:600}
 .sform .snote{color:var(--granite);font-size:.8rem;margin-top:.3rem}
 .smail{display:inline-block;margin-top:.4rem;background:var(--ocean);color:var(--foam);font:600 .9rem var(--sans);padding:.55rem .9rem;border-radius:8px;text-decoration:none}
@@ -218,11 +235,31 @@ section[hidden]{display:none}
     <img class="phare" src="phare_creach.svg" alt="" width="56" height="131">
     <div class="intro">
       <h1 data-t="title">Oiseaux d'Ouessant</h1>
-      <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation.</p>
+      <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation sur l'île.</p>
     </div>
-    <div class="lang" role="group" aria-label="Langue / Language">
-      <button type="button" data-lang="fr" aria-pressed="true">FR</button>
-      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    <div class="tools">
+      <button type="button" id="prefsBtn" class="prefs-btn" aria-expanded="false" aria-controls="prefsPanel">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>
+        <span class="sr" data-t="prefsLabel">Affichage</span>
+      </button>
+      <div class="lang" role="group" aria-label="Langue / Language">
+        <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <div id="prefsPanel" class="prefs" hidden>
+        <p class="prefs-t" data-t="themeLabel">Thème</p>
+        <div class="seg" role="group" data-pref="theme">
+          <button type="button" data-v="auto" data-t="tAuto">Auto</button>
+          <button type="button" data-v="light" data-t="tLight">Clair</button>
+          <button type="button" data-v="dark" data-t="tDark">Sombre</button>
+        </div>
+        <p class="prefs-t" data-t="colorsLabel">Couleurs</p>
+        <div class="seg" role="group" data-pref="cvd">
+          <button type="button" data-v="0" data-t="cStd">Standard</button>
+          <button type="button" data-v="1" data-t="cCvd">Daltonisme</button>
+        </div>
+        <p class="prefs-n" data-t="cvdNote"></p>
+      </div>
     </div>
   </header>
 
@@ -298,7 +335,18 @@ section[hidden]{display:none}
   const STORE = 'ouessant-birds-data', LANG_KEY = 'ouessant-birds-lang';
   const COLORS = ['#B4532A','#2C7A6B','#8C5E83','#3E6FA8','#A3802A','#5E676B','#B03A5B','#4F7A2C'];
   // WhatsApp en vert, Telegram en bleu, pas d'annonce en gris
-  const CHANNEL_COLORS = { telegram: '#2A9FD8', whatsapp: '#25A244', none: '#8A949A' };
+  // Palettes : standard, et adaptée au daltonisme (couleurs d'Okabe & Ito, distinguables par la plupart des daltoniens)
+  const PALETTES = {
+    std: { telegram: '#2A9FD8', whatsapp: '#25A244', none: '#8A949A', sq: '214,40,40', verified: '#D62828', proposed: '#1F7A5A', user: '#2B7BE4', num: '#1F3A4D' },
+    cvd: { telegram: '#0072B2', whatsapp: '#E69F00', none: '#8A949A', sq: '0,114,178', verified: '#D55E00', proposed: '#009E73', user: '#CC79A7', num: '#000000' }
+  };
+  const THEME_KEY = 'ouessant-theme', CVD_KEY = 'ouessant-cvd';
+  let cvd = false;
+  try { cvd = localStorage.getItem(CVD_KEY) === '1'; } catch(_) {}
+  const isDark = () => { const t = document.documentElement.getAttribute('data-theme'); return t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches); };
+  // en sombre, le bleu foncé d'Okabe & Ito ressort mal : on prend son bleu ciel
+  const PAL = () => (cvd && isDark()) ? Object.assign({}, PALETTES.cvd, { telegram: '#56B4E9' }) : PALETTES[cvd ? 'cvd' : 'std'];
+  const CHANNEL_COLORS = new Proxy({}, { get: (_, k) => PAL()[k] });
   function canalKind(c){
     const n = String(c || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
     return n.startsWith('tele') ? 'telegram' : n.startsWith('whats') ? 'whatsapp' : (n.startsWith('pas') || n === 'xx_non') ? 'none' : '';
@@ -308,7 +356,7 @@ section[hidden]{display:none}
     fr: {
       docTitle: "Oiseaux d'Ouessant · canal de diffusion",
       title: "Oiseaux d'Ouessant",
-      lede: "Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation.",
+      lede: "Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation sur l'île.",
       placeholder: 'Nom français, scientifique ou anglais',
       searchLabel: 'Rechercher une espèce',
       clear: 'Effacer', all: 'Toutes', showSsp: 'Afficher les sous-espèces', ssp: 'sous-espèce',
@@ -327,18 +375,21 @@ section[hidden]{display:none}
       badFile: "Ce fichier n'est pas lisible. Il doit contenir une liste d'espèces avec au moins les champs « Nom Français », « Nom Scientifique » et « Proposition de Canal de Diffusion Ouessant ».",
       channels: { telegram: 'Alerte Telegram', whatsapp: 'Alerte WhatsApp', none: "Pas d'alerte", unknown: 'Non renseigné' },
       tabBirds: 'Oiseaux', tabPlaces: 'Lieux', tabWhere: 'Où suis-je ?',
+      prefsLabel: 'Affichage', themeLabel: 'Thème', tAuto: 'Auto', tLight: 'Clair', tDark: 'Sombre',
+      colorsLabel: 'Couleurs', cStd: 'Standard', cCvd: 'Daltonisme',
+      cvdNote: "« Daltonisme » utilise des couleurs distinguables par la plupart des personnes daltoniennes. « Auto » suit le réglage du téléphone.",
       ledeWhere: 'Trouve les 5 lieux-dits les plus proches de ta position.',
       locateBtn: 'Me localiser', relocateBtn: 'Actualiser ma position',
       youAre: (c, a) => `Tu es dans le carré ${c} (précision GPS ± ${a} m). Les 5 lieux-dits les plus proches :`,
       notHere: d => `Tu ne sembles pas être sur Ouessant : le lieu-dit le plus proche est à ${d}.`,
       dirs: ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'],
       checkedShort: 'position vérifiée',
-      whereCaption: c => `Ta position (point bleu) dans le carré ${c}, et les lieux-dits numérotés.`,
+      whereCaption: c => `Ta position (point ${cvd ? 'rose' : 'bleu'}) dans le carré ${c}, et les lieux-dits numérotés.`,
       whereNote: "Les distances sont approximatives : la plupart des lieux-dits sont placés au centre de leur carré sur la carte (± 500 m). Ta position n'est envoyée nulle part.",
       ledePlaces: "Cherche un lieu-dit de l'île pour obtenir ses coordonnées GPS <strong>APPROXIMATIVES</strong>.",
       locTip: "« Loc SVP » reste le meilleur moyen de savoir où aller.",
       openIslandMap: "Ouvrir la carte de l'île (PDF)",
-      mapCaption: c => `${c.length > 1 ? 'Carrés' : 'Carré'} ${c.join(', ')} encadré${c.length > 1 ? 's' : ''} en rouge, extrait de la carte de l'Association Naturaliste d'Ouessant.`,
+      mapCaption: c => `${c.length > 1 ? 'Carrés' : 'Carré'} ${c.join(', ')} encadré${c.length > 1 ? 's' : ''} en ${cvd ? 'bleu' : 'rouge'}, extrait de la carte de l'Association Naturaliste d'Ouessant.`,
       mapLoading: 'Chargement de la carte…',
       verified: 'Position vérifiée sur le terrain',
       suggest: 'Proposer une meilleure position',
@@ -373,7 +424,7 @@ section[hidden]{display:none}
       newDup: n => `« ${n} » est déjà dans la liste. Pour corriger sa position, ouvre-le et utilise « Proposer une meilleure position ».`,
       newOut: "Ce point est en dehors de la carte d'Ouessant. Vérifie les coordonnées.",
       newOk: (n, c) => `« ${n} » serait placé dans le carré ${c}. Vérifie sur la carte ci-dessous, puis envoie ta proposition.`,
-      newCaption: (n, c) => `Position proposée pour « ${n} » (point vert), carré ${c}.`,
+      newCaption: (n, c) => `Position proposée pour « ${n} » (losange vert), carré ${c}.`,
       formNote: "Le formulaire va s'ouvrir, déjà rempli : il ne reste qu'à cliquer sur « Envoyer ». Ta proposition sera vérifiée, puis la mise à jour sera prise en compte dans les prochains jours.",
       mapMissing: "Aperçu indisponible : le fichier carte_ouessant.jpg est introuvable à côté de l'appli.",
       pPlaceholder: 'Nom du lieu (ex. Pern, Stiff, Kadoran)', pLabel: 'Rechercher un lieu',
@@ -385,7 +436,7 @@ section[hidden]{display:none}
     en: {
       docTitle: 'Birds of Ouessant · where to report',
       title: 'Birds of Ouessant',
-      lede: 'Type a species name to find out which channel to report your sighting.',
+      lede: 'Type a species name to find out which channel to report your sighting on the island.',
       placeholder: 'English, French or scientific name',
       searchLabel: 'Search for a species',
       clear: 'Clear', all: 'All', showSsp: 'Show subspecies', ssp: 'subspecies',
@@ -404,18 +455,21 @@ section[hidden]{display:none}
       badFile: 'This file cannot be read. It must contain a list of species with at least the fields “Nom Français”, “Nom Scientifique” and “Proposition de Canal de Diffusion Ouessant”.',
       channels: { telegram: 'Telegram alert', whatsapp: 'WhatsApp alert', none: 'No alert', unknown: 'Not specified' },
       tabBirds: 'Birds', tabPlaces: 'Places', tabWhere: 'Where am I?',
+      prefsLabel: 'Display', themeLabel: 'Theme', tAuto: 'Auto', tLight: 'Light', tDark: 'Dark',
+      colorsLabel: 'Colours', cStd: 'Standard', cCvd: 'Colour-blind',
+      cvdNote: '“Colour-blind” uses colours most colour-blind people can tell apart. “Auto” follows your phone’s setting.',
       ledeWhere: 'Find the 5 place names closest to where you are.',
       locateBtn: 'Locate me', relocateBtn: 'Update my position',
       youAre: (c, a) => `You are in square ${c} (GPS accuracy ± ${a} m). The 5 closest place names:`,
       notHere: d => `You don’t seem to be on Ouessant: the closest place name is ${d} away.`,
       dirs: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'],
       checkedShort: 'position checked',
-      whereCaption: c => `Your position (blue dot) in square ${c}, and the numbered place names.`,
+      whereCaption: c => `Your position (${cvd ? 'pink' : 'blue'} dot) in square ${c}, and the numbered place names.`,
       whereNote: 'Distances are approximate: most place names sit at the centre of their map square (± 500 m). Your position is not sent anywhere.',
       ledePlaces: 'Search for a place name on the island to get its <strong>APPROXIMATE</strong> GPS coordinates.',
       locTip: 'Asking “Loc SVP” (location please) in the group is still the best way to know where to go.',
       openIslandMap: 'Open the island map (PDF)',
-      mapCaption: c => `${c.length > 1 ? 'Squares' : 'Square'} ${c.join(', ')} outlined in red, from the map by the Association Naturaliste d’Ouessant.`,
+      mapCaption: c => `${c.length > 1 ? 'Squares' : 'Square'} ${c.join(', ')} outlined in ${cvd ? 'blue' : 'red'}, from the map by the Association Naturaliste d’Ouessant.`,
       mapLoading: 'Loading the map…',
       verified: 'Position checked on the ground',
       suggest: 'Suggest a better position',
@@ -450,7 +504,7 @@ section[hidden]{display:none}
       newDup: n => `“${n}” is already on the list. To correct its position, open it and use “Suggest a better position”.`,
       newOut: 'This point is outside the Ouessant map. Check the coordinates.',
       newOk: (n, c) => `“${n}” would be placed in square ${c}. Check on the map below, then send your suggestion.`,
-      newCaption: (n, c) => `Suggested position for “${n}” (green dot), square ${c}.`,
+      newCaption: (n, c) => `Suggested position for “${n}” (green diamond), square ${c}.`,
       formNote: 'The form will open already filled in: just press “Submit”. Your suggestion will be checked, and the update will be applied within the next few days.',
       mapMissing: 'Preview unavailable: the file carte_ouessant.jpg cannot be found next to the app.',
       pPlaceholder: 'Place name (e.g. Pern, Stiff, Kadoran)', pLabel: 'Search for a place',
@@ -903,7 +957,7 @@ section[hidden]{display:none}
     for (let c = c0; c <= c1; c++) ctx.fillText(String.fromCharCode(65 + c), M + ((GRID_X[c] + GRID_X[c + 1]) / 2 - sx) * k, M / 2);
     for (let r = r0; r <= r1; r++) ctx.fillText(String(r + 1), M / 2, M + ((GRID_Y[r] + GRID_Y[r + 1]) / 2 - sy) * k);
     // carré(s) du lieu
-    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(214,40,40,.5)'; ctx.fillStyle = 'rgba(214,40,40,.05)';
+    ctx.lineWidth = 3; ctx.strokeStyle = `rgba(${PAL().sq},.55)`; ctx.fillStyle = `rgba(${PAL().sq},.06)`;
     idx.forEach(([c, r]) => {
       const x = M + (GRID_X[c] - sx) * k, y = M + (GRID_Y[r] - sy) * k, w = (GRID_X[c + 1] - GRID_X[c]) * k, h = (GRID_Y[r + 1] - GRID_Y[r]) * k;
       ctx.fillRect(x, y, w, h); ctx.strokeRect(x + 1.5, y + 1.5, w - 3, h - 3);
@@ -916,8 +970,11 @@ section[hidden]{display:none}
       let X = M + (px - sx) * k, Y = M + (py - sy) * k;
       const key = Math.round(X / 6) + ',' + Math.round(Y / 6), n = seen[key] = (seen[key] || 0) + 1;
       if (n > 1){ const a = (n - 2) * Math.PI / 3; X += 16 * Math.cos(a); Y += 16 * Math.sin(a); }   // points superposés
-      const r = m.label ? 10 : 7;
-      ctx.beginPath(); ctx.arc(X, Y, r, 0, Math.PI * 2); ctx.fillStyle = m.color; ctx.fill();
+      const r = m.label ? 10 : 7, col = PAL()[m.kind] || m.color || '#000';
+      ctx.beginPath();
+      if (m.kind === 'proposed'){ ctx.moveTo(X, Y - 9); ctx.lineTo(X + 9, Y); ctx.lineTo(X, Y + 9); ctx.lineTo(X - 9, Y); ctx.closePath(); }
+      else ctx.arc(X, Y, r, 0, Math.PI * 2);
+      ctx.fillStyle = col; ctx.fill();
       ctx.lineWidth = 2.5; ctx.strokeStyle = '#fff'; ctx.stroke();
       if (m.label){ ctx.fillStyle = '#fff'; ctx.font = '700 12px "Public Sans", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(m.label, X, Y + .5); }
     });
@@ -937,7 +994,7 @@ section[hidden]{display:none}
         <div class="sresult" aria-live="polite"></div>
       </div>`;
   }
-  function placeMarks(p){ return (p[5] || p[4] <= 50) ? [{ lat: p[2], lon: p[3], color: '#D62828' }] : []; }   // point rouge : position vérifiée ou exacte (phares)
+  function placeMarks(p){ return (p[5] || p[4] <= 50) ? [{ lat: p[2], lon: p[3], kind: 'verified' }] : []; }   // point rouge : position vérifiée ou exacte (phares)
   function redraw(li, p, extra){
     const view = li.querySelector('.pview');
     loadMap().then(img => drawPreview(view, p[1], img, placeMarks(p).concat(extra || [])), () => {});
@@ -978,7 +1035,7 @@ section[hidden]{display:none}
     // ordre : message, aperçu de la carte, puis bouton d'envoi
     res.innerHTML = `<p class="good">${esc(T('newOk')(name, c))}</p><div class="pmap"><div class="pview"><p>${esc(T('mapLoading'))}</p></div></div>` + link;
     const view = res.querySelector('.pview');
-    loadMap().then(img => drawPreview(view, [c], img, [{ lat, lon, color: '#1F7A5A' }], T('newCaption')(name, c)),
+    loadMap().then(img => drawPreview(view, [c], img, [{ lat, lon, kind: 'proposed' }], T('newCaption')(name, c)),
       () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
   $('nCheck').addEventListener('click', () => { nHow = null; checkNew(parseCoords($('nCoords').value)); });
@@ -1025,7 +1082,7 @@ section[hidden]{display:none}
       link = `<p class="bad">${esc(T('sendOff'))}</p>`;
     }
     res.innerHTML = `<p class="good">${esc(T('okIn')(cellName(cell), fmtDist(d)))}</p>` + link;
-    redraw(li, p, [{ lat, lon, color: '#1F7A5A' }]);
+    redraw(li, p, [{ lat, lon, kind: 'proposed' }]);
   }
 
   function togglePlace(li){
@@ -1128,8 +1185,8 @@ section[hidden]{display:none}
     mapBox.hidden = false;
     mapBox.innerHTML = `<div class="pview"><p>${esc(T('mapLoading'))}</p></div>`;
     const view = mapBox.querySelector('.pview');
-    const marks = near.map((n, i) => ({ lat: n.p[2], lon: n.p[3], color: '#1F3A4D', label: String(i + 1) })).reverse()
-      .concat([{ lat, lon, color: '#2B7BE4' }]);
+    const marks = near.map((n, i) => ({ lat: n.p[2], lon: n.p[3], kind: 'num', label: String(i + 1) })).reverse()
+      .concat([{ lat, lon, kind: 'user' }]);
     loadMap().then(img => drawPreview(view, [cellName(cell)], img, marks, T('whereCaption')(cellName(cell))),
       () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
@@ -1156,6 +1213,37 @@ section[hidden]{display:none}
     try { localStorage.setItem(LANG_KEY, lang); } catch(_) {}
     applyLang();
   }));
+  // ---------- Affichage : thème clair / sombre / auto, couleurs pour daltonisme ----------
+  let theme = 'auto';
+  try { theme = localStorage.getItem(THEME_KEY) || 'auto'; } catch(_) {}
+  function applyPrefs(){
+    const root = document.documentElement;
+    if (theme === 'light' || theme === 'dark') root.setAttribute('data-theme', theme); else root.removeAttribute('data-theme');
+    if (cvd) root.setAttribute('data-cvd', '1'); else root.removeAttribute('data-cvd');
+    document.querySelectorAll('.seg[data-pref="theme"] button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === theme)));
+    document.querySelectorAll('.seg[data-pref="cvd"] button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === (cvd ? '1' : '0'))));
+    const dark = theme === 'dark' || (theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+    const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.content = dark ? '#0F1B23' : '#1F3A4D';
+  }
+  function refreshColors(){
+    if (birds.length){ channels.forEach((c, i) => colorOf[c] = CHANNEL_COLORS[canalKind(c)] || COLORS[i % COLORS.length]); buildChips(); render(); }
+    // aperçus de carte ouverts : on les redessine
+    document.querySelectorAll('.place').forEach(li => { const box = li.querySelector('.pmap'); if (box && !box.hidden){ box.hidden = true; togglePlace(li); } });
+    renderWhere();
+  }
+  $('prefsBtn').addEventListener('click', e => {
+    e.stopPropagation(); const p = $('prefsPanel'); p.hidden = !p.hidden; $('prefsBtn').setAttribute('aria-expanded', String(!p.hidden));
+  });
+  $('prefsPanel').addEventListener('click', e => {
+    e.stopPropagation();
+    const b = e.target.closest('.seg button'); if (!b) return;
+    if (b.parentElement.dataset.pref === 'theme'){ theme = b.dataset.v; try { localStorage.setItem(THEME_KEY, theme); } catch(_) {} applyPrefs(); refreshColors(); }
+    else { cvd = b.dataset.v === '1'; try { localStorage.setItem(CVD_KEY, cvd ? '1' : '0'); } catch(_) {} applyPrefs(); refreshColors(); }
+  });
+  document.addEventListener('click', () => { if (!$('prefsPanel').hidden){ $('prefsPanel').hidden = true; $('prefsBtn').setAttribute('aria-expanded', 'false'); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('prefsPanel').hidden){ $('prefsPanel').hidden = true; $('prefsBtn').setAttribute('aria-expanded', 'false'); $('prefsBtn').focus(); } });
+  applyPrefs();
+
   bindFiles();
   showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds');
   window.addEventListener('hashchange', () => showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds'));
