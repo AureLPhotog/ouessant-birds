@@ -97,6 +97,20 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 .actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
 .actions .sep{flex:1}
 
+/* Grille des carrés */
+.cells-field{grid-column:1 / -1;display:grid;gap:.4rem}
+.cells-field > label{display:grid;gap:.25rem;font-size:.8rem;color:var(--granite);font-weight:600;max-width:22rem}
+.cells-wrap{max-width:620px}
+.cells-head{display:grid;margin-left:1.4rem;font-size:.7rem;color:var(--granite);text-align:center}
+.cells-body{display:flex}
+.cells-side{display:grid;width:1.4rem;font-size:.7rem;color:var(--granite);align-items:center}
+.cells{flex:1;display:grid;border:1px solid var(--line);border-radius:6px;overflow:hidden;background-color:#ABDCFF;background-repeat:no-repeat}
+.cells.with-map{background-image:url("carte_ouessant.jpg")}
+.cells button{border:0;border-right:1px solid rgba(31,58,77,.25);border-bottom:1px solid rgba(31,58,77,.25);background:transparent;padding:0;cursor:pointer;min-height:0}
+.cells button:hover{background:rgba(31,58,77,.15)}
+.cells button[aria-pressed="true"]{background:rgba(214,40,40,.35);box-shadow:inset 0 0 0 2px #D62828}
+.cells button:focus-visible{outline:2px solid #8C5E83;outline-offset:-2px}
+
 /* Coller des lignes */
 .panel{margin-top:.8rem;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:1rem}
 .panel h2{font:600 1rem var(--sans);margin:0 0 .3rem}
@@ -204,6 +218,35 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
   const clone = o => JSON.parse(JSON.stringify(o));
 
+  // ---------- Champs propres à l'appli Ouessant : menus déroulants et grille des carrés ----------
+  const FIELD_CONFIG = {
+    'Proposition de Canal de Diffusion Ouessant': { type: 'select', options: [['Télégram', 'Alerte Telegram'], ['Whatsapp', 'Alerte WhatsApp'], ["Pas d'annonce", "Pas d'alerte"]] },
+    'Type de taxon': { type: 'select', options: [['espèce', 'espèce'], ['sous-espèce', 'sous-espèce']] },
+    'carres': { type: 'cells' }
+  };
+  const labelOf = (k, v) => { const c = FIELD_CONFIG[k]; if (!c || c.type !== 'select') return null; const o = c.options.find(x => x[0] === v); return o ? o[1] : null; };
+  // Bords des colonnes A→S et des lignes 1→13 sur la carte de l'association (pixels de l'image d'origine)
+  const GRID_X = [357,708,1055,1409,1761,2123,2477,2819,3183,3535,3881,4243,4587,4949,5301,5655,6009,6353,6715,7015];
+  const GRID_Y = [357,717,1067,1413,1761,2113,2467,2829,3183,3531,3883,4245,4591,4944];
+  const MAP_W = 7015, MAP_H = 4944;
+  let mapOk = false;
+  (function(){ const im = new Image(); im.onload = () => { mapOk = true; document.querySelectorAll('.cells').forEach(g => g.classList.add('with-map')); }; im.src = 'carte_ouessant.jpg'; })();
+  function cellsHtml(selected){
+    const sel = new Set(selected), cols = GRID_X.length - 1, rows = GRID_Y.length - 1;
+    const fx = GRID_X.slice(1).map((x, i) => (x - GRID_X[i]) + 'fr').join(' '), fy = GRID_Y.slice(1).map((y, i) => (y - GRID_Y[i]) + 'fr').join(' ');
+    // fond : la carte, recadrée sur la zone quadrillée
+    const bw = (MAP_W / (GRID_X[cols] - GRID_X[0]) * 100).toFixed(3), bx = (GRID_X[0] / (MAP_W - (GRID_X[cols] - GRID_X[0])) * 100).toFixed(3);
+    const by = (GRID_Y[0] / (MAP_H - (GRID_Y[rows] - GRID_Y[0])) * 100).toFixed(3);
+    let h = `<div class="cells-wrap"><div class="cells-head" style="grid-template-columns:${fx}">${Array.from({ length: cols }, (_, c) => `<span>${String.fromCharCode(65 + c)}</span>`).join('')}</div>
+      <div class="cells-body"><div class="cells-side" style="grid-template-rows:${fy}">${Array.from({ length: rows }, (_, r) => `<span>${r + 1}</span>`).join('')}</div>
+      <div class="cells${mapOk ? ' with-map' : ''}" role="group" aria-label="Carrés de la carte" style="grid-template-columns:${fx};grid-template-rows:${fy};aspect-ratio:${GRID_X[cols] - GRID_X[0]} / ${GRID_Y[rows] - GRID_Y[0]};background-size:${bw}% auto;background-position:${bx}% ${by}%">`;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++){
+      const n = String.fromCharCode(65 + c) + (r + 1);
+      h += `<button type="button" data-cell="${n}" aria-pressed="${sel.has(n)}" title="${n}" aria-label="${n}"></button>`;
+    }
+    return h + '</div></div></div>';
+  }
+
   // État : chaque entrée garde sa version d'origine pour repérer les modifications
   let fileName = '', items = [], deleted = [], fields = [], types = {}, uid = 0;
   let openId = null, sortField = null, sortDir = 1, filters = {}, shown = 200;
@@ -221,8 +264,12 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
       else if (vals.some(v => typeof v === 'object')) t = 'json';
       const distinct = t === 'text' ? [...new Set(vals.map(String))] : [];
       types[k] = { t, choices: distinct.length && distinct.length <= 12 && vals.length >= 10 ? distinct.sort((a, b) => a.localeCompare(b, 'fr')) : null };
+      const cfg = FIELD_CONFIG[k];
+      if (cfg && cfg.type === 'select') types[k].choices = cfg.options.map(o => o[0]).concat(distinct.filter(v => !cfg.options.some(o => o[0] === v)));
+      if (cfg && cfg.type === 'cells') types[k].t = 'list';
     });
   }
+  const showK = (k, v) => labelOf(k, v) || show(v, types[k] ? types[k].t : 'text');
   const show = (v, t) => v === undefined || v === null || v === '' ? '' :
     (t === 'list' || t === 'numlist') ? v.join(', ') : t === 'bool' ? (v ? 'oui' : 'non') : typeof v === 'object' ? JSON.stringify(v) : String(v);
 
@@ -278,7 +325,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   // ---------- Filtres et tri ----------
   function buildFilters(){
     $('filters').innerHTML = fields.filter(k => types[k].choices || types[k].t === 'bool').map(k => {
-      const opts = types[k].t === 'bool' ? [['true','oui'],['false','non']] : types[k].choices.map(c => [c, c]);
+      const opts = types[k].t === 'bool' ? [['true','oui'],['false','non']] : types[k].choices.map(c => [c, labelOf(k, c) || c]);
       return `<label>${esc(k)} <select data-filter="${esc(k)}"><option value="">Tous</option>${opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('')}<option value="__empty">(vide)</option></select></label>`;
     }).join('') + `<label>État <select data-filter="__state"><option value="">Tous</option><option value="mod">Modifiés</option><option value="new">Ajoutés</option><option value="any">Modifiés ou ajoutés</option></select></label>`;
   }
@@ -297,7 +344,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
         if (v === '__empty'){ if (!(val === undefined || val === null || val === '')) return false; }
         else if (String(val) !== v) return false;
       }
-      return !q || fields.some(k => norm(show(it.data[k], types[k].t)).includes(q));
+      return !q || fields.some(k => norm(showK(k, it.data[k])).includes(q) || norm(show(it.data[k], types[k].t)).includes(q));
     });
     if (sortField){
       const t = types[sortField].t;
@@ -333,7 +380,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     const rows = list.slice(0, shown).map(it => {
       const st = stateOf(it);
       let html = `<tr class="item${st ? ' is-' + st : ''}" data-id="${it.id}" tabindex="0" aria-expanded="${openId === it.id}">` + fields.map(k => {
-        const v = show(it.data[k], types[k].t);
+        const v = showK(k, it.data[k]);
         return `<td class="${['number','numlist'].includes(types[k].t) ? 'num' : ''}">${v === '' ? '<span class="empty">vide</span>' : hl(v)}</td>`;
       }).join('') + '</tr>';
       if (openId === it.id) html += `<tr class="editor"><td colspan="${fields.length}">${editorHtml(it)}</td></tr>`;
@@ -348,7 +395,19 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     if (sb){ const k = sb.dataset.sort; if (sortField === k) sortDir = -sortDir; else { sortField = k; sortDir = 1; } render(); return; }
     if (e.target.id === 'moreBtn'){ shown += 200; render(); return; }
     const tr = e.target.closest('tr.item'); if (tr){ toggle(+tr.dataset.id); return; }
+    const cell = e.target.closest('[data-cell]');
+    if (cell){
+      const wrap = cell.closest('.cells-field'), inp = wrap.querySelector('[data-cells]');
+      const on = cell.getAttribute('aria-pressed') !== 'true'; cell.setAttribute('aria-pressed', String(on));
+      inp.value = [...wrap.querySelectorAll('[data-cell][aria-pressed="true"]')].map(b => b.dataset.cell).join(', ');
+      return;
+    }
     const act = e.target.closest('[data-act]'); if (act) editorAction(act.dataset.act, +act.closest('.form-wrap').dataset.id);
+  });
+  $('table').addEventListener('input', e => {
+    if (!e.target.matches('[data-cells]')) return;
+    const set = new Set(e.target.value.toUpperCase().split(/[\s,;]+/).filter(Boolean));
+    e.target.closest('.cells-field').querySelectorAll('[data-cell]').forEach(b => b.setAttribute('aria-pressed', String(set.has(b.dataset.cell))));
   });
   $('table').addEventListener('keydown', e => {
     const tr = e.target.closest('tr.item');
@@ -361,6 +420,16 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     const t = types[k] ? types[k].t : 'text', ch = types[k] && types[k].choices;
     const was = orig === undefined ? '' : (same(v, orig) ? '' : `<span class="was">avant : ${esc(show(orig, t)) || 'vide'}</span>`);
     const cls = was ? ' class="changed"' : '';
+    const cfg = FIELD_CONFIG[k];
+    if (cfg && cfg.type === 'select'){
+      const known = cfg.options.some(o => o[0] === v);
+      const opts = (v && !known ? [[v, v + ' (valeur non reconnue)']] : []).concat(cfg.options);
+      return `<label${cls}>${esc(k)}<select data-k="${esc(k)}">${v === undefined || v === '' ? '<option value="">— choisir —</option>' : ''}${opts.map(([val, lab]) => `<option value="${esc(val)}"${val === v ? ' selected' : ''}>${esc(lab)}</option>`).join('')}</select>${was}</label>`;
+    }
+    if (cfg && cfg.type === 'cells'){
+      const list = Array.isArray(v) ? v : [];
+      return `<div class="cells-field${was ? ' changed' : ''}"><label>${esc(k)}<input type="text" data-k="${esc(k)}" data-cells value="${esc(list.join(', '))}" autocomplete="off" placeholder="clique sur la grille ou tape B8, B9"></label>${was}${cellsHtml(list)}</div>`;
+    }
     if (t === 'bool') return `<label${cls}><span>${esc(k)}</span><span class="chk"><input type="checkbox" data-k="${esc(k)}"${v ? ' checked' : ''}> ${v ? 'oui' : 'non'}</span>${was}</label>`;
     if (t === 'number') return `<label${cls}>${esc(k)}<input type="text" inputmode="decimal" data-k="${esc(k)}" value="${esc(v ?? '')}" autocomplete="off">${was}</label>`;
     if (t === 'json') return `<label${cls}>${esc(k)}<textarea rows="2" data-k="${esc(k)}">${esc(v === undefined ? '' : JSON.stringify(v))}</textarea>${was}</label>`;
@@ -387,6 +456,12 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
       if (t === 'bool'){ out[k] = el.checked; continue; }
       const raw = el.value.trim();
       if (t === 'number'){ if (raw === '') continue; const n = Number(raw.replace(',', '.')); if (!isFinite(n)) throw new Error(`« ${k} » doit être un nombre.`); out[k] = n; continue; }
+      if (el.hasAttribute('data-cells')){
+        const list = raw ? raw.toUpperCase().split(/[\s,;]+/).filter(Boolean) : [];
+        const bad = list.filter(c => !/^[A-S](?:[1-9]|1[0-3])$/.test(c));
+        if (bad.length) throw new Error(`Carré${bad.length > 1 ? 's' : ''} inconnu${bad.length > 1 ? 's' : ''} : ${bad.join(', ')} (de A1 à S13).`);
+        out[k] = [...new Set(list)]; continue;
+      }
       if (t === 'list'){ out[k] = raw ? raw.split(',').map(x => x.trim()).filter(Boolean) : []; continue; }
       if (t === 'numlist'){ out[k] = raw ? raw.split(',').map(x => Number(x.trim())) : []; if (out[k].some(n => !isFinite(n))) throw new Error(`« ${k} » ne doit contenir que des nombres.`); continue; }
       if (t === 'json'){ if (raw === '') continue; try { out[k] = JSON.parse(raw); } catch (_) { throw new Error(`« ${k} » n\u2019est pas un JSON valide.`); } continue; }
