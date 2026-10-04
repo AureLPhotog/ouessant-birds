@@ -2,12 +2,12 @@
   {
     "nom": "Mac Ludo (pizza)",
     "carres": [
-      "H7"
+      "I7"
     ],
-    "lat": 48.45685,
-    "lon": -5.0959,
-    "precision_m": 100,
-    "verifie": false,
+    "lat": 48.45669,
+    "lon": -5.09574,
+    "precision_m": 25,
+    "verifie": true,
     "source": ""
   },
   {
