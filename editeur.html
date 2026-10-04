@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Éditeur de listes · Oiseaux d'Ouessant</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean:#1F3A4D; --ocean-2:#2C5168; --foam:#EEF2F0; --paper:#FFFFFF; --granite:#5E676B; --line:#D3DAD8;
+  --ink:#16232C; --warn:#B4532A; --warn-bg:#FBEFE8; --ok:#1F7A5A; --ok-bg:#E5F3EC; --new:#0072B2; --new-bg:#E3F0F8; --mark:#F6E7A8;
+  --serif:"Spectral", Georgia, serif; --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#9FC3D9; --ocean-2:#7FAAC4; --foam:#0F1B23; --paper:#16252F; --granite:#9AA6AB; --line:#2A3B46;
+    --ink:#E6EEF0; --warn:#F0A07A; --warn-bg:#3A2219; --ok:#5CC497; --ok-bg:#16342A; --new:#56B4E9; --new-bg:#15303F; --mark:#5A4E1C;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#9FC3D9; --ocean-2:#7FAAC4; --foam:#0F1B23; --paper:#16252F; --granite:#9AA6AB; --line:#2A3B46;
+  --ink:#E6EEF0; --warn:#F0A07A; --warn-bg:#3A2219; --ok:#5CC497; --ok-bg:#16342A; --new:#56B4E9; --new-bg:#15303F; --mark:#5A4E1C;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--foam);color:var(--ink);font:400 15px/1.5 var(--sans)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.25rem 5rem}
+header{display:flex;align-items:flex-end;gap:1rem;padding:2rem 0 1.25rem}
+header img{width:40px;height:auto}
+h1{font:700 clamp(1.7rem,4vw,2.4rem)/1.05 var(--serif);color:var(--ocean);margin:0}
+.sub{margin:.35rem 0 0;color:var(--granite)}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  font-weight:600;font-size:.9rem;padding:.5rem .85rem;border-radius:9px;cursor:pointer;white-space:nowrap}
+.btn.primary{background:var(--ocean);border-color:var(--ocean);color:var(--foam)}
+.btn.danger{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
+.btn.ghost{background:none;border-color:transparent;color:var(--ocean-2);text-decoration:underline;text-underline-offset:3px;padding:.4rem .3rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+:is(.btn,input,select,textarea,.drop,tr.item):focus-visible{outline:3px solid #8C5E83;outline-offset:2px}
+input[type=text],input[type=number],input[type=search],select,textarea{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.45rem .6rem;width:100%}
+textarea{font-family:var(--mono);font-size:.85rem}
+.hidden{display:none !important}
+
+/* Import */
+.drop{display:grid;place-items:center;text-align:center;gap:.6rem;border:2px dashed var(--line);border-radius:14px;background:var(--paper);padding:2.4rem 1.2rem;cursor:pointer}
+.drop.over{border-color:var(--ocean);background:color-mix(in srgb,var(--ocean) 6%,var(--paper))}
+.drop strong{font-size:1.05rem}
+.drop p{margin:0;color:var(--granite)}
+.or{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem;align-items:center}
+.paste-box{margin-top:.8rem;display:grid;gap:.5rem}
+
+/* Barre d'outils */
+.bar{position:sticky;top:0;z-index:10;background:var(--foam);padding:.7rem 0 .6rem;border-bottom:1px solid var(--line);display:grid;gap:.6rem}
+.file{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .9rem}
+.file b{font-family:var(--mono);font-size:.95rem}
+.count{color:var(--granite);font-size:.88rem}
+.badge{display:inline-block;font-size:.75rem;font-weight:600;padding:.1rem .45rem;border-radius:6px}
+.badge.mod{background:var(--mark);color:var(--ink)}
+.badge.new{background:var(--new-bg);color:var(--new)}
+.badge.del{background:var(--warn-bg);color:var(--warn)}
+.tools{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.tools .grow{flex:1 1 220px}
+.filters{display:flex;flex-wrap:wrap;gap:.5rem}
+.filters label{display:flex;align-items:center;gap:.35rem;font-size:.85rem;color:var(--granite)}
+.filters select{width:auto;max-width:14rem;padding:.35rem .5rem}
+
+/* Tableau */
+.tablewrap{overflow-x:auto;margin-top:.8rem;background:var(--paper);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{position:sticky;top:0;background:var(--paper);font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--granite);white-space:nowrap}
+th button{all:unset;cursor:pointer}
+th button:focus-visible{outline:2px solid #8C5E83}
+tr.item{cursor:pointer}
+tr.item:hover td{background:color-mix(in srgb,var(--ocean) 5%,var(--paper))}
+tr.item.is-mod td:first-child{box-shadow:inset 4px 0 0 #D9B92E}
+tr.item.is-new td:first-child{box-shadow:inset 4px 0 0 var(--new)}
+td.num{font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:.85rem}
+td .empty{color:var(--granite);font-style:italic}
+mark{background:var(--mark);color:inherit;border-radius:3px}
+.more{padding:.8rem;text-align:center;color:var(--granite)}
+
+/* Formulaire d'édition */
+tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:1rem}
+.form{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.8rem}
+.form label{display:grid;gap:.25rem;font-size:.8rem;color:var(--granite);font-weight:600}
+.form label .was{font-weight:400;font-size:.75rem;color:var(--granite)}
+.form .chk{display:flex;align-items:center;gap:.5rem;font-size:.9rem;color:var(--ink);font-weight:500;padding-top:1.3rem}
+.form .chk input{width:1.1rem;height:1.1rem}
+.changed input,.changed select,.changed textarea{border-color:#D9B92E;box-shadow:0 0 0 2px color-mix(in srgb,#D9B92E 35%,transparent)}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.actions .sep{flex:1}
+
+/* Coller des lignes */
+.panel{margin-top:.8rem;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:1rem}
+.panel h2{font:600 1rem var(--sans);margin:0 0 .3rem}
+.panel p.help{margin:0 0 .6rem;color:var(--granite);font-size:.88rem}
+.preview{display:grid;gap:.6rem;margin-top:.8rem}
+.pv{border:1px solid var(--line);border-radius:10px;padding:.6rem .8rem}
+.pv h3{margin:0 0 .3rem;font-size:.92rem}
+.pv ul{margin:0;padding-left:1.1rem;font-size:.85rem}
+.pv del{color:var(--warn)} .pv ins{color:var(--ok);text-decoration:none;font-weight:600}
+.msg{margin:.6rem 0 0;font-size:.88rem}
+.msg.bad{color:var(--warn);font-weight:600}
+.msg.good{color:var(--ok);font-weight:600}
+
+/* Export */
+.export-opts{display:flex;flex-wrap:wrap;gap:.8rem 1.2rem;align-items:center;font-size:.88rem}
+.export-opts label{display:flex;align-items:center;gap:.4rem}
+
+/* Notification */
+.toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--foam);
+  padding:.65rem 1rem;border-radius:10px;font-size:.9rem;display:flex;gap:.8rem;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:50;max-width:calc(100% - 2rem)}
+.toast button{all:unset;cursor:pointer;font-weight:700;text-decoration:underline}
+@media (max-width:640px){ th:nth-child(n+4),td:nth-child(n+4){display:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="phare_creach.svg" alt="" onerror="this.remove()">
+    <div>
+      <h1>Éditeur de listes</h1>
+      <p class="sub">Importe un fichier JSON, cherche, modifie, puis exporte-le : sans toucher au fichier à la main.</p>
+    </div>
+  </header>
+
+  <!-- 1. Import -->
+  <section id="importView">
+    <label class="drop" id="drop" tabindex="0">
+      <strong>Glisse ton fichier JSON ici</strong>
+      <p>ou clique pour le choisir (ouessant_birds.json, lieux_ouessant.json…)</p>
+      <input type="file" id="file" accept=".json,application/json" class="hidden">
+    </label>
+    <div class="or">
+      <button type="button" class="btn" id="pasteJsonBtn">Coller du JSON</button>
+      <button type="button" class="btn" id="resumeBtn" hidden>Reprendre le brouillon</button>
+      <span class="count" id="resumeInfo"></span>
+    </div>
+    <div class="paste-box hidden" id="pasteJsonBox">
+      <textarea id="pasteJson" rows="8" placeholder='[ {"Nom Français": "…", …}, … ]'></textarea>
+      <div><button type="button" class="btn primary" id="pasteJsonGo">Charger</button></div>
+    </div>
+    <p class="msg bad" id="importMsg" role="alert"></p>
+  </section>
+
+  <!-- 2. Édition -->
+  <section id="editView" class="hidden">
+    <div class="bar">
+      <div class="file">
+        <b id="fileName"></b>
+        <span class="count" id="countInfo"></span>
+        <span id="changeInfo"></span>
+        <span style="flex:1"></span>
+        <button type="button" class="btn ghost" id="closeBtn">Changer de fichier</button>
+      </div>
+      <div class="tools">
+        <input type="search" id="search" class="grow" placeholder="Rechercher dans tous les champs…" aria-label="Rechercher" autocomplete="off">
+        <button type="button" class="btn" id="addBtn">+ Ajouter une entrée</button>
+        <button type="button" class="btn" id="pasteLinesBtn">Coller des lignes</button>
+        <button type="button" class="btn primary" id="exportBtn">Exporter</button>
+      </div>
+      <div class="filters" id="filters"></div>
+    </div>
+
+    <div class="panel hidden" id="pastePanel">
+      <h2>Coller des lignes JSON</h2>
+      <p class="help">Colle une ou plusieurs lignes, par exemple la colonne « Ligne JSON » de ton Google Sheet. Si une entrée porte déjà la même valeur de <select id="keyField" style="width:auto;display:inline-block;padding:.15rem .4rem"></select>, elle sera remplacée, sinon elle sera ajoutée.</p>
+      <textarea id="pasteLines" rows="5" placeholder='{"nom":"Pern","carres":["B9"],"lat":48.44833,"lon":-5.14056,"precision_m":25,"verifie":true}'></textarea>
+      <div class="actions"><button type="button" class="btn" id="pasteCheck">Vérifier</button><button type="button" class="btn primary" id="pasteApply" disabled>Appliquer</button><span class="sep"></span><button type="button" class="btn ghost" id="pasteClose">Fermer</button></div>
+      <p class="msg" id="pasteMsg"></p>
+      <div class="preview" id="pastePreview"></div>
+    </div>
+
+    <div class="panel hidden" id="exportPanel">
+      <h2>Exporter</h2>
+      <div class="export-opts">
+        <label><input type="radio" name="fmt" value="lines" checked> Une entrée par ligne</label>
+        <label><input type="radio" name="fmt" value="indent"> Indenté (plus aéré)</label>
+        <label>Ordre : <select id="exportSort" style="width:auto"></select></label>
+      </div>
+      <div class="actions"><button type="button" class="btn primary" id="downloadBtn">Télécharger le fichier</button><button type="button" class="btn" id="copyBtn">Copier le JSON</button><span class="sep"></span><button type="button" class="btn ghost" id="exportClose">Fermer</button></div>
+      <p class="msg" id="exportMsg"></p>
+    </div>
+
+    <div class="tablewrap"><table id="table"><thead></thead><tbody></tbody></table></div>
+  </section>
+</div>
+<div class="toast hidden" id="toast" role="status"></div>
+
+<script>
+(function(){
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const DRAFT = 'json-editor-draft';
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm = s => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const clone = o => JSON.parse(JSON.stringify(o));
+
+  // État : chaque entrée garde sa version d'origine pour repérer les modifications
+  let fileName = '', items = [], deleted = [], fields = [], types = {}, uid = 0;
+  let openId = null, sortField = null, sortDir = 1, filters = {}, shown = 200;
+
+  // ---------- Types de champs, déduits des valeurs ----------
+  function detectTypes(){
+    const keys = []; items.forEach(it => Object.keys(it.data).forEach(k => { if (!keys.includes(k)) keys.push(k); }));
+    fields = keys; types = {};
+    keys.forEach(k => {
+      const vals = items.map(it => it.data[k]).filter(v => v !== undefined && v !== null && v !== '');
+      let t = 'text';
+      if (vals.length && vals.every(v => typeof v === 'boolean')) t = 'bool';
+      else if (vals.length && vals.every(v => typeof v === 'number')) t = 'number';
+      else if (vals.length && vals.every(v => Array.isArray(v))) t = vals.every(v => v.every(x => typeof x === 'number')) ? 'numlist' : 'list';
+      else if (vals.some(v => typeof v === 'object')) t = 'json';
+      const distinct = t === 'text' ? [...new Set(vals.map(String))] : [];
+      types[k] = { t, choices: distinct.length && distinct.length <= 12 && vals.length >= 10 ? distinct.sort((a, b) => a.localeCompare(b, 'fr')) : null };
+    });
+  }
+  const show = (v, t) => v === undefined || v === null || v === '' ? '' :
+    (t === 'list' || t === 'numlist') ? v.join(', ') : t === 'bool' ? (v ? 'oui' : 'non') : typeof v === 'object' ? JSON.stringify(v) : String(v);
+
+  // ---------- Chargement ----------
+  function load(name, data, origs){
+    if (!Array.isArray(data)) throw new Error('Le fichier doit contenir une liste [ … ] d\u2019entrées.');
+    if (!data.every(x => x && typeof x === 'object' && !Array.isArray(x))) throw new Error('Chaque entrée de la liste doit être un objet { … }.');
+    fileName = name || 'liste.json';
+    items = data.map((d, i) => ({ id: ++uid, data: clone(d), orig: origs ? origs[i] : clone(d) }));
+    deleted = []; openId = null; filters = {}; sortField = null; shown = 200; $('search').value = '';
+    detectTypes(); buildFilters(); buildKeyField(); buildExportSort();
+    $('importView').classList.add('hidden'); $('editView').classList.remove('hidden');
+    render(); save();
+  }
+  function readFile(f){
+    const r = new FileReader();
+    r.onload = () => { try { load(f.name, JSON.parse(r.result)); $('importMsg').textContent = ''; } catch (e) { $('importMsg').textContent = 'Fichier illisible : ' + (e.message || 'JSON invalide'); } };
+    r.readAsText(f, 'utf-8');
+  }
+  $('file').addEventListener('change', e => { const f = e.target.files[0]; if (f) readFile(f); e.target.value = ''; });
+  const drop = $('drop');
+  drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); $('file').click(); } });
+  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) readFile(f); });
+  $('pasteJsonBtn').addEventListener('click', () => { $('pasteJsonBox').classList.toggle('hidden'); $('pasteJson').focus(); });
+  $('pasteJsonGo').addEventListener('click', () => {
+    try { load('liste.json', JSON.parse($('pasteJson').value)); $('importMsg').textContent = ''; }
+    catch (e) { $('importMsg').textContent = 'JSON illisible : ' + (e.message || ''); }
+  });
+
+  // ---------- Brouillon (sauvegarde automatique dans le navigateur) ----------
+  function save(){
+    try { localStorage.setItem(DRAFT, JSON.stringify({ fileName, at: Date.now(), items: items.map(it => [it.data, it.orig]), deleted: deleted.map(it => it.orig).filter(Boolean) })); } catch (_) {}
+  }
+  (function offerDraft(){
+    try {
+      const d = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (!d || !d.items) return;
+      $('resumeBtn').hidden = false;
+      $('resumeInfo').textContent = `${d.fileName}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
+      $('resumeBtn').onclick = () => {
+        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1]));
+        deleted = (d.deleted || []).map(o => ({ id: ++uid, data: o, orig: o })); render();
+      };
+    } catch (_) {}
+  })();
+  $('closeBtn').addEventListener('click', () => {
+    if (changes().total && !confirm('Les modifications non exportées restent dans le brouillon, tu pourras les reprendre. Changer de fichier ?')) return;
+    $('editView').classList.add('hidden'); $('importView').classList.remove('hidden');
+    location.reload();
+  });
+
+  // ---------- Filtres et tri ----------
+  function buildFilters(){
+    $('filters').innerHTML = fields.filter(k => types[k].choices || types[k].t === 'bool').map(k => {
+      const opts = types[k].t === 'bool' ? [['true','oui'],['false','non']] : types[k].choices.map(c => [c, c]);
+      return `<label>${esc(k)} <select data-filter="${esc(k)}"><option value="">Tous</option>${opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('')}<option value="__empty">(vide)</option></select></label>`;
+    }).join('') + `<label>État <select data-filter="__state"><option value="">Tous</option><option value="mod">Modifiés</option><option value="new">Ajoutés</option><option value="any">Modifiés ou ajoutés</option></select></label>`;
+  }
+  $('filters').addEventListener('change', e => {
+    const s = e.target.closest('select'); if (!s) return;
+    filters[s.dataset.filter] = s.value; shown = 200; render();
+  });
+  function stateOf(it){ return !it.orig ? 'new' : same(it.data, it.orig) ? '' : 'mod'; }
+  function visible(){
+    const q = norm($('search').value);
+    let list = items.filter(it => {
+      for (const [k, v] of Object.entries(filters)){
+        if (!v) continue;
+        if (k === '__state'){ const s = stateOf(it); if (v === 'any' ? !s : s !== v) return false; continue; }
+        const val = it.data[k];
+        if (v === '__empty'){ if (!(val === undefined || val === null || val === '')) return false; }
+        else if (String(val) !== v) return false;
+      }
+      return !q || fields.some(k => norm(show(it.data[k], types[k].t)).includes(q));
+    });
+    if (sortField){
+      const t = types[sortField].t;
+      list = list.slice().sort((a, b) => {
+        const x = a.data[sortField], y = b.data[sortField];
+        if (t === 'number') return ((x ?? -Infinity) - (y ?? -Infinity)) * sortDir;
+        return show(x, t).localeCompare(show(y, t), 'fr') * sortDir;
+      });
+    }
+    return list;
+  }
+
+  // ---------- Affichage ----------
+  function hl(text){
+    const q = $('search').value.trim(); const t = String(text);
+    if (!q) return esc(t);
+    const i = norm(t).indexOf(norm(q)); if (i < 0) return esc(t);
+    return esc(t.slice(0, i)) + '<mark>' + esc(t.slice(i, i + q.length)) + '</mark>' + esc(t.slice(i + q.length));
+  }
+  function changes(){
+    const mod = items.filter(it => it.orig && !same(it.data, it.orig)).length, add = items.filter(it => !it.orig).length, del = deleted.filter(it => it.orig).length;
+    return { mod, add, del, total: mod + add + del };
+  }
+  function render(){
+    const list = visible(), c = changes();
+    $('fileName').textContent = fileName;
+    $('countInfo').textContent = `${items.length} entrées` + (list.length !== items.length ? `, ${list.length} affichées` : '');
+    $('changeInfo').innerHTML = (c.mod ? `<span class="badge mod">${c.mod} modifiée${c.mod > 1 ? 's' : ''}</span> ` : '') +
+      (c.add ? `<span class="badge new">${c.add} ajoutée${c.add > 1 ? 's' : ''}</span> ` : '') +
+      (c.del ? `<span class="badge del">${c.del} supprimée${c.del > 1 ? 's' : ''}</span>` : '');
+    const thead = $('table').tHead, tbody = $('table').tBodies[0];
+    thead.innerHTML = '<tr>' + fields.map(k => `<th scope="col"><button type="button" data-sort="${esc(k)}">${esc(k)}${sortField === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</button></th>`).join('') + '</tr>';
+    const rows = list.slice(0, shown).map(it => {
+      const st = stateOf(it);
+      let html = `<tr class="item${st ? ' is-' + st : ''}" data-id="${it.id}" tabindex="0" aria-expanded="${openId === it.id}">` + fields.map(k => {
+        const v = show(it.data[k], types[k].t);
+        return `<td class="${['number','numlist'].includes(types[k].t) ? 'num' : ''}">${v === '' ? '<span class="empty">vide</span>' : hl(v)}</td>`;
+      }).join('') + '</tr>';
+      if (openId === it.id) html += `<tr class="editor"><td colspan="${fields.length}">${editorHtml(it)}</td></tr>`;
+      return html;
+    }).join('');
+    tbody.innerHTML = rows || `<tr><td colspan="${fields.length}" class="more">Aucune entrée ne correspond.</td></tr>`;
+    if (list.length > shown) tbody.insertAdjacentHTML('beforeend', `<tr><td colspan="${fields.length}" class="more"><button type="button" class="btn" id="moreBtn">Afficher ${Math.min(200, list.length - shown)} de plus (${list.length - shown} restantes)</button></td></tr>`);
+  }
+  $('search').addEventListener('input', () => { shown = 200; render(); });
+  $('table').addEventListener('click', e => {
+    const sb = e.target.closest('[data-sort]');
+    if (sb){ const k = sb.dataset.sort; if (sortField === k) sortDir = -sortDir; else { sortField = k; sortDir = 1; } render(); return; }
+    if (e.target.id === 'moreBtn'){ shown += 200; render(); return; }
+    const tr = e.target.closest('tr.item'); if (tr){ toggle(+tr.dataset.id); return; }
+    const act = e.target.closest('[data-act]'); if (act) editorAction(act.dataset.act, +act.closest('.form-wrap').dataset.id);
+  });
+  $('table').addEventListener('keydown', e => {
+    const tr = e.target.closest('tr.item');
+    if (tr && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); toggle(+tr.dataset.id); }
+  });
+  function toggle(id){ openId = openId === id ? null : id; render(); if (openId){ const f = document.querySelector('.form-wrap [data-k]'); if (f) f.focus({ preventScroll: true }); } }
+
+  // ---------- Formulaire d'édition ----------
+  function inputHtml(k, v, orig){
+    const t = types[k] ? types[k].t : 'text', ch = types[k] && types[k].choices;
+    const was = orig === undefined ? '' : (same(v, orig) ? '' : `<span class="was">avant : ${esc(show(orig, t)) || 'vide'}</span>`);
+    const cls = was ? ' class="changed"' : '';
+    if (t === 'bool') return `<label${cls}><span>${esc(k)}</span><span class="chk"><input type="checkbox" data-k="${esc(k)}"${v ? ' checked' : ''}> ${v ? 'oui' : 'non'}</span>${was}</label>`;
+    if (t === 'number') return `<label${cls}>${esc(k)}<input type="text" inputmode="decimal" data-k="${esc(k)}" value="${esc(v ?? '')}" autocomplete="off">${was}</label>`;
+    if (t === 'json') return `<label${cls}>${esc(k)}<textarea rows="2" data-k="${esc(k)}">${esc(v === undefined ? '' : JSON.stringify(v))}</textarea>${was}</label>`;
+    const val = show(v, t), list = ch ? ` list="dl-${esc(k)}"` : '';
+    const dl = ch ? `<datalist id="dl-${esc(k)}">${ch.map(c => `<option value="${esc(c)}">`).join('')}</datalist>` : '';
+    const ph = t === 'list' || t === 'numlist' ? ' placeholder="valeurs séparées par des virgules"' : '';
+    return `<label${cls}>${esc(k)}<input type="text" data-k="${esc(k)}" value="${esc(val)}"${list}${ph} autocomplete="off">${dl}${was}</label>`;
+  }
+  function editorHtml(it){
+    return `<div class="form-wrap" data-id="${it.id}"><div class="form">${fields.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
+      <div class="actions">
+        <button type="button" class="btn primary" data-act="save">Enregistrer</button>
+        <button type="button" class="btn" data-act="cancel">Fermer</button>
+        ${it.orig && !same(it.data, it.orig) ? '<button type="button" class="btn" data-act="revert">Revenir à l\u2019original</button>' : ''}
+        <span class="sep"></span>
+        <button type="button" class="btn" data-act="dup">Dupliquer</button>
+        <button type="button" class="btn danger" data-act="del">Supprimer</button>
+      </div><p class="msg bad" data-msg></p></div>`;
+  }
+  function readForm(wrap){
+    const out = {};
+    for (const el of wrap.querySelectorAll('[data-k]')){
+      const k = el.dataset.k, t = types[k] ? types[k].t : 'text';
+      if (t === 'bool'){ out[k] = el.checked; continue; }
+      const raw = el.value.trim();
+      if (t === 'number'){ if (raw === '') continue; const n = Number(raw.replace(',', '.')); if (!isFinite(n)) throw new Error(`« ${k} » doit être un nombre.`); out[k] = n; continue; }
+      if (t === 'list'){ out[k] = raw ? raw.split(',').map(x => x.trim()).filter(Boolean) : []; continue; }
+      if (t === 'numlist'){ out[k] = raw ? raw.split(',').map(x => Number(x.trim())) : []; if (out[k].some(n => !isFinite(n))) throw new Error(`« ${k} » ne doit contenir que des nombres.`); continue; }
+      if (t === 'json'){ if (raw === '') continue; try { out[k] = JSON.parse(raw); } catch (_) { throw new Error(`« ${k} » n\u2019est pas un JSON valide.`); } continue; }
+      out[k] = raw;
+    }
+    return out;
+  }
+  function editorAction(act, id){
+    const i = items.findIndex(x => x.id === id); if (i < 0) return;
+    const it = items[i], wrap = document.querySelector(`.form-wrap[data-id="${id}"]`);
+    if (act === 'save'){
+      try {
+        const d = readForm(wrap);
+        // on garde l'ordre des champs, et les champs absents du formulaire
+        const isEmpty = v => v === '' || v === false || (Array.isArray(v) && !v.length);
+        const merged = {}; fields.forEach(k => {
+          if (k in d && !(isEmpty(d[k]) && !(k in it.data))) merged[k] = d[k];   // un champ laissé vide n'est pas créé s'il n'existait pas
+          else if (k in it.data && !(k in d)) merged[k] = it.data[k];
+        });
+        it.data = merged; openId = null; render(); save(); toast('Entrée enregistrée.');
+      } catch (e) { wrap.querySelector('[data-msg]').textContent = e.message; }
+    } else if (act === 'cancel'){ openId = null; render(); }
+    else if (act === 'revert'){ it.data = clone(it.orig); render(); save(); toast('Entrée remise comme à l\u2019origine.'); }
+    else if (act === 'dup'){ const n = { id: ++uid, data: clone(it.data), orig: null }; items.splice(i + 1, 0, n); openId = n.id; render(); save(); toast('Copie ajoutée juste en dessous : modifie-la.'); }
+    else if (act === 'del'){
+      items.splice(i, 1); if (it.orig) deleted.push(it); openId = null; render(); save();
+      toast('Entrée supprimée.', 'Annuler', () => { items.splice(i, 0, it); deleted = deleted.filter(x => x !== it); render(); save(); });
+    }
+  }
+  $('addBtn').addEventListener('click', () => {
+    const d = {}; fields.forEach(k => { const t = types[k].t; d[k] = t === 'bool' ? false : (t === 'list' || t === 'numlist') ? [] : t === 'number' ? undefined : ''; });
+    Object.keys(d).forEach(k => d[k] === undefined && delete d[k]);
+    const n = { id: ++uid, data: d, orig: null }; items.unshift(n); openId = n.id;
+    $('search').value = ''; filters = {}; buildFilters(); sortField = null; render(); save();
+    const f = document.querySelector('.form-wrap [data-k]'); if (f) f.focus();
+  });
+
+  // ---------- Coller des lignes (ex. depuis le Google Sheet) ----------
+  function buildKeyField(){
+    const guess = ['Nom Scientifique', 'nom', 'Nom Français', 'id', 'name'].find(k => fields.includes(k)) || fields[0];
+    $('keyField').innerHTML = fields.map(k => `<option${k === guess ? ' selected' : ''}>${esc(k)}</option>`).join('');
+  }
+  let pending = [];
+  function parseLines(text){
+    const t = text.trim(); if (!t) return [];
+    try { const v = JSON.parse(t); return Array.isArray(v) ? v : [v]; } catch (_) {}
+    try { return JSON.parse('[' + t.replace(/,\s*$/, '') + ']'); } catch (_) {}
+    // une ligne par objet, sans virgules entre elles
+    return t.split(/\n+/).map(l => l.trim().replace(/,\s*$/, '')).filter(Boolean).map(l => JSON.parse(l));
+  }
+  $('pasteLinesBtn').addEventListener('click', () => { $('pastePanel').classList.toggle('hidden'); $('exportPanel').classList.add('hidden'); $('pasteLines').focus(); });
+  $('pasteClose').addEventListener('click', () => $('pastePanel').classList.add('hidden'));
+  $('pasteCheck').addEventListener('click', () => {
+    const msg = $('pasteMsg'), pv = $('pastePreview'); pending = []; pv.innerHTML = ''; $('pasteApply').disabled = true;
+    let objs;
+    try { objs = parseLines($('pasteLines').value); } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Lignes illisibles : vérifie qu\u2019il s\u2019agit bien de JSON ({ … }).'; return; }
+    if (!objs.length){ msg.className = 'msg bad'; msg.textContent = 'Rien à coller.'; return; }
+    const key = $('keyField').value;
+    objs.forEach(o => {
+      if (!o || typeof o !== 'object' || Array.isArray(o)) return;
+      const match = items.find(it => o[key] !== undefined && norm(show(it.data[key], types[key].t)) === norm(show(o[key], types[key].t)));
+      pending.push({ o, match });
+    });
+    const unknown = [...new Set(pending.flatMap(p => Object.keys(p.o)).filter(k => !fields.includes(k)))];
+    pv.innerHTML = pending.map(({ o, match }) => {
+      const title = esc(o[key] ?? '(sans ' + key + ')');
+      if (!match) return `<div class="pv"><h3><span class="badge new">Ajout</span> ${title}</h3><ul>${Object.entries(o).map(([k, v]) => `<li>${esc(k)} : <ins>${esc(show(v, types[k] ? types[k].t : 'json') || 'vide')}</ins></li>`).join('')}</ul></div>`;
+      const diffs = Object.keys(o).filter(k => !same(o[k], match.data[k]));
+      return `<div class="pv"><h3><span class="badge mod">Remplacement</span> ${title}</h3>${diffs.length ? `<ul>${diffs.map(k => { const t = types[k] ? types[k].t : 'json'; return `<li>${esc(k)} : <del>${esc(show(match.data[k], t) || 'vide')}</del> → <ins>${esc(show(o[k], t) || 'vide')}</ins></li>`; }).join('')}</ul>` : '<p class="help" style="margin:0">Aucune différence.</p>'}</div>`;
+    }).join('');
+    const add = pending.filter(p => !p.match).length, rep = pending.length - add;
+    msg.className = 'msg good';
+    msg.textContent = `${pending.length} ligne${pending.length > 1 ? 's' : ''} lue${pending.length > 1 ? 's' : ''} : ${rep} remplacement${rep > 1 ? 's' : ''}, ${add} ajout${add > 1 ? 's' : ''}.` + (unknown.length ? ` Attention, champ${unknown.length > 1 ? 's' : ''} inconnu${unknown.length > 1 ? 's' : ''} : ${unknown.join(', ')}.` : '');
+    $('pasteApply').disabled = !pending.length;
+  });
+  $('pasteApply').addEventListener('click', () => {
+    pending.forEach(({ o, match }) => {
+      if (match){ const merged = {}; fields.forEach(k => { if (k in o) merged[k] = o[k]; else if (k in match.data) merged[k] = match.data[k]; }); Object.keys(o).forEach(k => { if (!(k in merged)) merged[k] = o[k]; }); match.data = merged; }
+      else items.push({ id: ++uid, data: clone(o), orig: null });
+    });
+    const n = pending.length; pending = [];
+    detectTypes(); buildFilters(); render(); save();
+    $('pasteLines').value = ''; $('pastePreview').innerHTML = ''; $('pasteMsg').textContent = ''; $('pasteApply').disabled = true; $('pastePanel').classList.add('hidden');
+    filters = { __state: 'any' }; buildFilters(); document.querySelector('[data-filter="__state"]').value = 'any'; render();
+    toast(`${n} ligne${n > 1 ? 's' : ''} appliquée${n > 1 ? 's' : ''}. Affichage des entrées modifiées ou ajoutées.`);
+  });
+
+  // ---------- Export ----------
+  function buildExportSort(){
+    $('exportSort').innerHTML = `<option value="">ordre actuel du fichier</option>` + fields.map(k => `<option value="${esc(k)}">par ${esc(k)}</option>`).join('');
+  }
+  function exportText(){
+    let list = items.map(it => it.data);
+    const k = $('exportSort').value;
+    if (k){ const t = types[k].t; list = list.slice().sort((a, b) => t === 'number' ? (a[k] ?? 0) - (b[k] ?? 0) : show(a[k], t).localeCompare(show(b[k], t), 'fr')); }
+    const fmt = document.querySelector('input[name="fmt"]:checked').value;
+    return fmt === 'indent' ? JSON.stringify(list, null, 2) + '\n' : '[\n' + list.map(o => JSON.stringify(o)).join(',\n') + '\n]\n';
+  }
+  $('exportBtn').addEventListener('click', () => { $('exportPanel').classList.toggle('hidden'); $('pastePanel').classList.add('hidden'); $('exportMsg').textContent = ''; });
+  $('exportClose').addEventListener('click', () => $('exportPanel').classList.add('hidden'));
+  $('downloadBtn').addEventListener('click', () => {
+    const txt = exportText(); JSON.parse(txt);   // contrôle de validité
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([txt], { type: 'application/json;charset=utf-8' }));
+    a.download = fileName; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    $('exportMsg').className = 'msg good';
+    $('exportMsg').textContent = `« ${fileName} » téléchargé (${items.length} entrées, JSON valide). Remplace l\u2019ancien fichier sur GitHub par celui-ci.`;
+  });
+  $('copyBtn').addEventListener('click', () => {
+    const txt = exportText();
+    const done = () => { $('exportMsg').className = 'msg good'; $('exportMsg').textContent = 'JSON copié : tu peux le coller directement dans l\u2019éditeur de GitHub.'; };
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(done, () => { $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Copie impossible : utilise plutôt « Télécharger ».'; });
+  });
+
+  // ---------- Notification ----------
+  let tt;
+  function toast(text, actLabel, act){
+    const t = $('toast'); clearTimeout(tt);
+    t.innerHTML = `<span>${esc(text)}</span>` + (actLabel ? `<button type="button">${esc(actLabel)}</button>` : '');
+    t.classList.remove('hidden');
+    if (act) t.querySelector('button').onclick = () => { act(); t.classList.add('hidden'); };
+    tt = setTimeout(() => t.classList.add('hidden'), actLabel ? 7000 : 3000);
+  }
+  window.addEventListener('beforeunload', e => { if (items.length && changes().total){ save(); } });
+})();
+</script>
+</body>
+</html>
