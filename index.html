@@ -62,6 +62,47 @@ body{margin:0;background:var(--foam);color:var(--ink);font:400 16px/1.5 var(--sa
 /* En-tête : illustration du phare du Créac'h (phare_creach.svg) */
 header{display:flex;gap:1rem;align-items:flex-end;padding:2.25rem 0 1.5rem}
 .phare{flex:0 0 auto;width:56px;height:auto;align-self:flex-end;overflow:visible}
+.phare-btn{all:unset;flex:0 0 auto;align-self:flex-end;display:block;cursor:pointer;border-radius:8px;line-height:0;-webkit-tap-highlight-color:transparent}
+.phare-btn .phare{display:block;transition:transform .2s ease}
+.phare-btn:hover .phare{transform:translateY(-2px)}
+.phare-btn:active .phare{transform:scale(.96)}
+.phare-btn:focus-visible{outline:3px solid var(--heather);outline-offset:4px}
+.phare-btn[aria-expanded="true"] .phare{transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){.phare-btn .phare{transition:none}}
+/* Panneau du phare : météo + partage */
+.phare-panel{position:absolute;left:0;top:calc(100% - .6rem);z-index:20;width:min(23rem,calc(100vw - 2.5rem));background:var(--paper);
+  border:1px solid var(--line);border-radius:14px;padding:1rem;box-shadow:0 12px 32px rgba(0,0,0,.2)}
+.phare-panel[hidden]{display:none}
+.pp-h{margin:0 0 .5rem;font:700 1.05rem var(--serif);color:var(--ocean)}
+.pp-sec+.pp-sec{border-top:1px solid var(--line);margin-top:.9rem;padding-top:.9rem}
+.wind{display:flex;gap:.9rem;align-items:center}
+.wind-ar{flex:0 0 auto;width:64px;height:64px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;position:relative;background:var(--foam)}
+.wind-ar svg{transition:transform .4s ease}
+.wind-ar .n{position:absolute;top:1px;left:50%;transform:translateX(-50%);font:700 .6rem var(--sans);color:var(--granite)}
+.wind-main{font:600 1.05rem/1.3 var(--sans)}
+.wind-sub{color:var(--granite);font-size:.88rem}
+.days{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-top:.8rem}
+.day{background:var(--foam);border-radius:10px;padding:.45rem .35rem;text-align:center;font-size:.76rem;line-height:1.35}
+.day b{display:block;font-size:.82rem}
+.day .dw{display:flex;justify-content:center;align-items:center;gap:.2rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.76rem}
+.pp-src{margin:.6rem 0 0;font-size:.75rem;color:var(--granite)}
+@media (max-width:420px){ .day .dw svg{display:none} }
+.pp-src a{color:inherit}
+.qr{display:flex;gap:1rem;align-items:center}
+.qr-box{flex:0 0 auto;width:132px;height:132px;background:#fff;border-radius:10px;padding:8px;border:1px solid var(--line)}
+.qr-box svg{display:block;width:100%;height:100%}
+.qr-txt{font-size:.88rem;color:var(--granite)}
+.qr-txt .btns{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.qr-txt button{border:1px solid var(--line);background:var(--foam);color:var(--ink);font:600 .85rem var(--sans);padding:.4rem .7rem;border-radius:8px;cursor:pointer}
+.qr-txt button.main{background:var(--ocean);border-color:var(--ocean);color:var(--foam)}
+.qr-txt button:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
+/* Œuf de Pâques : un oiseau traverse le faisceau */
+.egg-bird{position:absolute;top:22px;left:-60px;width:46px;height:auto;z-index:30;pointer-events:none;color:var(--ink);animation:fly 3.4s cubic-bezier(.4,.1,.6,.9) forwards}
+.egg-bird .w{transform-origin:24px 14px;animation:flap .32s ease-in-out infinite alternate}
+@keyframes fly{0%{transform:translate(0,10px)}30%{transform:translate(30vw,-6px)}60%{transform:translate(60vw,8px)}100%{transform:translate(calc(100vw + 120px),-10px)}}
+@keyframes flap{to{transform:scaleY(-.55)}}
+.egg-toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;max-width:calc(100% - 2rem);
+  background:var(--ink);color:var(--foam);padding:.7rem 1rem;border-radius:12px;font-size:.92rem;box-shadow:0 8px 24px rgba(0,0,0,.3)}
 /* mode sombre : liseré clair pour que les bandes noires se détachent du fond */
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .phare{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))} }
 :root[data-theme="dark"] .phare{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))}
@@ -232,11 +273,12 @@ section[hidden]{display:none}
 <body>
 <div class="wrap">
   <header>
-    <img class="phare" src="phare_creach.svg" alt="" width="56" height="131">
+    <button type="button" class="phare-btn" id="phareBtn" aria-expanded="false" aria-controls="pharePanel" aria-label="Météo et partage" title="Météo et partage"><img class="phare" src="phare_creach.svg" alt="" width="56" height="131"></button>
     <div class="intro">
       <h1 data-t="title">Oiseaux d'Ouessant</h1>
       <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation.</p>
     </div>
+    <div id="pharePanel" class="phare-panel" hidden></div>
     <div class="tools">
       <button type="button" id="prefsBtn" class="prefs-btn" aria-expanded="false" aria-controls="prefsPanel">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>
@@ -331,6 +373,7 @@ section[hidden]{display:none}
 <script>
 (function(){
   const URL_DATA = 'https://raw.githubusercontent.com/AureLPhotog/ouessant-birds/refs/heads/main/ouessant_birds.json';
+
   const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant';
   const STORE = 'ouessant-birds-data', LANG_KEY = 'ouessant-birds-lang';
   const COLORS = ['#B4532A','#2C7A6B','#8C5E83','#3E6FA8','#A3802A','#5E676B','#B03A5B','#4F7A2C'];
@@ -375,6 +418,18 @@ section[hidden]{display:none}
       badFile: "Ce fichier n'est pas lisible. Il doit contenir une liste d'espèces avec au moins les champs « Nom Français », « Nom Scientifique » et « Proposition de Canal de Diffusion Ouessant ».",
       channels: { telegram: 'Alerte Telegram', whatsapp: 'Alerte WhatsApp', none: "Pas d'alerte", unknown: 'Non renseigné' },
       tabBirds: 'Oiseaux', tabPlaces: 'Lieux', tabWhere: 'Où suis-je ?',
+      phareLabel: 'Météo et partage', wTitle: 'Météo à Ouessant', wLoading: 'Chargement de la météo…', wErr: 'Météo indisponible pour le moment (connexion ?).',
+      wNow: (dir, kmh, bf) => `Vent ${dir}, ${kmh} km/h (force ${bf})`, wGust: g => `rafales ${g} km/h`, wSrc: 'Météo : Open-Meteo.com, mise à jour toutes les 15 minutes.',
+      dirs16: ['du nord','du nord-nord-est','du nord-est',"d'est-nord-est","d'est","d'est-sud-est",'du sud-est','du sud-sud-est','du sud','du sud-sud-ouest','du sud-ouest',"d'ouest-sud-ouest","d'ouest","d'ouest-nord-ouest",'du nord-ouest','du nord-nord-ouest'],
+      dirsShort: ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'],
+      today: "Aujourd'hui", tomorrow: 'Demain',
+      shTitle: "Partager l'appli", shText: "Fais scanner ce QR code à un autre observateur : il ouvrira l'appli directement.",
+      shBtn: 'Partager…', shCopy: 'Copier le lien', shCopied: 'Lien copié !', qrErr: 'QR code indisponible hors connexion.',
+      egg: n => `Alerte Telegram ! ${n} vient de passer devant le phare du Créac'h.`, eggNone: "Un oiseau vient de passer devant le phare du Créac'h !",
+      wx: { 0: 'ciel dégagé', 1: 'peu nuageux', 2: 'partiellement nuageux', 3: 'couvert', 45: 'brouillard', 48: 'brouillard givrant', 51: 'bruine légère', 53: 'bruine', 55: 'bruine forte',
+            56: 'bruine verglaçante', 57: 'bruine verglaçante', 61: 'pluie faible', 63: 'pluie', 65: 'forte pluie', 66: 'pluie verglaçante', 67: 'pluie verglaçante',
+            71: 'neige faible', 73: 'neige', 75: 'forte neige', 77: 'grains de neige', 80: 'averses', 81: 'averses', 82: 'fortes averses', 85: 'averses de neige', 86: 'averses de neige',
+            95: 'orage', 96: 'orage avec grêle', 99: 'orage avec grêle' },
       prefsLabel: 'Affichage', themeLabel: 'Thème', tAuto: 'Auto', tLight: 'Clair', tDark: 'Sombre',
       colorsLabel: 'Couleurs', cStd: 'Standard', cCvd: 'Daltonisme',
       cvdNote: "« Daltonisme » utilise des couleurs distinguables par la plupart des personnes daltoniennes. « Auto » suit le réglage du téléphone.",
@@ -456,6 +511,18 @@ section[hidden]{display:none}
       badFile: 'This file cannot be read. It must contain a list of species with at least the fields “Nom Français”, “Nom Scientifique” and “Proposition de Canal de Diffusion Ouessant”.',
       channels: { telegram: 'Telegram alert', whatsapp: 'WhatsApp alert', none: 'No alert', unknown: 'Not specified' },
       tabBirds: 'Birds', tabPlaces: 'Places', tabWhere: 'Where am I?',
+      phareLabel: 'Weather and sharing', wTitle: 'Weather on Ouessant', wLoading: 'Loading the weather…', wErr: 'Weather unavailable right now (connection?).',
+      wNow: (dir, kmh, bf) => `Wind ${dir}, ${kmh} km/h (force ${bf})`, wGust: g => `gusts ${g} km/h`, wSrc: 'Weather: Open-Meteo.com, updated every 15 minutes.',
+      dirs16: ['from the N','from the NNE','from the NE','from the ENE','from the E','from the ESE','from the SE','from the SSE','from the S','from the SSW','from the SW','from the WSW','from the W','from the WNW','from the NW','from the NNW'],
+      dirsShort: ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'],
+      today: 'Today', tomorrow: 'Tomorrow',
+      shTitle: 'Share the app', shText: 'Let another birder scan this QR code: it opens the app straight away.',
+      shBtn: 'Share…', shCopy: 'Copy link', shCopied: 'Link copied!', qrErr: 'QR code unavailable offline.',
+      egg: n => `Telegram alert! ${n} just flew past the Créac'h lighthouse.`, eggNone: "A bird just flew past the Créac'h lighthouse!",
+      wx: { 0: 'clear sky', 1: 'mainly clear', 2: 'partly cloudy', 3: 'overcast', 45: 'fog', 48: 'freezing fog', 51: 'light drizzle', 53: 'drizzle', 55: 'heavy drizzle',
+            56: 'freezing drizzle', 57: 'freezing drizzle', 61: 'light rain', 63: 'rain', 65: 'heavy rain', 66: 'freezing rain', 67: 'freezing rain',
+            71: 'light snow', 73: 'snow', 75: 'heavy snow', 77: 'snow grains', 80: 'showers', 81: 'showers', 82: 'heavy showers', 85: 'snow showers', 86: 'snow showers',
+            95: 'thunderstorm', 96: 'thunderstorm with hail', 99: 'thunderstorm with hail' },
       prefsLabel: 'Display', themeLabel: 'Theme', tAuto: 'Auto', tLight: 'Light', tDark: 'Dark',
       colorsLabel: 'Colours', cStd: 'Standard', cCvd: 'Colour-blind',
       cvdNote: '“Colour-blind” uses colours most colour-blind people can tell apart. “Auto” follows your phone’s setting.',
@@ -583,6 +650,8 @@ section[hidden]{display:none}
     renderWhere();
     if (!$('newBirdPanel').hidden) $('newBirdPanel').innerHTML = birdFormHtml(null);
     if (lastFix) $('locate').querySelector('span').textContent = T('relocateBtn');
+    $('phareBtn').setAttribute('aria-label', T('phareLabel')); $('phareBtn').title = T('phareLabel');
+    if (!$('pharePanel').hidden) renderPhare();
     q.placeholder = T('placeholder');
     q.setAttribute('aria-label', T('searchLabel'));
     chips.setAttribute('aria-label', T('channelsLabel'));
@@ -1274,6 +1343,97 @@ section[hidden]{display:none}
   document.addEventListener('click', () => { if (!$('prefsPanel').hidden){ $('prefsPanel').hidden = true; $('prefsBtn').setAttribute('aria-expanded', 'false'); } });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('prefsPanel').hidden){ $('prefsPanel').hidden = true; $('prefsBtn').setAttribute('aria-expanded', 'false'); $('prefsBtn').focus(); } });
   applyPrefs();
+
+  // ---------- Le phare : météo, partage (QR code) et œuf de Pâques ----------
+  const APP_URL = 'https://aurelphotog.github.io/ouessant-birds/';
+  const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=48.4568&longitude=-5.0975'
+    + '&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m'
+    + '&daily=weather_code,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,temperature_2m_max'
+    + '&wind_speed_unit=kmh&timezone=Europe%2FParis&forecast_days=3';
+  let wx = null, wxAt = 0, wxState = 'idle', qrLib = null;
+  const BF = [1, 6, 12, 20, 29, 39, 50, 62, 75, 89, 103, 118];   // seuils de l'échelle de Beaufort, en km/h
+  const beaufort = k => { const i = BF.findIndex(v => k < v); return i < 0 ? 12 : i; };
+  const dir16 = deg => Math.round(((deg % 360) + 360) % 360 / 22.5) % 16;
+  const arrow = (deg, size) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="transform:rotate(${(deg + 180) % 360}deg)" aria-hidden="true"><path d="M12 2 L18 20 L12 16 L6 20 Z" fill="currentColor"/></svg>`;
+  function loadWx(){
+    if (wx && Date.now() - wxAt < 15 * 60000) return;
+    wxState = 'loading';
+    fetch(WX_URL).then(r => r.ok ? r.json() : Promise.reject()).then(d => { wx = d; wxAt = Date.now(); wxState = 'ok'; renderPhare(); })
+      .catch(() => { wxState = wx ? 'ok' : 'err'; renderPhare(); });
+  }
+  function wxHtml(){
+    if (!wx) return `<p class="wind-sub">${esc(wxState === 'err' ? T('wErr') : T('wLoading'))}</p>`;
+    const c = wx.current, d = wx.daily, kmh = Math.round(c.wind_speed_10m), i = dir16(c.wind_direction_10m);
+    const days = d.time.map((t, j) => {
+      const label = j === 0 ? T('today') : j === 1 ? T('tomorrow') : (s => s.charAt(0).toUpperCase() + s.slice(1))(new Date(t + 'T12:00').toLocaleDateString(lang, { weekday: 'long' }));
+      return `<div class="day"><b>${esc(label)}</b><span class="dw">${arrow(d.wind_direction_10m_dominant[j], 14)} ${esc(T('dirsShort')[dir16(d.wind_direction_10m_dominant[j])])} ${Math.round(d.wind_speed_10m_max[j])} km/h</span>${esc(T('wx')[d.weather_code[j]] || '')}<br>${Math.round(d.temperature_2m_max[j])} °C</div>`;
+    }).join('');
+    return `<div class="wind"><div class="wind-ar"><span class="n">N</span>${arrow(c.wind_direction_10m, 30)}</div>
+      <div><div class="wind-main">${esc(T('wNow')(T('dirs16')[i], kmh, beaufort(c.wind_speed_10m)))}</div>
+      <div class="wind-sub">${esc(T('wGust')(Math.round(c.wind_gusts_10m)))}, ${esc(T('wx')[c.weather_code] || '')}, ${Math.round(c.temperature_2m)} °C</div></div></div>
+      <div class="days">${days}</div><p class="pp-src">${esc(T('wSrc'))}</p>`;
+  }
+  function qrSvg(){
+    if (!qrLib) return '';
+    const q = qrLib(0, 'M'); q.addData(APP_URL); q.make();
+    const n = q.getModuleCount(); let d = '';
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) d += `M${c} ${r}h1v1h-1z`;
+    return `<svg viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges" role="img" aria-label="QR code : ${esc(APP_URL)}"><path d="${d}" fill="#16232C"/></svg>`;
+  }
+  function loadQr(){
+    if (qrLib || window.qrcode){ qrLib = qrLib || window.qrcode; return; }
+    if (document.getElementById('qrlib')) return;
+    const sc = document.createElement('script'); sc.id = 'qrlib';
+    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+    sc.onload = () => { qrLib = window.qrcode; renderPhare(); };
+    sc.onerror = () => { sc.remove(); renderPhare(); };
+    document.head.appendChild(sc);
+  }
+  function renderPhare(){
+    const box = qrSvg();
+    $('pharePanel').innerHTML = `<div class="pp-sec"><h2 class="pp-h">${esc(T('wTitle'))}</h2>${wxHtml()}</div>
+      <div class="pp-sec"><h2 class="pp-h">${esc(T('shTitle'))}</h2><div class="qr">
+        <div class="qr-box">${box || `<p class="wind-sub" style="margin:0">${document.getElementById('qrlib') ? '…' : esc(T('qrErr'))}</p>`}</div>
+        <div class="qr-txt">${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
+      </div></div>`;
+  }
+  function openPhare(open){
+    $('pharePanel').hidden = !open; $('phareBtn').setAttribute('aria-expanded', String(open));
+    if (open){ loadWx(); loadQr(); renderPhare(); }
+  }
+  // un clic ouvre le panneau ; cinq clics rapides font passer un oiseau
+  let clicks = [], eggLock = 0;
+  $('phareBtn').addEventListener('click', e => {
+    e.stopPropagation();
+    const now = Date.now();
+    if (now < eggLock) return;                                   // juste après l'oiseau, on ignore les clics en trop
+    clicks = clicks.filter(t => now - t < 2000); clicks.push(now);
+    if (clicks.length >= 5){ clicks = []; eggLock = now + 1500; openPhare(false); egg(); return; }
+    openPhare($('pharePanel').hidden);
+  });
+  $('pharePanel').addEventListener('click', e => {
+    e.stopPropagation();
+    const b = e.target.closest('[data-ph]'); if (!b) return;
+    if (b.dataset.ph === 'share') navigator.share({ title: T('title'), text: T('lede').replace(/<[^>]+>/g, ''), url: APP_URL }).catch(() => {});
+    else {
+      const done = () => { b.textContent = T('shCopied'); setTimeout(() => { b.textContent = T('shCopy'); }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(APP_URL).then(done, () => fallbackCopy(APP_URL, done)); else fallbackCopy(APP_URL, done);
+    }
+  });
+  document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
+  function egg(){
+    const rares = birds.filter(b => canalKind(b[K_CANAL]) === 'telegram' && !isSsp(b));
+    const b = rares.length ? rares[Math.floor(Math.random() * rares.length)] : null;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce){
+      const header = document.querySelector('header');
+      header.insertAdjacentHTML('beforeend', `<svg class="egg-bird" viewBox="0 0 48 28" aria-hidden="true"><g class="w"><path d="M2 14 C10 4, 18 6, 24 14 C30 6, 38 4, 46 14 C38 10, 30 12, 24 18 C18 12, 10 10, 2 14 Z" fill="currentColor"/></g></svg>`);
+      const bird = header.querySelector('.egg-bird:last-child'); setTimeout(() => bird.remove(), 3600);
+    }
+    const t = document.createElement('div'); t.className = 'egg-toast'; t.setAttribute('role', 'status');
+    t.textContent = b ? T('egg')(mainName(b)) : T('eggNone'); document.body.appendChild(t); setTimeout(() => t.remove(), 4500);
+  }
 
   bindFiles();
   showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds');
