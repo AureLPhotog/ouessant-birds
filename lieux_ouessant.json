@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Sémaphore du Stiff",
+    "carres": [
+      "N3"
+    ],
+    "lat": 48.4734,
+    "lon": -5.05631,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Aérodrome Nord Est",
     "carres": [
       "M6",
