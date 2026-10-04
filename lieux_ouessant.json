@@ -380,12 +380,20 @@
   {
     "nom": "Baie de Lampaul",
     "carres": [
+      "F8",
+      "G8",
+      "H8",
+      "E9",
       "F9",
-      "G9"
+      "G9",
+      "H9",
+      "E10",
+      "F10"
     ],
-    "lat": 48.44661,
-    "lon": -5.10951,
-    "precision_m": 750
+    "lat": 48.4492,
+    "lon": -5.1076,
+    "precision_m": 25,
+    "verifie": true
   },
   {
     "nom": "Beg Piniglou",
