@@ -235,7 +235,7 @@ section[hidden]{display:none}
     <img class="phare" src="phare_creach.svg" alt="" width="56" height="131">
     <div class="intro">
       <h1 data-t="title">Oiseaux d'Ouessant</h1>
-      <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation .</p>
+      <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation.</p>
     </div>
     <div class="tools">
       <button type="button" id="prefsBtn" class="prefs-btn" aria-expanded="false" aria-controls="prefsPanel">
@@ -553,10 +553,28 @@ section[hidden]{display:none}
     return esc(t.slice(0,i)) + '<mark>' + esc(t.slice(i, i+query.length)) + '</mark>' + esc(t.slice(i+query.length));
   }
 
+  // Le texte d'intro change selon l'onglet : on lui réserve la hauteur du plus long des trois,
+  // pour que l'en-tête (et le phare) garde la même hauteur quel que soit l'onglet, l'écran ou la langue.
+  function fixLedeHeight(){
+    const lede = document.querySelector('.lede'); if (!lede || !lede.offsetWidth) return;
+    const m = lede.cloneNode(false);
+    m.removeAttribute('id'); m.setAttribute('aria-hidden', 'true');
+    Object.assign(m.style, { position: 'absolute', visibility: 'hidden', pointerEvents: 'none', minHeight: '0', width: lede.offsetWidth + 'px' });
+    lede.parentNode.appendChild(m);
+    let h = 0;
+    ['lede', 'ledePlaces', 'ledeWhere'].forEach(k => { m.innerHTML = T(k); h = Math.max(h, m.offsetHeight); });
+    m.remove();
+    lede.style.minHeight = h + 'px';
+  }
+  let lt;
+  window.addEventListener('resize', () => { clearTimeout(lt); lt = setTimeout(fixLedeHeight, 120); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fixLedeHeight);
+
   function applyLang(){
     document.documentElement.lang = lang;
     document.title = T('docTitle');
     document.querySelectorAll('[data-t]').forEach(el => { el.textContent = T(el.dataset.t); });
+    fixLedeHeight();
     document.querySelector('.lede').innerHTML = T({ places: 'ledePlaces', where: 'ledeWhere' }[tab] || 'lede');
     pq.placeholder = T('pPlaceholder'); pq.setAttribute('aria-label', T('pLabel'));
     renderPlaces();
