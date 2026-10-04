@@ -1,0 +1,80 @@
+/* Oiseaux d'Ouessant — mode hors ligne.
+   Le navigateur garde l'appli, les listes et la carte en mémoire, pour fonctionner sans réseau sur l'île.
+   ⚠️ À chaque mise en ligne d'une nouvelle version des fichiers de l'appli (HTML, CSS, JS, images),
+   augmente le numéro ci-dessous (v3.0 → v3.1…) : c'est ce qui déclenche la mise à jour chez les utilisateurs.
+   Les listes (JSON) n'ont pas besoin de ce changement : elles sont toujours vérifiées en ligne en premier. */
+const VERSION = 'v3.0';
+const CACHE = 'ouessant-' + VERSION;
+const RUNTIME = 'ouessant-runtime';
+
+// Fichiers gardés dès la première visite
+const SHELL = [
+  './', 'index.html', 'manifest.webmanifest',
+  'css/commun.css', 'css/appli.css',
+  'js/textes.js', 'js/carte.js', 'js/recherche.js', 'js/appli.js',
+  'ouessant_birds.json', 'lieux_ouessant.json',
+  'phare_creach.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png',
+  'carte_ouessant.webp'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE)
+      // chaque fichier séparément : un fichier manquant ne bloque pas les autres
+      .then(c => Promise.all(SHELL.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => {}))))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('ouessant-') && k !== CACHE && k !== RUNTIME).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+});
+
+// Réseau d'abord (pour avoir la dernière version), mémoire en secours
+async function networkFirst(req, cacheName){
+  const cache = await caches.open(cacheName);
+  try {
+    const res = await fetch(req, { cache: 'no-cache' });
+    if (res && res.ok) cache.put(req, res.clone());
+    return res;
+  } catch (_) {
+    const hit = await cache.match(req, { ignoreSearch: true });
+    if (hit) return hit;
+    throw _;
+  }
+}
+// Mémoire d'abord (rapide), mise à jour en arrière-plan
+async function staleWhileRevalidate(req, cacheName){
+  const cache = await caches.open(cacheName);
+  const hit = await cache.match(req);
+  const update = fetch(req).then(res => { if (res && (res.ok || res.type === 'opaque')) cache.put(req, res.clone()); return res; }).catch(() => null);
+  return hit || update.then(r => r || Response.error());
+}
+
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+
+  if (url.origin === location.origin){
+    // l'éditeur et ses échanges avec GitHub ne passent pas par le cache
+    if (url.pathname.endsWith('editeur.html')) return;
+    // pages et listes : toujours la version en ligne si possible
+    if (req.mode === 'navigate' || url.pathname.endsWith('.json')){
+      event.respondWith(networkFirst(req, CACHE).catch(() => caches.match('index.html')));
+      return;
+    }
+    // le reste (CSS, JS, images, carte) : depuis la mémoire, mis à jour en arrière-plan
+    event.respondWith(staleWhileRevalidate(req, CACHE));
+    return;
+  }
+  // polices Google : gardées pour l'affichage hors ligne
+  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com'){
+    event.respondWith(staleWhileRevalidate(req, RUNTIME));
+  }
+  // tout le reste (météo, API GitHub…) : réseau normal, jamais gardé
+});

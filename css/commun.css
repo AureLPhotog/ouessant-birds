@@ -1,0 +1,29 @@
+/* Oiseaux d'Ouessant — styles communs à l'appli et à l'éditeur : couleurs (clair, sombre, daltonisme) et bases */
+:root{
+  --ocean:#1F3A4D; --ocean-2:#2C5168; --foam:#EEF2F0; --paper:#FFFFFF;
+  --granite:#5E676B; --line:#D3DAD8; --heather:#8C5E83; --warn:#B4532A; --warn-bg:#FBEFE8;
+  --ink:#16232C; --ok:#1F7A5A;
+  --ok-bg:#E5F3EC; --new:#0072B2; --new-bg:#E3F0F8; --mark:#F6E7A8;
+  --mono:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --serif:"Spectral", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ocean:#9FC3D9; --ocean-2:#7FAAC4; --foam:#0F1B23; --paper:#16252F;
+    --granite:#9AA6AB; --line:#2A3B46; --heather:#C9A1C0; --warn:#F0A07A; --warn-bg:#3A2219; --ink:#E6EEF0; --ok:#5CC497; --ok-bg:#16342A; --new:#56B4E9; --new-bg:#15303F; --mark:#5A4E1C;
+  }
+}
+:root[data-theme="dark"]{
+  --ocean:#9FC3D9; --ocean-2:#7FAAC4; --foam:#0F1B23; --paper:#16252F;
+  --granite:#9AA6AB; --line:#2A3B46; --heather:#C9A1C0; --warn:#F0A07A; --warn-bg:#3A2219; --ink:#E6EEF0; --ok:#5CC497; --ok-bg:#16342A; --new:#56B4E9; --new-bg:#15303F; --mark:#5A4E1C;
+}
+*,*::before,*::after{box-sizing:inherit}
+:root[data-cvd="1"]{--ok:#0072B2}
+:root[data-cvd="1"][data-theme="dark"]{--ok:#56B4E9}
+@media (prefers-color-scheme: dark){ :root[data-cvd="1"]:not([data-theme="light"]){--ok:#56B4E9} }
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--foam);color:var(--ink);font:400 16px/1.5 var(--sans)}
