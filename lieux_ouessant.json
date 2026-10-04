@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Mac Ludo (pizza)",
+    "carres": [
+      "H7"
+    ],
+    "lat": 48.45685,
+    "lon": -5.0959,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Carrefour",
     "carres": [
       "I7"
