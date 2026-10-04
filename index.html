@@ -98,9 +98,7 @@ header{display:flex;gap:1rem;align-items:flex-end;padding:2.25rem 0 1.5rem}
 .qr-txt button:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
 /* Œuf de Pâques : un oiseau traverse le faisceau */
 .egg-bird{position:absolute;top:22px;left:-60px;width:46px;height:auto;z-index:30;pointer-events:none;color:var(--ink);animation:fly 3.4s cubic-bezier(.4,.1,.6,.9) forwards}
-.egg-bird .w{transform-origin:24px 14px;animation:flap .32s ease-in-out infinite alternate}
 @keyframes fly{0%{transform:translate(0,10px)}30%{transform:translate(30vw,-6px)}60%{transform:translate(60vw,8px)}100%{transform:translate(calc(100vw + 120px),-10px)}}
-@keyframes flap{to{transform:scaleY(-.55)}}
 .egg-toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;max-width:calc(100% - 2rem);
   background:var(--ink);color:var(--foam);padding:.7rem 1rem;border-radius:12px;font-size:.92rem;box-shadow:0 8px 24px rgba(0,0,0,.3)}
 /* mode sombre : liseré clair pour que les bandes noires se détachent du fond */
@@ -1428,7 +1426,7 @@ section[hidden]{display:none}
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduce){
       const header = document.querySelector('header');
-      header.insertAdjacentHTML('beforeend', `<svg class="egg-bird" viewBox="0 0 48 28" aria-hidden="true"><g class="w"><path d="M2 14 C10 4, 18 6, 24 14 C30 6, 38 4, 46 14 C38 10, 30 12, 24 18 C18 12, 10 10, 2 14 Z" fill="currentColor"/></g></svg>`);
+      header.insertAdjacentHTML('beforeend', `<svg class="egg-bird" viewBox="0 0 48 28" aria-hidden="true"><path d="M2 14 C10 4, 18 6, 24 14 C30 6, 38 4, 46 14 C38 10, 30 12, 24 18 C18 12, 10 10, 2 14 Z" fill="currentColor"/></svg>`);
       const bird = header.querySelector('.egg-bird:last-child'); setTimeout(() => bird.remove(), 3600);
     }
     const t = document.createElement('div'); t.className = 'egg-toast'; t.setAttribute('role', 'status');
