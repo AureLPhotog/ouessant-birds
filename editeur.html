@@ -224,7 +224,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 
     <div class="panel hidden" id="pastePanel">
       <h2>Coller des lignes JSON</h2>
-      <p class="help">Colle une ou plusieurs lignes, par exemple la colonne « Ligne JSON » de ton Google Sheet. Si une entrée porte déjà la même valeur de <select id="keyField" style="width:auto;display:inline-block;padding:.15rem .4rem"></select>, elle sera remplacée, sinon elle sera ajoutée.</p>
+      <p class="help">Colle une ou plusieurs lignes : la colonne « Ligne JSON » de ton Google Sheet, ou un fichier de modifications reçu par e-mail (les lignes « // » sont ignorées, les suppressions sont prises en compte). Si une entrée porte déjà la même valeur de <select id="keyField" style="width:auto;display:inline-block;padding:.15rem .4rem"></select>, elle sera remplacée, sinon elle sera ajoutée.</p>
       <textarea id="pasteLines" rows="5" placeholder='{"nom":"Pern","carres":["B9"],"lat":48.44833,"lon":-5.14056,"precision_m":25,"verifie":true}'></textarea>
       <div class="actions"><button type="button" class="btn" id="pasteCheck">Vérifier</button><button type="button" class="btn primary" id="pasteApply" disabled>Appliquer</button><span class="sep"></span><button type="button" class="btn ghost" id="pasteClose">Fermer</button></div>
       <p class="msg" id="pasteMsg"></p>
@@ -234,7 +234,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     <div class="panel hidden" id="ghPanel">
       <h2>Enregistrer sur GitHub</h2>
       <p class="help" id="ghTarget"></p>
-      <label class="gh-lab">Message du commit<input type="text" id="ghMsg" autocomplete="off"></label>
+      <label class="gh-lab">Message du commit <span style="font-weight:400">(1re ligne : résumé ; en dessous : le détail des modifications)</span><textarea id="ghMsg" rows="8" spellcheck="false"></textarea></label>
       <div class="actions"><button type="button" class="btn primary" id="ghCommit">Enregistrer sur GitHub</button><span class="sep"></span><button type="button" class="btn ghost" id="ghClose">Fermer</button></div>
       <p class="msg" id="ghMsgOut" aria-live="polite"></p>
     </div>
@@ -251,7 +251,15 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 
     <div class="panel hidden" id="exportPanel">
       <h2>Exporter</h2>
-      <div class="export-opts">
+      <div class="export-opts" style="margin-bottom:.6rem">
+        <label><input type="radio" name="what" value="changes" checked> <b>Seulement mes modifications</b></label>
+        <label><input type="radio" name="what" value="full"> Le fichier complet</label>
+      </div>
+      <div id="changesOpts">
+        <p class="help">Idéal pour envoyer tes propositions à Aurélien : un petit texte avec uniquement ce que tu as modifié, ajouté ou supprimé. Il le collera dans son éditeur et verra chaque changement avant de l’appliquer.</p>
+        <label class="gh-lab" style="max-width:22rem">Ton nom (facultatif)<input type="text" id="authorName" autocomplete="name"></label>
+      </div>
+      <div class="export-opts hidden" id="fullOpts">
         <label><input type="radio" name="fmt" value="lines" checked> Une entrée par ligne</label>
         <label><input type="radio" name="fmt" value="indent"> Indenté (plus aéré)</label>
         <label>Ordre : <select id="exportSort" style="width:auto"></select></label>
@@ -448,7 +456,8 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   });
 
   // ---------- GitHub : ouvrir et enregistrer directement dans le dépôt ----------
-  const GH = { owner: 'AureLPhotog', repo: 'ouessant-birds', branch: 'main', files: ['ouessant_birds.json', 'lieux_ouessant.json'] };
+  const GH = { owner: 'AureLPhotog', repo: 'ouessant-birds', files: ['ouessant_birds.json', 'lieux_ouessant.json'] };
+  const branch = 'main';   // l'éditeur lit et enregistre toujours sur main
   const TOKEN_KEY = 'gh-token-ouessant';
   let gh = null;            // { path, sha } du fichier ouvert depuis GitHub
   let fmtHint = null;       // mise en forme d'origine du fichier, pour l'export
@@ -488,16 +497,16 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   async function ghOpen(path){
     const out = $('importMsg'); out.className = 'msg'; out.textContent = 'Chargement depuis GitHub…';
     try {
-      const r = await api(`/contents/${encodeURIComponent(path)}?ref=${GH.branch}`);
+      const r = await api(`/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`);
       if (r.status === 401) throw new Error('clé refusée par GitHub (expirée ou invalide ?)');
-      if (r.status === 404) throw new Error(`${path} introuvable sur la branche ${GH.branch}`);
+      if (r.status === 404) throw new Error(`${path} introuvable sur la branche ${branch}`);
       if (r.status === 403) throw new Error('accès refusé ou limite de requêtes atteinte, réessaie dans quelques minutes');
       if (!r.ok) throw new Error('erreur ' + r.status);
       const j = await r.json(), text = b64dec(j.content);
       load(path, JSON.parse(text));
-      gh = { path, sha: j.sha }; applyFormat(detectFormat(text)); save(); render();
+      gh = { path, sha: j.sha, branch }; applyFormat(detectFormat(text)); save(); render();
       out.textContent = '';
-      toast(`${path} chargé depuis GitHub (${items.length} entrées).`);
+      toast(`${path} chargé depuis GitHub, branche ${branch} (${items.length} entrées).`);
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Impossible d’ouvrir depuis GitHub : ' + e.message + '.'; }
   }
   $('ghOpenBtn').addEventListener('click', () => ghOpen($('ghFile').value));
@@ -531,7 +540,30 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
     const part = (n, list, w) => list.length ? `${list.length} ${w}${list.length > 1 ? 's' : ''} (${list.slice(0, 3).map(it => name(it.data)).join(', ')}${list.length > 3 ? '…' : ''})` : '';
     const label = /bird|oiseau/i.test(gh ? gh.path : fileName) ? 'Oiseaux' : /lieu/i.test(gh ? gh.path : fileName) ? 'Lieux' : fileName;
-    return `${label} : ` + [part(0, mod, 'modifiée'), part(0, add, 'ajoutée'), part(0, del, 'supprimée')].filter(Boolean).join(', ');
+    const title = `${label} : ` + [part(0, mod, 'modifiée'), part(0, add, 'ajoutée'), part(0, del, 'supprimée')].filter(Boolean).join(', ');
+    // détail, champ par champ (noms de champs raccourcis quand ils sont longs)
+    const SHORT = { 'Proposition de Canal de Diffusion Ouessant': 'Canal', 'Nom Scientifique': 'Nom sci.', 'precision_m': 'précision' };
+    const fl = k => SHORT[k] || k, val = (k, v) => { const t = show(v, types[k] ? types[k].t : 'text'); return t === '' ? '(vide)' : t; };
+    const MAX = 60, body = [];
+    if (mod.length){
+      body.push('Modifiées :');
+      mod.slice(0, MAX).forEach(it => {
+        const keys = [...new Set([...Object.keys(it.orig), ...Object.keys(it.data)])].filter(k => !same(it.orig[k], it.data[k]));
+        body.push(`- ${name(it.orig)} : ` + keys.map(k => `${fl(k)} : ${val(k, it.orig[k])} → ${val(k, it.data[k])}`).join(' ; '));
+      });
+      if (mod.length > MAX) body.push(`- … et ${mod.length - MAX} autres`);
+    }
+    if (add.length){
+      body.push('Ajoutées :');
+      add.slice(0, MAX).forEach(it => body.push(`- ${name(it.data)} (` + Object.keys(it.data).filter(k => k !== key).map(k => `${fl(k)} : ${val(k, it.data[k])}`).join(' ; ') + ')'));
+      if (add.length > MAX) body.push(`- … et ${add.length - MAX} autres`);
+    }
+    if (del.length){
+      body.push('Supprimées :');
+      del.slice(0, MAX).forEach(it => body.push(`- ${name(it.orig)}`));
+      if (del.length > MAX) body.push(`- … et ${del.length - MAX} autres`);
+    }
+    return body.length ? title + '\n\n' + body.join('\n') : title;
   }
   $('ghSaveBtn').addEventListener('click', () => {
     if (!getToken()){ openKey(); return; }
@@ -540,7 +572,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     $('ghPanel').classList.toggle('hidden');
     if (!path){ $('ghTarget').innerHTML = `Ce fichier ne correspond à aucun fichier du dépôt (${GH.files.join(', ')}). Ouvre-le depuis GitHub, ou renomme-le.`; $('ghCommit').disabled = true; return; }
     $('ghCommit').disabled = !c.total;
-    $('ghTarget').innerHTML = `Fichier : <b>${esc(path)}</b> sur la branche <b>${GH.branch}</b>. ` + (c.total ? `${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s).` : 'Aucune modification à enregistrer.')
+    $('ghTarget').innerHTML = `Fichier : <b>${esc(path)}</b> sur la branche <b>${esc(gh ? gh.branch || branch : branch)}</b>. ` + (c.total ? `${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s).` : 'Aucune modification à enregistrer.')
       + (gh ? '' : ' <b>Attention :</b> ce fichier vient de ton ordinateur, la version en ligne sera entièrement remplacée.');
     $('ghMsg').value = c.total ? commitMessage() : ''; $('ghMsgOut').textContent = '';
   });
@@ -551,19 +583,24 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     $('ghCommit').disabled = true; out.className = 'msg'; out.textContent = 'Enregistrement sur GitHub…';
     try {
       let sha = gh && gh.sha;
-      if (!sha){ const r0 = await api(`/contents/${encodeURIComponent(path)}?ref=${GH.branch}`); if (r0.ok) sha = (await r0.json()).sha; }
+      const br = gh ? gh.branch || branch : branch;
+      if (!sha){ const r0 = await api(`/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(br)}`); if (r0.ok) sha = (await r0.json()).sha; }
       const text = exportText(); JSON.parse(text);
-      const r = await api(`/contents/${encodeURIComponent(path)}`, { method: 'PUT', body: JSON.stringify({ message: msg, content: b64enc(text), sha, branch: GH.branch }) });
+      const r = await api(`/contents/${encodeURIComponent(path)}`, { method: 'PUT', body: JSON.stringify({ message: msg, content: b64enc(text), sha, branch: br }) });
+      if (!r.ok){ const em = ((await r.clone().json().catch(() => ({}))).message || '').toLowerCase();
+        if (/rule|protected/.test(em)) throw new Error(`la branche ${br} est protégée par une règle du dépôt, et cette clé n’a pas le droit d’y écrire directement. Choisis une autre branche (ou « + Nouvelle branche… ») et ouvre ensuite une pull request.`); }
       if (r.status === 409 || r.status === 422) throw new Error('le fichier a été modifié sur GitHub depuis que tu l’as ouvert. Pour ne rien écraser, exporte tes modifications sur ton ordinateur, puis rouvre la version GitHub.');
       if (r.status === 401) throw new Error('clé refusée (expirée ?). Mets-la à jour avec « Gérer la clé ».');
       if (r.status === 403 || r.status === 404) throw new Error('la clé n’a pas le droit d’écrire dans ce dépôt (permission « Contents : Read and write » manquante ?).');
       if (!r.ok) throw new Error('erreur ' + r.status);
       const j = await r.json();
-      gh = { path, sha: j.content.sha };
+      gh = { path, sha: j.content.sha, branch: br };
       items.forEach(it => { it.orig = clone(it.data); }); deleted = [];   // l'état enregistré devient la nouvelle référence
       save(); render();
       out.className = 'msg good';
-      out.innerHTML = `Enregistré ! <a href="${esc(j.commit.html_url)}" target="_blank" rel="noopener">Voir le commit</a>. L’appli en ligne sera à jour d’ici quelques minutes.`;
+      out.innerHTML = `Enregistré sur <b>${esc(br)}</b> ! <a href="${esc(j.commit.html_url)}" target="_blank" rel="noopener">Voir le commit</a>. ` + (br === 'main'
+        ? 'L’appli en ligne sera à jour d’ici quelques minutes.'
+        : `L’appli en ligne ne change pas tant que cette branche n’est pas fusionnée : <a href="https://github.com/${GH.owner}/${GH.repo}/compare/main...${encodeURIComponent(br)}?expand=1" target="_blank" rel="noopener">ouvrir une pull request vers main</a>.`);
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Échec : ' + e.message; $('ghCommit').disabled = false; }
   });
 
@@ -575,9 +612,9 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     try {
       const d = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (!d || !d.items) return;
       $('resumeBtn').hidden = false;
-      $('resumeInfo').textContent = `${d.fileName}${d.gh ? ' (GitHub)' : ''}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
+      $('resumeInfo').textContent = `${d.fileName}${d.gh ? ` (GitHub, branche ${d.gh.branch || 'main'})` : ''}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
       $('resumeBtn').onclick = () => {
-        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1])); gh = d.gh || null; if (d.fmtHint) applyFormat(d.fmtHint);
+        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1])); gh = d.gh || null;  if (d.fmtHint) applyFormat(d.fmtHint);
         deleted = (d.deleted || []).map(o => ({ id: ++uid, data: o, orig: o })); render();
       };
     } catch (_) {}
@@ -636,7 +673,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   }
   function render(){
     const list = visible(), c = changes();
-    $('fileName').textContent = fileName;
+    $('fileName').textContent = fileName + (gh ? ` (${gh.branch || 'main'})` : '');
     $('countInfo').textContent = `${items.length} entrées` + (list.length !== items.length ? `, ${list.length} affichées` : '');
     $('changeInfo').innerHTML = (c.mod ? `<span class="badge mod">${c.mod} modifiée${c.mod > 1 ? 's' : ''}</span> ` : '') +
       (c.add ? `<span class="badge new">${c.add} ajoutée${c.add > 1 ? 's' : ''}</span> ` : '') +
@@ -814,7 +851,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   }
   let pending = [];
   function parseLines(text){
-    const t = text.trim(); if (!t) return [];
+    const t = text.split('\n').filter(l => !/^\s*\/\//.test(l)).join('\n').trim(); if (!t) return [];   // les lignes « // … » sont des commentaires
     try { const v = JSON.parse(t); return Array.isArray(v) ? v : [v]; } catch (_) {}
     try { return JSON.parse('[' + t.replace(/,\s*$/, '') + ']'); } catch (_) {}
     // une ligne par objet, sans virgules entre elles
@@ -830,23 +867,29 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     const key = $('keyField').value;
     objs.forEach(o => {
       if (!o || typeof o !== 'object' || Array.isArray(o)) return;
-      const match = items.find(it => o[key] !== undefined && norm(show(it.data[key], types[key].t)) === norm(show(o[key], types[key].t)));
-      pending.push({ o, match });
+      const lookFor = o._cle_avant !== undefined ? o._cle_avant : o[key];
+      const match = items.find(it => lookFor !== undefined && norm(show(it.data[key], types[key].t)) === norm(show(lookFor, types[key].t)));
+      pending.push({ o, match, del: o._action === 'supprimer' });
     });
-    const unknown = [...new Set(pending.flatMap(p => Object.keys(p.o)).filter(k => !fields.includes(k)))];
-    pv.innerHTML = pending.map(({ o, match }) => {
+    const unknown = [...new Set(pending.flatMap(p => Object.keys(p.o)).filter(k => !fields.includes(k) && !META.includes(k)))];
+    pv.innerHTML = pending.map(({ o, match, del }) => {
       const title = esc(o[key] ?? '(sans ' + key + ')');
+      if (del) return match ? `<div class="pv"><h3><span class="badge del">Suppression</span> ${title}</h3></div>`
+                            : `<div class="pv"><h3><span class="badge del">Suppression</span> ${title}</h3><p class="help" style="margin:0">Introuvable dans la liste (déjà supprimée ?) : ignorée.</p></div>`;
+      o = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
       if (!match) return `<div class="pv"><h3><span class="badge new">Ajout</span> ${title}</h3><ul>${Object.entries(o).map(([k, v]) => `<li>${esc(k)} : <ins>${esc(show(v, types[k] ? types[k].t : 'json') || 'vide')}</ins></li>`).join('')}</ul></div>`;
       const diffs = Object.keys(o).filter(k => !same(o[k], match.data[k]));
       return `<div class="pv"><h3><span class="badge mod">Remplacement</span> ${title}</h3>${diffs.length ? `<ul>${diffs.map(k => { const t = types[k] ? types[k].t : 'json'; return `<li>${esc(k)} : <del>${esc(show(match.data[k], t) || 'vide')}</del> → <ins>${esc(show(o[k], t) || 'vide')}</ins></li>`; }).join('')}</ul>` : '<p class="help" style="margin:0">Aucune différence.</p>'}</div>`;
     }).join('');
-    const add = pending.filter(p => !p.match).length, rep = pending.length - add;
+    const add = pending.filter(p => !p.match && !p.del).length, nd = pending.filter(p => p.del && p.match).length, rep = pending.filter(p => p.match && !p.del).length;
     msg.className = 'msg good';
-    msg.textContent = `${pending.length} ligne${pending.length > 1 ? 's' : ''} lue${pending.length > 1 ? 's' : ''} : ${rep} remplacement${rep > 1 ? 's' : ''}, ${add} ajout${add > 1 ? 's' : ''}.` + (unknown.length ? ` Attention, champ${unknown.length > 1 ? 's' : ''} inconnu${unknown.length > 1 ? 's' : ''} : ${unknown.join(', ')}.` : '');
+    msg.textContent = `${pending.length} ligne${pending.length > 1 ? 's' : ''} lue${pending.length > 1 ? 's' : ''} : ${rep} remplacement${rep > 1 ? 's' : ''}, ${add} ajout${add > 1 ? 's' : ''}, ${nd} suppression${nd > 1 ? 's' : ''}.` + (unknown.length ? ` Attention, champ${unknown.length > 1 ? 's' : ''} inconnu${unknown.length > 1 ? 's' : ''} : ${unknown.join(', ')}.` : '');
     $('pasteApply').disabled = !pending.length;
   });
   $('pasteApply').addEventListener('click', () => {
-    pending.forEach(({ o, match }) => {
+    pending.forEach(({ o, match, del }) => {
+      if (del){ if (match){ items = items.filter(x => x !== match); if (match.orig) deleted.push(match); } return; }
+      o = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
       if (match){ const merged = {}; fields.forEach(k => { if (k in o) merged[k] = o[k]; else if (k in match.data) merged[k] = match.data[k]; }); Object.keys(o).forEach(k => { if (!(k in merged)) merged[k] = o[k]; }); match.data = merged; }
       else items.push({ id: ++uid, data: clone(o), orig: null });
     });
@@ -861,6 +904,37 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   function buildExportSort(){
     $('exportSort').innerHTML = `<option value="">ordre actuel du fichier</option>` + fields.map(k => `<option value="${esc(k)}">par ${esc(k)}</option>`).join('');
   }
+  // ---------- Export « seulement mes modifications » ----------
+  // Format : lignes de commentaire (« // … »), puis une ligne JSON par entrée modifiée ou ajoutée,
+  // et une ligne {"_action":"supprimer", …} par entrée supprimée. Se colle tel quel dans « Coller des lignes ».
+  const META = ['_action', '_cle_avant'];
+  function changesText(){
+    const key = $('keyField').value || fields[0];
+    const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
+    const who = ($('authorName').value || '').trim();
+    const lines = [
+      `// Modifications de ${fileName}` + (who ? ` proposées par ${who}` : '') + `, le ${new Date().toLocaleDateString('fr-FR')}`,
+      `// ${mod.length} modifiée(s), ${add.length} ajoutée(s), ${del.length} supprimée(s). À coller dans l’éditeur : « Coller des lignes ».`
+    ];
+    mod.forEach(it => {
+      const o = clone(it.data);
+      if (!same(it.orig[key], it.data[key])) o._cle_avant = it.orig[key];   // la clé elle-même a changé : on garde l'ancienne pour retrouver l'entrée
+      lines.push(`// modifiée : ${show(it.orig[key], types[key] ? types[key].t : 'text')}`, JSON.stringify(o));
+    });
+    add.forEach(it => lines.push('// ajoutée', JSON.stringify(it.data)));
+    del.forEach(it => lines.push('// supprimée', JSON.stringify(Object.assign({ _action: 'supprimer' }, it.orig))));
+    return lines.join('\n') + '\n';
+  }
+  const exportMode = () => document.querySelector('input[name="what"]:checked').value;
+  document.querySelectorAll('input[name="what"]').forEach(r => r.addEventListener('change', () => {
+    const ch = exportMode() === 'changes';
+    $('changesOpts').classList.toggle('hidden', !ch); $('fullOpts').classList.toggle('hidden', ch);
+    $('downloadBtn').textContent = ch ? 'Télécharger mes modifications' : 'Télécharger le fichier';
+    $('copyBtn').textContent = ch ? 'Copier mes modifications' : 'Copier le JSON';
+    $('exportMsg').textContent = '';
+  }));
+  document.querySelector('input[name="what"]:checked').dispatchEvent(new Event('change'));   // libellés initiaux
+
   function exportText(){
     let list = items.map(it => it.data);
     const k = $('exportSort').value;
@@ -871,6 +945,17 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   $('exportBtn').addEventListener('click', () => { $('exportPanel').classList.toggle('hidden'); $('pastePanel').classList.add('hidden'); $('exportMsg').textContent = ''; });
   $('exportClose').addEventListener('click', () => $('exportPanel').classList.add('hidden'));
   $('downloadBtn').addEventListener('click', () => {
+    if (exportMode() === 'changes'){
+      if (!changes().total){ $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Aucune modification à exporter pour l’instant.'; return; }
+      const txt = changesText(), base = fileName.replace(/\.json$/i, ''), who = ($('authorName').value || '').trim().replace(/[^\p{L}\p{N}-]+/gu, '-');
+      const name = `modifications_${base}${who ? '_' + who : ''}_${new Date().toISOString().slice(0, 10)}.txt`;
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain;charset=utf-8' })); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      const c = changes();
+      $('exportMsg').className = 'msg good';
+      $('exportMsg').textContent = `« ${name} » téléchargé (${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s)). Envoie-le à Aurélien par e-mail, en pièce jointe ou en copiant son contenu.`;
+      return;
+    }
     const txt = exportText(); JSON.parse(txt);   // contrôle de validité
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([txt], { type: 'application/json;charset=utf-8' }));
@@ -879,8 +964,9 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     $('exportMsg').textContent = `« ${fileName} » téléchargé (${items.length} entrées, JSON valide). Remplace l\u2019ancien fichier sur GitHub par celui-ci.`;
   });
   $('copyBtn').addEventListener('click', () => {
-    const txt = exportText();
-    const done = () => { $('exportMsg').className = 'msg good'; $('exportMsg').textContent = 'JSON copié : tu peux le coller directement dans l\u2019éditeur de GitHub.'; };
+    if (exportMode() === 'changes' && !changes().total){ $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Aucune modification à copier pour l’instant.'; return; }
+    const txt = exportMode() === 'changes' ? changesText() : exportText();
+    const done = () => { $('exportMsg').className = 'msg good'; $('exportMsg').textContent = exportMode() === 'changes' ? 'Modifications copiées : colle-les dans un e-mail à Aurélien.' : 'JSON copié : tu peux le coller directement dans l\u2019éditeur de GitHub.'; };
     if (navigator.clipboard) navigator.clipboard.writeText(txt).then(done, () => { $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Copie impossible : utilise plutôt « Télécharger ».'; });
   });
 
