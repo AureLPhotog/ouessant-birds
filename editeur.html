@@ -73,7 +73,7 @@
     </div>
 
     <div class="panel visit hidden" id="visitBanner">
-      <p><b>Tu proposes une modification.</b> Corrige l’entrée ouverte ci-dessous (ou complète la nouvelle), clique sur « Enregistrer », puis sur <b>« Envoyer ma proposition »</b>. Aurélien la vérifiera avant de l’intégrer. <a href="index.html">Revenir à l’appli</a></p>
+      <p><span id="visitText"></span> <a href="index.html">Revenir à l’appli</a></p>
     </div>
 
     <div class="panel hidden" id="proposePanel">
@@ -84,6 +84,7 @@
       <label class="gh-lab">Commentaire (facultatif : pourquoi ce changement, d’où vient l’info…)<textarea id="propComment" rows="3"></textarea></label>
       <div class="actions"><button type="button" class="btn primary" id="propSend">Envoyer</button><button type="button" class="btn" id="propCopy">Copier ma proposition</button><span class="sep"></span><button type="button" class="btn ghost" id="propClose">Fermer</button></div>
       <p class="msg" id="propOut" aria-live="polite"></p>
+      <p class="help small" style="margin-top:.6rem">Tu as une clé d’accès GitHub ? <button type="button" class="btn ghost" data-key>Ajouter ma clé</button> pour enregistrer directement.</p>
     </div>
 
     <div class="panel hidden" id="pastePanel">

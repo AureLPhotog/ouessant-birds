@@ -219,6 +219,7 @@
     const t = getToken();
     $('ghKeyInfo').innerHTML = t ? (tokenRemembered() ? 'Clé GitHub mémorisée sur cet appareil.' : 'Clé GitHub active dans cet onglet (oubliée à sa fermeture).') + ' <button type="button" class="btn ghost" data-key>Gérer la clé</button>'
       : 'Lecture possible sans clé. Pour enregistrer sur GitHub, il faudra une clé d’accès. <button type="button" class="btn ghost" data-key>Ajouter une clé</button>';
+    updateSaveBtn();
   }
   $('ghFile').innerHTML = GH.files.map(f => `<option>${esc(f)}</option>`).join('');
   keyInfo();
@@ -414,8 +415,17 @@
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).catch(() => {});
     else { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (_) {} ta.remove(); }
   }
-  // le bouton « Enregistrer sur GitHub » ne sert qu'à Aurélien (avec sa clé)
-  function updateSaveBtn(){ $('ghSaveBtn').classList.toggle('hidden', !getToken()); }
+  // Un seul bouton d'envoi selon la clé : avec la clé, « Enregistrer sur GitHub » (direct) ;
+  // sans clé, « Envoyer ma proposition » (formulaire Google).
+  function updateSaveBtn(){
+    const t = !!getToken();
+    $('ghSaveBtn').classList.toggle('hidden', !t);
+    $('proposeBtn').classList.toggle('hidden', t);
+    if (t) $('proposePanel').classList.add('hidden');
+    $('visitText').innerHTML = t
+      ? '<b>Clé GitHub active.</b> Corrige l\u2019entrée ouverte ci-dessous, clique sur « Enregistrer », puis sur <b>« Enregistrer sur GitHub »</b> : la modification sera en ligne directement.'
+      : '<b>Tu proposes une modification.</b> Corrige l\u2019entrée ouverte ci-dessous (ou complète la nouvelle), clique sur « Enregistrer », puis sur <b>« Envoyer ma proposition »</b>. Aurélien la vérifiera avant de l\u2019intégrer.';
+  }
   updateSaveBtn();
   document.addEventListener('click', () => setTimeout(updateSaveBtn, 0));
 
