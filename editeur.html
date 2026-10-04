@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Éditeur de listes · Oiseaux d'Ouessant</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://aurelphotog.github.io/ouessant-birds/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -64,6 +64,9 @@ textarea{font-family:var(--mono);font-size:.85rem}
 .or-sep{margin:1.2rem 0 .6rem;color:var(--granite);font-size:.88rem;text-align:center}
 .gh-lab{display:grid;gap:.25rem;font-size:.82rem;color:var(--granite);font-weight:600;margin-top:.4rem}
 .panel a{color:var(--ocean-2)}
+.remember{display:flex;align-items:center;gap:.5rem;margin-top:.7rem;font-size:.9rem;cursor:pointer}
+.remember input{width:1.05rem;height:1.05rem}
+.help.small{font-size:.8rem;margin:.3rem 0 0}
 
 /* Barre d'outils */
 .bar{position:sticky;top:0;z-index:10;background:var(--foam);padding:.7rem 0 .6rem;border-bottom:1px solid var(--line);display:grid;gap:.6rem}
@@ -122,7 +125,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 .cells-body{display:flex}
 .cells-side{display:grid;width:1.4rem;font-size:.7rem;color:var(--granite);align-items:center}
 .cells{flex:1;display:grid;background-color:#ABDCFF;background-repeat:no-repeat}
-.cells.with-map{background-image:url("carte_ouessant.jpg")}
+.cells.with-map{background-image:var(--map-url)}
 .cells button{border:0;border-right:1px solid rgba(31,58,77,.25);border-bottom:1px solid rgba(31,58,77,.25);background:transparent;padding:0;cursor:pointer;min-height:0}
 .cells button:hover{background:rgba(31,58,77,.15)}
 .cells button[aria-pressed="true"]{background:rgba(214,40,40,.35);box-shadow:inset 0 0 0 2px #D62828}
@@ -164,7 +167,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 <body>
 <div class="wrap">
   <header>
-    <img src="phare_creach.svg" alt="" onerror="this.remove()">
+    <img src="phare_creach.svg" alt="" onerror="if(!this.dataset.web){this.dataset.web=1;this.src='https://aurelphotog.github.io/ouessant-birds/phare_creach.svg'}else this.remove()">
     <div>
       <h1>Éditeur de listes</h1>
       <p class="sub">Importe un fichier JSON, cherche, modifie, puis exporte-le : sans toucher au fichier à la main.</p>
@@ -238,8 +241,10 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 
     <div class="panel hidden" id="keyPanel">
       <h2>Clé d'accès GitHub</h2>
-      <p class="help">Pour enregistrer dans le dépôt <b>AureLPhotog/ouessant-birds</b>, l'éditeur a besoin d'un jeton d'accès personnel « à granularité fine », limité à ce dépôt, avec la permission <b>Contents : lecture et écriture</b>. Il reste uniquement dans ce navigateur. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer un jeton sur GitHub</a></p>
+      <p class="help">Pour enregistrer dans le dépôt <b>AureLPhotog/ouessant-birds</b>, l'éditeur a besoin d'un jeton d'accès personnel « à granularité fine », limité à ce dépôt, avec la permission <b>Contents : lecture et écriture</b>. Par défaut, il n'est gardé que dans cet onglet et oublié à sa fermeture. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer un jeton sur GitHub</a></p>
       <label class="gh-lab">Jeton<input type="password" id="ghToken" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+      <label class="remember"><input type="checkbox" id="ghRemember"> Mémoriser la clé sur cet appareil</label>
+      <p class="help small">À cocher seulement sur un appareil personnel. Non cochée, la clé reste dans cet onglet et disparaît à sa fermeture : aucune autre page ne peut la récupérer ensuite.</p>
       <div class="actions"><button type="button" class="btn primary" id="keySave">Vérifier et enregistrer</button><button type="button" class="btn danger" id="keyForget">Oublier la clé</button><span class="sep"></span><button type="button" class="btn ghost" id="keyClose">Fermer</button></div>
       <p class="msg" id="keyMsg" aria-live="polite"></p>
     </div>
@@ -282,7 +287,15 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   const GRID_Y = [357,717,1067,1413,1761,2113,2467,2829,3183,3531,3883,4245,4591,4944];
   const MAP_W = 7015, MAP_H = 4944;
   let mapOk = false;
-  (function(){ const im = new Image(); im.onload = () => { mapOk = true; document.querySelectorAll('.cells').forEach(g => g.classList.add('with-map')); }; im.src = 'carte_ouessant.jpg'; })();
+  // Carte en fond de grille : à côté de l'éditeur si elle y est, sinon celle du site en ligne
+  const MAP_SOURCES = ['carte_ouessant.jpg', 'https://aurelphotog.github.io/ouessant-birds/carte_ouessant.jpg'];
+  (function tryMap(k){
+    if (k >= MAP_SOURCES.length) return;
+    const im = new Image();
+    im.onload = () => { document.documentElement.style.setProperty('--map-url', `url("${MAP_SOURCES[k]}")`); mapOk = true; document.querySelectorAll('.cells').forEach(g => g.classList.add('with-map')); };
+    im.onerror = () => tryMap(k + 1);
+    im.src = MAP_SOURCES[k];
+  })(0);
   // Recalage carte <-> GPS, identique à celui de l'appli (19 repères relevés sur le terrain, écart moyen ≈ 30 m)
   const AFF = [[0.709161048, -0.002042154, 2964.964458201], [-0.000573242, -0.712172752, 3202.871361484]];
   const MLAT = 111132, MLON = 111320 * Math.cos(48.45 * Math.PI / 180);
@@ -439,7 +452,16 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   const TOKEN_KEY = 'gh-token-ouessant';
   let gh = null;            // { path, sha } du fichier ouvert depuis GitHub
   let fmtHint = null;       // mise en forme d'origine du fichier, pour l'export
-  const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; } };
+  // La clé est gardée dans l'onglet (sessionStorage) par défaut, ou sur l'appareil (localStorage) si on le demande
+  const getToken = () => { try { return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; } };
+  const tokenRemembered = () => { try { return !!localStorage.getItem(TOKEN_KEY); } catch (_) { return false; } };
+  function storeToken(t, remember){
+    try {
+      if (remember){ localStorage.setItem(TOKEN_KEY, t); sessionStorage.removeItem(TOKEN_KEY); }
+      else { sessionStorage.setItem(TOKEN_KEY, t); localStorage.removeItem(TOKEN_KEY); }
+    } catch (_) {}
+  }
+  function forgetToken(){ try { localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY); } catch (_) {} }
   const api = (path, opts = {}) => {
     const h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
     const t = getToken(); if (t) h['Authorization'] = 'Bearer ' + t;
@@ -457,7 +479,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   function applyFormat(h){ fmtHint = h; const r = document.querySelector(`input[name="fmt"][value="${h.fmt}"]`); if (r) r.checked = true; }
   function keyInfo(){
     const t = getToken();
-    $('ghKeyInfo').innerHTML = t ? 'Clé GitHub enregistrée dans ce navigateur. <button type="button" class="btn ghost" data-key>Gérer la clé</button>'
+    $('ghKeyInfo').innerHTML = t ? (tokenRemembered() ? 'Clé GitHub mémorisée sur cet appareil.' : 'Clé GitHub active dans cet onglet (oubliée à sa fermeture).') + ' <button type="button" class="btn ghost" data-key>Gérer la clé</button>'
       : 'Lecture possible sans clé. Pour enregistrer sur GitHub, il faudra une clé d’accès. <button type="button" class="btn ghost" data-key>Ajouter une clé</button>';
   }
   $('ghFile').innerHTML = GH.files.map(f => `<option>${esc(f)}</option>`).join('');
@@ -483,23 +505,23 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   // clé d'accès
   function openKey(){ ['ghPanel','pastePanel','exportPanel'].forEach(id => $(id).classList.add('hidden')); $('keyPanel').classList.remove('hidden');
     if ($('editView').classList.contains('hidden')){ $('importView').classList.add('hidden'); $('editView').classList.remove('hidden'); $('editView').dataset.keyOnly = '1'; }
-    $('ghToken').value = getToken(); $('keyMsg').textContent = ''; $('ghToken').focus(); }
+    $('ghToken').value = getToken(); $('ghRemember').checked = tokenRemembered(); $('keyMsg').textContent = ''; $('ghToken').focus(); }
   function closeKey(){ $('keyPanel').classList.add('hidden');
     if ($('editView').dataset.keyOnly){ delete $('editView').dataset.keyOnly; $('editView').classList.add('hidden'); $('importView').classList.remove('hidden'); } keyInfo(); }
   $('keyClose').addEventListener('click', closeKey);
-  $('keyForget').addEventListener('click', () => { try { localStorage.removeItem(TOKEN_KEY); } catch (_) {} $('ghToken').value = ''; $('keyMsg').className = 'msg good'; $('keyMsg').textContent = 'Clé effacée de ce navigateur.'; keyInfo(); });
+  $('keyForget').addEventListener('click', () => { forgetToken(); $('ghToken').value = ''; $('ghRemember').checked = false; $('keyMsg').className = 'msg good'; $('keyMsg').textContent = 'Clé effacée de ce navigateur.'; keyInfo(); });
   $('keySave').addEventListener('click', async () => {
     const t = $('ghToken').value.trim(), m = $('keyMsg');
     if (!t){ m.className = 'msg bad'; m.textContent = 'Colle d’abord ton jeton.'; return; }
-    try { localStorage.setItem(TOKEN_KEY, t); } catch (_) {}
+    storeToken(t, $('ghRemember').checked);
     m.className = 'msg'; m.textContent = 'Vérification…';
     try {
       const r = await api('');
-      if (r.status === 401){ localStorage.removeItem(TOKEN_KEY); throw new Error('GitHub refuse ce jeton (mal copié ou expiré).'); }
+      if (r.status === 401){ forgetToken(); throw new Error('GitHub refuse ce jeton (mal copié ou expiré).'); }
       if (!r.ok) throw new Error('le dépôt est inaccessible avec ce jeton (erreur ' + r.status + ').');
       const j = await r.json();
       if (j.permissions && j.permissions.push === false) throw new Error('ce jeton peut lire le dépôt mais pas y écrire : ajoute la permission « Contents : Read and write ».');
-      m.className = 'msg good'; m.textContent = 'Clé valide : l’éditeur peut enregistrer dans AureLPhotog/ouessant-birds.'; keyInfo();
+      m.className = 'msg good'; m.textContent = 'Clé valide : l’éditeur peut enregistrer dans AureLPhotog/ouessant-birds.' + ($('ghRemember').checked ? ' Elle est mémorisée sur cet appareil.' : ' Elle sera oubliée à la fermeture de l’onglet.'); keyInfo();
     } catch (e) { m.className = 'msg bad'; m.textContent = e.message; keyInfo(); }
   });
 
