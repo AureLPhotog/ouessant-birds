@@ -21,6 +21,22 @@
       <h1>Éditeur de listes</h1>
       <p class="sub">Importe un fichier JSON, cherche, modifie, puis exporte-le : sans toucher au fichier à la main.</p>
     </div>
+    <div class="tools">
+      <button type="button" id="prefsBtn" class="prefs-btn" aria-expanded="false" aria-controls="prefsPanel" title="Affichage" aria-label="Affichage">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>
+      </button>
+      <div class="lang" role="group" aria-label="Langue / Language">
+        <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <div id="prefsPanel" class="prefs" hidden>
+        <p class="prefs-t">Thème</p>
+        <div class="seg" role="group" data-pref="theme"><button type="button" data-v="auto">Auto</button><button type="button" data-v="light">Clair</button><button type="button" data-v="dark">Sombre</button></div>
+        <p class="prefs-t">Couleurs</p>
+        <div class="seg" role="group" data-pref="cvd"><button type="button" data-v="0">Standard</button><button type="button" data-v="1">Daltonisme</button></div>
+        <p class="prefs-n">« Daltonisme » utilise des couleurs distinguables par la plupart des personnes daltoniennes. « Auto » suit le réglage du téléphone.</p>
+      </div>
+    </div>
   </header>
 
   <!-- 1. Import -->
@@ -80,7 +96,7 @@
     <div class="panel hidden" id="proposePanel">
       <h2>Envoyer ma proposition</h2>
       <p class="help">Tes modifications partent dans un formulaire, avec ton commentaire. Elles seront vérifiées avant d’être intégrées à l’appli.</p>
-      <pre class="prop-sum" id="propSummary"></pre>
+      <pre class="prop-sum" id="propSummary" data-notr></pre>
       <label class="gh-lab">Commentaire (facultatif : pourquoi ce changement, d’où vient l’info…)<textarea id="propComment" rows="3"></textarea></label>
       <div class="actions"><button type="button" class="btn primary" id="propSend">Envoyer</button><button type="button" class="btn" id="propCopy">Copier ma proposition</button><span class="sep"></span><button type="button" class="btn ghost" id="propClose">Fermer</button></div>
       <p class="msg" id="propOut" aria-live="polite"></p>
@@ -140,7 +156,7 @@
 <script>
 // Charge les scripts partagés depuis le dossier de l'éditeur, ou depuis le site en ligne s'il est ouvert seul
 (function(){
-  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/carte.js', 'js/editeur.js'];
+  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/carte.js', 'js/editeur-langue.js', 'js/editeur.js'];
   (function next(i, web){
     if (i >= files.length) return;
     const s = document.createElement('script'); s.src = (web ? SITE : '') + files[i];

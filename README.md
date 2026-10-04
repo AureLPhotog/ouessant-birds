@@ -27,6 +27,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `js/carte.js` | grille des carrés de la carte et recalage GPS (partagé appli / éditeur) |
 | `js/recherche.js` | recherche tolérante aux fautes de frappe |
 | `js/appli.js`, `js/editeur.js` | fonctionnement de l'appli et de l'éditeur |
+| `js/editeur-langue.js` | éditeur : version anglaise (tables de traduction), thème clair / sombre, couleurs pour daltonisme |
 | `sw.js` | mode hors connexion |
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
 | `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |

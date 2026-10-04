@@ -675,7 +675,7 @@
   // ---------- Coller des lignes (ex. depuis le Google Sheet) ----------
   function buildKeyField(){
     const guess = ['Nom Scientifique', 'nom', 'Nom Français', 'id', 'name'].find(k => fields.includes(k)) || fields[0];
-    $('keyField').innerHTML = fields.map(k => `<option${k === guess ? ' selected' : ''}>${esc(k)}</option>`).join('');
+    $('keyField').innerHTML = fields.map(k => `<option value="${esc(k)}"${k === guess ? ' selected' : ''}>${esc(k)}</option>`).join('');
   }
   let pending = [];
   function parseLines(text){
