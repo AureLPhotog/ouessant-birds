@@ -42,7 +42,7 @@
         <button type="button" class="zb" data-zoom="+" aria-label="Zoomer">+</button>
         <button type="button" class="btn ghost" data-zoom="sel">Centrer sur la sélection</button>
         <button type="button" class="btn ghost" data-zoom="fit">Toute la carte</button>
-        ${hasGeo() ? '<span style="flex:1"></span><button type="button" class="btn" data-pick aria-pressed="false">Placer le point GPS sur la carte</button>' : ''}
+        ${hasGeo() ? '<span style="flex:1"></span><button type="button" class="btn" data-gps>Utiliser ma position GPS</button><button type="button" class="btn" data-pick aria-pressed="false">Placer le point GPS sur la carte</button>' : ''}
       </div>
       ${hasGeo() ? '<p class="geo-hint" data-geo-hint></p>' : ''}
       <div class="cells-scroll"><div class="cells-wrap" style="--z:${zoom}"><div class="cells-head" style="grid-template-columns:${fx}">${Array.from({ length: cols }, (_, c) => `<span>${String.fromCharCode(65 + c)}</span>`).join('')}</div>
@@ -66,6 +66,25 @@
     if (!cell){ hint.className = 'geo-hint bad'; hint.textContent = 'Le point GPS est en dehors de la carte d’Ouessant.'; return; }
     if (sel.includes(cell)){ hint.className = 'geo-hint good'; hint.textContent = `Le point GPS est bien dans le carré ${cell}.`; }
     else { hint.className = 'geo-hint bad'; hint.innerHTML = `Le point GPS est dans le carré <b>${cell}</b>, qui n’est pas sélectionné. <button type="button" class="btn ghost" data-addcell="${cell}">Ajouter ${cell}</button>`; }
+  }
+  // Position GPS du téléphone (sur place) : remplit lat / lon, la précision, coche « verifie » et le carré
+  function useGps(form){
+    const field = form.querySelector('.cells-field'), hint = field && field.querySelector('[data-geo-hint]');
+    if (!field) return;
+    if (!navigator.geolocation){ hint.className = 'geo-hint bad'; hint.textContent = 'Ce navigateur ne donne pas accès à la position GPS.'; return; }
+    hint.className = 'geo-hint'; hint.textContent = 'Recherche de ta position…';
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude, longitude, accuracy } = pos.coords, [x, y] = toPixel(latitude, longitude), c = cellAt(x, y);
+      if (!c){ hint.className = 'geo-hint bad'; hint.textContent = 'Ta position est en dehors de la carte d\u2019Ouessant : rien n\u2019a été modifié.'; return; }
+      form.querySelector('[data-k="lat"]').value = latitude.toFixed(5); form.querySelector('[data-k="lon"]').value = longitude.toFixed(5);
+      const pr = form.querySelector('[data-k="precision_m"]'); if (pr){ pr.value = Math.max(10, Math.round(accuracy)); pr.closest('label').classList.add('changed'); }
+      const vf = form.querySelector('[data-k="verifie"]'); if (vf) vf.checked = true;     // relevé sur place
+      const b = field.querySelector(`[data-cell="${c}"]`);
+      if (b && b.getAttribute('aria-pressed') !== 'true'){ b.setAttribute('aria-pressed', 'true'); field.querySelector('[data-cells]').value = selectedCells(field).join(', '); }
+      updateGeo(field); centerOn(field.querySelector('.cells-scroll'), [c]);
+      hint.insertAdjacentText('beforeend', ` (position GPS ± ${Math.round(accuracy)} m${accuracy > 100 ? ' : précision faible, réessaie à découvert' : ''})`);
+    }, () => { hint.className = 'geo-hint bad'; hint.textContent = 'Position GPS indisponible : autorise la localisation, ou place le point sur la carte.'; },
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
   }
   function geoProblem(form){
     if (!hasGeo()) return null;
@@ -314,11 +333,98 @@
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Échec : ' + e.message; $('ghCommit').disabled = false; }
   });
 
+  // ---------- Arrivée depuis l'appli : ouvre la bonne liste sur la bonne entrée ----------
+  const FICHIERS = { oiseaux: 'ouessant_birds.json', lieux: 'lieux_ouessant.json' };
+  const NOM = { 'ouessant_birds.json': 'Nom Français', 'lieux_ouessant.json': 'nom' };
+  const CLE = { 'ouessant_birds.json': 'Nom Scientifique', 'lieux_ouessant.json': 'nom' };
+  const params = new URLSearchParams(location.search);
+  const visitMode = !!FICHIERS[params.get('fichier')];
+  async function openFromApp(){
+    const path = FICHIERS[params.get('fichier')];
+    $('importMsg').className = 'msg'; $('importMsg').textContent = 'Chargement de la liste…';
+    if (getToken()) await ghOpen(path);                  // Aurélien : depuis GitHub, pour pouvoir enregistrer
+    if (!items.length){
+      try {
+        const r = await fetch(path, { cache: 'no-cache' }); if (!r.ok) throw 0;
+        const text = await r.text(); load(path, JSON.parse(text)); gh = null; applyFormat(detectFormat(text));
+      } catch (_) { await ghOpen(path); }               // éditeur ouvert ailleurs : lecture sur GitHub
+    }
+    if (!items.length) return;
+    $('importMsg').textContent = '';
+    $('visitBanner').classList.remove('hidden');
+    const k = CLE[path], wanted = params.get('cherche');
+    if (wanted){
+      const it = items.find(x => norm(show(x.data[k], 'text')) === norm(wanted));
+      if (it){ $('search').value = show(it.data[NOM[path]], 'text'); render(); toggle(it.id);
+        if (params.get('gps') === '1'){ const f = document.querySelector('.form-wrap'); if (f) useGps(f); } }
+      else { $('search').value = wanted; render(); }
+    } else if (params.has('nouveau')){
+      $('addBtn').click();
+      const f = document.querySelector(`.form-wrap [data-k="${NOM[path]}"]`); if (f){ f.value = params.get('nouveau'); f.focus(); }
+    }
+  }
+
+  // ---------- Envoyer ma proposition (formulaire Google unique) ----------
+  // Lien prérempli du formulaire : tape MODIFS, COMMENTAIRE et JSON dans ses trois champs, puis colle le lien ici.
+  const PROPOSAL_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfO5eaqQZ_NS10ChZhazXZLLach0Bm0aQYUt9yZQsi-Qdh3LA/viewform?usp=pp_url&entry.1342929352=MODIFS&entry.253715776=COMMENTAIRE&entry.1219654439=JSON';
+  const PFORM = (() => {
+    try {
+      if (!PROPOSAL_FORM) return null;
+      const u = new URL(PROPOSAL_FORM), map = {};
+      u.searchParams.forEach((v, k) => { if (k.startsWith('entry.')) map[v.trim().toUpperCase()] = k; });
+      return map.MODIFS && map.JSON ? { base: u.origin + u.pathname, map } : null;
+    } catch (_) { return null; }
+  })();
+  function proposalParts(){
+    const who = $('propName').value.trim(), com = $('propComment').value.trim();
+    return { MODIFS: commitMessage(), COMMENTAIRE: [who ? 'Proposé par ' + who : '', com].filter(Boolean).join('\n'), JSON: changesText(who) };
+  }
+  $('proposeBtn').addEventListener('click', () => {
+    ['pastePanel','exportPanel','ghPanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
+    $('proposePanel').classList.toggle('hidden');
+    const c = changes(), out = $('propOut');
+    out.className = 'msg'; out.textContent = '';
+    $('propSummary').textContent = c.total ? commitMessage() : 'Aucune modification pour l\u2019instant : modifie, ajoute ou supprime une entrée, puis reviens ici.';
+    $('propSend').disabled = !c.total;
+  });
+  $('propClose').addEventListener('click', () => $('proposePanel').classList.add('hidden'));
+  $('propSend').addEventListener('click', () => {
+    const out = $('propOut'), parts = proposalParts();
+    if (!PFORM){
+      out.className = 'msg bad'; out.textContent = 'L\u2019envoi n\u2019est pas encore configuré. Copie ta proposition et envoie-la à Aurélien.';
+      return;
+    }
+    const url = f => { const q = new URLSearchParams({ usp: 'pp_url' }); Object.entries(f).forEach(([k, v]) => { if (PFORM.map[k] && v) q.set(PFORM.map[k], v); }); return PFORM.base + '?' + q.toString(); };
+    let href = url(parts);
+    if (href.length > 7500){
+      // trop long pour une adresse : on copie les lignes JSON, à coller dans le formulaire
+      href = url({ MODIFS: parts.MODIFS.split('\n')[0], COMMENTAIRE: parts.COMMENTAIRE });
+      copyText(parts.JSON);
+      out.className = 'msg good'; out.textContent = 'Ta proposition est longue : les lignes JSON ont été copiées. Colle-les dans le champ « Lignes JSON » du formulaire qui vient de s\u2019ouvrir, puis clique sur « Envoyer ».';
+    } else {
+      out.className = 'msg good'; out.textContent = 'Le formulaire s\u2019est ouvert, déjà rempli : il ne reste qu\u2019à cliquer sur « Envoyer ». Ta proposition sera vérifiée, puis prise en compte dans les prochains jours.';
+    }
+    window.open(href, '_blank', 'noopener');
+  });
+  $('propCopy').addEventListener('click', () => {
+    const p = proposalParts(); copyText(`${p.MODIFS}\n\n${p.COMMENTAIRE}\n\n${p.JSON}`);
+    $('propOut').className = 'msg good'; $('propOut').textContent = 'Proposition copiée.';
+  });
+  function copyText(t){
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).catch(() => {});
+    else { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (_) {} ta.remove(); }
+  }
+  // le bouton « Enregistrer sur GitHub » ne sert qu'à Aurélien (avec sa clé)
+  function updateSaveBtn(){ $('ghSaveBtn').classList.toggle('hidden', !getToken()); }
+  updateSaveBtn();
+  document.addEventListener('click', () => setTimeout(updateSaveBtn, 0));
+
   // ---------- Brouillon (sauvegarde automatique dans le navigateur) ----------
   function save(){
     try { localStorage.setItem(DRAFT, JSON.stringify({ fileName, gh, fmtHint, at: Date.now(), items: items.map(it => [it.data, it.orig]), deleted: deleted.map(it => it.orig).filter(Boolean) })); } catch (_) {}
   }
   (function offerDraft(){
+    if (visitMode) return;
     try {
       const d = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (!d || !d.items) return;
       $('resumeBtn').hidden = false;
@@ -332,7 +438,7 @@
   $('closeBtn').addEventListener('click', () => {
     if (changes().total && !confirm('Les modifications non exportées restent dans le brouillon, tu pourras les reprendre. Changer de fichier ?')) return;
     $('editView').classList.add('hidden'); $('importView').classList.remove('hidden');
-    location.reload();
+    location.href = location.pathname;
   });
 
   // ---------- Filtres et tri ----------
@@ -418,6 +524,8 @@
       else centerOn(f.querySelector('.cells-scroll'), selectedCells(f));
       return;
     }
+    const gb = e.target.closest('[data-gps]');
+    if (gb){ useGps(gb.closest('.form-wrap')); return; }
     const pk = e.target.closest('[data-pick]');
     if (pk){ const on = pk.getAttribute('aria-pressed') !== 'true'; pk.setAttribute('aria-pressed', String(on)); pk.closest('.cells-field').classList.toggle('picking', on);
       pk.textContent = on ? 'Clique sur la carte à l’endroit exact…' : 'Placer le point GPS sur la carte'; return; }
@@ -618,10 +726,10 @@
   // Format : lignes de commentaire (« // … »), puis une ligne JSON par entrée modifiée ou ajoutée,
   // et une ligne {"_action":"supprimer", …} par entrée supprimée. Se colle tel quel dans « Coller des lignes ».
   const META = ['_action', '_cle_avant'];
-  function changesText(){
+  function changesText(whoArg){
     const key = $('keyField').value || fields[0];
     const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
-    const who = ($('authorName').value || '').trim();
+    const who = (whoArg !== undefined ? whoArg : ($('authorName').value || '')).trim();
     const lines = [
       `// Modifications de ${fileName}` + (who ? ` proposées par ${who}` : '') + `, le ${new Date().toLocaleDateString('fr-FR')}`,
       `// ${mod.length} modifiée(s), ${add.length} ajoutée(s), ${del.length} supprimée(s). À coller dans l’éditeur : « Coller des lignes ».`
@@ -690,4 +798,5 @@
     tt = setTimeout(() => t.classList.add('hidden'), actLabel ? 7000 : 3000);
   }
   window.addEventListener('beforeunload', e => { if (items.length && changes().total){ save(); } });
+  if (visitMode) openFromApp();
 })();

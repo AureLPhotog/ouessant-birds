@@ -210,3 +210,9 @@ section[hidden]{display:none}
 }
 
 .version{margin-left:auto;font-size:.8rem;color:var(--granite);font-variant-numeric:tabular-nums}
+
+/* Liens vers l'éditeur (propositions) */
+a.sbtn{display:inline-block;text-decoration:none;text-align:center}
+.suggest{display:flex;flex-wrap:wrap;gap:.5rem}
+a.bedit-btn{text-decoration:underline}
+.phare-btn.off .phare{opacity:.9}

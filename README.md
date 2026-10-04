@@ -29,7 +29,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `js/appli.js`, `js/editeur.js` | fonctionnement de l'appli et de l'éditeur |
 | `sw.js` | mode hors connexion |
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
-| `phare_creach.svg`, `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
+| `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
 | `manifest.webmanifest` | raccourci sur l'écran d'accueil du téléphone |
 | `scripts/verifier_listes.py`, `.github/workflows/verifier-listes.yml` | vérification automatique des listes |
 
@@ -66,10 +66,13 @@ La position affichée dépend de `precision_m` et `verifie` :
 
 1. Ouvrir l'éditeur : <https://aurelphotog.github.io/ouessant-birds/editeur.html>
 2. **Ouvrir depuis GitHub**, modifier, puis **Enregistrer sur GitHub** (clé d'accès nécessaire, voir ci-dessous).
-3. Les propositions des visiteurs arrivent dans les Google Sheets des deux formulaires (lieux, oiseaux) :
-   copier la colonne « Ligne JSON » dans l'éditeur, bouton **Coller des lignes**.
-4. Les contributeurs peuvent aussi utiliser l'éditeur, puis **Exporter > Seulement mes modifications**
-   et envoyer le texte obtenu par e-mail : il se colle tel quel dans **Coller des lignes**.
+3. Les **propositions des visiteurs** passent aussi par l'éditeur : dans l'appli, « Proposer une modification »,
+   « Proposer une meilleure position », « Je suis sur place », « Proposer un nouvel oiseau / lieu-dit » ouvrent
+   l'éditeur sur la bonne liste et la bonne entrée. Le visiteur modifie, puis clique sur **Envoyer ma proposition** :
+   un formulaire Google unique s'ouvre, prérempli avec trois champs (Modifications, Commentaire, Lignes JSON).
+   Dans le Google Sheet des réponses, copier la colonne « Lignes JSON » dans l'éditeur, bouton **Coller des lignes**.
+   Le lien prérempli du formulaire est dans `js/editeur.js` (`PROPOSAL_FORM`), avec les mots MODIFS, COMMENTAIRE et JSON.
+4. Pour revenir de l'éditeur à l'appli : cliquer sur le phare.
 
 **Clé d'accès** : jeton GitHub « à granularité fine », limité au dépôt `ouessant-birds`, permission
 *Contents : Read and write*, avec une date d'expiration. Ne jamais la partager ni l'écrire dans un fichier.

@@ -132,3 +132,11 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   padding:.65rem 1rem;border-radius:10px;font-size:.9rem;display:flex;gap:.8rem;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:50;max-width:calc(100% - 2rem)}
 .toast button{all:unset;cursor:pointer;font-weight:700;text-decoration:underline}
 @media (max-width:640px){ th:nth-child(n+4),td:nth-child(n+4){display:none} }
+
+/* Retour à l'appli par le phare */
+header .home{display:block;line-height:0;border-radius:6px}
+header .home:focus-visible{outline:3px solid #8C5E83;outline-offset:3px}
+/* Arrivée depuis l'appli et envoi d'une proposition */
+.panel.visit{border-color:var(--ocean);background:color-mix(in srgb,var(--ocean) 6%,var(--paper))}
+.panel.visit p{margin:0;font-size:.92rem}
+.prop-sum{white-space:pre-wrap;font:400 .82rem/1.45 var(--mono);background:var(--foam);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem;max-height:14rem;overflow:auto;margin:.4rem 0 .2rem}

@@ -16,7 +16,7 @@
 <body>
 <div class="wrap">
   <header>
-    <img src="phare_creach.svg" alt="" onerror="if(!this.dataset.web){this.dataset.web=1;this.src='https://aurelphotog.github.io/ouessant-birds/phare_creach.svg'}else this.remove()">
+    <a href="index.html" class="home" title="Revenir à l'appli" aria-label="Revenir à l'appli"><img src="phare_creach.svg" alt="" onerror="if(!this.dataset.web){this.dataset.web=1;this.src='https://aurelphotog.github.io/ouessant-birds/phare_creach.svg'}else this.remove()"></a>
     <div>
       <h1>Éditeur de listes</h1>
       <p class="sub">Importe un fichier JSON, cherche, modifie, puis exporte-le : sans toucher au fichier à la main.</p>
@@ -65,10 +65,25 @@
         <input type="search" id="search" class="grow" placeholder="Rechercher dans tous les champs…" aria-label="Rechercher" autocomplete="off">
         <button type="button" class="btn" id="addBtn">+ Ajouter une entrée</button>
         <button type="button" class="btn" id="pasteLinesBtn">Coller des lignes</button>
+        <button type="button" class="btn primary" id="proposeBtn">Envoyer ma proposition</button>
         <button type="button" class="btn primary" id="ghSaveBtn">Enregistrer sur GitHub</button>
         <button type="button" class="btn" id="exportBtn">Exporter</button>
       </div>
       <div class="filters" id="filters"></div>
+    </div>
+
+    <div class="panel visit hidden" id="visitBanner">
+      <p><b>Tu proposes une modification.</b> Corrige l’entrée ouverte ci-dessous (ou complète la nouvelle), clique sur « Enregistrer », puis sur <b>« Envoyer ma proposition »</b>. Aurélien la vérifiera avant de l’intégrer. <a href="index.html">Revenir à l’appli</a></p>
+    </div>
+
+    <div class="panel hidden" id="proposePanel">
+      <h2>Envoyer ma proposition</h2>
+      <p class="help">Tes modifications partent dans un formulaire, avec ton commentaire. Aurélien les vérifie, puis les intègre à l’appli.</p>
+      <pre class="prop-sum" id="propSummary"></pre>
+      <label class="gh-lab" style="max-width:22rem">Ton nom (facultatif)<input type="text" id="propName" autocomplete="name"></label>
+      <label class="gh-lab">Commentaire (facultatif : pourquoi ce changement, d’où vient l’info…)<textarea id="propComment" rows="3"></textarea></label>
+      <div class="actions"><button type="button" class="btn primary" id="propSend">Envoyer</button><button type="button" class="btn" id="propCopy">Copier ma proposition</button><span class="sep"></span><button type="button" class="btn ghost" id="propClose">Fermer</button></div>
+      <p class="msg" id="propOut" aria-live="polite"></p>
     </div>
 
     <div class="panel hidden" id="pastePanel">

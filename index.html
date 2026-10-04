@@ -89,8 +89,7 @@
   <p class="status" id="status" aria-live="polite"></p>
   <div id="results"></div>
 
-  <button type="button" id="newBirdBtn" class="sbtn" aria-expanded="false" aria-controls="newBirdPanel" data-t="newBird">Proposer un nouvel oiseau</button>
-  <div id="newBirdPanel" hidden></div>
+  <a id="newBirdBtn" class="sbtn" href="editeur.html?fichier=oiseaux&amp;nouveau=" data-t="newBird">Proposer un nouvel oiseau</a>
 
   <div class="foot">
     <span id="source"></span>
@@ -109,16 +108,7 @@
     </div>
     <p class="ptip" data-t="locTip"></p>
     <p class="maplink"><a href="Map_Ouessant.pdf" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span data-t="openIslandMap">Ouvrir la carte de l'île (PDF)</span></a></p>
-    <button type="button" id="newBtn" class="sbtn" aria-expanded="false" aria-controls="newPanel" data-t="newPlace">Proposer un nouveau lieu-dit</button>
-    <div id="newPanel" class="sform newpanel" hidden>
-      <p class="shelp" data-t="newHelp"></p>
-      <label><span data-t="newName"></span><input type="text" id="nName" autocomplete="off" maxlength="80"></label>
-      <button type="button" class="sgps" id="nGps" data-t="useGps"></button>
-      <label><span data-t="pasteLabel"></span><input type="text" id="nCoords" inputmode="decimal" autocomplete="off" placeholder="48.45606, -5.08603"></label>
-      <label><span data-t="commentLabel"></span><textarea id="nComment" rows="2"></textarea></label>
-      <button type="button" class="scheck" id="nCheck" data-t="check"></button>
-      <div class="sresult" id="nResult" aria-live="polite"></div>
-    </div>
+    <a id="newBtn" class="sbtn" href="editeur.html?fichier=lieux&amp;nouveau=" data-t="newPlace">Proposer un nouveau lieu-dit</a>
     <p class="status" id="pstatus" aria-live="polite"></p>
     <div id="presults"></div>
     <p class="pnote" data-t="placesNote"></p>

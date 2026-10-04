@@ -13,7 +13,7 @@ const SHELL = [
   'css/commun.css', 'css/appli.css',
   'js/textes.js', 'js/carte.js', 'js/recherche.js', 'js/appli.js',
   'ouessant_birds.json', 'lieux_ouessant.json',
-  'phare_creach.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png',
+  'phare_creach.svg', 'phare_creach_eteint.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png',
   'carte_ouessant.webp'
 ];
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 140" width="60" height="140">
+  <title>Phare du Créac'h (éteint : hors connexion)</title>
+  <defs>
+    <linearGradient id="beamL" x1="1" x2="0" y1="0" y2="0"><stop offset="0" stop-color="#F6C844" stop-opacity=".85"/><stop offset="1" stop-color="#F6C844" stop-opacity="0"/></linearGradient>
+    <linearGradient id="beamR" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#F6C844" stop-opacity=".85"/><stop offset="1" stop-color="#F6C844" stop-opacity="0"/></linearGradient>
+    <linearGradient id="shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
+    <clipPath id="tower"><path d="M24.5 34 H35.5 L40 118 H20 Z"/></clipPath>
+  </defs>
+  <!-- tour rayée noir et blanc -->
+  <path d="M24.5 34 H35.5 L40 118 H20 Z" fill="#F7F6F2"/>
+  <g clip-path="url(#tower)"><rect x="0" y="34.0" width="60" height="12.0" fill="#1D2428"/><rect x="0" y="58.0" width="60" height="12.0" fill="#1D2428"/><rect x="0" y="82.0" width="60" height="12.0" fill="#1D2428"/><rect x="0" y="106.0" width="60" height="12.0" fill="#1D2428"/><rect x="0" y="30" width="60" height="90" fill="url(#shade)"/></g>
+  <path d="M24.5 34 H35.5 L40 118 H20 Z" fill="none" stroke="#1D2428" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- galerie et lanterne -->
+  <rect x="21" y="30.5" width="18" height="3.5" rx=".6" fill="#1D2428"/>
+  <path d="M22 30.5 V27 M26 30.5 V27 M30 30.5 V27 M34 30.5 V27 M38 30.5 V27 M21.5 27 H38.5" stroke="#1D2428" stroke-width=".9" fill="none"/>
+  <rect x="25.5" y="14" width="9" height="13" fill="#2B3A44"/>
+  <rect x="26.6" y="15.2" width="6.8" height="10.6" fill="#9AA6AB"/>
+  <circle class="lamp" cx="30" cy="20.5" r="2.6" fill="#5E676B"/>
+  <path d="M26.6 15.2 V25.8 M30 15.2 V25.8 M33.4 15.2 V25.8" stroke="#2B3A44" stroke-width=".6"/>
+  <path d="M24.5 14.2 Q30 6.5 35.5 14.2 Z" fill="#1D2428"/>
+  <path d="M30 8 V3.5" stroke="#1D2428" stroke-width="1"/>
+  <!-- maison du gardien -->
+  <path d="M5 122 L13 115.5 H47 L55 122 Z" fill="#5E676B"/>
+  <rect x="6" y="122" width="48" height="12" fill="#F7F6F2" stroke="#1D2428" stroke-width="1"/>
+  <rect x="27" y="125.5" width="6" height="8.5" fill="#1D2428"/>
+  <rect x="11" y="125" width="5" height="4" fill="#2B3A44"/><rect x="44" y="125" width="5" height="4" fill="#2B3A44"/>
+  <path d="M0 134.5 H60" stroke="#5E676B" stroke-width="1.2"/>
+</svg>

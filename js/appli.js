@@ -1,7 +1,7 @@
 /* Oiseaux d'Ouessant — logique de l'appli (index.html). Textes : js/textes.js ; carte : js/carte.js ; recherche : js/recherche.js */
 (function(){
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
-  const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM, parseCoords } = window.OuessantCarte;
+  const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
   const APP_VERSION = '3.0';
   let listsDate = null;
@@ -99,9 +99,8 @@
     pq.placeholder = T('pPlaceholder'); pq.setAttribute('aria-label', T('pLabel'));
     renderPlaces();
     renderWhere();
-    if (!$('newBirdPanel').hidden) $('newBirdPanel').innerHTML = birdFormHtml(null);
     if (lastFix) $('locate').querySelector('span').textContent = T('relocateBtn');
-    $('phareBtn').setAttribute('aria-label', T('phareLabel')); $('phareBtn').title = T('phareLabel');
+    $('phareBtn').setAttribute('aria-label', T('phareLabel')); $('phareBtn').title = navigator.onLine === false ? T('phareOff') : T('phareLabel');
     if (!$('pharePanel').hidden) renderPhare();
     q.placeholder = T('placeholder');
     q.setAttribute('aria-label', T('searchLabel'));
@@ -170,7 +169,7 @@
     // Le message « première pour l'île » n'apparaît qu'une fois la recherche validée (Entrée)
     if(mode === 'fuzzy' && submitted){
       notice.innerHTML = `<div class="notice"><p>${(list.length ? T('fuzzyNear') : T('fuzzyNone'))(esc(raw))}</p>`
-        + `<p style="margin-top:.5rem"><button type="button" class="link" id="newBirdFromSearch">${esc(T('newBirdQ'))}</button></p></div>`;
+        + `<p style="margin-top:.5rem"><a class="link" href="${editorLink('oiseaux', { nouveau: raw })}">${esc(T('newBirdQ'))}</a></p></div>`;
     }
 
     status.textContent = mode === 'exact' ? T('found')
@@ -186,7 +185,7 @@
         <span class="sci" lang="la">${highlight(b[K_SCI], raw)}</span>
         ${alt ? `<span class="en" lang="${lang === 'en' ? 'fr' : 'en'}">${highlight(alt, raw)}</span>` : ''}
         <span class="canal"><span class="dot" style="background:${colorOf[c]||'#5E676B'}"></span>${esc(canalLabel(c))}</span>
-        <button type="button" class="bedit-btn" aria-expanded="false">${esc(T('proposeEdit'))}</button>
+        <a class="bedit-btn" href="${editorLink('oiseaux', { cherche: b[K_SCI] })}">${esc(T('proposeEdit'))}</a>
       </li>`;
     }).join('') + '</ul>';
   }
@@ -229,126 +228,16 @@
   function buildPfuse(){}   // (la recherche des lieux n'a plus besoin d'index)
   buildPfuse();
   const PLACES_URL = 'lieux_ouessant.json';
-  // Formulaire Google : colle ici le « lien prérempli » obtenu en tapant LIEU, CARRES, ACTUELLE, PROPOSEE,
-  // METHODE, COMMENTAIRE et JSON dans les champs.
-  const FORM_PREFILL = 'https://docs.google.com/forms/d/e/1FAIpQLScOxBBEcdsk4Z2v-LVrY8xLXXabd04wU5Y1RU30lyCRPXbvsA/viewform?usp=pp_url&entry.1650810107=LIEU&entry.1922090503=CARRES&entry.1319372064=ACTUELLE&entry.1632270140=PROPOSEE&entry.1990808669=METHODE&entry.1661757736=COMMENTAIRE&entry.1256600801=JSON';
-  const FORM = (() => {
-    try {
-      if (!FORM_PREFILL) return null;
-      const u = new URL(FORM_PREFILL), map = {};
-      u.searchParams.forEach((v, k) => { if (k.startsWith('entry.')) map[v.trim().toUpperCase()] = k; });
-      if (!map.LIEU || !map.PROPOSEE || !map.JSON) return null;
-      return { base: u.origin + u.pathname, map };
-    } catch (_) { return null; }
-  })();
-  // Formulaire Google « oiseaux » : lien prérempli obtenu en tapant TYPE, FR, SCI, EN, TAXON, CANAL, ACTUEL,
-  // COMMENTAIRE et JSON dans les champs.
-  const FORM_BIRDS_PREFILL = 'https://docs.google.com/forms/d/e/1FAIpQLSd2f4fi6E3XW0KR2Cqq1wZNqfj4cLG9cWueWjDffeZK4BfYog/viewform?usp=pp_url&entry.598969188=TYPE&entry.840488517=FR&entry.441655997=SCI&entry.1638519433=EN&entry.1127568963=TAXON&entry.810151131=CANAL&entry.1939945856=ACTUEL&entry.1244273965=COMMENTAIRE&entry.1010965311=JSON';
-  const FORM_BIRDS = (() => {
-    try {
-      if (!FORM_BIRDS_PREFILL) return null;
-      const u = new URL(FORM_BIRDS_PREFILL), map = {};
-      u.searchParams.forEach((v, k) => { if (k.startsWith('entry.')) map[v.trim().toUpperCase()] = k; });
-      if (!map.FR || !map.JSON) return null;
-      return { base: u.origin + u.pathname, map };
-    } catch (_) { return null; }
-  })();
-  function formUrlFor(F, f){
-    const q = new URLSearchParams({ usp: 'pp_url' });
-    Object.entries(f).forEach(([k, v]) => { if (F.map[k] && v) q.set(F.map[k], v); });
-    return F.base + '?' + q.toString();
+  // ---------- Propositions : elles passent par l'éditeur (editeur.html), qui ouvre la bonne liste sur la bonne entrée ----------
+  function editorLink(fichier, opts){
+    const q = new URLSearchParams({ fichier });
+    if (opts.cherche) q.set('cherche', opts.cherche);
+    if (opts.nouveau !== undefined) q.set('nouveau', opts.nouveau);
+    if (opts.gps) q.set('gps', '1');
+    return 'editeur.html?' + q.toString();
   }
-
-  // ---------- Oiseaux : proposer une modification ou un nouvel oiseau ----------
-  const TAXON_VALUES = ['espèce', 'sous-espèce'];
-  function canalValues(){
-    const v = channels.length ? channels.slice() : ['Télégram', 'Whatsapp', "Pas d'annonce"];
-    return v.filter(c => c !== '—');
-  }
-  function birdFormHtml(b){
-    const v = (k) => esc(b ? (b[k] || '') : '');
-    const type = b ? (isSsp(b) ? 'sous-espèce' : 'espèce') : 'espèce';
-    const canal = b ? canalOf(b) : '';
-    return `<div class="sform bform">
-      <p class="shelp">${esc(T(b ? 'bHelpEdit' : 'bHelpNew'))}</p>
-      <label>${esc(T('fFR'))}<input type="text" data-f="fr" value="${v(K_FR)}" autocomplete="off"></label>
-      <label>${esc(T('fSCI'))}<input type="text" data-f="sci" value="${v(K_SCI)}" autocomplete="off" lang="la"></label>
-      <label>${esc(T('fEN'))}<input type="text" data-f="en" value="${v(K_EN)}" autocomplete="off" lang="en"></label>
-      <label>${esc(T('fType'))}<select data-f="type">${TAXON_VALUES.map(t => `<option value="${t}"${t === type ? ' selected' : ''}>${esc(t === 'espèce' ? T('typeSp') : T('typeSsp'))}</option>`).join('')}</select></label>
-      <label>${esc(T('fCanal'))}<select data-f="canal">${b ? '' : `<option value="">${esc(T('choose'))}</option>`}${canalValues().map(c => `<option value="${esc(c)}"${c === canal ? ' selected' : ''}>${esc(canalLabel(c))}</option>`).join('')}</select></label>
-      <label>${esc(T('commentLabel'))}<textarea data-f="com" rows="2"></textarea></label>
-      <button type="button" class="scheck" data-bact="prep">${esc(T('prep'))}</button>
-      <div class="sresult" aria-live="polite"></div>
-    </div>`;
-  }
-  function birdLine(o){
-    return JSON.stringify({ [K_FR]: o.fr, [K_SCI]: o.sci, [K_EN]: o.en, [K_TYPE]: o.type, [K_CANAL]: o.canal });
-  }
-  function prepBird(form, orig){
-    const res = form.querySelector('.sresult');
-    const get = k => form.querySelector(`[data-f="${k}"]`).value.trim().replace(/\s+/g, ' ');
-    const o = { fr: get('fr'), sci: get('sci'), en: get('en'), type: get('type'), canal: get('canal') }, com = get('com');
-    if (!o.fr || !o.sci){ res.innerHTML = `<p class="bad">${esc(T('needFrSci'))}</p>`; return; }
-    if (!o.canal){ res.innerHTML = `<p class="bad">${esc(T('needCanal'))}</p>`; return; }
-    // doublons : un autre oiseau porte déjà ce nom français ou scientifique
-    const clash = birds.find(b => b !== orig && (norm(b[K_FR]) === norm(o.fr) || norm(b[K_SCI]) === norm(o.sci)));
-    if (clash){ res.innerHTML = `<p class="bad">${esc(orig ? T('bClash')(clash[K_FR]) : T('bDup')(clash[K_FR]))}</p>`; return; }
-    let summary, actuel = '';
-    if (orig){
-      const before = { fr: orig[K_FR] || '', sci: orig[K_SCI] || '', en: orig[K_EN] || '', type: isSsp(orig) ? 'sous-espèce' : 'espèce', canal: canalOf(orig) };
-      const labels = { fr: T('fFR'), sci: T('fSCI'), en: T('fEN'), type: T('fType'), canal: T('fCanal') };
-      const show = (k, x) => k === 'canal' ? canalLabel(x) : (x || '—');
-      const diffs = Object.keys(o).filter(k => o[k] !== before[k]);
-      if (!diffs.length && !com){ res.innerHTML = `<p class="bad">${esc(T('noChange'))}</p>`; return; }
-      summary = diffs.length
-        ? `<p class="good">${esc(T('changes'))}</p><ul>${diffs.map(k => `<li>${esc(labels[k])} : ${esc(show(k, before[k]))} → <strong>${esc(show(k, o[k]))}</strong></li>`).join('')}</ul>`
-        : `<p class="good">${esc(T('commentOnly'))}</p>`;
-      actuel = birdLine(before);
-    } else {
-      summary = `<p class="good">${esc(T('bNewOk')(o.fr))}</p>`;
-    }
-    let link;
-    if (FORM_BIRDS){
-      const href = formUrlFor(FORM_BIRDS, {
-        TYPE: orig ? 'Modification' : 'Nouvel oiseau', FR: o.fr, SCI: o.sci, EN: o.en, TAXON: o.type,
-        CANAL: o.canal, ACTUEL: actuel, COMMENTAIRE: com, JSON: birdLine(o)
-      });
-      link = `<a class="smail" href="${esc(href)}" target="_blank" rel="noopener">${esc(T('sendForm'))}</a><p class="snote">${esc(T('formNote'))}</p>`;
-    } else link = `<p class="bad">${esc(T('sendOff'))}</p>`;
-    res.innerHTML = summary + link;
-  }
-  results.addEventListener('click', e => {
-    const btn = e.target.closest('.bedit-btn');
-    if (btn){
-      const li = btn.closest('.row'), b = shownBirds[+li.dataset.bi]; if (!b) return;
-      let f = li.querySelector('.bform');
-      if (f){ f.remove(); btn.setAttribute('aria-expanded', 'false'); return; }
-      li.insertAdjacentHTML('beforeend', birdFormHtml(b)); btn.setAttribute('aria-expanded', 'true');
-      li.querySelector('.bform input').focus();
-      return;
-    }
-    const act = e.target.closest('[data-bact="prep"]');
-    if (act){ const li = act.closest('.row'); prepBird(act.closest('.bform'), shownBirds[+li.dataset.bi]); }
-  });
-  function openNewBird(prefill){
-    const panel = $('newBirdPanel');
-    if (panel.hidden || !panel.innerHTML){ panel.innerHTML = birdFormHtml(null); }
-    panel.hidden = false; $('newBirdBtn').setAttribute('aria-expanded', 'true');
-    if (prefill) panel.querySelector('[data-f="fr"]').value = prefill;
-    panel.querySelector('[data-f="fr"]').focus(); panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  }
-  $('newBirdBtn').addEventListener('click', () => {
-    const panel = $('newBirdPanel');
-    if (panel.hidden) openNewBird(''); else { panel.hidden = true; $('newBirdBtn').setAttribute('aria-expanded', 'false'); }
-  });
-  $('newBirdPanel').addEventListener('click', e => { if (e.target.closest('[data-bact="prep"]')) prepBird($('newBirdPanel').querySelector('.bform'), null); });
-  notice.addEventListener('click', e => { if (e.target.id === 'newBirdFromSearch') openNewBird(q.value.trim()); });
-
-  function formUrl(f){
-    const q = new URLSearchParams({ usp: 'pp_url' });
-    Object.entries(f).forEach(([k, v]) => { if (FORM.map[k] && v) q.set(FORM.map[k], v); });
-    return FORM.base + '?' + q.toString();
-  }
+  $('newBirdBtn').href = editorLink('oiseaux', { nouveau: '' });
+  $('newBtn').href = editorLink('lieux', { nouveau: '' });
   function placesFromJson(arr){
     if (!Array.isArray(arr)) return [];
     return arr.filter(e => e && e.nom && Array.isArray(e.carres) && e.carres.length && isFinite(e.lat) && isFinite(e.lon))
@@ -379,7 +268,7 @@
       if (query){ const sa = norm(a[0]).startsWith(query), sb = norm(b[0]).startsWith(query); if (sa !== sb) return sa ? -1 : 1; }
       return a[0].localeCompare(b[0], 'fr');
     });
-    pstatus.innerHTML = list.length ? esc(T('pCount')(list.length)) : (raw ? esc(T('pNone')(raw)) + ` <button type="button" class="link" id="newFromSearch">${esc(T('newPlaceQ'))}</button>` : '');
+    pstatus.innerHTML = list.length ? esc(T('pCount')(list.length)) : (raw ? esc(T('pNone')(raw)) + ` <a class="link" href="${editorLink('lieux', { nouveau: raw })}">${esc(T('newPlaceQ'))}</a>` : '');
     presults.innerHTML = list.length ? '<ul class="list">' + list.map((p, i) => {
       const [n, cells, lat, lon, prec, checked] = p;
       const dec = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
@@ -414,12 +303,6 @@
     const [la, lo] = cellsCenter(p[1]); return [p[0], p[1], +la.toFixed(5), +lo.toFixed(5), p[4], p[5]];
   }
   PLACES = PLACES.map(fixPlace); buildPfuse();
-  // Zone affichée dans l'aperçu : carrés du lieu + un carré tout autour
-  function zoneOf(cells){
-    const idx = cells.map(cellIdx);
-    return { c0: Math.max(0, Math.min(...idx.map(x => x[0])) - 1), c1: Math.min(GRID_X.length - 2, Math.max(...idx.map(x => x[0])) + 1),
-             r0: Math.max(0, Math.min(...idx.map(x => x[1])) - 1), r1: Math.min(GRID_Y.length - 2, Math.max(...idx.map(x => x[1])) + 1) };
-  }
   const fmtDist = d => d < 1000 ? (Math.round(d / 10) * 10) + ' m' : (d / 1000).toFixed(1).replace('.', lang === 'fr' ? ',' : '.') + ' km';
   function loadMap(){
     if (!mapPromise) mapPromise = new Promise((ok, ko) => {
@@ -480,112 +363,16 @@
     const cap = document.createElement('p'); cap.textContent = caption || T('mapCaption')(cells); box.appendChild(cap);
   }
 
-  // ---------- Proposer une meilleure position ----------
-  function suggestHtml(){
-    return `<button type="button" class="sbtn" data-act="open">${esc(T('suggest'))}</button>
-      <div class="sform" hidden>
-        <p class="shelp">${esc(T('sHelp'))}</p>
-        <button type="button" class="sgps" data-act="gps">${esc(T('useGps'))}</button>
-        <label>${esc(T('pasteLabel'))}<input type="text" class="scoords" inputmode="decimal" autocomplete="off" placeholder="48.45606, -5.08603"></label>
-        <label>${esc(T('commentLabel'))}<textarea class="scomment" rows="2"></textarea></label>
-        <button type="button" class="scheck" data-act="check">${esc(T('check'))}</button>
-        <div class="sresult" aria-live="polite"></div>
-      </div>`;
+  // ---------- Proposer une meilleure position : dans l'éditeur, sur ce lieu-dit ----------
+  function suggestHtml(p){
+    return `<a class="sbtn" href="${editorLink('lieux', { cherche: p[0] })}">${esc(T('suggest'))}</a>
+      <a class="sbtn" href="${editorLink('lieux', { cherche: p[0], gps: true })}">${esc(T('suggestGps'))}</a>`;
   }
   function placeMarks(p){
     if (p[5] || p[4] <= 50) return [{ lat: p[2], lon: p[3], kind: 'verified' }];      // point plein : vérifié ou exact
     if (isPlaced(p)) return [{ lat: p[2], lon: p[3], kind: 'verified', ring: true }];   // anneau : placé sur la carte
     return [];
   }   // point rouge : position vérifiée ou exacte (phares)
-  function redraw(li, p, extra){
-    const view = li.querySelector('.pview');
-    loadMap().then(img => drawPreview(view, p[1], img, placeMarks(p).concat(extra || [])), () => {});
-  }
-  // ---------- Proposer un nouveau lieu-dit ----------
-  let nHow = null;
-  function openNew(prefill){
-    const panel = $('newPanel'); panel.hidden = false; $('newBtn').setAttribute('aria-expanded', 'true');
-    if (prefill && !$('nName').value) $('nName').value = prefill;
-    $('nName').focus(); panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  }
-  $('newBtn').addEventListener('click', () => {
-    const panel = $('newPanel'); if (panel.hidden) openNew(pq.value.trim()); else { panel.hidden = true; $('newBtn').setAttribute('aria-expanded', 'false'); }
-  });
-  pstatus.addEventListener('click', e => { if (e.target.id === 'newFromSearch') openNew(pq.value.trim()); });
-  function checkNew(coords){
-    const res = $('nResult'), name = $('nName').value.trim().replace(/\s+/g, ' ');
-    if (!name){ res.innerHTML = `<p class="bad">${esc(T('newNoName'))}</p>`; $('nName').focus(); return; }
-    const dup = PLACES.find(p => norm(p[0]) === norm(name));
-    if (dup){ res.innerHTML = `<p class="bad">${esc(T('newDup')(dup[0]))}</p>`; return; }
-    if (!coords){ res.innerHTML = `<p class="bad">${esc(T('badFormat'))}</p>`; return; }
-    const [lat, lon] = coords, [x, y] = toPixel(lat, lon), cell = cellAt(x, y);
-    const nearest = PLACES.reduce((m, p) => Math.min(m, distM(lat, lon, p[2], p[3])), Infinity);
-    if (!cell || nearest > 3000){ res.innerHTML = `<p class="bad">${esc(T('newOut'))}</p>`; return; }
-    const c = cellName(cell), comment = $('nComment').value.trim();
-    const prec = nHow && nHow.acc ? Math.max(10, Math.round(nHow.acc)) : 25;
-    const line = JSON.stringify({ nom: name, carres: [c], lat: +lat.toFixed(5), lon: +lon.toFixed(5), precision_m: prec, verifie: true });
-    let link;
-    if (FORM){
-      const href = formUrl({
-        LIEU: name, CARRES: c, ACTUELLE: 'Nouveau lieu-dit',
-        PROPOSEE: `${lat.toFixed(5)}, ${lon.toFixed(5)} (carré ${c})`,
-        METHODE: nHow && nHow.acc ? 'GPS du téléphone, précision ± ' + Math.round(nHow.acc) + ' m' : 'coordonnées saisies',
-        COMMENTAIRE: comment, JSON: line
-      });
-      link = `<a class="smail" href="${esc(href)}" target="_blank" rel="noopener">${esc(T('sendForm'))}</a><p class="snote">${esc(T('formNote'))}</p>`;
-    } else link = `<p class="bad">${esc(T('sendOff'))}</p>`;
-    // ordre : message, aperçu de la carte, puis bouton d'envoi
-    res.innerHTML = `<p class="good">${esc(T('newOk')(name, c))}</p><div class="pmap"><div class="pview"><p>${esc(T('mapLoading'))}</p></div></div>` + link;
-    const view = res.querySelector('.pview');
-    loadMap().then(img => drawPreview(view, [c], img, [{ lat, lon, kind: 'proposed' }], T('newCaption')(name, c)),
-      () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
-  }
-  $('nCheck').addEventListener('click', () => { nHow = null; checkNew(parseCoords($('nCoords').value)); });
-  $('nCoords').addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); nHow = null; checkNew(parseCoords($('nCoords').value)); } });
-  $('nCoords').addEventListener('input', () => { nHow = null; });
-  $('nGps').addEventListener('click', () => {
-    const res = $('nResult');
-    if (!navigator.geolocation){ res.innerHTML = `<p class="bad">${esc(T('gpsErr'))}</p>`; return; }
-    res.innerHTML = `<p>${esc(T('gpsWait'))}</p>`;
-    navigator.geolocation.getCurrentPosition(pos => {
-      const { latitude, longitude, accuracy } = pos.coords;
-      $('nCoords').value = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`; nHow = { acc: accuracy };
-      checkNew([latitude, longitude]);
-      res.insertAdjacentHTML('afterbegin', `<p>${esc(T('gpsAcc')(Math.round(accuracy)))}</p>`);
-    }, () => { res.innerHTML = `<p class="bad">${esc(T('gpsErr'))}</p>`; }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
-  });
-
-  function checkSuggestion(li, p, coords, how){
-    const res = li.querySelector('.sresult');
-    if (!coords){ res.innerHTML = `<p class="bad">${esc(T('badFormat'))}</p>`; return; }
-    const [lat, lon] = coords, [x, y] = toPixel(lat, lon), cell = cellAt(x, y), z = zoneOf(p[1]);
-    const inZone = cell && cell[0] >= z.c0 && cell[0] <= z.c1 && cell[1] >= z.r0 && cell[1] <= z.r1;
-    if (!inZone){
-      res.innerHTML = `<p class="bad">${esc(T('outZone')(cell ? cellName(cell) : null, p[0]))}</p>`;
-      redraw(li, p); return;
-    }
-    const d = distM(p[2], p[3], lat, lon);
-    const comment = li.querySelector('.scomment').value.trim();
-    const prec = how && how.acc ? Math.max(10, Math.round(how.acc)) : 25;
-    const newCell = cellName(cell), oldCells = p[1].join(', ');
-    const cellsTxt = oldCells === newCell ? newCell : `${oldCells} → ${newCell}`;
-    const line = JSON.stringify({ nom: p[0], carres: [newCell], lat: +lat.toFixed(5), lon: +lon.toFixed(5), precision_m: prec, verifie: true });
-    let link;
-    if (FORM){
-      const href = formUrl({
-        LIEU: p[0], CARRES: cellsTxt,
-        ACTUELLE: `${p[2].toFixed(5)}, ${p[3].toFixed(5)}`,
-        PROPOSEE: `${lat.toFixed(5)}, ${lon.toFixed(5)} (carré ${cellName(cell)}, à ${fmtDist(d)})`,
-        METHODE: how && how.acc ? 'GPS du téléphone, précision ± ' + Math.round(how.acc) + ' m' : 'coordonnées saisies',
-        COMMENTAIRE: comment, JSON: line
-      });
-      link = `<a class="smail" href="${esc(href)}" target="_blank" rel="noopener">${esc(T('sendForm'))}</a><p class="snote">${esc(T('formNote'))}</p>`;
-    } else {
-      link = `<p class="bad">${esc(T('sendOff'))}</p>`;
-    }
-    res.innerHTML = `<p class="good">${esc(T('okIn')(cellName(cell), fmtDist(d)))}</p>` + link;
-    redraw(li, p, [{ lat, lon, kind: 'proposed' }]);
-  }
 
   function togglePlace(li){
     const box = li.querySelector('.pmap'), btn = li.querySelector('.ptitle');
@@ -594,7 +381,7 @@
     if (!open) return;
     const p = shownPlaces[+li.dataset.i]; if (!p) return;
     const canSuggest = !(p[4] <= 50 && !p[5]);        // pas pour les phares, dont la position est déjà exacte
-    box.innerHTML = `<div class="pview"><p>${esc(T('mapLoading'))}</p></div>` + (canSuggest ? `<div class="suggest">${suggestHtml()}</div>` : '');
+    box.innerHTML = `<div class="pview"><p>${esc(T('mapLoading'))}</p></div>` + (canSuggest ? `<div class="suggest">${suggestHtml(p)}</div>` : '');
     const view = box.querySelector('.pview');
     loadMap().then(img => drawPreview(view, p[1], img, placeMarks(p)), () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
@@ -602,26 +389,6 @@
   presults.addEventListener('click', e => {
     const b = e.target.closest('button[data-copy]');
     if (!b) {
-      const act = e.target.closest('[data-act]');
-      if (act){
-        const li = act.closest('.place'), p = shownPlaces[+li.dataset.i]; if (!p) return;
-        const res = li.querySelector('.sresult');
-        if (act.dataset.act === 'open'){
-          const f = li.querySelector('.sform'); f.hidden = !f.hidden; act.setAttribute('aria-expanded', String(!f.hidden));
-        } else if (act.dataset.act === 'check'){
-          checkSuggestion(li, p, parseCoords(li.querySelector('.scoords').value));
-        } else if (act.dataset.act === 'gps'){
-          if (!navigator.geolocation){ res.innerHTML = `<p class="bad">${esc(T('gpsErr'))}</p>`; return; }
-          res.innerHTML = `<p>${esc(T('gpsWait'))}</p>`;
-          navigator.geolocation.getCurrentPosition(pos => {
-            const { latitude, longitude, accuracy } = pos.coords;
-            li.querySelector('.scoords').value = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
-            checkSuggestion(li, p, [latitude, longitude], { acc: accuracy });
-            res.insertAdjacentHTML('afterbegin', `<p>${esc(T('gpsAcc')(Math.round(accuracy)))}</p>`);
-          }, () => { res.innerHTML = `<p class="bad">${esc(T('gpsErr'))}</p>`; }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
-        }
-        return;
-      }
       if (e.target.closest('.actions a, .pmap')) return;
       const li = e.target.closest('.place'); if (li) togglePlace(li);
       return;
@@ -637,12 +404,6 @@
   }
   let pt;
   pq.addEventListener('input', () => { clearTimeout(pt); pt = setTimeout(renderPlaces, 100); });
-  presults.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.target.classList.contains('scoords')){
-      e.preventDefault(); const li = e.target.closest('.place'); const p = shownPlaces[+li.dataset.i];
-      if (p) checkSuggestion(li, p, parseCoords(e.target.value));
-    }
-  });
   pq.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderPlaces(); pq.blur(); } });
   pclear.addEventListener('click', () => { pq.value = ''; renderPlaces(); pq.focus(); });
 
@@ -765,6 +526,7 @@
       .catch(() => { wxState = wx ? 'ok' : 'err'; renderPhare(); });
   }
   function wxHtml(){
+    if (navigator.onLine === false && !wx) return `<p class="wind-sub">${esc(T('wOffline'))}</p>`;
     if (!wx) return `<p class="wind-sub">${esc(wxState === 'err' ? T('wErr') : T('wLoading'))}</p>`;
     const c = wx.current, d = wx.daily, kmh = Math.round(c.wind_speed_10m), i = dir16(c.wind_direction_10m);
     const days = d.time.map((t, j) => {
@@ -790,6 +552,15 @@
     $('pharePanel').hidden = !open; $('phareBtn').setAttribute('aria-expanded', String(open));
     if (open){ loadWx(); loadQr(); renderPhare(); }
   }
+  // hors connexion, le phare s'éteint (pas de faisceau ni de lanterne allumée)
+  function updatePhare(){
+    const off = navigator.onLine === false, img = $('phareBtn').querySelector('img');
+    img.src = off ? 'phare_creach_eteint.svg' : 'phare_creach.svg';
+    $('phareBtn').classList.toggle('off', off);
+    $('phareBtn').title = off ? T('phareOff') : T('phareLabel');
+    if (!$('pharePanel').hidden) renderPhare();
+  }
+  window.addEventListener('online', updatePhare); window.addEventListener('offline', updatePhare);
   // un clic ouvre le panneau ; cinq clics rapides font passer un oiseau
   let clicks = [], eggLock = 0;
   $('phareBtn').addEventListener('click', e => {
@@ -828,6 +599,7 @@
   showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds');
   window.addEventListener('hashchange', () => showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds'));
   applyLang();
+  updatePhare();
 
   // 1) GitHub  2) copie enregistrée dans le navigateur  3) import manuel
   fetch(URL_DATA)
