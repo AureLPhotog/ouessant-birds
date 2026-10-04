@@ -67,6 +67,7 @@
         <button type="button" class="btn" id="pasteLinesBtn">Coller des lignes</button>
         <button type="button" class="btn primary" id="proposeBtn">Envoyer ma proposition</button>
         <button type="button" class="btn primary" id="ghSaveBtn">Enregistrer sur GitHub</button>
+        <button type="button" class="btn ghost" id="keyBtn" data-key>Clé GitHub</button>
         <button type="button" class="btn" id="exportBtn">Exporter</button>
       </div>
       <div class="filters" id="filters"></div>
@@ -78,9 +79,8 @@
 
     <div class="panel hidden" id="proposePanel">
       <h2>Envoyer ma proposition</h2>
-      <p class="help">Tes modifications partent dans un formulaire, avec ton commentaire. Aurélien les vérifie, puis les intègre à l’appli.</p>
+      <p class="help">Tes modifications partent dans un formulaire, avec ton commentaire. Elles seront vérifiées avant d’être intégrées à l’appli.</p>
       <pre class="prop-sum" id="propSummary"></pre>
-      <label class="gh-lab" style="max-width:22rem">Ton nom (facultatif)<input type="text" id="propName" autocomplete="name"></label>
       <label class="gh-lab">Commentaire (facultatif : pourquoi ce changement, d’où vient l’info…)<textarea id="propComment" rows="3"></textarea></label>
       <div class="actions"><button type="button" class="btn primary" id="propSend">Envoyer</button><button type="button" class="btn" id="propCopy">Copier ma proposition</button><span class="sep"></span><button type="button" class="btn ghost" id="propClose">Fermer</button></div>
       <p class="msg" id="propOut" aria-live="polite"></p>
@@ -121,8 +121,7 @@
         <label><input type="radio" name="what" value="full"> Le fichier complet</label>
       </div>
       <div id="changesOpts">
-        <p class="help">Idéal pour envoyer tes propositions à Aurélien : un petit texte avec uniquement ce que tu as modifié, ajouté ou supprimé. Il le collera dans son éditeur et verra chaque changement avant de l’appliquer.</p>
-        <label class="gh-lab" style="max-width:22rem">Ton nom (facultatif)<input type="text" id="authorName" autocomplete="name"></label>
+        <p class="help">Un petit texte avec uniquement ce que tu as modifié, ajouté ou supprimé, à coller ensuite dans « Coller des lignes ».</p>
       </div>
       <div class="export-opts hidden" id="fullOpts">
         <label><input type="radio" name="fmt" value="lines" checked> Une entrée par ligne</label>

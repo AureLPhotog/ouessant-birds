@@ -18,7 +18,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | Fichier | Rôle |
 |---|---|
 | `index.html` | l'appli (structure de la page) |
-| `editeur.html` | l'éditeur des listes (réservé à Aurélien pour l'enregistrement sur GitHub) |
+| `editeur.html` | l'éditeur des listes (enregistrement direct sur GitHub avec la clé d'accès ; sans clé, envoi d'une proposition) |
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
 | `css/commun.css` | couleurs (clair, sombre, daltonisme) et bases, partagées par l'appli et l'éditeur |

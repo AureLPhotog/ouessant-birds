@@ -343,7 +343,7 @@
   async function openFromApp(){
     const path = FICHIERS[params.get('fichier')];
     $('importMsg').className = 'msg'; $('importMsg').textContent = 'Chargement de la liste…';
-    if (getToken()) await ghOpen(path);                  // Aurélien : depuis GitHub, pour pouvoir enregistrer
+    if (getToken()) await ghOpen(path);                  // avec la clé : depuis GitHub, pour pouvoir enregistrer
     if (!items.length){
       try {
         const r = await fetch(path, { cache: 'no-cache' }); if (!r.ok) throw 0;
@@ -377,8 +377,7 @@
     } catch (_) { return null; }
   })();
   function proposalParts(){
-    const who = $('propName').value.trim(), com = $('propComment').value.trim();
-    return { MODIFS: commitMessage(), COMMENTAIRE: [who ? 'Proposé par ' + who : '', com].filter(Boolean).join('\n'), JSON: changesText(who) };
+    return { MODIFS: commitMessage(), COMMENTAIRE: $('propComment').value.trim(), JSON: changesText() };
   }
   $('proposeBtn').addEventListener('click', () => {
     ['pastePanel','exportPanel','ghPanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
@@ -392,7 +391,7 @@
   $('propSend').addEventListener('click', () => {
     const out = $('propOut'), parts = proposalParts();
     if (!PFORM){
-      out.className = 'msg bad'; out.textContent = 'L\u2019envoi n\u2019est pas encore configuré. Copie ta proposition et envoie-la à Aurélien.';
+      out.className = 'msg bad'; out.textContent = 'L\u2019envoi n\u2019est pas encore configuré. Utilise « Copier ma proposition ».';
       return;
     }
     const url = f => { const q = new URLSearchParams({ usp: 'pp_url' }); Object.entries(f).forEach(([k, v]) => { if (PFORM.map[k] && v) q.set(PFORM.map[k], v); }); return PFORM.base + '?' + q.toString(); };
@@ -420,11 +419,12 @@
   function updateSaveBtn(){
     const t = !!getToken();
     $('ghSaveBtn').classList.toggle('hidden', !t);
+    $('keyBtn').classList.toggle('hidden', t);
     $('proposeBtn').classList.toggle('hidden', t);
     if (t) $('proposePanel').classList.add('hidden');
     $('visitText').innerHTML = t
       ? '<b>Clé GitHub active.</b> Corrige l\u2019entrée ouverte ci-dessous, clique sur « Enregistrer », puis sur <b>« Enregistrer sur GitHub »</b> : la modification sera en ligne directement.'
-      : '<b>Tu proposes une modification.</b> Corrige l\u2019entrée ouverte ci-dessous (ou complète la nouvelle), clique sur « Enregistrer », puis sur <b>« Envoyer ma proposition »</b>. Aurélien la vérifiera avant de l\u2019intégrer.';
+      : '<b>Tu proposes une modification.</b> Corrige l\u2019entrée ouverte ci-dessous (ou complète la nouvelle), clique sur « Enregistrer », puis sur <b>« Envoyer ma proposition »</b>. Elle sera vérifiée avant d\u2019être intégrée.';
   }
   updateSaveBtn();
   document.addEventListener('click', () => setTimeout(updateSaveBtn, 0));
@@ -736,12 +736,11 @@
   // Format : lignes de commentaire (« // … »), puis une ligne JSON par entrée modifiée ou ajoutée,
   // et une ligne {"_action":"supprimer", …} par entrée supprimée. Se colle tel quel dans « Coller des lignes ».
   const META = ['_action', '_cle_avant'];
-  function changesText(whoArg){
+  function changesText(){
     const key = $('keyField').value || fields[0];
     const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
-    const who = (whoArg !== undefined ? whoArg : ($('authorName').value || '')).trim();
     const lines = [
-      `// Modifications de ${fileName}` + (who ? ` proposées par ${who}` : '') + `, le ${new Date().toLocaleDateString('fr-FR')}`,
+      `// Modifications de ${fileName}, le ${new Date().toLocaleDateString('fr-FR')}`,
       `// ${mod.length} modifiée(s), ${add.length} ajoutée(s), ${del.length} supprimée(s). À coller dans l’éditeur : « Coller des lignes ».`
     ];
     mod.forEach(it => {
@@ -775,13 +774,13 @@
   $('downloadBtn').addEventListener('click', () => {
     if (exportMode() === 'changes'){
       if (!changes().total){ $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Aucune modification à exporter pour l’instant.'; return; }
-      const txt = changesText(), base = fileName.replace(/\.json$/i, ''), who = ($('authorName').value || '').trim().replace(/[^\p{L}\p{N}-]+/gu, '-');
-      const name = `modifications_${base}${who ? '_' + who : ''}_${new Date().toISOString().slice(0, 10)}.txt`;
+      const txt = changesText(), base = fileName.replace(/\.json$/i, '');
+      const name = `modifications_${base}_${new Date().toISOString().slice(0, 10)}.txt`;
       const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain;charset=utf-8' })); a.download = name;
       document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
       const c = changes();
       $('exportMsg').className = 'msg good';
-      $('exportMsg').textContent = `« ${name} » téléchargé (${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s)). Envoie-le à Aurélien par e-mail, en pièce jointe ou en copiant son contenu.`;
+      $('exportMsg').textContent = `« ${name} » téléchargé (${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s)). Tu peux l\u2019envoyer par e-mail, en pièce jointe ou en copiant son contenu.`;
       return;
     }
     const txt = exportText(); JSON.parse(txt);   // contrôle de validité
@@ -794,7 +793,7 @@
   $('copyBtn').addEventListener('click', () => {
     if (exportMode() === 'changes' && !changes().total){ $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Aucune modification à copier pour l’instant.'; return; }
     const txt = exportMode() === 'changes' ? changesText() : exportText();
-    const done = () => { $('exportMsg').className = 'msg good'; $('exportMsg').textContent = exportMode() === 'changes' ? 'Modifications copiées : colle-les dans un e-mail à Aurélien.' : 'JSON copié : tu peux le coller directement dans l\u2019éditeur de GitHub.'; };
+    const done = () => { $('exportMsg').className = 'msg good'; $('exportMsg').textContent = exportMode() === 'changes' ? 'Modifications copiées.' : 'JSON copié : tu peux le coller directement dans l\u2019éditeur de GitHub.'; };
     if (navigator.clipboard) navigator.clipboard.writeText(txt).then(done, () => { $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Copie impossible : utilise plutôt « Télécharger ».'; });
   });
 
