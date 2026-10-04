@@ -55,6 +55,16 @@ textarea{font-family:var(--mono);font-size:.85rem}
 .or{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem;align-items:center}
 .paste-box{margin-top:.8rem;display:grid;gap:.5rem}
 
+/* GitHub */
+.gh-open{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem}
+.gh-open h2{margin:0 0 .6rem;font:600 1rem var(--sans)}
+.gh-row{display:flex;flex-wrap:wrap;gap:.5rem}
+.gh-row select{width:auto;flex:1 1 220px}
+.gh-key{margin:.6rem 0 0;font-size:.85rem;color:var(--granite)}
+.or-sep{margin:1.2rem 0 .6rem;color:var(--granite);font-size:.88rem;text-align:center}
+.gh-lab{display:grid;gap:.25rem;font-size:.82rem;color:var(--granite);font-weight:600;margin-top:.4rem}
+.panel a{color:var(--ocean-2)}
+
 /* Barre d'outils */
 .bar{position:sticky;top:0;z-index:10;background:var(--foam);padding:.7rem 0 .6rem;border-bottom:1px solid var(--line);display:grid;gap:.6rem}
 .file{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .9rem}
@@ -163,6 +173,15 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 
   <!-- 1. Import -->
   <section id="importView">
+    <div class="gh-open">
+      <h2>Depuis GitHub</h2>
+      <div class="gh-row">
+        <select id="ghFile" aria-label="Fichier du dépôt"></select>
+        <button type="button" class="btn primary" id="ghOpenBtn">Ouvrir depuis GitHub</button>
+      </div>
+      <p class="gh-key" id="ghKeyInfo"></p>
+    </div>
+    <p class="or-sep">ou depuis ton ordinateur</p>
     <label class="drop" id="drop" tabindex="0">
       <strong>Glisse ton fichier JSON ici</strong>
       <p>ou clique pour le choisir (ouessant_birds.json, lieux_ouessant.json…)</p>
@@ -194,7 +213,8 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
         <input type="search" id="search" class="grow" placeholder="Rechercher dans tous les champs…" aria-label="Rechercher" autocomplete="off">
         <button type="button" class="btn" id="addBtn">+ Ajouter une entrée</button>
         <button type="button" class="btn" id="pasteLinesBtn">Coller des lignes</button>
-        <button type="button" class="btn primary" id="exportBtn">Exporter</button>
+        <button type="button" class="btn primary" id="ghSaveBtn">Enregistrer sur GitHub</button>
+        <button type="button" class="btn" id="exportBtn">Exporter</button>
       </div>
       <div class="filters" id="filters"></div>
     </div>
@@ -206,6 +226,22 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
       <div class="actions"><button type="button" class="btn" id="pasteCheck">Vérifier</button><button type="button" class="btn primary" id="pasteApply" disabled>Appliquer</button><span class="sep"></span><button type="button" class="btn ghost" id="pasteClose">Fermer</button></div>
       <p class="msg" id="pasteMsg"></p>
       <div class="preview" id="pastePreview"></div>
+    </div>
+
+    <div class="panel hidden" id="ghPanel">
+      <h2>Enregistrer sur GitHub</h2>
+      <p class="help" id="ghTarget"></p>
+      <label class="gh-lab">Message du commit<input type="text" id="ghMsg" autocomplete="off"></label>
+      <div class="actions"><button type="button" class="btn primary" id="ghCommit">Enregistrer sur GitHub</button><span class="sep"></span><button type="button" class="btn ghost" id="ghClose">Fermer</button></div>
+      <p class="msg" id="ghMsgOut" aria-live="polite"></p>
+    </div>
+
+    <div class="panel hidden" id="keyPanel">
+      <h2>Clé d'accès GitHub</h2>
+      <p class="help">Pour enregistrer dans le dépôt <b>AureLPhotog/ouessant-birds</b>, l'éditeur a besoin d'un jeton d'accès personnel « à granularité fine », limité à ce dépôt, avec la permission <b>Contents : lecture et écriture</b>. Il reste uniquement dans ce navigateur. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer un jeton sur GitHub</a></p>
+      <label class="gh-lab">Jeton<input type="password" id="ghToken" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+      <div class="actions"><button type="button" class="btn primary" id="keySave">Vérifier et enregistrer</button><button type="button" class="btn danger" id="keyForget">Oublier la clé</button><span class="sep"></span><button type="button" class="btn ghost" id="keyClose">Fermer</button></div>
+      <p class="msg" id="keyMsg" aria-live="polite"></p>
     </div>
 
     <div class="panel hidden" id="exportPanel">
@@ -383,7 +419,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   }
   function readFile(f){
     const r = new FileReader();
-    r.onload = () => { try { load(f.name, JSON.parse(r.result)); $('importMsg').textContent = ''; } catch (e) { $('importMsg').textContent = 'Fichier illisible : ' + (e.message || 'JSON invalide'); } };
+    r.onload = () => { try { load(f.name, JSON.parse(r.result)); gh = null; applyFormat(detectFormat(r.result)); $('importMsg').textContent = ''; } catch (e) { $('importMsg').textContent = 'Fichier illisible : ' + (e.message || 'JSON invalide'); } };
     r.readAsText(f, 'utf-8');
   }
   $('file').addEventListener('change', e => { const f = e.target.files[0]; if (f) readFile(f); e.target.value = ''; });
@@ -394,21 +430,132 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   drop.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) readFile(f); });
   $('pasteJsonBtn').addEventListener('click', () => { $('pasteJsonBox').classList.toggle('hidden'); $('pasteJson').focus(); });
   $('pasteJsonGo').addEventListener('click', () => {
-    try { load('liste.json', JSON.parse($('pasteJson').value)); $('importMsg').textContent = ''; }
+    try { load('liste.json', JSON.parse($('pasteJson').value)); gh = null; $('importMsg').textContent = ''; }
     catch (e) { $('importMsg').textContent = 'JSON illisible : ' + (e.message || ''); }
+  });
+
+  // ---------- GitHub : ouvrir et enregistrer directement dans le dépôt ----------
+  const GH = { owner: 'AureLPhotog', repo: 'ouessant-birds', branch: 'main', files: ['ouessant_birds.json', 'lieux_ouessant.json'] };
+  const TOKEN_KEY = 'gh-token-ouessant';
+  let gh = null;            // { path, sha } du fichier ouvert depuis GitHub
+  let fmtHint = null;       // mise en forme d'origine du fichier, pour l'export
+  const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; } };
+  const api = (path, opts = {}) => {
+    const h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+    const t = getToken(); if (t) h['Authorization'] = 'Bearer ' + t;
+    if (opts.body) h['Content-Type'] = 'application/json';
+    return fetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}${path}`, Object.assign({ cache: 'no-store' }, opts, { headers: h }));
+  };
+  const b64enc = str => { const by = new TextEncoder().encode(str); let bin = ''; for (let i = 0; i < by.length; i += 8192) bin += String.fromCharCode.apply(null, by.subarray(i, i + 8192)); return btoa(bin); };
+  const b64dec = b64 => new TextDecoder('utf-8').decode(Uint8Array.from(atob(b64.replace(/\s/g, '')), c => c.charCodeAt(0)));
+  // détecte la mise en forme du fichier (une entrée par ligne, ou indenté) pour la conserver
+  function detectFormat(text){
+    const lines = text.trim().split('\n');
+    if (lines.length > 2 && lines.slice(1, -1).every(l => /^\s*\{.*\},?\s*$/.test(l))) return { fmt: 'lines' };
+    const m = text.match(/^\[\s*\n( +)\{/); return { fmt: 'indent', n: m ? m[1].length : 2 };
+  }
+  function applyFormat(h){ fmtHint = h; const r = document.querySelector(`input[name="fmt"][value="${h.fmt}"]`); if (r) r.checked = true; }
+  function keyInfo(){
+    const t = getToken();
+    $('ghKeyInfo').innerHTML = t ? 'Clé GitHub enregistrée dans ce navigateur. <button type="button" class="btn ghost" data-key>Gérer la clé</button>'
+      : 'Lecture possible sans clé. Pour enregistrer sur GitHub, il faudra une clé d’accès. <button type="button" class="btn ghost" data-key>Ajouter une clé</button>';
+  }
+  $('ghFile').innerHTML = GH.files.map(f => `<option>${esc(f)}</option>`).join('');
+  keyInfo();
+  document.addEventListener('click', e => { if (e.target.closest('[data-key]')) openKey(); });
+  async function ghOpen(path){
+    const out = $('importMsg'); out.className = 'msg'; out.textContent = 'Chargement depuis GitHub…';
+    try {
+      const r = await api(`/contents/${encodeURIComponent(path)}?ref=${GH.branch}`);
+      if (r.status === 401) throw new Error('clé refusée par GitHub (expirée ou invalide ?)');
+      if (r.status === 404) throw new Error(`${path} introuvable sur la branche ${GH.branch}`);
+      if (r.status === 403) throw new Error('accès refusé ou limite de requêtes atteinte, réessaie dans quelques minutes');
+      if (!r.ok) throw new Error('erreur ' + r.status);
+      const j = await r.json(), text = b64dec(j.content);
+      load(path, JSON.parse(text));
+      gh = { path, sha: j.sha }; applyFormat(detectFormat(text)); save(); render();
+      out.textContent = '';
+      toast(`${path} chargé depuis GitHub (${items.length} entrées).`);
+    } catch (e) { out.className = 'msg bad'; out.textContent = 'Impossible d’ouvrir depuis GitHub : ' + e.message + '.'; }
+  }
+  $('ghOpenBtn').addEventListener('click', () => ghOpen($('ghFile').value));
+
+  // clé d'accès
+  function openKey(){ ['ghPanel','pastePanel','exportPanel'].forEach(id => $(id).classList.add('hidden')); $('keyPanel').classList.remove('hidden');
+    if ($('editView').classList.contains('hidden')){ $('importView').classList.add('hidden'); $('editView').classList.remove('hidden'); $('editView').dataset.keyOnly = '1'; }
+    $('ghToken').value = getToken(); $('keyMsg').textContent = ''; $('ghToken').focus(); }
+  function closeKey(){ $('keyPanel').classList.add('hidden');
+    if ($('editView').dataset.keyOnly){ delete $('editView').dataset.keyOnly; $('editView').classList.add('hidden'); $('importView').classList.remove('hidden'); } keyInfo(); }
+  $('keyClose').addEventListener('click', closeKey);
+  $('keyForget').addEventListener('click', () => { try { localStorage.removeItem(TOKEN_KEY); } catch (_) {} $('ghToken').value = ''; $('keyMsg').className = 'msg good'; $('keyMsg').textContent = 'Clé effacée de ce navigateur.'; keyInfo(); });
+  $('keySave').addEventListener('click', async () => {
+    const t = $('ghToken').value.trim(), m = $('keyMsg');
+    if (!t){ m.className = 'msg bad'; m.textContent = 'Colle d’abord ton jeton.'; return; }
+    try { localStorage.setItem(TOKEN_KEY, t); } catch (_) {}
+    m.className = 'msg'; m.textContent = 'Vérification…';
+    try {
+      const r = await api('');
+      if (r.status === 401){ localStorage.removeItem(TOKEN_KEY); throw new Error('GitHub refuse ce jeton (mal copié ou expiré).'); }
+      if (!r.ok) throw new Error('le dépôt est inaccessible avec ce jeton (erreur ' + r.status + ').');
+      const j = await r.json();
+      if (j.permissions && j.permissions.push === false) throw new Error('ce jeton peut lire le dépôt mais pas y écrire : ajoute la permission « Contents : Read and write ».');
+      m.className = 'msg good'; m.textContent = 'Clé valide : l’éditeur peut enregistrer dans AureLPhotog/ouessant-birds.'; keyInfo();
+    } catch (e) { m.className = 'msg bad'; m.textContent = e.message; keyInfo(); }
+  });
+
+  // enregistrement
+  function commitMessage(){
+    const key = ['Nom Français', 'nom'].find(k => fields.includes(k)) || $('keyField').value || fields[0], name = d => d && d[key] !== undefined ? show(d[key], types[key] ? types[key].t : 'text') : '?';
+    const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
+    const part = (n, list, w) => list.length ? `${list.length} ${w}${list.length > 1 ? 's' : ''} (${list.slice(0, 3).map(it => name(it.data)).join(', ')}${list.length > 3 ? '…' : ''})` : '';
+    const label = /bird|oiseau/i.test(gh ? gh.path : fileName) ? 'Oiseaux' : /lieu/i.test(gh ? gh.path : fileName) ? 'Lieux' : fileName;
+    return `${label} : ` + [part(0, mod, 'modifiée'), part(0, add, 'ajoutée'), part(0, del, 'supprimée')].filter(Boolean).join(', ');
+  }
+  $('ghSaveBtn').addEventListener('click', () => {
+    if (!getToken()){ openKey(); return; }
+    ['pastePanel','exportPanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
+    const c = changes(), path = gh ? gh.path : (GH.files.includes(fileName) ? fileName : null);
+    $('ghPanel').classList.toggle('hidden');
+    if (!path){ $('ghTarget').innerHTML = `Ce fichier ne correspond à aucun fichier du dépôt (${GH.files.join(', ')}). Ouvre-le depuis GitHub, ou renomme-le.`; $('ghCommit').disabled = true; return; }
+    $('ghCommit').disabled = !c.total;
+    $('ghTarget').innerHTML = `Fichier : <b>${esc(path)}</b> sur la branche <b>${GH.branch}</b>. ` + (c.total ? `${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s).` : 'Aucune modification à enregistrer.')
+      + (gh ? '' : ' <b>Attention :</b> ce fichier vient de ton ordinateur, la version en ligne sera entièrement remplacée.');
+    $('ghMsg').value = c.total ? commitMessage() : ''; $('ghMsgOut').textContent = '';
+  });
+  $('ghClose').addEventListener('click', () => $('ghPanel').classList.add('hidden'));
+  $('ghCommit').addEventListener('click', async () => {
+    const out = $('ghMsgOut'), path = gh ? gh.path : fileName, msg = $('ghMsg').value.trim() || commitMessage();
+    if (!gh && !confirm(`Remplacer ${path} sur GitHub par cette version ?`)) return;
+    $('ghCommit').disabled = true; out.className = 'msg'; out.textContent = 'Enregistrement sur GitHub…';
+    try {
+      let sha = gh && gh.sha;
+      if (!sha){ const r0 = await api(`/contents/${encodeURIComponent(path)}?ref=${GH.branch}`); if (r0.ok) sha = (await r0.json()).sha; }
+      const text = exportText(); JSON.parse(text);
+      const r = await api(`/contents/${encodeURIComponent(path)}`, { method: 'PUT', body: JSON.stringify({ message: msg, content: b64enc(text), sha, branch: GH.branch }) });
+      if (r.status === 409 || r.status === 422) throw new Error('le fichier a été modifié sur GitHub depuis que tu l’as ouvert. Pour ne rien écraser, exporte tes modifications sur ton ordinateur, puis rouvre la version GitHub.');
+      if (r.status === 401) throw new Error('clé refusée (expirée ?). Mets-la à jour avec « Gérer la clé ».');
+      if (r.status === 403 || r.status === 404) throw new Error('la clé n’a pas le droit d’écrire dans ce dépôt (permission « Contents : Read and write » manquante ?).');
+      if (!r.ok) throw new Error('erreur ' + r.status);
+      const j = await r.json();
+      gh = { path, sha: j.content.sha };
+      items.forEach(it => { it.orig = clone(it.data); }); deleted = [];   // l'état enregistré devient la nouvelle référence
+      save(); render();
+      out.className = 'msg good';
+      out.innerHTML = `Enregistré ! <a href="${esc(j.commit.html_url)}" target="_blank" rel="noopener">Voir le commit</a>. L’appli en ligne sera à jour d’ici quelques minutes.`;
+    } catch (e) { out.className = 'msg bad'; out.textContent = 'Échec : ' + e.message; $('ghCommit').disabled = false; }
   });
 
   // ---------- Brouillon (sauvegarde automatique dans le navigateur) ----------
   function save(){
-    try { localStorage.setItem(DRAFT, JSON.stringify({ fileName, at: Date.now(), items: items.map(it => [it.data, it.orig]), deleted: deleted.map(it => it.orig).filter(Boolean) })); } catch (_) {}
+    try { localStorage.setItem(DRAFT, JSON.stringify({ fileName, gh, fmtHint, at: Date.now(), items: items.map(it => [it.data, it.orig]), deleted: deleted.map(it => it.orig).filter(Boolean) })); } catch (_) {}
   }
   (function offerDraft(){
     try {
       const d = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (!d || !d.items) return;
       $('resumeBtn').hidden = false;
-      $('resumeInfo').textContent = `${d.fileName}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
+      $('resumeInfo').textContent = `${d.fileName}${d.gh ? ' (GitHub)' : ''}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
       $('resumeBtn').onclick = () => {
-        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1]));
+        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1])); gh = d.gh || null; if (d.fmtHint) applyFormat(d.fmtHint);
         deleted = (d.deleted || []).map(o => ({ id: ++uid, data: o, orig: o })); render();
       };
     } catch (_) {}
@@ -697,7 +844,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     const k = $('exportSort').value;
     if (k){ const t = types[k].t; list = list.slice().sort((a, b) => t === 'number' ? (a[k] ?? 0) - (b[k] ?? 0) : show(a[k], t).localeCompare(show(b[k], t), 'fr')); }
     const fmt = document.querySelector('input[name="fmt"]:checked').value;
-    return fmt === 'indent' ? JSON.stringify(list, null, 2) + '\n' : '[\n' + list.map(o => JSON.stringify(o)).join(',\n') + '\n]\n';
+    return fmt === 'indent' ? JSON.stringify(list, null, (fmtHint && fmtHint.n) || 2) + '\n' : '[\n' + list.map(o => JSON.stringify(o)).join(',\n') + '\n]\n';
   }
   $('exportBtn').addEventListener('click', () => { $('exportPanel').classList.toggle('hidden'); $('pastePanel').classList.add('hidden'); $('exportMsg').textContent = ''; });
   $('exportClose').addEventListener('click', () => $('exportPanel').classList.add('hidden'));
