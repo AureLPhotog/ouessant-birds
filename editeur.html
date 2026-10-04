@@ -100,16 +100,32 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 /* Grille des carrés */
 .cells-field{grid-column:1 / -1;display:grid;gap:.4rem}
 .cells-field > label{display:grid;gap:.25rem;font-size:.8rem;color:var(--granite);font-weight:600;max-width:22rem}
-.cells-wrap{max-width:620px}
-.cells-head{display:grid;margin-left:1.4rem;font-size:.7rem;color:var(--granite);text-align:center}
+.cells-tools{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;max-width:640px}
+.zb{width:2rem;height:2rem;border:1px solid var(--line);border-radius:8px;background:var(--paper);font:700 1.1rem/1 var(--sans);cursor:pointer}
+.zb:focus-visible{outline:3px solid #8C5E83;outline-offset:2px}
+.zl{min-width:3.4rem;text-align:center;font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--granite)}
+.cells-scroll{max-width:640px;max-height:min(460px,60vh);overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper);overscroll-behavior:contain}
+.cells-wrap{width:calc(var(--z,1) * 100%);min-width:100%}
+.cells-head{position:sticky;top:0;z-index:2;background:var(--paper);padding:.15rem 0}
+.cells-side{position:sticky;left:0;z-index:1;background:var(--paper)}
+.cells-head{display:grid;margin-left:1.4rem;font-size:.72rem;font-weight:600;color:var(--granite);text-align:center}
 .cells-body{display:flex}
 .cells-side{display:grid;width:1.4rem;font-size:.7rem;color:var(--granite);align-items:center}
-.cells{flex:1;display:grid;border:1px solid var(--line);border-radius:6px;overflow:hidden;background-color:#ABDCFF;background-repeat:no-repeat}
+.cells{flex:1;display:grid;background-color:#ABDCFF;background-repeat:no-repeat}
 .cells.with-map{background-image:url("carte_ouessant.jpg")}
 .cells button{border:0;border-right:1px solid rgba(31,58,77,.25);border-bottom:1px solid rgba(31,58,77,.25);background:transparent;padding:0;cursor:pointer;min-height:0}
 .cells button:hover{background:rgba(31,58,77,.15)}
 .cells button[aria-pressed="true"]{background:rgba(214,40,40,.35);box-shadow:inset 0 0 0 2px #D62828}
 .cells button:focus-visible{outline:2px solid #8C5E83;outline-offset:-2px}
+
+.cells{position:relative}
+.pin{position:absolute;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#D62828;border:3px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.35);pointer-events:none;z-index:1}
+.picking .cells{cursor:crosshair}
+.picking .cells button{pointer-events:none}
+[data-pick][aria-pressed="true"]{background:var(--ocean);color:var(--foam);border-color:var(--ocean)}
+.geo-hint{margin:0;font-size:.85rem;min-height:1.2em}
+.geo-hint.good{color:var(--ok);font-weight:600}
+.geo-hint.bad{color:var(--warn);font-weight:600}
 
 /* Coller des lignes */
 .panel{margin-top:.8rem;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:1rem}
@@ -231,20 +247,101 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   const MAP_W = 7015, MAP_H = 4944;
   let mapOk = false;
   (function(){ const im = new Image(); im.onload = () => { mapOk = true; document.querySelectorAll('.cells').forEach(g => g.classList.add('with-map')); }; im.src = 'carte_ouessant.jpg'; })();
+  // Recalage carte <-> GPS, identique à celui de l'appli (19 repères relevés sur le terrain, écart moyen ≈ 30 m)
+  const AFF = [[0.709161048, -0.002042154, 2964.964458201], [-0.000573242, -0.712172752, 3202.871361484]];
+  const MLAT = 111132, MLON = 111320 * Math.cos(48.45 * Math.PI / 180);
+  function toPixel(lat, lon){ const E = (lon + 5.1) * MLON, N = (lat - 48.45) * MLAT; return [AFF[0][0] * E + AFF[0][1] * N + AFF[0][2], AFF[1][0] * E + AFF[1][1] * N + AFF[1][2]]; }
+  function fromPixel(x, y){
+    const a = AFF[0][0], b = AFF[0][1], d = AFF[1][0], e = AFF[1][1], det = a * e - b * d, X = x - AFF[0][2], Y = y - AFF[1][2];
+    return [48.45 + ((a * Y - d * X) / det) / MLAT, -5.1 + ((e * X - b * Y) / det) / MLON];
+  }
+  function cellAt(x, y){
+    const c = GRID_X.findIndex((g, i) => i < GRID_X.length - 1 && x >= g && x < GRID_X[i + 1]);
+    const r = GRID_Y.findIndex((g, i) => i < GRID_Y.length - 1 && y >= g && y < GRID_Y[i + 1]);
+    return c < 0 || r < 0 ? null : String.fromCharCode(65 + c) + (r + 1);
+  }
+  const num = v => { const n = Number(String(v).trim().replace(',', '.')); return String(v).trim() !== '' && isFinite(n) ? n : null; };
+  const hasGeo = () => ['lat', 'lon', 'carres'].every(k => fields.includes(k));
+
   function cellsHtml(selected){
     const sel = new Set(selected), cols = GRID_X.length - 1, rows = GRID_Y.length - 1;
     const fx = GRID_X.slice(1).map((x, i) => (x - GRID_X[i]) + 'fr').join(' '), fy = GRID_Y.slice(1).map((y, i) => (y - GRID_Y[i]) + 'fr').join(' ');
     // fond : la carte, recadrée sur la zone quadrillée
     const bw = (MAP_W / (GRID_X[cols] - GRID_X[0]) * 100).toFixed(3), bx = (GRID_X[0] / (MAP_W - (GRID_X[cols] - GRID_X[0])) * 100).toFixed(3);
     const by = (GRID_Y[0] / (MAP_H - (GRID_Y[rows] - GRID_Y[0])) * 100).toFixed(3);
-    let h = `<div class="cells-wrap"><div class="cells-head" style="grid-template-columns:${fx}">${Array.from({ length: cols }, (_, c) => `<span>${String.fromCharCode(65 + c)}</span>`).join('')}</div>
+    let h = `<div class="cells-tools" role="group" aria-label="Zoom de la carte">
+        <button type="button" class="zb" data-zoom="-" aria-label="Dézoomer">−</button>
+        <span class="zl" data-zoom-label>${Math.round(zoom * 100)} %</span>
+        <button type="button" class="zb" data-zoom="+" aria-label="Zoomer">+</button>
+        <button type="button" class="btn ghost" data-zoom="sel">Centrer sur la sélection</button>
+        <button type="button" class="btn ghost" data-zoom="fit">Toute la carte</button>
+        ${hasGeo() ? '<span style="flex:1"></span><button type="button" class="btn" data-pick aria-pressed="false">Placer le point GPS sur la carte</button>' : ''}
+      </div>
+      ${hasGeo() ? '<p class="geo-hint" data-geo-hint></p>' : ''}
+      <div class="cells-scroll"><div class="cells-wrap" style="--z:${zoom}"><div class="cells-head" style="grid-template-columns:${fx}">${Array.from({ length: cols }, (_, c) => `<span>${String.fromCharCode(65 + c)}</span>`).join('')}</div>
       <div class="cells-body"><div class="cells-side" style="grid-template-rows:${fy}">${Array.from({ length: rows }, (_, r) => `<span>${r + 1}</span>`).join('')}</div>
       <div class="cells${mapOk ? ' with-map' : ''}" role="group" aria-label="Carrés de la carte" style="grid-template-columns:${fx};grid-template-rows:${fy};aspect-ratio:${GRID_X[cols] - GRID_X[0]} / ${GRID_Y[rows] - GRID_Y[0]};background-size:${bw}% auto;background-position:${bx}% ${by}%">`;
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++){
       const n = String.fromCharCode(65 + c) + (r + 1);
       h += `<button type="button" data-cell="${n}" aria-pressed="${sel.has(n)}" title="${n}" aria-label="${n}"></button>`;
     }
-    return h + '</div></div></div>';
+    return h + '<span class="pin" data-pin hidden></span></div></div></div></div>';
+  }
+  // Point GPS sur la grille + contrôle « le point est-il dans un carré sélectionné ? »
+  function updateGeo(field){
+    if (!hasGeo()) return;
+    const form = field.closest('.form-wrap'), pin = field.querySelector('[data-pin]'), hint = field.querySelector('[data-geo-hint]');
+    const lat = num(form.querySelector('[data-k="lat"]').value), lon = num(form.querySelector('[data-k="lon"]').value);
+    if (lat === null || lon === null){ pin.hidden = true; hint.textContent = ''; hint.className = 'geo-hint'; return; }
+    const [x, y] = toPixel(lat, lon), cell = cellAt(x, y), sel = selectedCells(field);
+    const W = GRID_X[GRID_X.length - 1] - GRID_X[0], H = GRID_Y[GRID_Y.length - 1] - GRID_Y[0];
+    pin.hidden = !cell; pin.style.left = ((x - GRID_X[0]) / W * 100) + '%'; pin.style.top = ((y - GRID_Y[0]) / H * 100) + '%';
+    if (!cell){ hint.className = 'geo-hint bad'; hint.textContent = 'Le point GPS est en dehors de la carte d’Ouessant.'; return; }
+    if (sel.includes(cell)){ hint.className = 'geo-hint good'; hint.textContent = `Le point GPS est bien dans le carré ${cell}.`; }
+    else { hint.className = 'geo-hint bad'; hint.innerHTML = `Le point GPS est dans le carré <b>${cell}</b>, qui n’est pas sélectionné. <button type="button" class="btn ghost" data-addcell="${cell}">Ajouter ${cell}</button>`; }
+  }
+  function geoProblem(form){
+    if (!hasGeo()) return null;
+    const lat = num(form.querySelector('[data-k="lat"]').value), lon = num(form.querySelector('[data-k="lon"]').value);
+    const sel = form.querySelector('[data-cells]').value.toUpperCase().split(/[\s,;]+/).filter(Boolean);
+    if (lat === null || lon === null || !sel.length) return null;
+    const cell = cellAt(...toPixel(lat, lon));
+    if (!cell) return { text: 'Le point GPS est en dehors de la carte d’Ouessant.' };
+    return sel.includes(cell) ? null : { text: `Le point GPS tombe dans le carré ${cell}, qui ne fait pas partie des carrés sélectionnés (${sel.join(', ')}).`, cell };
+  }
+  // Zoom : la grille est agrandie dans une zone qui défile ; on garde le niveau choisi d'une entrée à l'autre
+  const ZOOMS = [1, 1.6, 2.3, 3.2, 4.5];
+  let zoom = 2.3, zoomChosen = false;
+  function centerOn(scroll, cells){
+    const grid = scroll.querySelector('.cells'); if (!grid) return;
+    const btns = cells.length ? cells.map(c => grid.querySelector(`[data-cell="${c}"]`)).filter(Boolean) : [];
+    let cx, cy;
+    if (btns.length){
+      // positions mesurées par rapport à la zone défilante (et non au tableau)
+      const R = scroll.getBoundingClientRect();
+      const xs = btns.map(b => { const q = b.getBoundingClientRect(); return q.left + q.width / 2 - R.left + scroll.scrollLeft; });
+      const ys = btns.map(b => { const q = b.getBoundingClientRect(); return q.top + q.height / 2 - R.top + scroll.scrollTop; });
+      cx = (Math.min(...xs) + Math.max(...xs)) / 2; cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+    } else { cx = scroll.scrollWidth / 2; cy = scroll.scrollHeight / 2; }
+    scroll.scrollLeft = cx - scroll.clientWidth / 2; scroll.scrollTop = cy - scroll.clientHeight / 2;
+  }
+  function selectedCells(field){ return [...field.querySelectorAll('[data-cell][aria-pressed="true"]')].map(b => b.dataset.cell); }
+  function setZoom(field, z, keepCenter){
+    const scroll = field.querySelector('.cells-scroll'), wrap = field.querySelector('.cells-wrap');
+    const rx = (scroll.scrollLeft + scroll.clientWidth / 2) / scroll.scrollWidth, ry = (scroll.scrollTop + scroll.clientHeight / 2) / scroll.scrollHeight;
+    zoom = z; zoomChosen = true; wrap.style.setProperty('--z', z);
+    field.querySelector('[data-zoom-label]').textContent = Math.round(z * 100) + ' %';
+    if (keepCenter){ scroll.scrollLeft = rx * scroll.scrollWidth - scroll.clientWidth / 2; scroll.scrollTop = ry * scroll.scrollHeight - scroll.clientHeight / 2; }
+    else centerOn(scroll, selectedCells(field));
+  }
+  function initCells(){
+    document.querySelectorAll('.cells-field').forEach(f => {
+      const sel = selectedCells(f);
+      // sans carré choisi et sans zoom réglé, on montre toute la carte
+      if (!sel.length && !zoomChosen){ f.querySelector('.cells-wrap').style.setProperty('--z', 1); f.querySelector('[data-zoom-label]').textContent = '100 %'; }
+      centerOn(f.querySelector('.cells-scroll'), sel);
+      updateGeo(f);
+    });
   }
 
   // État : chaque entrée garde sa version d'origine pour repérer les modifications
@@ -395,12 +492,41 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     if (sb){ const k = sb.dataset.sort; if (sortField === k) sortDir = -sortDir; else { sortField = k; sortDir = 1; } render(); return; }
     if (e.target.id === 'moreBtn'){ shown += 200; render(); return; }
     const tr = e.target.closest('tr.item'); if (tr){ toggle(+tr.dataset.id); return; }
+    const zb = e.target.closest('[data-zoom]');
+    if (zb){
+      const f = zb.closest('.cells-field'), i = ZOOMS.indexOf(zoom), cur = i < 0 ? ZOOMS.findIndex(z => z >= zoom) : i;
+      const v = zb.dataset.zoom;
+      if (v === '+') setZoom(f, ZOOMS[Math.min(ZOOMS.length - 1, cur + 1)], true);
+      else if (v === '-') setZoom(f, ZOOMS[Math.max(0, cur - 1)], true);
+      else if (v === 'fit') setZoom(f, 1, true);
+      else centerOn(f.querySelector('.cells-scroll'), selectedCells(f));
+      return;
+    }
+    const pk = e.target.closest('[data-pick]');
+    if (pk){ const on = pk.getAttribute('aria-pressed') !== 'true'; pk.setAttribute('aria-pressed', String(on)); pk.closest('.cells-field').classList.toggle('picking', on);
+      pk.textContent = on ? 'Clique sur la carte à l’endroit exact…' : 'Placer le point GPS sur la carte'; return; }
+    const ac = e.target.closest('[data-addcell]');
+    if (ac){ const f = ac.closest('.form-wrap'), b = f.querySelector(`[data-cell="${ac.dataset.addcell}"]`); if (b && b.getAttribute('aria-pressed') !== 'true') b.click(); else { const inp = f.querySelector('[data-cells]'); inp.value = [inp.value, ac.dataset.addcell].filter(Boolean).join(', '); } f.querySelector('[data-msg]').innerHTML = ''; return; }
+    const pickField = e.target.closest('.cells-field.picking');
+    if (pickField && e.target.closest('.cells')){
+      const grid = pickField.querySelector('.cells'), R = grid.getBoundingClientRect();
+      const x = GRID_X[0] + (e.clientX - R.left) / R.width * (GRID_X[GRID_X.length - 1] - GRID_X[0]);
+      const y = GRID_Y[0] + (e.clientY - R.top) / R.height * (GRID_Y[GRID_Y.length - 1] - GRID_Y[0]);
+      const [lat, lon] = fromPixel(x, y), form = pickField.closest('.form-wrap');
+      form.querySelector('[data-k="lat"]').value = lat.toFixed(5); form.querySelector('[data-k="lon"]').value = lon.toFixed(5);
+      // point placé sur la carte : précision ± 100 m (sans toucher à « verifie »), sauf si une meilleure précision est déjà indiquée
+      const pr = form.querySelector('[data-k="precision_m"]');
+      if (pr && !(num(pr.value) !== null && num(pr.value) <= 100)){ pr.value = 100; pr.closest('label').classList.add('changed'); }
+      const c = cellAt(x, y), b = c && pickField.querySelector(`[data-cell="${c}"]`);
+      if (b && b.getAttribute('aria-pressed') !== 'true'){ b.setAttribute('aria-pressed', 'true'); pickField.querySelector('[data-cells]').value = selectedCells(pickField).join(', '); }
+      updateGeo(pickField); return;
+    }
     const cell = e.target.closest('[data-cell]');
     if (cell){
       const wrap = cell.closest('.cells-field'), inp = wrap.querySelector('[data-cells]');
       const on = cell.getAttribute('aria-pressed') !== 'true'; cell.setAttribute('aria-pressed', String(on));
       inp.value = [...wrap.querySelectorAll('[data-cell][aria-pressed="true"]')].map(b => b.dataset.cell).join(', ');
-      return;
+      updateGeo(wrap); return;
     }
     const act = e.target.closest('[data-act]'); if (act) editorAction(act.dataset.act, +act.closest('.form-wrap').dataset.id);
   });
@@ -408,12 +534,18 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     if (!e.target.matches('[data-cells]')) return;
     const set = new Set(e.target.value.toUpperCase().split(/[\s,;]+/).filter(Boolean));
     e.target.closest('.cells-field').querySelectorAll('[data-cell]').forEach(b => b.setAttribute('aria-pressed', String(set.has(b.dataset.cell))));
+    updateGeo(e.target.closest('.cells-field'));
+  });
+  // saisie de lat / lon : le point suit
+  $('table').addEventListener('input', e => {
+    if (!e.target.matches('[data-k="lat"], [data-k="lon"]')) return;
+    const f = e.target.closest('.form-wrap').querySelector('.cells-field'); if (f) updateGeo(f);
   });
   $('table').addEventListener('keydown', e => {
     const tr = e.target.closest('tr.item');
     if (tr && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); toggle(+tr.dataset.id); }
   });
-  function toggle(id){ openId = openId === id ? null : id; render(); if (openId){ const f = document.querySelector('.form-wrap [data-k]'); if (f) f.focus({ preventScroll: true }); } }
+  function toggle(id){ openId = openId === id ? null : id; render(); initCells(); if (openId){ const f = document.querySelector('.form-wrap [data-k]'); if (f) f.focus({ preventScroll: true }); } }
 
   // ---------- Formulaire d'édition ----------
   function inputHtml(k, v, orig){
@@ -472,8 +604,15 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
   function editorAction(act, id){
     const i = items.findIndex(x => x.id === id); if (i < 0) return;
     const it = items[i], wrap = document.querySelector(`.form-wrap[data-id="${id}"]`);
-    if (act === 'save'){
+    if (act === 'save' || act === 'forcesave'){
       try {
+        const pb = act === 'save' && geoProblem(wrap);
+        if (pb){
+          wrap.querySelector('[data-msg]').innerHTML = esc(pb.text) +
+            (pb.cell ? ` <button type="button" class="btn ghost" data-addcell="${pb.cell}">Ajouter ${pb.cell}</button>` : '') +
+            ` <button type="button" class="btn ghost" data-act="forcesave">Enregistrer quand même</button>`;
+          return;
+        }
         const d = readForm(wrap);
         // on garde l'ordre des champs, et les champs absents du formulaire
         const isEmpty = v => v === '' || v === false || (Array.isArray(v) && !v.length);
@@ -484,8 +623,8 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
         it.data = merged; openId = null; render(); save(); toast('Entrée enregistrée.');
       } catch (e) { wrap.querySelector('[data-msg]').textContent = e.message; }
     } else if (act === 'cancel'){ openId = null; render(); }
-    else if (act === 'revert'){ it.data = clone(it.orig); render(); save(); toast('Entrée remise comme à l\u2019origine.'); }
-    else if (act === 'dup'){ const n = { id: ++uid, data: clone(it.data), orig: null }; items.splice(i + 1, 0, n); openId = n.id; render(); save(); toast('Copie ajoutée juste en dessous : modifie-la.'); }
+    else if (act === 'revert'){ it.data = clone(it.orig); render(); initCells(); save(); toast('Entrée remise comme à l\u2019origine.'); }
+    else if (act === 'dup'){ const n = { id: ++uid, data: clone(it.data), orig: null }; items.splice(i + 1, 0, n); openId = n.id; render(); initCells(); save(); toast('Copie ajoutée juste en dessous : modifie-la.'); }
     else if (act === 'del'){
       items.splice(i, 1); if (it.orig) deleted.push(it); openId = null; render(); save();
       toast('Entrée supprimée.', 'Annuler', () => { items.splice(i, 0, it); deleted = deleted.filter(x => x !== it); render(); save(); });
@@ -495,7 +634,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
     const d = {}; fields.forEach(k => { const t = types[k].t; d[k] = t === 'bool' ? false : (t === 'list' || t === 'numlist') ? [] : t === 'number' ? undefined : ''; });
     Object.keys(d).forEach(k => d[k] === undefined && delete d[k]);
     const n = { id: ++uid, data: d, orig: null }; items.unshift(n); openId = n.id;
-    $('search').value = ''; filters = {}; buildFilters(); sortField = null; render(); save();
+    $('search').value = ''; filters = {}; buildFilters(); sortField = null; render(); initCells(); save();
     const f = document.querySelector('.form-wrap [data-k]'); if (f) f.focus();
   });
 

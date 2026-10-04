@@ -430,6 +430,7 @@ section[hidden]{display:none}
       pPlaceholder: 'Nom du lieu (ex. Pern, Stiff, Kadoran)', pLabel: 'Rechercher un lieu',
       pCount: n => n + ' lieu' + (n>1?'x':''), pNone: q => `Aucun lieu ne correspond à « ${q} ».`,
       square: n => n > 1 ? 'Carrés' : 'Carré', approx: m => `Position approximative : ± ${m} m (centre du carré sur la carte)`,
+      approxPlaced: m => `Position approximative : ± ${m} m (point placé sur la carte, non vérifié sur le terrain)`,
       exact: 'Position exacte', copy: 'Copier', copied: 'Copié !', openMap: 'Ouvrir dans Maps',
       placesNote: "Coordonnées calculées d'après la carte de l'île de l'Association Naturaliste d'Ouessant : chaque lieu est placé au centre de son carré, d'où une précision d'environ 500 m. Seuls les phares ont une position exacte. Vérifie sur le terrain avant de donner un point précis."
     },
@@ -510,6 +511,7 @@ section[hidden]{display:none}
       pPlaceholder: 'Place name (e.g. Pern, Stiff, Kadoran)', pLabel: 'Search for a place',
       pCount: n => n + ' place' + (n>1?'s':''), pNone: q => `No place matches “${q}”.`,
       square: n => n > 1 ? 'Squares' : 'Square', approx: m => `Approximate position: ± ${m} m (centre of the map square)`,
+      approxPlaced: m => `Approximate position: ± ${m} m (point placed on the map, not checked on the ground)`,
       exact: 'Exact position', copy: 'Copy', copied: 'Copied!', openMap: 'Open in Maps',
       placesNote: 'Coordinates derived from the island map by the Association Naturaliste d’Ouessant: each place sits at the centre of its map square, so accuracy is about 500 m. Only the lighthouses have an exact position. Check on the ground before giving a precise spot.'
     }
@@ -867,7 +869,7 @@ section[hidden]{display:none}
         <h3><button type="button" class="ptitle" aria-expanded="false"><span>${highlight(n, raw)}</span></button></h3>
         <div class="grid">${esc(T('square')(cells.length))} ${esc(cells.join(', '))}</div>
         <div class="coords">${dec}<small>${dms(lat,'N','S')} ${dms(lon,'E','W')}</small></div>
-        <div class="prec${exact ? ' exact' : ''}">${esc(checked ? T('verified') : exact ? T('exact') : T('approx')(prec))}</div>
+        <div class="prec${exact ? ' exact' : ''}">${esc(checked ? T('verified') : exact ? T('exact') : isPlaced(p) ? T('approxPlaced')(prec) : T('approx')(prec))}</div>
         <div class="actions">
           <button type="button" data-copy="${dec}">${esc(T('copy'))}</button>
           <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lon}" target="_blank" rel="noopener">${esc(T('openMap'))}</a>
@@ -901,8 +903,14 @@ section[hidden]{display:none}
     const pts = cells.map(cellIdx).map(([c, r]) => [(GRID_X[c] + GRID_X[c + 1]) / 2, (GRID_Y[r] + GRID_Y[r + 1]) / 2]);
     return fromPixel(pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length);
   }
+  // Précision enregistrée (precision_m) :
+  //   ≤ 50 m ou verifie = true : position exacte ou vérifiée sur le terrain, on la garde ;
+  //   < 500 m (ex. 100 m)      : point placé sur la carte, non vérifié, on le garde aussi ;
+  //   sinon                    : centre du carré, recalculé avec le recalage actuel.
+  const PLACED_MAX = 500;
+  const isPlaced = p => !p[5] && p[4] > 50 && p[4] < PLACED_MAX;
   function fixPlace(p){
-    if (p[5] || p[4] <= 50) return p;                        // vérifié ou exact (phares) : on garde
+    if (p[5] || p[4] < PLACED_MAX) return p;
     const [la, lo] = cellsCenter(p[1]); return [p[0], p[1], +la.toFixed(5), +lo.toFixed(5), p[4], p[5]];
   }
   function cellAt(x, y){
@@ -992,6 +1000,7 @@ section[hidden]{display:none}
       ctx.beginPath();
       if (m.kind === 'proposed'){ ctx.moveTo(X, Y - 9); ctx.lineTo(X + 9, Y); ctx.lineTo(X, Y + 9); ctx.lineTo(X - 9, Y); ctx.closePath(); }
       else ctx.arc(X, Y, r, 0, Math.PI * 2);
+      if (m.ring){ ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.lineWidth = 3; ctx.strokeStyle = col; ctx.stroke(); return; }
       ctx.fillStyle = col; ctx.fill();
       ctx.lineWidth = 2.5; ctx.strokeStyle = '#fff'; ctx.stroke();
       if (m.label){ ctx.fillStyle = '#fff'; ctx.font = '700 12px "Public Sans", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(m.label, X, Y + .5); }
@@ -1012,7 +1021,11 @@ section[hidden]{display:none}
         <div class="sresult" aria-live="polite"></div>
       </div>`;
   }
-  function placeMarks(p){ return (p[5] || p[4] <= 50) ? [{ lat: p[2], lon: p[3], kind: 'verified' }] : []; }   // point rouge : position vérifiée ou exacte (phares)
+  function placeMarks(p){
+    if (p[5] || p[4] <= 50) return [{ lat: p[2], lon: p[3], kind: 'verified' }];      // point plein : vérifié ou exact
+    if (isPlaced(p)) return [{ lat: p[2], lon: p[3], kind: 'verified', ring: true }];   // anneau : placé sur la carte
+    return [];
+  }   // point rouge : position vérifiée ou exacte (phares)
   function redraw(li, p, extra){
     const view = li.querySelector('.pview');
     loadMap().then(img => drawPreview(view, p[1], img, placeMarks(p).concat(extra || [])), () => {});
