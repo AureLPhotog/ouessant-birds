@@ -791,7 +791,7 @@
       const turn = Math.max(-1, Math.min(1, vx / 35));                         // le demi-tour se fait en s'écrasant, sans saut
       const sc = (0.9 + 0.2 * P.d) * Math.min(1, 0.55 + t * 0.9);
       const vy = (Q.y - P.y) / 0.016, tilt = Math.max(-12, Math.min(12, vy * 0.06));      // le bec se lève quand il monte
-      bird.style.transform = `translate(${(P.x - 15).toFixed(1)}px,${(P.y - 8.5).toFixed(1)}px) scale(${(turn * sc).toFixed(3)},${sc.toFixed(3)}) rotate(${tilt.toFixed(1)}deg)`;
+      bird.style.transform = `translate(${(P.x - 18).toFixed(1)}px,${(P.y - 10.2).toFixed(1)}px) scale(${(turn * sc).toFixed(3)},${sc.toFixed(3)}) rotate(${tilt.toFixed(1)}deg)`;
       bird.style.zIndex = P.d > 0 ? (P.y > 78 ? 1 : 3) : -1;           // 1 : derrière les fougères (z 2) tant qu'il est à leur hauteur ; 3 : devant la tour ; -1 : derrière la tour
       bird.style.opacity = Math.min(1, t * 5, Math.max(0, (exitX - P.x) / 80));
       const ph = t * Math.PI * 2 * 5; wing(near, 0.15 + 0.85 * Math.sin(ph)); wing(far, 0.15 + 0.85 * Math.sin(ph - 0.6));
