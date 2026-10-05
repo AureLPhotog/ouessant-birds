@@ -3,7 +3,7 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.21';
+  const APP_VERSION = '3.20';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
@@ -465,7 +465,7 @@
   }
   // Position GPS : le premier relevé d'un téléphone est souvent grossier (antennes, Wi-Fi : parfois ± 2 km).
   // On écoute le GPS, on garde le relevé le plus précis et on s'arrête dès qu'il est suffisant :
-  // tout de suite si ≤ 50 m, après 3 s si ≤ 100 m, sinon au bout de 8 s avec le meilleur relevé obtenu.
+  // tout de suite si ≤ 50 m, après 3 s si ≤ 150 m, sinon au bout de 8 s avec le meilleur relevé obtenu.
   const COARSE_M = 1900;   // au-delà, le téléphone n'a donné qu'une position approximative
   const coarseHtml = acc => `<div class="notice" role="alert">${T('coarseHtml')(Math.round(acc))}</div>`;
   function locate(onProgress, onDone, onError){
@@ -479,7 +479,7 @@
       if (best.acc <= 50) return finish();
       onProgress(best);
     }, () => finish(), { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
-    soon = setTimeout(() => { if (best && best.acc <= 100) finish(); }, 3000);   // assez précis après 3 s : inutile d'attendre
+    soon = setTimeout(() => { if (best && best.acc <= 150) finish(); }, 3000);   // assez précis après 3 s : inutile d'attendre
     timer = setTimeout(finish, 8000);
   }
 
