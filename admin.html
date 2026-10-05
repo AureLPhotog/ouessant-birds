@@ -51,6 +51,7 @@
       <input type="file" id="csvFile" accept=".csv,text/csv">
       <span>Choisir le fichier .csv des réponses (ou le glisser ici)</span>
     </label>
+    <label class="incl"><input type="checkbox" id="inclDone"> Inclure les réponses déjà marquées « traitées »</label>
     <p class="msg" id="loadMsg" role="status"></p>
   </section>
 
@@ -81,7 +82,7 @@
       <p class="help">Dans l’éditeur (avec ta clé) : onglet de la liste → <b>Coller des lignes</b> → colle → <b>Vérifier</b> → <b>Appliquer</b> → <b>Enregistrer sur GitHub</b>. Une liste à la fois : Oiseaux puis Lieux.</p>
       <div class="actions"><button type="button" class="btn primary" id="genBtn">Générer les lignes JSON</button></div>
       <div id="outBlocks"></div>
-      <div class="actions"><button type="button" class="btn" id="doneBtn" disabled>Marquer les propositions de cette période comme traitées</button></div>
+      <div class="actions"><button type="button" class="btn" id="doneBtn" disabled>Marquer les réponses décidées comme traitées</button></div>
       <p class="msg" id="outMsg" role="status"></p>
     </section>
   </section>
