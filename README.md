@@ -21,7 +21,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `editeur.html` | l'éditeur des listes (onglets Oiseaux / Lieux ; enregistrement direct sur GitHub avec la « Clé Admin » ; sans clé, envoi d'une proposition) |
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
-| `version_listes.json` | numéro de version des listes (`{"app": "3.24", "rev": 2}` → affiché « v3.24.2 »), mis à jour par l'éditeur à chaque enregistrement |
+| `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
 | `css/commun.css` | couleurs (clair, sombre, daltonisme) et bases, partagées par l'appli et l'éditeur |
 | `css/appli.css`, `css/editeur.css` | mise en page de l'appli et de l'éditeur |
 | `js/textes.js` | **tous les textes de l'appli**, en français et en anglais |
@@ -34,7 +34,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
 | `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
 | `manifest.webmanifest` | raccourci sur l'écran d'accueil du téléphone |
-| `docs/Guide_utilisation.pdf` | guide d'utilisation à partager (l'appli, puis l'éditeur pour proposer une correction) |
+| `docs/Guide_utilisation.pdf` | guide d'utilisation (l'appli, puis l'éditeur pour proposer une correction) : à partager, et lié en bas de l'appli et de l'éditeur |
 | `scripts/verifier_listes.py` | vérification des listes (voir « Vérifier les listes ») |
 
 ## Les listes
@@ -110,11 +110,11 @@ configurée dans le dépôt pour l'instant (pas de fichier `.github/workflows`).
 
 ## Les numéros de version
 
-- **Version de l'appli** (`3.24`) : à augmenter à chaque modification de l'appli (HTML, CSS, JS, images), **avant de fusionner dans `main`** :
-  - dans `js/version.js` : `window.OUESSANT_APP_VERSION = '3.24';` (numéro affiché dans le phare) ;
-  - dans `sw.js` : `const VERSION = 'v3.24';` (c'est ce qui met l'appli à jour chez les utilisateurs, mode hors connexion compris).
-- **Version des listes** (`3.24.2`) : automatique. Chaque enregistrement de liste dans l'éditeur ajoute 1 au dernier chiffre.
-  Quand la version de l'appli change, le compteur repart de zéro (`v3.25`, puis `v3.25.1`…).
+- **Version de l'appli** (`4.0`) : à augmenter à chaque modification de l'appli (HTML, CSS, JS, images), **avant de fusionner dans `main`** :
+  - dans `js/version.js` : `window.OUESSANT_APP_VERSION = '4.0';` (numéro affiché dans le phare) ;
+  - dans `sw.js` : `const VERSION = 'v4.0';` (c'est ce qui met l'appli à jour chez les utilisateurs, mode hors connexion compris).
+- **Version des listes** (`4.0.2`) : automatique. Chaque enregistrement de liste dans l'éditeur ajoute 1 au dernier chiffre.
+  Quand la version de l'appli change, le compteur repart de zéro (`v4.1`, puis `v4.1.1`…).
   Une modification faite directement sur le site GitHub ne fait pas monter le compteur.
 
 ## Publier une nouvelle version de l'appli

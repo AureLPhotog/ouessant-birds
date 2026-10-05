@@ -14,7 +14,7 @@
     "Éditeur de listes": "List editor",
     "Cherche un oiseau ou un lieu-dit, corrige-le ou ajoutes-en un, puis envoie ta proposition.": "Search for a bird or a place name, correct it or add a new one, then send your suggestion.",
     "Oiseaux": "Birds", "Lieux": "Places",
-    "Revenir à l'appli": "Back to the app",
+    "Revenir à l'appli": "Back to the app", "Guide d'utilisation (PDF)": "User guide (PDF, in French)",
     "Depuis GitHub": "From GitHub",
     "Fichier du dépôt": "Repository file",
     "Ouvrir depuis GitHub": "Open from GitHub",
