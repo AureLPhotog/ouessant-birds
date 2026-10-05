@@ -3,7 +3,7 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.4';
+  const APP_VERSION = '3.5';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
@@ -429,6 +429,7 @@
   }
   function renderWhere(){
     const st = $('wstatus'), out = $('wresults'), mapBox = $('wmap');
+    $('shareLoc').hidden = true;
     if (!lastFix){ st.textContent = ''; out.innerHTML = ''; mapBox.hidden = true; return; }
     const { lat, lon, acc } = lastFix;
     const ranked = PLACES.map(p => ({ p, d: distM(lat, lon, p[2], p[3]) })).sort((a, b) => a.d - b.d || a.p[0].localeCompare(b.p[0], 'fr'));
@@ -437,6 +438,7 @@
       st.textContent = T('notHere')(fmtDist(ranked[0].d)); out.innerHTML = ''; mapBox.hidden = true; return;
     }
     const near = ranked.slice(0, NEAR_N);
+    $('shareLoc').hidden = false;
     st.textContent = T('youAre')(cellName(cell), Math.round(acc));
     const dirs = T('dirs');
     out.innerHTML = '<ul class="list">' + near.map((n, i) => `<li class="near">
@@ -453,6 +455,17 @@
     loadMap().then(img => drawPreview(view, [cellName(cell)], img, marks, T('whereCaption')(cellName(cell))),
       () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
+  // Partager ma position : message prêt à envoyer (lieu-dit le plus proche, coordonnées, lien Google Maps)
+  $('shareLoc').addEventListener('click', () => {
+    if (!lastFix) return;
+    const { lat, lon } = lastFix, n = PLACES.map(p => ({ p, d: distM(lat, lon, p[2], p[3]) })).sort((a, b) => a.d - b.d)[0];
+    const text = T('shareLocMsg')(n.p[0], fmtDist(n.d), lat.toFixed(5), lon.toFixed(5), `https://www.google.com/maps?q=${lat.toFixed(6)},${lon.toFixed(6)}`);
+    const btn = $('shareLoc').querySelector('span'), back = () => setTimeout(() => { btn.textContent = T('shareLocBtn'); }, 1800);
+    const copied = () => { btn.textContent = T('shareLocCopied'); back(); };
+    if (navigator.share) navigator.share({ text }).catch(() => {});
+    else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(copied, () => fallbackCopy(text, copied));
+    else fallbackCopy(text, copied);
+  });
   $('locate').addEventListener('click', () => {
     const st = $('wstatus');
     if (!navigator.geolocation){ st.textContent = T('gpsErr'); return; }
