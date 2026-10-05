@@ -38,12 +38,17 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
 .pp-src a{color:inherit}
 .qr{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:1.1rem;align-items:center}
 .qr-box{flex:0 0 auto;width:118px;height:118px;background:#fff;border-radius:10px;padding:0;overflow:visible;border:1px solid var(--line);position:relative;margin:43px 0 12px}
-.qr-box .oriole{position:absolute;-webkit-clip-path:polygon(-8px -8px,200px -8px,200px 42px,9px 42px,9px 200px,-8px 200px);left:-10px;top:-43px;width:47px;height:69px;pointer-events:none;filter:drop-shadow(0 0 .6px rgba(28,40,46,.95)) drop-shadow(0 0 .6px rgba(28,40,46,.95));clip-path:polygon(-8px -8px,200px -8px,200px 42px,9px 42px,9px 200px,-8px 200px)}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .qr-box .oriole{filter:none}  }
-:root[data-theme="dark"] .qr-box .oriole{filter:none}
+.qr-box .oriole{position:absolute;left:-10px;top:-43px;width:47px;height:69px;pointer-events:none}
+.qr-box .oriole img{position:absolute;left:0;top:0;width:100%;height:100%}
+/* contour sombre (mode clair) : visible autour de l'oiseau, mais coupé au niveau du cadre pour ne rien dessiner dans le QR code ; l'oiseau lui-même reste devant */
+.qr-box .o-sh{filter:drop-shadow(0 0 .6px rgba(28,40,46,.95)) drop-shadow(0 0 .6px rgba(28,40,46,.95));-webkit-clip-path:polygon(-8px -8px,200px -8px,200px 42px,9px 42px,9px 200px,-8px 200px);clip-path:polygon(-8px -8px,200px -8px,200px 42px,9px 42px,9px 200px,-8px 200px)}
+.qr-box{border-color:rgba(28,40,46,.7)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .qr-box .o-sh{display:none} :root:not([data-theme="light"]) .qr-box{border-color:var(--line)} }
+:root[data-theme="dark"] .qr-box .o-sh{display:none}
+:root[data-theme="dark"] .qr-box{border-color:var(--line)}
 .qr-box .fern{position:absolute;right:-9px;bottom:-12px;font-size:1.5rem;line-height:1;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 .qr-box svg{display:block;width:100%;height:100%}
-.qr-box img:not(.oriole){border-radius:9px}
+.qr-box>img{border-radius:9px}
 .qr-txt{font-size:.88rem;color:var(--granite)}
 .qr-txt .btns{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
 .qr-txt button{border:1px solid var(--line);background:var(--foam);color:var(--ink);font:600 .85rem var(--sans);padding:.4rem .7rem;border-radius:8px;cursor:pointer}
