@@ -27,7 +27,6 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `js/textes.js` | **tous les textes de l'appli**, en français et en anglais |
 | `js/carte.js` | grille des carrés de la carte et recalage GPS (partagé appli / éditeur) |
 | `js/recherche.js` | recherche tolérante aux fautes de frappe |
-| `js/test-gps.js` | mode test : position GPS simulée (inactif par défaut, voir « Publier une nouvelle version ») |
 | `js/version.js` | **numéro de version de l'appli** (à augmenter à chaque modification de l'appli) |
 | `js/appli.js`, `js/editeur.js` | fonctionnement de l'appli et de l'éditeur |
 | `js/editeur-langue.js` | éditeur : version anglaise (tables de traduction), thème clair / sombre, couleurs pour daltonisme |
@@ -127,15 +126,13 @@ configurée dans le dépôt pour l'instant (pas de fichier `.github/workflows`).
 
 ## Publier une nouvelle version de l'appli
 
-1. Travailler dans la branche **`test`** (c'est la branche de travail), et la tester avec
-   `https://raw.githack.com/AureLPhotog/ouessant-birds/test/index.html`
-2. Augmenter la version de l'appli (voir plus haut), puis fusionner dans `main` : le site est à jour quelques minutes plus tard.
-
-**Mode test (position GPS simulée)** : le fichier `js/test-gps.js` simule une position sur l'île, pour tester les alertes et
-« Où suis-je ? » sans être sur place. Il est **inactif par défaut** :
-- sur le site de test (`raw.githack.com`) il est actif automatiquement : un bandeau rouge « MODE TEST » s'affiche en bas de l'écran, et le toucher permet de choisir la position sur la carte ;
-- sur le site en ligne, il ne s'active que si l'adresse contient `?test=1` (réglage mémorisé dans ce navigateur) ; `?test=0` le désactive ;
-- `?lat=48.4502&lon=-5.139` impose une position.
+Trois branches :
+- **`main`** : le code en ligne (GitHub Pages). Il ne reçoit que du code validé, jamais la branche `test`.
+- **`Pre-prod`** : la branche de travail. On y fait les modifications, on les vérifie avec
+  `https://raw.githack.com/AureLPhotog/ouessant-birds/Pre-prod/index.html`, puis on les fusionne dans `main` après avoir augmenté la version de l'appli (voir plus haut). Le site est à jour quelques minutes plus tard.
+- **`test`** : l'environnement de test, une copie de l'appli avec un **mode test** (bandeau rouge « MODE TEST ») : la position GPS est
+  simulée sur l'île et se choisit sur la carte en touchant le bandeau. Il sert à tester les alertes et « Où suis-je ? » sans
+  être sur place (`https://raw.githack.com/AureLPhotog/ouessant-birds/test/index.html`). On y fusionne les nouveautés de `Pre-prod`, mais **jamais dans l'autre sens, et jamais dans `main`**.
 
 Les listes JSON, elles, n'ont pas besoin de changement de version de l'appli : l'appli vérifie toujours en ligne s'il en existe une plus récente.
 

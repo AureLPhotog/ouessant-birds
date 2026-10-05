@@ -1,17 +1,9 @@
-/* MODE TEST : simule une position GPS sur l'île d'Ouessant, pour tester les alertes et « Où suis-je ? » depuis n'importe où.
-   INACTIF par défaut : il ne s'active que
-   • sur le site de test (raw.githack.com), automatiquement ;
-   • ailleurs (dont le site en ligne), seulement si l'adresse contient ?test=1 (le réglage est ensuite mémorisé dans ce navigateur) ;
-   ?test=0 le désactive.
-   Actif, un bandeau rouge s'affiche en bas de l'écran : le toucher permet de choisir la position sur la carte.
+/* MODE TEST (branche test-gps uniquement, ne jamais fusionner dans main).
+   Simule une position GPS sur l'île d'Ouessant pour tester les alertes et « Où suis-je ? » depuis n'importe où.
+   Toucher le bandeau rouge en bas de l'écran permet de choisir la position sur la carte.
    Position imposée par l'adresse : ?lat=48.4502&lon=-5.139 */
 (function(){
-  const KEY = 'test-gps-position', ON = 'test-gps-on', q = new URLSearchParams(location.search);
-  try { if (q.get('test') === '1') localStorage.setItem(ON, '1'); if (q.get('test') === '0') localStorage.removeItem(ON); } catch (_) {}
-  let on = /githack\.com$/.test(location.hostname) && q.get('test') !== '0';
-  try { on = on || localStorage.getItem(ON) === '1'; } catch (_) {}
-  if (q.get('test') === '1') on = true;
-  if (!on) return;   // site en ligne : rien ne change
+  const KEY = 'test-gps-position', q = new URLSearchParams(location.search);
   let cur = { lat: 48.4502, lon: -5.139 };
   try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && isFinite(s.lat) && isFinite(s.lon)) cur = s; } catch (_) {}
   if (isFinite(parseFloat(q.get('lat'))) && isFinite(parseFloat(q.get('lon')))) cur = { lat: parseFloat(q.get('lat')), lon: parseFloat(q.get('lon')) };
