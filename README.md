@@ -46,7 +46,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 - **Canal** : `Télégram`, `Whatsapp` ou `Pas d'annonce` (l'appli les affiche « Alerte Telegram », « Alerte WhatsApp », « Pas d'alerte »).
 - **Type de taxon** : `espèce` ou `sous-espèce`.
 
-**Méthode de classement** : à partir des données Faune France, en croisant la fréquence de chaque espèce à Ouessant (depuis 1900) avec sa rareté à l'échelle nationale (données 2025), puis ajusté à la main.
+**Méthode de classement** : établi à la main, en s'inspirant des données de Faune France (l'appli n'y accède pas), en croisant la fréquence de chaque espèce à Ouessant (depuis 1900) avec sa rareté à l'échelle nationale (données 2025), puis ajusté à la main.
 
 ### `lieux_ouessant.json`
 
@@ -104,4 +104,4 @@ au pire 95 m. Les coefficients sont dans `js/carte.js` (`AFF`) et, à l'identiqu
 
 - Carte de l'île : réalisée par Gaëtan Mineau pour l'Association Naturaliste d'Ouessant.
 - Météo : [Open-Meteo.com](https://open-meteo.com/).
-- Données d'observation : Faune France.
+- Classement des espèces : établi à la main d'après des données de Faune France. L'appli n'interroge pas leur base de données.
