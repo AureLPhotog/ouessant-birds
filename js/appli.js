@@ -8,11 +8,11 @@
   // Oriole de Baltimore (photo détourée et légèrement stylisée) posé sur l'angle du cadre du QR code, et petite fougère (émoji) au pied
   const ORIOLE = '<span class="oriole" aria-hidden="true"><img class="o-sh" src="oriole_baltimore.webp" alt="" width="47" height="69"><img class="o-bd" src="oriole_baltimore.webp" alt="" width="47" height="69"></span>';
   const FERN = '<span class="fern" aria-hidden="true">🌿</span>';
-  // Rideau de fougères (easter egg) : chaque feuille = [décalage fermé, angle fermé, décalage ouvert, angle ouvert, teinte, hauteur] 
-  const RIDEAU = [[-20, 8, -34, -30, -55, 0], [-11, -4, -42, -45, 0, 9], [-3, 10, -50, -60, 25, 2],
-                  [20, -8, 34, 30, 0, 0], [11, 4, 42, 45, -40, 9], [3, -10, 50, 60, -70, 2]];
-  const rideauHtml = () => '<span class="egg-ferns" aria-hidden="true">' + RIDEAU.map(([cx, cr, ox, or, hue, b], i) =>
-    `<span class="ef" style="--cx:${cx}px;--cr:${cr}deg;--ox:${ox}px;--or:${or}deg;--hue:${hue}deg;bottom:${b}px;animation-delay:${(i % 3) * 0.08}s">🌿</span>`).join('') + '</span>';
+  // Rideau de fougères (easter egg) : chaque feuille = [décalage fermé, angle fermé, décalage ouvert, angle ouvert, teinte, hauteur, inversée (-1) ou non (1)]
+  const RIDEAU = [[-20, 8, -34, -30, -55, 0, 1], [-11, -4, -42, -45, 0, 9, 1], [-3, 10, -50, -60, 25, 2, -1],
+                  [20, -8, 34, 30, 0, 0, -1], [11, 4, 42, 45, -40, 9, -1], [3, -10, 50, 60, -70, 2, 1]];
+  const rideauHtml = () => '<span class="egg-ferns" aria-hidden="true">' + RIDEAU.map(([cx, cr, ox, or, hue, b, f], i) =>
+    `<span class="ef" style="--cx:${cx}px;--cr:${cr}deg;--ox:${ox}px;--or:${or}deg;--hue:${hue}deg;--f:${f};bottom:${b}px;animation-delay:${(i % 3) * 0.08}s">🌿</span>`).join('') + '</span>';
   const APP_VERSION = window.OUESSANT_APP_VERSION || '?';
   let listsRev = null;   // { app, rev } lu dans version_listes.json
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
