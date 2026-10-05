@@ -41,7 +41,7 @@
     "Enregistrer sur GitHub": "Save to GitHub",
     "Clé Admin": "Admin key",
     "Tous": "All", "(vide)": "(empty)", "État": "Status", "Modifiés": "Modified", "Ajoutés": "Added", "Modifiés ou ajoutés": "Modified or added",
-    "Aucune entrée ne correspond.": "No entry matches.", "Canal de diffusion": "Broadcast channel",
+    "Aucune entrée ne correspond.": "No entry matches.", "Canal de diffusion": "Broadcast channel", "Trier les propositions": "Sort suggestions",
     "Carrés": "Grid squares", "Précision (m)": "Accuracy (m)", "Nom": "Name",
     "Recherche des noms sur iNaturalist…": "Looking up the names on iNaturalist…",
     "Faute de frappe corrigée, noms retrouvés sur iNaturalist : à vérifier avant d'enregistrer.": "Typo corrected, names found on iNaturalist: check them before saving.",

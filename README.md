@@ -19,6 +19,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 |---|---|
 | `index.html` | l'appli (structure de la page) |
 | `editeur.html` | l'éditeur des listes (onglets Oiseaux / Lieux ; enregistrement direct sur GitHub avec la « Clé Admin » ; sans clé, envoi d'une proposition) |
+| `admin.html`, `js/admin.js`, `css/admin.css` | **tri des propositions** reçues par le formulaire (page réservée : verrouillée par la Clé Admin, voir « Trier les propositions ») |
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
 | `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
@@ -109,6 +110,41 @@ partagée (sur Chrome Android : menu ⋮ → Paramètres → Paramètres des sit
 **Clé Admin** : jeton GitHub « à granularité fine », limité au dépôt `ouessant-birds`, permission
 *Contents : Read and write*, avec une date d'expiration. Ne jamais la partager ni l'écrire dans un fichier.
 Cochée « Mémoriser la clé sur cet appareil », elle est oubliée automatiquement au bout de **30 jours** ; sinon elle disparaît à la fermeture de l'onglet.
+
+## Trier les propositions
+
+Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce), la page **`admin.html`** les regroupe :
+
+1. Ouvrir l'éditeur avec la Clé Admin → bouton **Trier les propositions** (ou directement `admin.html`, qui demande la clé).
+2. Dans Google Forms : **Réponses → Afficher dans Sheets**, puis **Fichier → Télécharger → .csv**, et choisir ce fichier dans la page.
+   Le fichier est lu sur l'appareil : rien n'est mis en ligne.
+3. Choisir la période (un jour, « non traitées » ou tout). Chaque espèce / lieu-dit a sa carte : la valeur actuelle, chaque proposition
+   différente (avec le nombre de personnes, les dates et les commentaires), et les boutons **Valider** / **Tout rejeter**.
+   Les propositions déjà conformes à la liste sont signalées et ignorées. Les décisions sont gardées dans le navigateur.
+4. **Générer les lignes JSON** → copier le bloc Oiseaux puis le bloc Lieux dans l'éditeur (**Coller des lignes → Vérifier → Appliquer →
+   Enregistrer sur GitHub**). Puis **Marquer comme traitées** : la prochaine fois, « non traitées » ne montrera que les nouvelles réponses.
+
+### Récupération automatique des réponses (à installer une fois)
+
+Au lieu de télécharger le .csv, la page peut aller chercher les réponses elle-même, grâce à un petit script Google attaché à la
+feuille des réponses (`scripts/apps_script_reponses.gs`). Le script ne répond qu'avec un **code secret** connu de toi seul.
+
+1. Ouvrir la feuille Google des réponses → **Extensions → Apps Script**. Effacer le contenu, coller celui de
+   `scripts/apps_script_reponses.gs`, enregistrer (icône disquette).
+2. Dans la page de tri : **Réglages de la récupération automatique → Créer un code**, et copier ce code.
+3. Dans Apps Script : **Paramètres du projet** (roue dentée) → **Propriétés du script → Ajouter une propriété** :
+   nom `CODE`, valeur = le code copié → Enregistrer.
+4. **Déployer → Nouveau déploiement** → type **Application Web** → *Exécuter en tant que* : **Moi** ;
+   *Qui a accès* : **Tout le monde** → Déployer → autoriser l'accès (compte Google) → copier l'**URL de l'application Web** (finit par `/exec`).
+   (« Tout le monde » est nécessaire pour que la page puisse l'appeler ; sans le code secret, le script ne renvoie rien.)
+5. Dans la page de tri : coller l'adresse et le code → **Enregistrer les réglages** → **Récupérer les réponses**.
+
+Pour changer le code : modifier la propriété `CODE` dans Apps Script, puis dans la page. Pour tout couper : Apps Script →
+**Déployer → Gérer les déploiements → Archiver**. Documentation Google : <https://developers.google.com/apps-script/guides/web>.
+Le fichier .csv reste possible en secours.
+
+Confidentialité : la page est verrouillée (la clé est vérifiée auprès de GitHub : seul le propriétaire du dépôt l'ouvre) et ne contient
+aucune donnée. Son code reste visible, comme tout le dépôt public ; les réponses, elles, ne quittent jamais la feuille Google et ton appareil.
 
 ## Sécurité
 
