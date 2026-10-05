@@ -122,7 +122,10 @@ Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce
    différente (avec le nombre de personnes, les dates et les commentaires), et les boutons **Valider** / **Tout rejeter**.
    Les propositions déjà conformes à la liste sont signalées et ignorées. Les décisions sont gardées dans le navigateur.
 4. **Générer les lignes JSON** → copier le bloc Oiseaux puis le bloc Lieux dans l'éditeur (**Coller des lignes → Vérifier → Appliquer →
-   Enregistrer sur GitHub**). Puis **Marquer comme traitées** : la prochaine fois, « non traitées » ne montrera que les nouvelles réponses.
+   Enregistrer sur GitHub**). Puis **Marquer les réponses décidées comme traitées** : avec le script Google, la date est écrite dans une
+   colonne **« Traitée »** de la feuille (ajoutée à droite des réponses) et ces réponses ne sont plus proposées au tri suivant ;
+   avec le fichier .csv seul, c'est noté dans le navigateur (période « non traitées »). Une réponse qui contient encore une proposition
+   « à décider » n'est pas marquée. Rien n'est effacé : la case **Inclure les réponses déjà marquées « traitées »** les fait réapparaître.
 
 ### Récupération automatique des réponses (à installer une fois)
 
@@ -139,6 +142,8 @@ feuille des réponses (`scripts/apps_script_reponses.gs`). Le script ne répond 
    (« Tout le monde » est nécessaire pour que la page puisse l'appeler ; sans le code secret, le script ne renvoie rien.)
 5. Dans la page de tri : coller l'adresse et le code → **Enregistrer les réglages** → **Récupérer les réponses**.
 
+Après une mise à jour du script (nouveau contenu de `scripts/apps_script_reponses.gs`) : le recoller dans Apps Script, puis
+**Déployer → Gérer les déploiements → ✏️ → Version : Nouvelle version → Déployer** (l'adresse `/exec` ne change pas).
 Pour changer le code : modifier la propriété `CODE` dans Apps Script, puis dans la page. Pour tout couper : Apps Script →
 **Déployer → Gérer les déploiements → Archiver**. Documentation Google : <https://developers.google.com/apps-script/guides/web>.
 Le fichier .csv reste possible en secours.

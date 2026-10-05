@@ -28,6 +28,8 @@
   const META = ['_action', '_cle_avant'];
   let current = {};            // fichier → { entries: [...], byKey: Map }
   let proposals = [];          // toutes les propositions lues dans le fichier
+  let answers = [];            // une entrée par réponse (ligne de la feuille) : { row, when, day, ids }
+  let lastRows = null, lastSource = null;   // dernières lignes lues et leur origine ('csv' ou 'script')
   let decisions = {};          // clé de groupe → signature de la variante retenue, ou 'reject'
   try { decisions = JSON.parse(store.get(DECISIONS) || '{}') || {}; } catch (_) { decisions = {}; }
   const saveDecisions = () => store.set(DECISIONS, JSON.stringify(decisions));
@@ -96,7 +98,8 @@
     const date = Math.max(0, h.findIndex(t => /horodat|timestamp|date/.test(t)));
     const comment = h.findIndex((t, i) => i !== json && /comment/.test(t));
     const modifs = h.findIndex((t, i) => i !== json && i !== comment && i !== date && /modif|resume|chang/.test(t));
-    return { json, date, comment, modifs, dayFirst: !/timestamp/.test(h[date] || '') };
+    const done = h.findIndex(t => /^traite/.test(t));   // colonne « Traitée » écrite par le script Google
+    return { json, date, comment, modifs, done, dayFirst: !/timestamp/.test(h[date] || '') };
   }
 
   // Les lignes JSON d'une réponse (celles produites par « Envoyer ma proposition » dans l'éditeur)
@@ -130,20 +133,25 @@
   async function readFile(file){
     if ($('loadPanel').classList.contains('hidden')) return;
     const msg = $('loadMsg'); msg.className = 'msg'; msg.textContent = 'Lecture…';
-    try { await processRows(parseCSV(await file.text())); }
+    try { lastSource = 'csv'; await processRows(parseCSV(await file.text())); }
     catch (e) { msg.className = 'msg bad'; msg.textContent = 'Lecture impossible : ' + (e.message || e); }
   }
   // Tableau de lignes (la première = titres des colonnes), venant du fichier .csv ou de la feuille Google
   async function processRows(rows){
     const msg = $('loadMsg');
-      rows = rows.map(r => r.map(c => String(c ?? ''))).filter(r => r.some(c => c.trim() !== ''));
-      if (rows.length < 2) throw new Error('Aucune réponse pour l’instant.');
+      rows = rows.map(r => r.map(c => String(c ?? '')));
+      lastRows = rows;
+      if (rows.filter(r => r.some(c => c.trim() !== '')).length < 2) throw new Error('Aucune réponse pour l’instant.');
       const col = columns(rows[0], rows.slice(1));
+      const withDone = $('inclDone').checked; let skipped = 0;
       if (col.json < 0) throw new Error('Aucune colonne ne contient de lignes JSON : est-ce bien le fichier des réponses du formulaire ?');
       await loadLists();
-      proposals = [];
+      proposals = []; answers = [];
       rows.slice(1).forEach((r, ri) => {
+        if (!r.some(c => c.trim() !== '')) return;
+        if (col.done >= 0 && (r[col.done] || '').trim() && !withDone){ skipped++; return; }   // déjà traitée (colonne « Traitée » de la feuille)
         const when = parseDate(r[col.date], col.dayFirst), comment = col.comment >= 0 ? (r[col.comment] || '').trim() : '';
+        const ans = { row: ri + 2, when, day: dayOf(when), ids: [] }; answers.push(ans);   // row : numéro de la ligne dans la feuille (1 = titres)
         linesOf(r[col.json]).forEach(({ o, file, hint }, li) => {
           const f = fileOf(o, file); if (!f) return;
           const L = LISTS[f], data = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
@@ -158,11 +166,12 @@
             diffs = Object.keys(data).filter(k => !same(data[k], cur[k])).map(k => ({ k, before: cur[k], after: data[k] }));
             if (!diffs.length) type = 'same';   // déjà comme ça dans la liste
           }
-          proposals.push({ id: ri + '-' + li, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur });
+          const id = ri + '-' + li; ans.ids.push(id);
+          proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur });
         });
       });
-      if (!proposals.length) throw new Error('Aucune proposition lisible dans ce fichier.');
-      msg.className = 'msg good'; msg.textContent = `${rows.length - 1} réponse(s), ${proposals.length} proposition(s) lues. Les listes en ligne ont été chargées pour comparer.`;
+      if (!answers.length) throw new Error(skipped ? `Rien de nouveau : les ${skipped} réponse(s) sont déjà marquées « traitées ».` : 'Aucune réponse pour l’instant.');
+      msg.className = 'msg good'; msg.textContent = `${answers.length} réponse(s) à trier, ${proposals.length} proposition(s)` + (skipped ? ` (${skipped} déjà traitée(s), masquée(s))` : '') + '. Les listes en ligne ont été chargées pour comparer.';
       buildPeriods(); $('sortView').classList.remove('hidden'); render();
   }
   // ---------- Récupération automatique : script Google (Apps Script) attaché à la feuille des réponses ----------
@@ -194,10 +203,11 @@
       const j = await r.json();
       if (!j || !j.ok) throw new Error(j && j.erreur === 'code' ? 'code secret refusé par le script (vérifie la propriété CODE).' : 'réponse inattendue du script.');
       if (!Array.isArray(j.lignes)) throw new Error('réponse inattendue du script.');
-      await processRows(j.lignes);
+      lastSource = 'script'; await processRows(j.lignes);
     } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Récupération impossible : ' + (e.message || e) + ' Tu peux toujours utiliser le fichier .csv.'; }
   });
 
+  $('inclDone').addEventListener('change', () => { if (lastRows) processRows(lastRows).catch(e => { $('loadMsg').className = 'msg bad'; $('loadMsg').textContent = e.message || e; }); });
   $('csvFile').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) readFile(f); e.target.value = ''; });
   const drop = $('drop');
   ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
@@ -257,6 +267,7 @@
       return (b.total - a.total) || nameOf(a).main.localeCompare(nameOf(b).main, 'fr');
     });
     $('groups').innerHTML = list.length ? list.map(cardHtml).join('') : '<p class="help empty">Rien à afficher pour cette période et ce filtre.</p>';
+    $('doneBtn').disabled = !doneRows().length;
   }
   function cardHtml(g){
     const n = nameOf(g), st = stateOf(g), chosen = decisions[g.gk];
@@ -301,7 +312,7 @@
   $('genBtn').addEventListener('click', () => {
     const ok = groups().filter(g => stateOf(g) === 'ok');
     const out = $('outBlocks'); $('outMsg').textContent = '';
-    if (!ok.length){ out.innerHTML = '<p class="help">Aucune proposition validée pour l’instant.</p>'; $('doneBtn').disabled = true; return; }
+    if (!ok.length){ out.innerHTML = '<p class="help">Aucune proposition validée pour l’instant.</p>'; return; }
     const today = new Date().toLocaleDateString('fr-FR');
     out.innerHTML = Object.keys(LISTS).map(f => {
       const L = LISTS[f], mine = ok.filter(g => g.file === f); if (!mine.length) return '';
@@ -319,7 +330,6 @@
         <textarea readonly rows="${Math.min(14, lines.length + 3)}" spellcheck="false">${esc(text)}</textarea>
         <div class="actions"><button type="button" class="btn" data-copy>Copier</button></div></div>`;
     }).join('');
-    $('doneBtn').disabled = false;
   });
   $('outBlocks').addEventListener('click', e => {
     if (!e.target.closest('[data-copy]')) return;
@@ -328,14 +338,35 @@
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(done, () => { ta.select(); document.execCommand('copy'); done(); });
     else { ta.select(); document.execCommand('copy'); done(); }
   });
-  // « Traitées » : la prochaine fois, la période « non traitées » ne montrera que les nouvelles réponses
-  $('doneBtn').addEventListener('click', () => {
-    const shown = proposals.filter(inPeriod).filter(p => p.when);
-    if (!shown.length) return;
-    const max = Math.max(...shown.map(p => +p.when), +store.get(DONE) || 0);
-    store.set(DONE, String(max));
-    $('outMsg').className = 'msg good';
-    $('outMsg').textContent = `C’est noté : les réponses jusqu’au ${new Date(max).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })} sont traitées. Pense à enregistrer les lignes dans l’éditeur si ce n’est pas fait.`;
-    buildPeriods(); $('period').value = 'new'; render();
+  // Réponses « traitées » : celles de la période dont toutes les propositions ont une décision (validée, rejetée ou déjà conforme)
+  const decided = p => p.type === 'same' || decisions[p.file + '|' + norm(p.origKey)] !== undefined;
+  const byId = () => new Map(proposals.map(p => [p.id, p]));
+  function doneRows(){
+    const m = byId();
+    return answers.filter(a => (!a.when || inPeriod(a)) && a.ids.every(id => decided(m.get(id))));
+  }
+  $('doneBtn').addEventListener('click', async () => {
+    const rows = doneRows(), out = $('outMsg'); if (!rows.length) return;
+    const left = answers.filter(a => (!a.when || inPeriod(a))).length - rows.length;
+    if (!confirm(`Marquer ${rows.length} réponse(s) comme traitée(s) ?` + (left ? ` (${left} autre(s) gardée(s) : elles ont encore des propositions « à décider ».)` : '') + ' Pense à enregistrer les lignes JSON dans l’éditeur avant.')) return;
+    out.className = 'msg'; out.textContent = 'Marquage…';
+    try {
+      if (lastSource === 'script' && src.url && src.code){
+        let n = 0; const nums = rows.map(a => a.row);
+        for (let k = 0; k < nums.length; k += 300){   // par paquets, pour garder des adresses courtes
+          const r = await fetch(src.url + '?code=' + encodeURIComponent(src.code) + '&action=marquer&lignes=' + nums.slice(k, k + 300).join(','), { cache: 'no-store', credentials: 'omit' });
+          const j = await r.json(); if (!j || !j.ok) throw new Error(j && j.erreur === 'code' ? 'code secret refusé' : 'réponse inattendue du script'); n += j.marquees || 0;
+        }
+        out.className = 'msg good'; out.textContent = `${n} réponse(s) marquée(s) « traitée(s) » dans la feuille Google : elles ne seront plus proposées.`;
+      } else {
+        const withDate = rows.filter(a => a.when);
+        const max = Math.max(+store.get(DONE) || 0, ...withDate.map(a => +a.when));
+        store.set(DONE, String(max));
+        out.className = 'msg good'; out.textContent = `C’est noté dans ce navigateur : réponses jusqu’au ${new Date(max).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })} traitées (période « non traitées »). Avec le script Google, le marquage se fait directement dans la feuille.`;
+      }
+      const marked = new Set(rows.map(a => a.row));
+      answers = answers.filter(a => !marked.has(a.row)); proposals = proposals.filter(p => !marked.has(p.row));
+      buildPeriods(); render();
+    } catch (e) { out.className = 'msg bad'; out.textContent = 'Marquage impossible : ' + (e.message || e); }
   });
 })();
