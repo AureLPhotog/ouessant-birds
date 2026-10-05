@@ -11,7 +11,7 @@
   const PROPRES = ['Europe', 'Asie', 'Afrique', 'Amérique', 'Océanie', 'Sibérie', 'Groenland', 'Islande', 'Écosse', 'Irlande', 'France', 'Canada', 'Alaska', 'Méditerranée',
     'Brésil', 'Mexique', 'Pérou', 'Chine', 'Japon', 'Inde', 'Mongolie', 'Tibet', 'Himalaya', 'Caucase', 'Oural', 'Sahara', 'Arabie', 'Égypte', 'Maroc', 'Espagne', 'Portugal', 'Italie', 'Grèce', 'Russie', 'Turquie',
     'Chypre', 'Crète', 'Corse', 'Madère', 'Canaries', 'Açores', 'Hawaï', 'Californie', 'Floride', 'Louisiane', 'Antilles', 'Amazonie', 'Patagonie', 'Angleterre',
-    'Balkans', 'Baléares', 'Macaronésie', 'Colchide', 'Caroline', 'Baltimore', 'Petchora', 'Bassan', 'Saint-Martin', 'Jean-le-Blanc',
+    'Balkans', 'Baléares', 'Macaronésie', 'Colchide', 'Caroline', 'Baltimore', 'Petchora', 'Bassan', 'Nord', 'Anglais', 'Saint-Martin', 'Jean-le-Blanc',
     'Baird', 'Bonaparte', 'Yarrell', 'Cetti', 'Kumlien', 'Troïl', 'McCormick', 'Franklin', 'Sabine', 'Wilson', 'Godlewski', 'Richard', 'Bonelli', 'Hume', 'Pallas', 'Schwarz', 'Temminck', 'Scopoli', 'Dougall', 'Belon'];
   const propre = new Map(PROPRES.map(p => [p.toLowerCase(), p]));
   const cap = w => w ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : w;
