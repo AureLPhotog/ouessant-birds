@@ -8,6 +8,22 @@
   // Oriole de Baltimore (photo détourée et légèrement stylisée) posé sur l'angle du cadre du QR code, et petite fougère (émoji) au pied
   const ORIOLE = '<span class="oriole" aria-hidden="true"><img class="o-sh" src="oriole_baltimore.webp" alt="" width="47" height="69"><img class="o-bd" src="oriole_baltimore.webp" alt="" width="47" height="69"></span>';
   const FERN = '<span class="fern" aria-hidden="true">🌿</span>';
+  // Rideau de fougères (easter egg) : 3 rangées de 3 émojis cachent le pied du phare, puis s'ouvrent de part et d'autre
+  const HUES = [-55, 0, 25, -40, 0, -70, 15, -25, 10, -60, 0, -35];
+  const RIDEAU = [];
+  for (let row = 0; row < 3; row++) for (let k = 0; k < 3; k++){
+    const side = k === 0 ? -1 : k === 2 ? 1 : (row % 2 ? 1 : -1);           // la fougère du milieu part à gauche, puis à droite, une rangée sur deux
+    const n = RIDEAU.length, j = RIDEAU.filter(e => e.side === side).length;
+    RIDEAU.push({
+      side, cx: (k - 1) * 15 + (row % 2 ? 4 : -4), cr: (k - 1) * 14 + (row % 2 ? 6 : -6),   // fermé : serrées devant le phare
+      ox: side * (34 + j * 7), or: side * (30 + j * 14),                                      // ouvert : écartées de chaque côté
+      hue: HUES[n % HUES.length], b: row * 12 + (k % 2) * 4,
+      f: (j % 2 ? -1 : 1) * side,                                                             // symétrie : les fougères de droite sont les inverses de celles de gauche
+      d: (row * 0.04 + k * 0.05).toFixed(2)
+    });
+  }
+  const rideauHtml = () => '<span class="egg-ferns" aria-hidden="true">' + RIDEAU.map(e =>
+    `<span class="ef" style="--cx:${e.cx}px;--cr:${e.cr}deg;--ox:${e.ox}px;--or:${e.or}deg;--hue:${e.hue}deg;--f:${e.f};bottom:${e.b}px;animation-delay:${e.d}s">🌿</span>`).join('') + '</span>';
   const APP_VERSION = window.OUESSANT_APP_VERSION || '?';
   let listsRev = null;   // { app, rev } lu dans version_listes.json
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
@@ -689,7 +705,7 @@
     const now = Date.now();
     if (now < eggLock) return;                                   // juste après l'oiseau, on ignore les clics en trop
     clicks = clicks.filter(t => now - t < 2000); clicks.push(now);
-    if (clicks.length >= 5){ clicks = []; eggLock = now + 1500; openPhare(false); egg(); return; }
+    if (clicks.length >= 5){ clicks = []; eggLock = now + 6800; openPhare(false); egg(); return; }
     openPhare($('pharePanel').hidden);
   });
   $('pharePanel').addEventListener('click', e => {
@@ -704,14 +720,50 @@
   });
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
+  // L'oiseau sort de derrière les fougères, fait un tour du phare (devant puis derrière la tour) et s'envole vers la droite
+  const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
+    + '<g class="eb-far"><path d="M32 16C30 6 22-1 8 0l3 3.200-1.500 1 3.500 2.300c4 1.500 7.500 4 9 10.500z" opacity=".55"/></g>'
+    + '<path d="M19 17.500L2 12.500l4.500 5L2 22.500 19 21z"/><ellipse cx="30" cy="18" rx="13.500" ry="5.600" transform="rotate(-5 30 18)"/>'
+    + '<circle cx="44" cy="15" r="4.700"/><path d="M47.500 13.800L57 16.200 47.500 17.600z"/><circle cx="45.600" cy="14" r="1" fill="var(--paper)"/>'
+    + '<g class="eb-near"><path d="M33 16C31 5 22-2 6-1l3.200 3.400-1.700 1 3.800 2.400-1 1.800 4 2C21 11 25 13 27 14.500 30 15.500 31.500 16.500 33 17z"/></g></svg>';
+  function flyBird(btn){
+    btn.insertAdjacentHTML('beforeend', BIRD_SVG);
+    const bird = btn.querySelector('.egg-flyer:last-child'), near = bird.querySelector('.eb-near'), far = bird.querySelector('.eb-far');
+    const rect = btn.getBoundingClientRect(), exitX = Math.max(rect.width + 120, innerWidth - rect.left + 20);
+    const CX = rect.width / 2, R = 30, RY = 8, DELAY = 1.0, OM = 2.7, RAMP = 0.45, Y0 = 112, Y1 = 52;
+    const T1 = 2 * Math.PI / OM + RAMP / 2;                                   // fin du tour : devant le phare, vers la droite, à pleine vitesse
+    const th = t => t < RAMP ? OM * t * t / (2 * RAMP) : OM * (t - RAMP / 2);  // angle : départ progressif puis vitesse constante
+    const sm = u => u * u * (3 - 2 * u);
+    const vxEnd = R * OM, T2 = 1.7, ax = 2 * ((exitX - CX) - vxEnd * T2) / (T2 * T2);   // sortie : même vitesse qu'à la fin du tour, puis accélération douce
+    const pos = t => {
+      if (t <= T1){ const a = th(t), u = t / T1; return { x: CX + R * Math.sin(a), y: Y0 + (Y1 - Y0) * sm(u) + RY * Math.cos(a), d: Math.cos(a), u }; }
+      const q = t - T1; return { x: CX + vxEnd * q + ax * q * q / 2 + 0 * R, y: Y1 + RY - 16 * q * q, d: 1, u: 1 + q / T2 };
+    };
+    const wing = (g, k) => g.setAttribute('transform', `translate(28 16) scale(1 ${k.toFixed(2)}) translate(-28 -16)`);
+    const t0 = performance.now();
+    (function frame(now){
+      const t = (now - t0) / 1000 - DELAY;
+      if (t < 0){ bird.style.opacity = 0; requestAnimationFrame(frame); return; }
+      const P = pos(t), Q = pos(t + 0.016), vx = (Q.x - P.x) / 0.016;
+      const turn = Math.max(-1, Math.min(1, vx / 35));                         // le demi-tour se fait en s'écrasant, sans saut
+      const sc = (0.9 + 0.2 * P.d) * Math.min(1, 0.55 + t * 0.9);
+      const vy = (Q.y - P.y) / 0.016, tilt = Math.max(-12, Math.min(12, vy * 0.06));      // le bec se lève quand il monte
+      bird.style.transform = `translate(${(P.x - 15).toFixed(1)}px,${(P.y - 8.5).toFixed(1)}px) scale(${(turn * sc).toFixed(3)},${sc.toFixed(3)}) rotate(${tilt.toFixed(1)}deg)`;
+      bird.style.zIndex = P.d > 0 ? (P.y > 78 ? 1 : 3) : -1;           // 1 : derrière les fougères (z 2) tant qu'il est à leur hauteur ; 3 : devant la tour ; -1 : derrière la tour
+      bird.style.opacity = Math.min(1, t * 5, Math.max(0, (exitX - P.x) / 80));
+      const ph = t * Math.PI * 2 * 5; wing(near, 0.15 + 0.85 * Math.sin(ph)); wing(far, 0.15 + 0.85 * Math.sin(ph - 0.6));
+      if (P.x < exitX + 10 && t < T1 + T2 + 0.5) requestAnimationFrame(frame); else bird.remove();
+    })(performance.now());
+  }
   function egg(){
     const rares = birds.filter(b => canalKind(b[K_CANAL]) === 'telegram' && !isSsp(b));
     const b = rares.length ? rares[Math.floor(Math.random() * rares.length)] : null;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduce){
-      const header = document.querySelector('header');
-      header.insertAdjacentHTML('beforeend', `<svg class="egg-bird" viewBox="0 0 48 28" aria-hidden="true"><path d="M2 14 C10 4, 18 6, 24 14 C30 6, 38 4, 46 14 C38 10, 30 12, 24 18 C18 12, 10 10, 2 14 Z" fill="currentColor"/></svg>`);
-      const bird = header.querySelector('.egg-bird:last-child'); setTimeout(() => bird.remove(), 3600);
+      const btn = $('phareBtn');
+      btn.insertAdjacentHTML('beforeend', rideauHtml());
+      const ferns = btn.querySelector('.egg-ferns'); setTimeout(() => ferns.remove(), 4300);
+      flyBird(btn);
     }
     const t = document.createElement('div'); t.className = 'egg-toast'; t.setAttribute('role', 'status');
     t.textContent = b ? T('egg')(mainName(b)) : T('eggNone'); document.body.appendChild(t); setTimeout(() => t.remove(), 4500);
