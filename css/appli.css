@@ -36,9 +36,9 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
 .pp-src{margin:.6rem 0 0;font-size:.75rem;color:var(--granite)}
 @media (max-width:420px){ .day .dw svg{display:none} }
 .pp-src a{color:inherit}
-.qr{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:1.1rem;align-items:center;margin-top:2.7rem}
+.qr{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:1.1rem;align-items:center;margin-top:1.5rem}
 .qr-box{flex:0 0 auto;width:118px;height:118px;background:#fff;border-radius:10px;padding:0;overflow:visible;border:1px solid var(--line);position:relative}
-.qr-box .oriole{position:absolute;left:-5px;top:-41px;width:42px;height:71px;pointer-events:none;filter:drop-shadow(0 0 .6px rgba(28,40,46,.95)) drop-shadow(0 0 .6px rgba(28,40,46,.95))}
+.qr-box .oriole{position:absolute;left:-5px;top:-48px;width:42px;height:71px;pointer-events:none;filter:drop-shadow(0 0 .6px rgba(28,40,46,.95)) drop-shadow(0 0 .6px rgba(28,40,46,.95))}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .qr-box .oriole{filter:none} }
 :root[data-theme="dark"] .qr-box .oriole{filter:none}
 .qr-box .fern{position:absolute;right:-9px;bottom:-12px;font-size:1.5rem;line-height:1;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
