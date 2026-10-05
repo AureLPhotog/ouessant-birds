@@ -12,6 +12,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .btn.primary{background:var(--ocean);border-color:var(--ocean);color:var(--foam)}
 .btn.danger{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
 .btn.ghost{background:none;border-color:transparent;color:var(--ocean-2);text-decoration:underline;text-underline-offset:3px;padding:.4rem .3rem}
+.btn.attention{box-shadow:0 0 0 3px #F2C230;border-color:#F2C230}
+@media (prefers-reduced-motion:no-preference){ .btn.attention{animation:attn 1.8s ease-in-out infinite} @keyframes attn{50%{box-shadow:0 0 0 6px rgba(242,194,48,.55)}} }
+:root[data-cvd="1"] .btn.attention{box-shadow:0 0 0 3px #E69F00;border-color:#E69F00}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 :is(.btn,input,select,textarea,.drop,tr.item):focus-visible{outline:3px solid #8C5E83;outline-offset:2px}
 input[type=text],input[type=number],input[type=search],select,textarea{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.45rem .6rem;width:100%}
