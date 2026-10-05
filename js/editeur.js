@@ -659,6 +659,13 @@
     }
     return out;
   }
+  // Noms d'oiseaux : mise en forme homogène à l'enregistrement (règles dans js/noms.js)
+  function formatNames(o){
+    const N = window.OuessantNoms; let changed = false; if (!N) return false;
+    [['Nom Français', N.fmtFr], ['Nom Anglais', N.fmtEn], ['Nom Scientifique', N.fmtSci]].forEach(([k, f]) => {
+      if (typeof o[k] === 'string'){ const v = f(o[k]); if (v !== o[k]){ o[k] = v; changed = true; } } });
+    return changed;
+  }
   function editorAction(act, id){
     const i = items.findIndex(x => x.id === id); if (i < 0) return;
     const it = items[i], wrap = document.querySelector(`.form-wrap[data-id="${id}"]`);
@@ -678,7 +685,8 @@
           if (k in d && !(isEmpty(d[k]) && !(k in it.data))) merged[k] = d[k];   // un champ laissé vide n'est pas créé s'il n'existait pas
           else if (k in it.data && !(k in d)) merged[k] = it.data[k];
         });
-        it.data = merged; openId = null; render(); save(); toast('Entrée enregistrée.');
+        const fmt = formatNames(merged);
+        it.data = merged; openId = null; render(); save(); toast(fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.');
       } catch (e) { wrap.querySelector('[data-msg]').textContent = e.message; }
     } else if (act === 'cancel'){ openId = null; render(); }
     else if (act === 'revert'){ it.data = clone(it.orig); render(); initCells(); save(); toast('Entrée remise comme à l\u2019origine.'); }
@@ -812,7 +820,7 @@
   $('pasteApply').addEventListener('click', () => {
     pending.forEach(({ o, match, del }) => {
       if (del){ if (match){ items = items.filter(x => x !== match); if (match.orig) deleted.push(match); } return; }
-      o = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
+      o = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k))); formatNames(o);
       if (match){ const merged = {}; fields.forEach(k => { if (k in o) merged[k] = o[k]; else if (k in match.data) merged[k] = match.data[k]; }); Object.keys(o).forEach(k => { if (!(k in merged)) merged[k] = o[k]; }); match.data = merged; }
       else items.push({ id: ++uid, data: clone(o), orig: null });
     });

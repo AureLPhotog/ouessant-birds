@@ -49,6 +49,13 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 - **Canal** : `Télégram`, `Whatsapp` ou `Pas d'annonce` (l'appli les affiche « Alerte Telegram », « Alerte WhatsApp », « Pas d'alerte »).
 - **Type de taxon** : `espèce` ou `sous-espèce`.
 
+**Règles d'écriture des noms** (appliquées automatiquement par l'éditeur à l'enregistrement, code dans `js/noms.js`) :
+- **français** : une majuscule au premier mot, puis des minuscules, sauf les noms propres : `Bécasseau de Baird`, mais `Bécasseau minute`, `Grand corbeau`, `Pouillot ibérique`. Un mot qui suit « de / du / des / d' » garde la casse saisie (`d'Europe`, `de Baird`, mais `des roseaux`). Apostrophes droites ('). Sous-espèces : `(ssp. nom)`.
+- **anglais** : une majuscule à chaque mot (`Steppe Eagle`, `Rough-legged Buzzard`).
+- **scientifique** : majuscule au genre, minuscules ensuite (`Aquila nipalensis`).
+
+Pour qu'un nom propre garde sa majuscule partout dans le nom, l'ajouter à la liste `PROPRES` de `js/noms.js`.
+
 **Méthode de classement** : établi à la main, en s'inspirant des données de Faune France (l'appli n'y accède pas), en croisant la fréquence de chaque espèce à Ouessant (depuis 1900) avec sa rareté à l'échelle nationale (données 2025), puis ajusté à la main.
 
 ### `lieux_ouessant.json`

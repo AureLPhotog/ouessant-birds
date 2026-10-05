@@ -122,7 +122,7 @@
 <script>
 // Charge les scripts partagés depuis le dossier de l'éditeur, ou depuis le site en ligne s'il est ouvert seul
 (function(){
-  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/version.js', 'js/carte.js', 'js/editeur-langue.js', 'js/editeur.js'];
+  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/version.js', 'js/noms.js', 'js/carte.js', 'js/editeur-langue.js', 'js/editeur.js'];
   (function next(i, web){
     if (i >= files.length) return;
     const s = document.createElement('script'); s.src = (web ? SITE : '') + files[i];
