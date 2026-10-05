@@ -130,9 +130,14 @@
   async function readFile(file){
     if ($('loadPanel').classList.contains('hidden')) return;
     const msg = $('loadMsg'); msg.className = 'msg'; msg.textContent = 'Lecture…';
-    try {
-      const text = await file.text(), rows = parseCSV(text);
-      if (rows.length < 2) throw new Error('Le fichier ne contient aucune réponse.');
+    try { await processRows(parseCSV(await file.text())); }
+    catch (e) { msg.className = 'msg bad'; msg.textContent = 'Lecture impossible : ' + (e.message || e); }
+  }
+  // Tableau de lignes (la première = titres des colonnes), venant du fichier .csv ou de la feuille Google
+  async function processRows(rows){
+    const msg = $('loadMsg');
+      rows = rows.map(r => r.map(c => String(c ?? ''))).filter(r => r.some(c => c.trim() !== ''));
+      if (rows.length < 2) throw new Error('Aucune réponse pour l’instant.');
       const col = columns(rows[0], rows.slice(1));
       if (col.json < 0) throw new Error('Aucune colonne ne contient de lignes JSON : est-ce bien le fichier des réponses du formulaire ?');
       await loadLists();
@@ -159,8 +164,40 @@
       if (!proposals.length) throw new Error('Aucune proposition lisible dans ce fichier.');
       msg.className = 'msg good'; msg.textContent = `${rows.length - 1} réponse(s), ${proposals.length} proposition(s) lues. Les listes en ligne ont été chargées pour comparer.`;
       buildPeriods(); $('sortView').classList.remove('hidden'); render();
-    } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Lecture impossible : ' + (e.message || e); }
   }
+  // ---------- Récupération automatique : script Google (Apps Script) attaché à la feuille des réponses ----------
+  // Le script ne répond qu'avec le code secret ; l'adresse et le code sont gardés dans ce navigateur, jamais dans le dépôt.
+  const SRC = 'ouessant-admin-source';
+  const SCRIPT_URL = /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/;
+  let src = {}; try { src = JSON.parse(store.get(SRC) || '{}') || {}; } catch (_) { src = {}; }
+  $('srcUrl').value = src.url || ''; $('srcCode').value = src.code || '';
+  $('fetchBtn').disabled = !(src.url && src.code);
+  $('srcSave').addEventListener('click', () => {
+    const url = $('srcUrl').value.trim(), code = $('srcCode').value.trim(), m = $('srcMsg');
+    if (!SCRIPT_URL.test(url)){ m.className = 'msg bad'; m.textContent = 'L’adresse doit être celle de l’application web du script : https://script.google.com/macros/s/…/exec'; return; }
+    if (code.length < 16){ m.className = 'msg bad'; m.textContent = 'Le code secret doit faire au moins 16 caractères (bouton « Créer un code »).'; return; }
+    src = { url, code }; store.set(SRC, JSON.stringify(src)); $('fetchBtn').disabled = false;
+    m.className = 'msg good'; m.textContent = 'Réglages enregistrés sur cet appareil.';
+  });
+  $('srcGen').addEventListener('click', () => {
+    const a = new Uint8Array(18); crypto.getRandomValues(a);
+    $('srcCode').value = btoa(String.fromCharCode(...a)).replace(/[+/=]/g, c => ({ '+': 'k', '/': 'z', '=': '' }[c]));
+    $('srcCode').type = 'text'; $('srcCode').select();
+    $('srcMsg').className = 'msg'; $('srcMsg').textContent = 'Code créé : copie-le dans les propriétés du script Google (CODE), puis « Enregistrer les réglages ».';
+  });
+  $('fetchBtn').addEventListener('click', async () => {
+    const msg = $('loadMsg'); if (!(src.url && src.code)) return;
+    msg.className = 'msg'; msg.textContent = 'Récupération des réponses auprès de Google…';
+    try {
+      const r = await fetch(src.url + '?code=' + encodeURIComponent(src.code), { cache: 'no-store', credentials: 'omit' });
+      if (!r.ok) throw new Error('Google a répondu ' + r.status);
+      const j = await r.json();
+      if (!j || !j.ok) throw new Error(j && j.erreur === 'code' ? 'code secret refusé par le script (vérifie la propriété CODE).' : 'réponse inattendue du script.');
+      if (!Array.isArray(j.lignes)) throw new Error('réponse inattendue du script.');
+      await processRows(j.lignes);
+    } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Récupération impossible : ' + (e.message || e) + ' Tu peux toujours utiliser le fichier .csv.'; }
+  });
+
   $('csvFile').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) readFile(f); e.target.value = ''; });
   const drop = $('drop');
   ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));

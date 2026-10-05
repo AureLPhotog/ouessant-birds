@@ -31,3 +31,7 @@
 .out h3{margin:0 0 .3rem;font-size:.95rem}
 .out textarea{width:100%;box-sizing:border-box;font:400 .8rem ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.5rem}
 .empty{margin:1rem 0}
+.src{margin:.6rem 0;font-size:.9rem}
+.src summary{cursor:pointer;color:var(--ocean-2);font-weight:600}
+.src .gh-lab{display:grid;gap:.2rem;margin:.5rem 0;font-size:.85rem;color:var(--granite)}
+.src input{font:400 .95rem var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.5rem .6rem}

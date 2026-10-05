@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!-- Sécurité : page verrouillée par la Clé Admin (vérifiée auprès de GitHub) ; les réponses du formulaire sont lues depuis un fichier choisi sur l'appareil, rien n'est envoyé -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tri des propositions · Oiseaux d'Ouessant</title>
 <meta name="robots" content="noindex">
@@ -37,7 +37,16 @@
   <!-- 1. Fichier des réponses -->
   <section class="panel hidden" id="loadPanel">
     <h2>1. Les réponses du formulaire</h2>
-    <p class="help">Dans Google Forms : onglet <b>Réponses</b> → <b>Afficher dans Sheets</b> ; puis dans la feuille : <b>Fichier → Télécharger → Valeurs séparées par des virgules (.csv)</b>. Choisis ensuite ce fichier ici (il reste sur ton appareil, rien n’est envoyé).</p>
+    <div class="actions"><button type="button" class="btn primary" id="fetchBtn" disabled>Récupérer les réponses</button></div>
+    <details class="src">
+      <summary>Réglages de la récupération automatique</summary>
+      <p class="help">Une seule fois : installe le script Google sur la feuille des réponses (voir README, « Récupération automatique »), puis colle ici l’adresse de son application web et le code secret. Ils restent sur cet appareil.</p>
+      <label class="gh-lab">Adresse de l’application web<input type="url" id="srcUrl" autocomplete="off" spellcheck="false" placeholder="https://script.google.com/macros/s/…/exec"></label>
+      <label class="gh-lab">Code secret<input type="password" id="srcCode" autocomplete="off" spellcheck="false"></label>
+      <div class="actions"><button type="button" class="btn" id="srcGen">Créer un code</button><button type="button" class="btn" id="srcSave">Enregistrer les réglages</button></div>
+      <p class="msg" id="srcMsg" role="status"></p>
+    </details>
+    <p class="help">Sinon, à la main — dans Google Forms : onglet <b>Réponses</b> → <b>Afficher dans Sheets</b> ; puis dans la feuille : <b>Fichier → Télécharger → Valeurs séparées par des virgules (.csv)</b>. Choisis ensuite ce fichier ici (il reste sur ton appareil, rien n’est envoyé).</p>
     <label class="drop" id="drop">
       <input type="file" id="csvFile" accept=".csv,text/csv">
       <span>Choisir le fichier .csv des réponses (ou le glisser ici)</span>

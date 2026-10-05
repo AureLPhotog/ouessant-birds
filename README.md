@@ -124,6 +124,25 @@ Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce
 4. **Générer les lignes JSON** → copier le bloc Oiseaux puis le bloc Lieux dans l'éditeur (**Coller des lignes → Vérifier → Appliquer →
    Enregistrer sur GitHub**). Puis **Marquer comme traitées** : la prochaine fois, « non traitées » ne montrera que les nouvelles réponses.
 
+### Récupération automatique des réponses (à installer une fois)
+
+Au lieu de télécharger le .csv, la page peut aller chercher les réponses elle-même, grâce à un petit script Google attaché à la
+feuille des réponses (`scripts/apps_script_reponses.gs`). Le script ne répond qu'avec un **code secret** connu de toi seul.
+
+1. Ouvrir la feuille Google des réponses → **Extensions → Apps Script**. Effacer le contenu, coller celui de
+   `scripts/apps_script_reponses.gs`, enregistrer (icône disquette).
+2. Dans la page de tri : **Réglages de la récupération automatique → Créer un code**, et copier ce code.
+3. Dans Apps Script : **Paramètres du projet** (roue dentée) → **Propriétés du script → Ajouter une propriété** :
+   nom `CODE`, valeur = le code copié → Enregistrer.
+4. **Déployer → Nouveau déploiement** → type **Application Web** → *Exécuter en tant que* : **Moi** ;
+   *Qui a accès* : **Tout le monde** → Déployer → autoriser l'accès (compte Google) → copier l'**URL de l'application Web** (finit par `/exec`).
+   (« Tout le monde » est nécessaire pour que la page puisse l'appeler ; sans le code secret, le script ne renvoie rien.)
+5. Dans la page de tri : coller l'adresse et le code → **Enregistrer les réglages** → **Récupérer les réponses**.
+
+Pour changer le code : modifier la propriété `CODE` dans Apps Script, puis dans la page. Pour tout couper : Apps Script →
+**Déployer → Gérer les déploiements → Archiver**. Documentation Google : <https://developers.google.com/apps-script/guides/web>.
+Le fichier .csv reste possible en secours.
+
 Confidentialité : la page est verrouillée (la clé est vérifiée auprès de GitHub : seul le propriétaire du dépôt l'ouvre) et ne contient
 aucune donnée. Son code reste visible, comme tout le dépôt public ; les réponses, elles, ne quittent jamais la feuille Google et ton appareil.
 
