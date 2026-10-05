@@ -125,7 +125,7 @@
   const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/version.js', 'js/noms.js', 'js/carte.js', 'js/editeur-langue.js', 'js/editeur.js'];
   (function next(i, web){
     if (i >= files.length) return;
-    const s = document.createElement('script'); s.src = (web ? SITE : '') + files[i];
+    const s = document.createElement('script'); s.src = (web ? SITE : '') + files[i] + '?t=' + Math.floor(Date.now() / 60000);   // ?t= : une nouvelle version de l'éditeur est prise en compte en moins d'une minute (sans lui, le navigateur peut garder l'ancienne ~10 min)
     s.onload = () => next(i + 1, web);
     s.onerror = () => { s.remove(); if (!web) next(i, true); };
     document.body.appendChild(s);
