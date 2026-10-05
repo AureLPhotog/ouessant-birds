@@ -4,7 +4,7 @@
   <style>
     @media (prefers-reduced-motion: no-preference){
       .beams{animation:beam 5s ease-in-out infinite}
-      @keyframes beam{0%,100%{opacity:.25}50%{opacity:1}}
+      @keyframes beam{0%,100%{opacity:.04}50%{opacity:1}}
     }
   </style>
   <defs>

@@ -71,7 +71,7 @@ La position affichée dépend de `precision_m` et `verifie` :
    « Proposer une meilleure position », « Je suis sur place », « Proposer un nouvel oiseau / lieu-dit » ouvrent
    l'éditeur sur la bonne liste et la bonne entrée. Le visiteur modifie, puis clique sur **Envoyer ma proposition** :
    un formulaire Google unique s'ouvre, prérempli avec trois champs (Modifications, Commentaire, Lignes JSON).
-   Dans le Google Sheet des réponses, copier la colonne « Lignes JSON » dans l'éditeur, bouton **Coller des lignes**.
+   Dans le Google Sheet des réponses, copier la colonne « Lignes JSON » dans l'éditeur, bouton **Coller des lignes** (visible seulement avec une clé GitHub valide).
    Le lien prérempli du formulaire est dans `js/editeur.js` (`PROPOSAL_FORM`), avec les mots MODIFS, COMMENTAIRE et JSON.
 4. Pour revenir de l'éditeur à l'appli : cliquer sur le phare.
 

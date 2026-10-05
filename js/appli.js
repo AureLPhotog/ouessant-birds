@@ -3,12 +3,14 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.0';
-  let listsDate = null;
+  const APP_VERSION = '3.1';
+  const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
-    const d = listsDate ? new Date(listsDate) : null;
-    el.textContent = 'v' + APP_VERSION + (d && !isNaN(d) ? ' · ' + T('listsOf')(d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB')) : '');
+    const fmt = h => { const d = h ? new Date(h) : null; return d && !isNaN(d) ? d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB') : null; };
+    const b = fmt(listsDate.birds), p = fmt(listsDate.places);
+    const dates = b && p && b !== p ? T('listsOfBoth')(b, p) : (b || p) ? T('listsOf')(b || p) : '';
+    el.textContent = 'v' + APP_VERSION + (dates ? ' · ' + dates : '');
   }
   const URL_DATA = 'ouessant_birds.json';
 
@@ -233,7 +235,6 @@
     const q = new URLSearchParams({ fichier });
     if (opts.cherche) q.set('cherche', opts.cherche);
     if (opts.nouveau !== undefined) q.set('nouveau', opts.nouveau);
-    if (opts.gps) q.set('gps', '1');
     return 'editeur.html?' + q.toString();
   }
   $('newBirdBtn').href = editorLink('oiseaux', { nouveau: '' });
@@ -243,9 +244,9 @@
     return arr.filter(e => e && e.nom && Array.isArray(e.carres) && e.carres.length && isFinite(e.lat) && isFinite(e.lon))
       .map(e => [String(e.nom), e.carres.map(String), +e.lat, +e.lon, +(e.precision_m || 550), !!e.verifie]);
   }
-  fetch(PLACES_URL).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+  fetch(PLACES_URL).then(r => { if (!r.ok) return Promise.reject(); listsDate.places = r.headers.get('last-modified'); return r.json(); }).then(d => {
     const l = placesFromJson(d); if (!l.length) return;
-    PLACES = l.map(fixPlace); buildPfuse(); renderPlaces(); renderWhere();
+    PLACES = l.map(fixPlace); buildPfuse(); renderPlaces(); renderWhere(); showVersion();
   }).catch(() => {});
   let tab = 'birds';
 
@@ -365,8 +366,7 @@
 
   // ---------- Proposer une meilleure position : dans l'éditeur, sur ce lieu-dit ----------
   function suggestHtml(p){
-    return `<a class="sbtn" href="${editorLink('lieux', { cherche: p[0] })}">${esc(T('suggest'))}</a>
-      <a class="sbtn" href="${editorLink('lieux', { cherche: p[0], gps: true })}">${esc(T('suggestGps'))}</a>`;
+    return `<a class="sbtn" href="${editorLink('lieux', { cherche: p[0] })}">${esc(T('suggest'))}</a>`;
   }
   function placeMarks(p){
     if (p[5] || p[4] <= 50) return [{ lat: p[2], lon: p[3], kind: 'verified' }];      // point plein : vérifié ou exact
@@ -603,7 +603,7 @@
 
   // 1) GitHub  2) copie enregistrée dans le navigateur  3) import manuel
   fetch(URL_DATA)
-    .then(r => { if(!r.ok) throw new Error(r.status); listsDate = r.headers.get('last-modified'); return r.json(); })
+    .then(r => { if(!r.ok) throw new Error(r.status); listsDate.birds = r.headers.get('last-modified'); return r.json(); })
     .then(data => { setData(data, 'sourceGithub'); showVersion(); })
     .catch(() => {
       try{

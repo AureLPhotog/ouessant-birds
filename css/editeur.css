@@ -1,9 +1,9 @@
 /* Oiseaux d'Ouessant — styles de l'éditeur (editeur.html). Couleurs et bases : css/commun.css */
 body{font-size:15px}
 .wrap{max-width:1180px;margin:0 auto;padding:0 1.25rem 5rem}
-header{display:flex;align-items:flex-end;gap:1rem;padding:2rem 0 1.25rem}
-header img{width:40px;height:auto}
-h1{font:700 clamp(1.7rem,4vw,2.4rem)/1.05 var(--serif);color:var(--ocean);margin:0}
+header{display:flex;align-items:flex-end;gap:1rem;padding:2.25rem 0 1.5rem}
+header img{width:56px;height:auto;overflow:visible}
+h1{font:700 clamp(2rem,6vw,3.1rem)/1.02 var(--serif);color:var(--ocean);margin:0;letter-spacing:-.01em}
 .sub{margin:.35rem 0 0;color:var(--granite)}
 button,input,select,textarea{font:inherit;color:inherit}
 .btn{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);

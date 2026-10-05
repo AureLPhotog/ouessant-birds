@@ -28,6 +28,11 @@
     im.src = MAP_SOURCES[k];
   })(0);
   const num = v => { const n = Number(String(v).trim().replace(',', '.')); return String(v).trim() !== '' && isFinite(n) ? n : null; };
+  // Nom affiché pour une liste : « Oiseaux » ou « Lieux » (jamais le nom du fichier)
+  const kindOf = name => /lieu/i.test(name || '') ? 'places' : /bird|oiseau/i.test(name || '') ? 'birds' : '';
+  const KIND_LABEL = { birds: 'Oiseaux', places: 'Lieux' }, KIND_UNIT = { birds: ['oiseau', 'oiseaux'], places: ['lieu', 'lieux'] };
+  const listLabel = name => KIND_LABEL[kindOf(name)] || name;
+  const countText = n => { const u = KIND_UNIT[kindOf(gh ? gh.path : fileName)]; return u ? `${n} ${u[n > 1 ? 1 : 0]}` : `${n} entrées`; };
   const hasGeo = () => ['lat', 'lon', 'carres'].every(k => fields.includes(k));
 
   function cellsHtml(selected){
@@ -42,7 +47,7 @@
         <button type="button" class="zb" data-zoom="+" aria-label="Zoomer">+</button>
         <button type="button" class="btn ghost" data-zoom="sel">Centrer sur la sélection</button>
         <button type="button" class="btn ghost" data-zoom="fit">Toute la carte</button>
-        ${hasGeo() ? '<span style="flex:1"></span><button type="button" class="btn" data-gps>Utiliser ma position GPS</button><button type="button" class="btn" data-pick aria-pressed="false">Placer le point GPS sur la carte</button>' : ''}
+        ${hasGeo() ? '<span style="flex:1"></span><button type="button" class="btn" data-gps>Je suis sur place : envoyer ma position GPS</button><button type="button" class="btn" data-pick aria-pressed="false">Placer le point GPS sur la carte</button>' : ''}
       </div>
       ${hasGeo() ? '<p class="geo-hint" data-geo-hint></p>' : ''}
       <div class="cells-scroll"><div class="cells-wrap" style="--z:${zoom}"><div class="cells-head" style="grid-template-columns:${fx}">${Array.from({ length: cols }, (_, c) => `<span>${String.fromCharCode(65 + c)}</span>`).join('')}</div>
@@ -163,7 +168,7 @@
     fileName = name || 'liste.json';
     items = data.map((d, i) => ({ id: ++uid, data: clone(d), orig: origs ? origs[i] : clone(d) }));
     deleted = []; openId = null; filters = {}; sortField = null; shown = 200; $('search').value = '';
-    detectTypes(); buildFilters(); buildKeyField(); buildExportSort();
+    detectTypes(); buildFilters(); buildKeyField();
     $('importView').classList.add('hidden'); $('editView').classList.remove('hidden');
     render(); save();
   }
@@ -187,19 +192,27 @@
   // ---------- GitHub : ouvrir et enregistrer directement dans le dépôt ----------
   const GH = { owner: 'AureLPhotog', repo: 'ouessant-birds', files: ['ouessant_birds.json', 'lieux_ouessant.json'] };
   const branch = 'main';   // l'éditeur lit et enregistre toujours sur main
-  const TOKEN_KEY = 'gh-token-ouessant';
+  const TOKEN_KEY = 'gh-token-ouessant', OK_KEY = TOKEN_KEY + '-ok';   // OK_KEY : la clé a été vérifiée auprès de GitHub
   let gh = null;            // { path, sha } du fichier ouvert depuis GitHub
   let fmtHint = null;       // mise en forme d'origine du fichier, pour l'export
   // La clé est gardée dans l'onglet (sessionStorage) par défaut, ou sur l'appareil (localStorage) si on le demande
   const getToken = () => { try { return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; } };
   const tokenRemembered = () => { try { return !!localStorage.getItem(TOKEN_KEY); } catch (_) { return false; } };
+  const tokenValid = () => { try { return !!getToken() && (sessionStorage.getItem(OK_KEY) || localStorage.getItem(OK_KEY)) === getToken().slice(-8); } catch (_) { return false; } };
+  function setTokenValid(ok){
+    try {
+      const st = tokenRemembered() ? localStorage : sessionStorage; localStorage.removeItem(OK_KEY); sessionStorage.removeItem(OK_KEY);
+      if (ok) st.setItem(OK_KEY, getToken().slice(-8));
+    } catch (_) {}
+  }
   function storeToken(t, remember){
     try {
       if (remember){ localStorage.setItem(TOKEN_KEY, t); sessionStorage.removeItem(TOKEN_KEY); }
       else { sessionStorage.setItem(TOKEN_KEY, t); localStorage.removeItem(TOKEN_KEY); }
     } catch (_) {}
+    setTokenValid(false);   // nouvelle clé : pas encore vérifiée
   }
-  function forgetToken(){ try { localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY); } catch (_) {} }
+  function forgetToken(){ try { [localStorage, sessionStorage].forEach(s => { s.removeItem(TOKEN_KEY); s.removeItem(OK_KEY); }); } catch (_) {} }
   const api = (path, opts = {}) => {
     const h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
     const t = getToken(); if (t) h['Authorization'] = 'Bearer ' + t;
@@ -214,21 +227,21 @@
     if (lines.length > 2 && lines.slice(1, -1).every(l => /^\s*\{.*\},?\s*$/.test(l))) return { fmt: 'lines' };
     const m = text.match(/^\[\s*\n( +)\{/); return { fmt: 'indent', n: m ? m[1].length : 2 };
   }
-  function applyFormat(h){ fmtHint = h; const r = document.querySelector(`input[name="fmt"][value="${h.fmt}"]`); if (r) r.checked = true; }
+  function applyFormat(h){ fmtHint = h; }
   function keyInfo(){
     const t = getToken();
     $('ghKeyInfo').innerHTML = t ? (tokenRemembered() ? 'Clé GitHub mémorisée sur cet appareil.' : 'Clé GitHub active dans cet onglet (oubliée à sa fermeture).') + ' <button type="button" class="btn ghost" data-key>Gérer la clé</button>'
       : 'Lecture possible sans clé. Pour enregistrer sur GitHub, il faudra une clé d’accès. <button type="button" class="btn ghost" data-key>Ajouter une clé</button>';
     updateSaveBtn();
   }
-  $('ghFile').innerHTML = GH.files.map(f => `<option>${esc(f)}</option>`).join('');
+  $('ghFile').innerHTML = GH.files.map(f => `<option value="${esc(f)}">${esc(listLabel(f))}</option>`).join('');
   keyInfo();
   document.addEventListener('click', e => { if (e.target.closest('[data-key]')) openKey(); });
   async function ghOpen(path){
     const out = $('importMsg'); out.className = 'msg'; out.textContent = 'Chargement depuis GitHub…';
     try {
       const r = await api(`/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`);
-      if (r.status === 401) throw new Error('clé refusée par GitHub (expirée ou invalide ?)');
+      if (r.status === 401){ setTokenValid(false); throw new Error('clé refusée par GitHub (expirée ou invalide ?)'); }
       if (r.status === 404) throw new Error(`${path} introuvable sur la branche ${branch}`);
       if (r.status === 403) throw new Error('accès refusé ou limite de requêtes atteinte, réessaie dans quelques minutes');
       if (!r.ok) throw new Error('erreur ' + r.status);
@@ -236,13 +249,13 @@
       load(path, JSON.parse(text));
       gh = { path, sha: j.sha, branch }; applyFormat(detectFormat(text)); save(); render();
       out.textContent = '';
-      toast(`${path} chargé depuis GitHub, branche ${branch} (${items.length} entrées).`);
+      toast(`${listLabel(path)} : ${countText(items.length)} chargés depuis GitHub.`);
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Impossible d’ouvrir depuis GitHub : ' + e.message + '.'; }
   }
   $('ghOpenBtn').addEventListener('click', () => ghOpen($('ghFile').value));
 
   // clé d'accès
-  function openKey(){ ['ghPanel','pastePanel','exportPanel'].forEach(id => $(id).classList.add('hidden')); $('keyPanel').classList.remove('hidden');
+  function openKey(){ ['ghPanel','pastePanel'].forEach(id => $(id).classList.add('hidden')); $('keyPanel').classList.remove('hidden');
     if ($('editView').classList.contains('hidden')){ $('importView').classList.add('hidden'); $('editView').classList.remove('hidden'); $('editView').dataset.keyOnly = '1'; }
     $('ghToken').value = getToken(); $('ghRemember').checked = tokenRemembered(); $('keyMsg').textContent = ''; $('ghToken').focus(); }
   function closeKey(){ $('keyPanel').classList.add('hidden');
@@ -260,7 +273,7 @@
       if (!r.ok) throw new Error('le dépôt est inaccessible avec ce jeton (erreur ' + r.status + ').');
       const j = await r.json();
       if (j.permissions && j.permissions.push === false) throw new Error('ce jeton peut lire le dépôt mais pas y écrire : ajoute la permission « Contents : Read and write ».');
-      m.className = 'msg good'; m.textContent = 'Clé valide : l’éditeur peut enregistrer dans AureLPhotog/ouessant-birds.' + ($('ghRemember').checked ? ' Elle est mémorisée sur cet appareil.' : ' Elle sera oubliée à la fermeture de l’onglet.'); keyInfo();
+      setTokenValid(true); m.className = 'msg good'; m.textContent = 'Clé valide : l’éditeur peut enregistrer dans AureLPhotog/ouessant-birds.' + ($('ghRemember').checked ? ' Elle est mémorisée sur cet appareil.' : ' Elle sera oubliée à la fermeture de l’onglet.'); keyInfo();
     } catch (e) { m.className = 'msg bad'; m.textContent = e.message; keyInfo(); }
   });
 
@@ -297,7 +310,7 @@
   }
   $('ghSaveBtn').addEventListener('click', () => {
     if (!getToken()){ openKey(); return; }
-    ['pastePanel','exportPanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
+    ['pastePanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
     const c = changes(), path = gh ? gh.path : (GH.files.includes(fileName) ? fileName : null);
     $('ghPanel').classList.toggle('hidden');
     if (!path){ $('ghTarget').innerHTML = `Ce fichier ne correspond à aucun fichier du dépôt (${GH.files.join(', ')}). Ouvre-le depuis GitHub, ou renomme-le.`; $('ghCommit').disabled = true; return; }
@@ -319,8 +332,8 @@
       const r = await api(`/contents/${encodeURIComponent(path)}`, { method: 'PUT', body: JSON.stringify({ message: msg, content: b64enc(text), sha, branch: br }) });
       if (!r.ok){ const em = ((await r.clone().json().catch(() => ({}))).message || '').toLowerCase();
         if (/rule|protected/.test(em)) throw new Error(`la branche ${br} est protégée par une règle du dépôt, et cette clé n’a pas le droit d’y écrire directement. Choisis une autre branche (ou « + Nouvelle branche… ») et ouvre ensuite une pull request.`); }
-      if (r.status === 409 || r.status === 422) throw new Error('le fichier a été modifié sur GitHub depuis que tu l’as ouvert. Pour ne rien écraser, exporte tes modifications sur ton ordinateur, puis rouvre la version GitHub.');
-      if (r.status === 401) throw new Error('clé refusée (expirée ?). Mets-la à jour avec « Gérer la clé ».');
+      if (r.status === 409 || r.status === 422) { copyText(changesText()); throw new Error('la liste a été modifiée sur GitHub depuis que tu l’as ouverte. Pour ne rien écraser, tes modifications viennent d’être copiées : rouvre la liste depuis GitHub, puis colle-les avec « Coller des lignes ».'); }
+      if (r.status === 401){ setTokenValid(false); throw new Error('clé refusée (expirée ?). Mets-la à jour avec « Gérer la clé ».'); }
       if (r.status === 403 || r.status === 404) throw new Error('la clé n’a pas le droit d’écrire dans ce dépôt (permission « Contents : Read and write » manquante ?).');
       if (!r.ok) throw new Error('erreur ' + r.status);
       const j = await r.json();
@@ -356,8 +369,7 @@
     const k = CLE[path], wanted = params.get('cherche');
     if (wanted){
       const it = items.find(x => norm(show(x.data[k], 'text')) === norm(wanted));
-      if (it){ $('search').value = show(it.data[NOM[path]], 'text'); render(); toggle(it.id);
-        if (params.get('gps') === '1'){ const f = document.querySelector('.form-wrap'); if (f) useGps(f); } }
+      if (it){ $('search').value = show(it.data[NOM[path]], 'text'); render(); toggle(it.id); }
       else { $('search').value = wanted; render(); }
     } else if (params.has('nouveau')){
       $('addBtn').click();
@@ -380,7 +392,7 @@
     return { MODIFS: commitMessage(), COMMENTAIRE: $('propComment').value.trim(), JSON: changesText() };
   }
   $('proposeBtn').addEventListener('click', () => {
-    ['pastePanel','exportPanel','ghPanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
+    ['pastePanel','ghPanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
     $('proposePanel').classList.toggle('hidden');
     const c = changes(), out = $('propOut');
     out.className = 'msg'; out.textContent = '';
@@ -419,6 +431,10 @@
   function updateSaveBtn(){
     const t = !!getToken();
     $('ghSaveBtn').classList.toggle('hidden', !t);
+    // « Coller des lignes » : seulement avec une clé GitHub entrée ET reconnue par GitHub
+    const ok = tokenValid();
+    $('pasteLinesBtn').classList.toggle('hidden', !ok);
+    if (!ok) $('pastePanel').classList.add('hidden');
     $('keyBtn').classList.toggle('hidden', t);
     $('proposeBtn').classList.toggle('hidden', t);
     if (t) $('proposePanel').classList.add('hidden');
@@ -438,7 +454,7 @@
     try {
       const d = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (!d || !d.items) return;
       $('resumeBtn').hidden = false;
-      $('resumeInfo').textContent = `${d.fileName}${d.gh ? ` (GitHub, branche ${d.gh.branch || 'main'})` : ''}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
+      $('resumeInfo').textContent = `${listLabel(d.gh ? d.gh.path : d.fileName)}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
       $('resumeBtn').onclick = () => {
         load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1])); gh = d.gh || null;  if (d.fmtHint) applyFormat(d.fmtHint);
         deleted = (d.deleted || []).map(o => ({ id: ++uid, data: o, orig: o })); render();
@@ -446,7 +462,7 @@
     } catch (_) {}
   })();
   $('closeBtn').addEventListener('click', () => {
-    if (changes().total && !confirm('Les modifications non exportées restent dans le brouillon, tu pourras les reprendre. Changer de fichier ?')) return;
+    if (changes().total && !confirm('Tes modifications non envoyées restent dans le brouillon, tu pourras les reprendre. Changer de liste ?')) return;
     $('editView').classList.add('hidden'); $('importView').classList.remove('hidden');
     location.href = location.pathname;
   });
@@ -499,8 +515,8 @@
   }
   function render(){
     const list = visible(), c = changes();
-    $('fileName').textContent = fileName + (gh ? ` (${gh.branch || 'main'})` : '');
-    $('countInfo').textContent = `${items.length} entrées` + (list.length !== items.length ? `, ${list.length} affichées` : '');
+    $('fileName').textContent = listLabel(gh ? gh.path : fileName);
+    $('countInfo').textContent = countText(items.length) + (list.length !== items.length ? `, ${list.length} affichés` : '');
     $('changeInfo').innerHTML = (c.mod ? `<span class="badge mod">${c.mod} modifiée${c.mod > 1 ? 's' : ''}</span> ` : '') +
       (c.add ? `<span class="badge new">${c.add} ajoutée${c.add > 1 ? 's' : ''}</span> ` : '') +
       (c.del ? `<span class="badge del">${c.del} supprimée${c.del > 1 ? 's' : ''}</span>` : '');
@@ -685,7 +701,7 @@
     // une ligne par objet, sans virgules entre elles
     return t.split(/\n+/).map(l => l.trim().replace(/,\s*$/, '')).filter(Boolean).map(l => JSON.parse(l));
   }
-  $('pasteLinesBtn').addEventListener('click', () => { $('pastePanel').classList.toggle('hidden'); $('exportPanel').classList.add('hidden'); $('pasteLines').focus(); });
+  $('pasteLinesBtn').addEventListener('click', () => { $('pastePanel').classList.toggle('hidden'); $('pasteLines').focus(); });
   $('pasteClose').addEventListener('click', () => $('pastePanel').classList.add('hidden'));
   $('pasteCheck').addEventListener('click', () => {
     const msg = $('pasteMsg'), pv = $('pastePreview'); pending = []; pv.innerHTML = ''; $('pasteApply').disabled = true;
@@ -728,13 +744,9 @@
     toast(`${n} ligne${n > 1 ? 's' : ''} appliquée${n > 1 ? 's' : ''}. Affichage des entrées modifiées ou ajoutées.`);
   });
 
-  // ---------- Export ----------
-  function buildExportSort(){
-    $('exportSort').innerHTML = `<option value="">ordre actuel du fichier</option>` + fields.map(k => `<option value="${esc(k)}">par ${esc(k)}</option>`).join('');
-  }
-  // ---------- Export « seulement mes modifications » ----------
+  // ---------- Modifications sous forme de lignes ----------
   // Format : lignes de commentaire (« // … »), puis une ligne JSON par entrée modifiée ou ajoutée,
-  // et une ligne {"_action":"supprimer", …} par entrée supprimée. Se colle tel quel dans « Coller des lignes ».
+  // et une ligne {"_action":"supprimer", …} par entrée supprimée. Sert à la proposition et se colle dans « Coller des lignes ».
   const META = ['_action', '_cle_avant'];
   function changesText(){
     const key = $('keyField').value || fields[0];
@@ -752,50 +764,11 @@
     del.forEach(it => lines.push('// supprimée', JSON.stringify(Object.assign({ _action: 'supprimer' }, it.orig))));
     return lines.join('\n') + '\n';
   }
-  const exportMode = () => document.querySelector('input[name="what"]:checked').value;
-  document.querySelectorAll('input[name="what"]').forEach(r => r.addEventListener('change', () => {
-    const ch = exportMode() === 'changes';
-    $('changesOpts').classList.toggle('hidden', !ch); $('fullOpts').classList.toggle('hidden', ch);
-    $('downloadBtn').textContent = ch ? 'Télécharger mes modifications' : 'Télécharger le fichier';
-    $('copyBtn').textContent = ch ? 'Copier mes modifications' : 'Copier le JSON';
-    $('exportMsg').textContent = '';
-  }));
-  document.querySelector('input[name="what"]:checked').dispatchEvent(new Event('change'));   // libellés initiaux
-
+  // Texte du fichier à enregistrer sur GitHub, dans la mise en forme d'origine (une entrée par ligne, ou indenté)
   function exportText(){
-    let list = items.map(it => it.data);
-    const k = $('exportSort').value;
-    if (k){ const t = types[k].t; list = list.slice().sort((a, b) => t === 'number' ? (a[k] ?? 0) - (b[k] ?? 0) : show(a[k], t).localeCompare(show(b[k], t), 'fr')); }
-    const fmt = document.querySelector('input[name="fmt"]:checked').value;
-    return fmt === 'indent' ? JSON.stringify(list, null, (fmtHint && fmtHint.n) || 2) + '\n' : '[\n' + list.map(o => JSON.stringify(o)).join(',\n') + '\n]\n';
+    const list = items.map(it => it.data);
+    return fmtHint && fmtHint.fmt === 'indent' ? JSON.stringify(list, null, fmtHint.n || 2) + '\n' : '[\n' + list.map(o => JSON.stringify(o)).join(',\n') + '\n]\n';
   }
-  $('exportBtn').addEventListener('click', () => { $('exportPanel').classList.toggle('hidden'); $('pastePanel').classList.add('hidden'); $('exportMsg').textContent = ''; });
-  $('exportClose').addEventListener('click', () => $('exportPanel').classList.add('hidden'));
-  $('downloadBtn').addEventListener('click', () => {
-    if (exportMode() === 'changes'){
-      if (!changes().total){ $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Aucune modification à exporter pour l’instant.'; return; }
-      const txt = changesText(), base = fileName.replace(/\.json$/i, '');
-      const name = `modifications_${base}_${new Date().toISOString().slice(0, 10)}.txt`;
-      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain;charset=utf-8' })); a.download = name;
-      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-      const c = changes();
-      $('exportMsg').className = 'msg good';
-      $('exportMsg').textContent = `« ${name} » téléchargé (${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s)). Tu peux l\u2019envoyer par e-mail, en pièce jointe ou en copiant son contenu.`;
-      return;
-    }
-    const txt = exportText(); JSON.parse(txt);   // contrôle de validité
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([txt], { type: 'application/json;charset=utf-8' }));
-    a.download = fileName; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    $('exportMsg').className = 'msg good';
-    $('exportMsg').textContent = `« ${fileName} » téléchargé (${items.length} entrées, JSON valide). Remplace l\u2019ancien fichier sur GitHub par celui-ci.`;
-  });
-  $('copyBtn').addEventListener('click', () => {
-    if (exportMode() === 'changes' && !changes().total){ $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Aucune modification à copier pour l’instant.'; return; }
-    const txt = exportMode() === 'changes' ? changesText() : exportText();
-    const done = () => { $('exportMsg').className = 'msg good'; $('exportMsg').textContent = exportMode() === 'changes' ? 'Modifications copiées.' : 'JSON copié : tu peux le coller directement dans l\u2019éditeur de GitHub.'; };
-    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(done, () => { $('exportMsg').className = 'msg bad'; $('exportMsg').textContent = 'Copie impossible : utilise plutôt « Télécharger ».'; });
-  });
 
   // ---------- Notification ----------
   let tt;
