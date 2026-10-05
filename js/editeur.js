@@ -101,7 +101,7 @@
     return sel.includes(cell) ? null : { text: `Le point GPS tombe dans le carré ${cell}, qui ne fait pas partie des carrés sélectionnés (${sel.join(', ')}).`, cell };
   }
   // Zoom : la grille est agrandie dans une zone qui défile ; on garde le niveau choisi d'une entrée à l'autre
-  const ZOOMS = [1, 1.6, 2.3, 3.2, 4.5];
+  const ZOOMS = [1, 1.6, 2.3, 3.2, 4.5, 6.5, 9, 12];   // 12 × : la carte (3508 px de large) y est agrandie au-delà de sa définition, utile pour placer un point au mètre près
   let zoom = 2.3, zoomChosen = false;
   function centerOn(scroll, cells){
     const grid = scroll.querySelector('.cells'); if (!grid) return;
