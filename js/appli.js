@@ -722,38 +722,52 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
   // L'oiseau sort de derrière les fougères, fait un tour du phare (devant puis derrière la tour) et s'envole vers la droite
   const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
+    + '<defs>'
+    + '<radialGradient id="eb-eye" cx="44.9" cy="14.1" r="1.05" gradientUnits="userSpaceOnUse">'
+    + '<stop offset="0.7" stop-color="white"/><stop offset="0.9" stop-color="#ddd"/>'
+    + '</radialGradient>'
+    + '<linearGradient id="eb-beak" x1="47" y1="15.6" x2="53.4" y2="15.6" gradientUnits="userSpaceOnUse">'
+    + '<stop offset="0" stop-color="#222"/><stop offset="1" stop-color="#111"/>'
+    + '</linearGradient>'
+    + '</defs>'
     // Aile arrière
+    + '<g transform="translate(4 0)">'
     + '<g class="eb-far">'
-      + '<path fill="#555" d="M31.2 16.8C29.5 11.2 26.8 6.3 22.7 3C18.8-0.1 13.1-1 7-0.2L10.8 3L8.2 4.3L12.2 6.4L10.2 8L14.8 10.2L13.4 11.7L18 12.8L17 14.3L21.6 15.2C24.5 15.7 27.2 16.4 29 17.3C29.8 17.6 30.7 17.5 31.2 16.8Z"/>'
-      + '<path fill="#777" d="M7-0.2C12.5-1 17.8 0 22.7 3C18.4 0.5 13.2-0.3 7-0.2Z"/>'
-      + '<path fill="#666" d="M8.2 4.3C14.1 4.5 19.8 6.7 24.9 10.7C20.7 7 16.2 4.6 8.2 4.3Z"/>'
-      + '<path fill="#444" d="M10.2 8C16.6 8.6 22.5 11.3 27.5 15.4C23.1 11.5 17.6 8.7 10.2 8Z"/>'
+    + '<path fill="#555" d="M31 16.6C30.4 12 28.8 7.8 26 4.4C23 0.8 18.4-1.5 12.4-1.8C9.4-2 6.4-1.6 3.6-1L8 2.3L6 3.7L10.4 5.6L8.6 7.2L13.2 8.8L11.6 10.4L16.2 11.6L14.8 13.2L19.4 14.2L18.2 15.8L22.9 16.4L22.2 17.7L26.4 17.9C28.4 18 30 17.7 31 16.6Z"/>'
+    + '<path fill="#666" d="M3.6-1C10-1.7 17-0.2 22.6 3.8C17.5 0.5 11.2-0.9 3.6-1Z"/>'
+    + '<path fill="#4a4a4a" d="M8.6 7.2C14.6 7.6 20.4 9.8 25.6 14C21 11 15 8.4 8.6 7.2Z"/>'
     + '</g>'
-    // Queue (deux plumes)
-    + '<g>'
-      + '<path fill="#222" d="M21 18.1C14.7 16.7 8.2 14.3 2.2 12.7C4.5 15.2 7.3 17.2 10.2 18.3C7.3 18.9 4.6 20.1 2.1 21.8C8.4 21.3 15 20.6 21.2 20Z"/>'
-      + '<path fill="#333" d="M20.9 19.1C14.7 19.4 8.5 21.1 2.1 23.5C7.5 23 14.1 21.9 20.8 21Z"/>'
     + '</g>'
-    // Corps
-    + '<path fill="#222" d="M18.1 18.7C19.2 15.3 22.8 12.5 28.2 11.9C33.1 11.3 37.9 12.3 40.7 14C42.7 15.2 43.8 16.7 43.6 18.2C43.4 19.8 41.6 21.1 39.1 21.9C35.3 23.1 30.3 23.7 25.7 22.8C22 22.1 19.1 20.6 18.1 18.7Z"/>'
-    // Aile avant (+ rémiges)
+    // Queue : 6 plumes, extrémités échelonnées (décalée vers l'avant : corps raccourci)
+    + '<g transform="translate(2.5 0)">'
+    + '<path fill="#222" d="M21.2 18.2C16.4 17.2 11.2 15.6 6 14L2 12.6L4.6 14.8L3.4 15.4L6.2 17L4.4 18.4L7.4 19.2L5.2 20.6L8 21.2L5.8 22.8C11.8 22 17 21.2 21.2 20.8Z"/>'
+    + '<path fill="#333" d="M21 19.2C16 19.6 11.2 20.6 6.2 22L2.2 23.6L6.6 23.2L5.6 24.4C10.4 23.6 15.8 22.6 21 21.6Z"/>'
+    + '<path fill="none" stroke="#444" stroke-width=".3" stroke-linecap="round" d="M20.6 18.7C15 18.4 9.4 17.4 4.4 15.2M20.6 19.4C15 19.7 9.4 20.4 3.4 22.9"/>'
+    + '</g>'
+    // Corps (raccourci de 15 %)
+    + '<path transform="translate(43 0) scale(.85 1) translate(-43 0)" fill="#222" d="M18.1 18.7c1.1-3.4 4.7-6.2 10.1-6.8 4.9-.6 9.7.4 12.5 2.1.7.4 1.4 1 2.1 1.5 1 2.3-.2 4.6-2.1 6.1-2 .6-4 .9-6 .9C30.3 23.7 25.7 22.8 21.1 22.1 19 21.3 18.1 19.8 18.1 18.7z"/>'
+    // Aile avant : 8 plumes primaires/secondaires + couvertures
+    + '<g transform="translate(4 0)">'
     + '<g class="eb-near">'
-      + '<path fill="#292929" d="M33 17.4C32.4 13.3 30.7 9.1 27.8 5.6C24.8 1.8 20.2-0.5 14.2-0.8C11.2-1 8.2-0.6 5.4 0L10 3.7L8 5L12.5 7L10.7 8.7L15.4 10.4L13.6 12L18.4 13L17.2 14.7L22 15.5L21 17.2L26 17.6C28.5 17.9 31 18.3 33 17.4Z"/>'
-      + '<path fill="#333" d="M33 17.4C32.2 13.8 30.4 10 27.4 6.8C24.4 3.6 20.4 1.6 16 1.1C20.2 4 23.2 7.6 25 11.6C26.4 14.4 28.6 16.7 31.2 17.8Z"/>'
-      + '<path fill="#3d3d3d" d="M5.4 0C12.1-0.7 19.1 1.2 24.6 5.2C19.2 1.3 12.9-0.2 5.4 0Z"/>'
-      + '<path fill="#444" d="M8 5C14.5 5.1 20.8 7.7 26 11.7C21.2 7.5 15.3 5 8 5Z"/>'
-      + '<path fill="#505050" d="M10.7 8.7C17.2 9 23 11.5 28.8 16.7C24.5 12.2 18.5 9.2 10.7 8.7Z"/>'
-      + '<path fill="#484848" d="M13.6 12C18.6 12.4 23.6 14 28 17C24 14 19 12.4 13.6 12Z"/>'
-      + '<path fill="none" stroke="#666" stroke-width=".45" stroke-linecap="round" d="M15.3 10.4C20.5 11.7 25 13.8 28.8 16.7"/>'
+    + '<path fill="#292929" d="M32.8 17.6C32.2 13 30.6 8.8 27.8 5.4C24.8 1.7 20.2-0.6 14.2-0.9C11.2-1.1 8.2-0.7 5.4-0.1L9.8 3.3L7.8 4.7L12.2 6.6L10.4 8.2L15 9.8L13.4 11.4L18 12.6L16.6 14.2L21.2 15.2L20 16.8L24.7 17.4L24 18.7L28.2 18.9C30.2 19 31.7 18.7 32.8 17.6Z"/>'
+    // séparations des plumes
+    + '<path fill="none" stroke="#555" stroke-width=".3" stroke-linecap="round" d="M9.8 3.3C15 5 20.8 8 27 13.2M12.2 6.6C17 8.2 22 10.6 27.6 15M15 9.8C19 11.2 23 13.2 27.8 16.2M18 12.6C21.2 13.4 24.4 14.8 28 17M21.2 15.2C23.6 15.8 26 16.6 28.4 17.8"/>'
+    // couvertures : trois bandes plus claires le long du bras
+    + '<path fill="#3a3a3a" d="M32.8 17.6C32.2 13.2 30.4 9.4 27.8 6.2C25.2 3 21 1 16 0.4C20.4 3.4 23.6 7.2 25.4 11.6C26.6 14.6 29 16.8 32 18Z"/>'
+    + '<path fill="#454545" d="M32.4 17.8C31.6 14 29.8 10.6 27.2 7.8C24.8 5.2 21.2 3.4 17.2 2.8C21.2 5.8 23.8 9.2 25.2 13C26.2 15.6 28.6 17.4 31.4 18.2Z"/>'
+    + '<path fill="#505050" d="M31.8 18C31 15 29.2 12.4 27 10.2C25 8.2 22.2 6.8 19.2 6.2C22.4 8.6 24.4 11.4 25.4 14.4C26.2 16.2 28.4 17.6 30.8 18.3Z"/>'
+    // rémiges primaires, bord de fuite
+    + '<path fill="#3f3f3f" d="M5.4-0.1C12-0.8 19 1 24.6 5C19.2 1.3 12.8-0.3 5.4-0.1Z"/>'
+    + '<path fill="#444" d="M7.8 4.7C14.4 5 20.8 7.6 26 11.6C21.2 7.8 15.2 5.2 7.8 4.7Z"/>'
     + '</g>'
-    // Tête
-    + '<path fill="#222" d="M38.4 14.3C39.7 11.7 42.5 10.2 45.1 10.7C47.2 11.1 48.6 12.8 48.6 14.8C48.6 16.8 47.3 18.5 45.3 19.1C43.2 19.7 40.6 19 39.2 17.3C38.3 16.2 37.9 15.1 38.4 14.3Z"/>'
+    + '</g>'
+    // Tête (réduite de 12 %)
+    + '<path transform="translate(43.5 15) scale(.88) translate(-43.5 -15)" fill="#222" d="M38.4 14.3c1.3-2.6 4.1-4.1 6.7-3.6 2.1.4 3.5 2.1 3.5 4.1 0 2-1.3 3.7-3.3 4.3-2.1.6-4.7-.1-6.1-1.8-.9-1.1-1.3-2.2-.8-3z"/>'
     // Bec
-    + '<path fill="#222" d="M47.1 13.8L53.4 15.6C53.9 15.7 53.9 16.2 53.4 16.4L47 17.4C47.6 16.2 47.7 14.9 47.1 13.8Z"/>'
-    // Œil (blanc)
-    + '<circle cx="44.9" cy="14.1" r="1.05" fill="white"/>'
-    // Œil (pupille)
-    + '<circle cx="45.15" cy="13.8" r=".3" fill="#222"/>'
+    + '<path fill="url(#eb-beak)" d="M47.1 13.8L53.4 15.6c.5.1.5.6 0 .8L47 17.4c.6-1.2.7-2.5.1-3.6z"/>'
+    // Œil
+    + '<circle transform="translate(43.5 15) scale(.88) translate(-43.5 -15)" cx="44.9" cy="14.1" r="1.05" fill="url(#eb-eye)"/>'
+    + '<circle transform="translate(43.5 15) scale(.88) translate(-43.5 -15)" cx="45.15" cy="13.8" r=".3" fill="#222"/>'
     + '</svg>';
   function flyBird(btn){
     btn.insertAdjacentHTML('beforeend', BIRD_SVG);
@@ -768,7 +782,7 @@
       if (t <= T1){ const a = th(t), u = t / T1; return { x: CX + R * Math.sin(a), y: Y0 + (Y1 - Y0) * sm(u) + RY * Math.cos(a), d: Math.cos(a), u }; }
       const q = t - T1; return { x: CX + vxEnd * q + ax * q * q / 2 + 0 * R, y: Y1 + RY - 16 * q * q, d: 1, u: 1 + q / T2 };
     };
-    const wing = (g, k) => g.setAttribute('transform', `translate(31 17) scale(1 ${k.toFixed(2)}) translate(-31 -17)`);
+    const wing = (g, k) => g.setAttribute('transform', `translate(32 17) scale(1 ${k.toFixed(2)}) translate(-32 -17)`);
     const t0 = performance.now();
     (function frame(now){
       const t = (now - t0) / 1000 - DELAY;
