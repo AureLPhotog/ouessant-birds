@@ -18,7 +18,7 @@ input[type=text],input[type=number],input[type=search],select,textarea{backgroun
 textarea{font-family:var(--mono);font-size:.85rem}
 .hidden{display:none !important}
 
-.back{margin:2rem 0 0;text-align:center}
+.back{margin:2rem 0 0;text-align:center;display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center}
 .back a{text-decoration:none}
 
 /* Choix de la liste : mêmes onglets que sur l'index */

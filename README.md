@@ -2,10 +2,10 @@
 
 Petite appli web pour les observateurs d'oiseaux à Ouessant :
 
-- **Oiseaux** : sur quel canal annoncer une observation (Alerte Telegram, Alerte WhatsApp, Pas d'alerte) ;
+- **Oiseaux** : sur quel canal annoncer une observation (Alerte Telegram, Alerte WhatsApp, Pas d'alerte). Toucher le canal prépare le **message d'alerte** (voir plus bas) ;
 - **Lieux** : coordonnées GPS indicatives des lieux-dits de l'île, avec un aperçu de la carte ;
-- **Où suis-je ?** : les 5 lieux-dits les plus proches de sa position ;
-- **le phare** (en haut à gauche) : météo du jour à Ouessant et QR code pour partager l'appli.
+- **Où suis-je ?** : les lieux-dits les plus proches de sa position (de 3 à 10, au choix avec le curseur). Toucher un lieu-dit ouvre Google Maps sur son point GPS. Un bouton **Partager ma position** prépare un message (coordonnées, lien Google Maps, lieu-dit le plus proche) ;
+- **le phare** (en haut à gauche) : météo du jour à Ouessant, QR code pour partager l'appli, numéro de version et informations légales.
 
 En ligne : <https://aurelphotog.github.io/ouessant-birds/>
 
@@ -18,21 +18,24 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | Fichier | Rôle |
 |---|---|
 | `index.html` | l'appli (structure de la page) |
-| `editeur.html` | l'éditeur des listes (enregistrement direct sur GitHub avec la clé d'accès ; sans clé, envoi d'une proposition) |
+| `editeur.html` | l'éditeur des listes (onglets Oiseaux / Lieux ; enregistrement direct sur GitHub avec la « Clé Admin » ; sans clé, envoi d'une proposition) |
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
+| `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
 | `css/commun.css` | couleurs (clair, sombre, daltonisme) et bases, partagées par l'appli et l'éditeur |
 | `css/appli.css`, `css/editeur.css` | mise en page de l'appli et de l'éditeur |
 | `js/textes.js` | **tous les textes de l'appli**, en français et en anglais |
 | `js/carte.js` | grille des carrés de la carte et recalage GPS (partagé appli / éditeur) |
 | `js/recherche.js` | recherche tolérante aux fautes de frappe |
+| `js/version.js` | **numéro de version de l'appli** (à augmenter à chaque modification de l'appli) |
 | `js/appli.js`, `js/editeur.js` | fonctionnement de l'appli et de l'éditeur |
 | `js/editeur-langue.js` | éditeur : version anglaise (tables de traduction), thème clair / sombre, couleurs pour daltonisme |
 | `sw.js` | mode hors connexion |
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
 | `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
 | `manifest.webmanifest` | raccourci sur l'écran d'accueil du téléphone |
-| `scripts/verifier_listes.py`, `.github/workflows/verifier-listes.yml` | vérification automatique des listes |
+| `docs/Guide_utilisation.pdf` | guide d'utilisation (l'appli, puis l'éditeur pour proposer une correction) : à partager, et lié en bas de l'appli et de l'éditeur |
+| `scripts/verifier_listes.py` | vérification des listes (voir « Vérifier les listes ») |
 
 ## Les listes
 
@@ -63,36 +66,68 @@ La position affichée dépend de `precision_m` et `verifie` :
 | 51 à 499 m | `false` | placée sur la carte : anneau |
 | 500 m ou plus | `false` | centre du carré, recalculé (les `lat`/`lon` enregistrées sont ignorées) |
 
+## Le message d'alerte
+
+Sur une espèce « Alerte Telegram » ou « Alerte WhatsApp », toucher le canal :
+
+1. l'appli relève la position GPS (elle suit le GPS jusqu'à 8 secondes et garde le relevé le plus précis) ;
+2. elle prépare ce message et le **copie** :
+   ```
+   Pouillot Ibérique (Phylloscopus ibericus)
+   GPS : 48.45020, -5.13900
+   Lieu-dit le plus proche : Pointe de Pern
+   https://www.google.com/maps?q=48.450200,-5.139000
+   ```
+3. un bouton « Ouvrir WhatsApp » ou « Ouvrir Telegram » ouvre l'appli de messagerie : l'utilisateur choisit lui-même le groupe et colle le message. **Aucun lien de groupe n'est publié dans l'appli.**
+
+Cas particuliers : hors de l'île, l'appli prévient qu'on ne peut pas signaler l'oiseau ; si le GPS est indisponible, le
+message ne contient que l'espèce ; si la précision dépasse 1900 m, l'appli explique que la position exacte n'est pas
+partagée (sur Chrome Android : menu ⋮ → Paramètres → Paramètres des sites → Position → choisir le site → **Exacte**).
+
 ## Mettre à jour les listes
 
 1. Ouvrir l'éditeur : <https://aurelphotog.github.io/ouessant-birds/editeur.html>
-2. **Ouvrir depuis GitHub**, modifier, puis **Enregistrer sur GitHub** (clé d'accès nécessaire, voir ci-dessous).
+2. Choisir l'onglet **Oiseaux** ou **Lieux**, modifier, puis **Enregistrer sur GitHub** (il faut la « Clé Admin », voir ci-dessous).
 3. Les **propositions des visiteurs** passent aussi par l'éditeur : dans l'appli, « Proposer une modification »,
-   « Proposer une meilleure position », « Je suis sur place », « Proposer un nouvel oiseau / lieu-dit » ouvrent
-   l'éditeur sur la bonne liste et la bonne entrée. Le visiteur modifie, puis clique sur **Envoyer ma proposition** :
-   un formulaire Google unique s'ouvre, prérempli avec trois champs (Modifications, Commentaire, Lignes JSON).
-   Dans le Google Sheet des réponses, copier la colonne « Lignes JSON » dans l'éditeur, bouton **Coller des lignes** (visible seulement avec une clé GitHub valide).
+   « Proposer une meilleure position », « Proposer un nouvel oiseau / lieu-dit » ouvrent l'éditeur sur la bonne liste
+   et la bonne entrée (pour un lieu, le bouton « Je suis sur place : envoyer ma position GPS » est dans l'éditeur).
+   Le visiteur modifie, puis clique sur **Envoyer ma proposition** : un formulaire Google unique s'ouvre, prérempli avec
+   trois champs (Modifications, Commentaire, Lignes JSON). Dans le Google Sheet des réponses, copier la colonne
+   « Lignes JSON » dans l'éditeur, bouton **Coller des lignes** (visible seulement avec une clé valide).
    Le lien prérempli du formulaire est dans `js/editeur.js` (`PROPOSAL_FORM`), avec les mots MODIFS, COMMENTAIRE et JSON.
-4. Pour revenir de l'éditeur à l'appli : cliquer sur le phare.
+4. Pour revenir de l'éditeur à l'appli : le bouton « Revenir à l'appli » en bas de page, ou le phare.
 
-**Clé d'accès** : jeton GitHub « à granularité fine », limité au dépôt `ouessant-birds`, permission
+**Clé Admin** : jeton GitHub « à granularité fine », limité au dépôt `ouessant-birds`, permission
 *Contents : Read and write*, avec une date d'expiration. Ne jamais la partager ni l'écrire dans un fichier.
 
-À chaque modification d'une liste, GitHub la vérifie automatiquement (onglet **Actions**) : en cas d'erreur
-(canal inconnu, doublon, carré inexistant, coordonnées hors de l'île…), le commit est marqué d'une croix rouge
-et un e-mail est envoyé. Les avertissements (nom anglais manquant…) ne bloquent rien.
+À chaque enregistrement d'une liste, l'éditeur fait **deux commits** : la liste, puis `version_listes.json` (numéro de version des listes).
+
+### Vérifier les listes
+
+`python3 scripts/verifier_listes.py` contrôle les deux listes (canal inconnu, doublon, carré inexistant, coordonnées hors de
+l'île…) ; les avertissements (nom anglais manquant…) ne bloquent rien. Aucune vérification automatique n'est
+configurée dans le dépôt pour l'instant (pas de fichier `.github/workflows`).
+
+## Les numéros de version
+
+- **Version de l'appli** (`4.0`) : à augmenter à chaque modification de l'appli (HTML, CSS, JS, images), **avant de fusionner dans `main`** :
+  - dans `js/version.js` : `window.OUESSANT_APP_VERSION = '4.0';` (numéro affiché dans le phare) ;
+  - dans `sw.js` : `const VERSION = 'v4.0';` (c'est ce qui met l'appli à jour chez les utilisateurs, mode hors connexion compris).
+- **Version des listes** (`4.0.2`) : automatique. Chaque enregistrement de liste dans l'éditeur ajoute 1 au dernier chiffre.
+  Quand la version de l'appli change, le compteur repart de zéro (`v4.1`, puis `v4.1.1`…).
+  Une modification faite directement sur le site GitHub ne fait pas monter le compteur.
 
 ## Publier une nouvelle version de l'appli
 
 1. Travailler dans une **branche**, et tester avec
    `https://raw.githack.com/AureLPhotog/ouessant-birds/NOM-DE-LA-BRANCHE/index.html`
-2. **Avant de fusionner**, si des fichiers de l'appli ont changé (HTML, CSS, JS, images) :
-   augmenter le numéro de version
-   - dans `sw.js` : `const VERSION = 'v3.1';` (c'est ce qui met à jour l'appli chez les utilisateurs, mode hors connexion compris) ;
-   - dans `js/appli.js` : `const APP_VERSION = '3.1';` (le numéro affiché en bas de page).
-3. Fusionner dans `main` : le site est à jour quelques minutes plus tard.
+2. Augmenter la version de l'appli (voir plus haut), puis fusionner dans `main` : le site est à jour quelques minutes plus tard.
 
-Les listes JSON, elles, n'ont pas besoin de changement de version : l'appli vérifie toujours en ligne s'il en existe une plus récente.
+La branche **`test-gps`** est une copie de l'appli avec un **mode test** (bandeau rouge « MODE TEST ») : la position GPS est
+simulée sur l'île et se choisit sur la carte en touchant le bandeau. Elle sert à tester les alertes et « Où suis-je ? » sans
+être sur place. Il faut y fusionner les nouveautés de la branche de travail, mais **ne jamais la fusionner dans `main`**.
+
+Les listes JSON, elles, n'ont pas besoin de changement de version de l'appli : l'appli vérifie toujours en ligne s'il en existe une plus récente.
 
 ## Recalage de la carte
 
@@ -105,3 +140,10 @@ au pire 95 m. Les coefficients sont dans `js/carte.js` (`AFF`) et, à l'identiqu
 - Carte de l'île : réalisée par Gaëtan Mineau pour l'Association Naturaliste d'Ouessant.
 - Météo : [Open-Meteo.com](https://open-meteo.com/).
 - Classement des espèces : établi à la main d'après des données de Faune France. L'appli n'interroge pas leur base de données.
+
+## Licence
+
+Projet libre et gratuit. L'auteur ne revendique aucune paternité ni aucun droit sur le code et les listes : ils peuvent
+être copiés, modifiés et réutilisés librement (dédicace au domaine public,
+[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.fr)). Exception : la carte de l'île, qui reste l'œuvre de
+Gaëtan Mineau et de l'Association Naturaliste d'Ouessant. Les mêmes informations sont dans l'appli (phare → « Informations légales »).

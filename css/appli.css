@@ -220,6 +220,9 @@ section[hidden]{display:none}
 .maplink a{display:inline-flex;align-items:center;gap:.45rem;color:var(--ocean-2);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .maplink a:focus-visible{outline:3px solid var(--heather);outline-offset:2px;border-radius:4px}
 .pnote{margin-top:1.5rem;color:var(--granite);font-size:.85rem;max-width:62ch}
+.guide{margin:1.2rem 0 0}
+.guide a{display:inline-flex;align-items:center;gap:.45rem;color:var(--ocean-2);font-weight:600;font-size:.9rem;text-decoration:underline;text-underline-offset:3px}
+.guide a:focus-visible{outline:3px solid var(--heather);outline-offset:3px;border-radius:4px}
 .foot{margin-top:2rem;color:var(--granite);font-size:.85rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;align-items:center}
 .link{background:none;border:0;padding:0;color:var(--ocean-2);text-decoration:underline;font:inherit;cursor:pointer}
 .link input{position:absolute;width:1px;height:1px;opacity:0}

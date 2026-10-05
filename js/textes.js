@@ -20,7 +20,7 @@ window.OUESSANT_TEXTES = {
       sourceCount: (sp, ssp) => sp + ' espèces' + (ssp ? ' et ' + ssp + ' sous-espèces' : ''),
       importTitle: 'Ajoute la liste des espèces',
       importText: "La liste n'a pas pu être téléchargée depuis GitHub sur cette page. Importe le fichier <em>ouessant_birds.json</em> depuis ton ordinateur ou ton téléphone : il restera enregistré dans ce navigateur.",
-      importBtn: 'Importer le fichier JSON', legalBtn: 'Informations légales',
+      importBtn: 'Importer le fichier JSON', legalBtn: 'Informations légales', guideLink: "Guide d'utilisation (PDF)",
       legalHtml: `<h2>Informations légales</h2>
         <p><strong>Projet libre et gratuit.</strong> Cette appli est un projet amateur, sans but commercial. Son auteur ne revendique aucune paternité ni aucun droit sur le code et les listes : tu peux les copier, les modifier et les réutiliser librement, sans rien demander (<a href="https://creativecommons.org/publicdomain/zero/1.0/deed.fr" target="_blank" rel="noopener">dédicace au domaine public, CC0 1.0</a>).</p>
         <p><strong>Ce qui n'est pas couvert</strong> : la carte de l'île, réalisée par Gaëtan Mineau pour l'Association Naturaliste d'Ouessant, reste leur œuvre ; la météo vient de <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. Le classement des espèces a été établi à la main d'après des données de Faune France ; l'appli n'interroge pas leur base.</p>
@@ -131,7 +131,7 @@ window.OUESSANT_TEXTES = {
       sourceCount: (sp, ssp) => sp + ' species' + (ssp ? ' and ' + ssp + ' subspecies' : ''),
       importTitle: 'Add the species list',
       importText: 'The list could not be downloaded from GitHub on this page. Import the <em>ouessant_birds.json</em> file from your computer or phone: it will stay saved in this browser.',
-      importBtn: 'Import the JSON file', legalBtn: 'Legal information',
+      importBtn: 'Import the JSON file', legalBtn: 'Legal information', guideLink: 'User guide (PDF, in French)',
       legalHtml: `<h2>Legal information</h2>
         <p><strong>Free and open project.</strong> This app is an amateur project with no commercial purpose. Its author claims no authorship and no rights over the code and the lists: you can copy, modify and reuse them freely, without asking (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">public domain dedication, CC0 1.0</a>).</p>
         <p><strong>Not covered</strong>: the island map, made by Gaëtan Mineau for the Association Naturaliste d'Ouessant, remains their work; the weather comes from <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. The species ranking was made by hand from Faune France data; the app does not query their database.</p>
