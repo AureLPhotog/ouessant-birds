@@ -476,6 +476,7 @@
     // « Coller des lignes » : seulement avec une clé GitHub entrée ET reconnue par GitHub
     const ok = tokenValid();
     $('pasteLinesBtn').classList.toggle('hidden', !ok);
+    $('adminLink').classList.toggle('hidden', !ok);   // page de tri des propositions : seulement pour l'administrateur
     if (!ok) $('pastePanel').classList.add('hidden');
     $('keyBtn').classList.remove('hidden');   // toujours accessible : ajouter ou gérer la clé
     $('keyBtn').textContent = t ? 'Gérer la clé' : 'Clé Admin';

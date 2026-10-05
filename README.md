@@ -19,6 +19,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 |---|---|
 | `index.html` | l'appli (structure de la page) |
 | `editeur.html` | l'éditeur des listes (onglets Oiseaux / Lieux ; enregistrement direct sur GitHub avec la « Clé Admin » ; sans clé, envoi d'une proposition) |
+| `admin.html`, `js/admin.js`, `css/admin.css` | **tri des propositions** reçues par le formulaire (page réservée : verrouillée par la Clé Admin, voir « Trier les propositions ») |
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
 | `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
@@ -109,6 +110,22 @@ partagée (sur Chrome Android : menu ⋮ → Paramètres → Paramètres des sit
 **Clé Admin** : jeton GitHub « à granularité fine », limité au dépôt `ouessant-birds`, permission
 *Contents : Read and write*, avec une date d'expiration. Ne jamais la partager ni l'écrire dans un fichier.
 Cochée « Mémoriser la clé sur cet appareil », elle est oubliée automatiquement au bout de **30 jours** ; sinon elle disparaît à la fermeture de l'onglet.
+
+## Trier les propositions
+
+Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce), la page **`admin.html`** les regroupe :
+
+1. Ouvrir l'éditeur avec la Clé Admin → bouton **Trier les propositions** (ou directement `admin.html`, qui demande la clé).
+2. Dans Google Forms : **Réponses → Afficher dans Sheets**, puis **Fichier → Télécharger → .csv**, et choisir ce fichier dans la page.
+   Le fichier est lu sur l'appareil : rien n'est mis en ligne.
+3. Choisir la période (un jour, « non traitées » ou tout). Chaque espèce / lieu-dit a sa carte : la valeur actuelle, chaque proposition
+   différente (avec le nombre de personnes, les dates et les commentaires), et les boutons **Valider** / **Tout rejeter**.
+   Les propositions déjà conformes à la liste sont signalées et ignorées. Les décisions sont gardées dans le navigateur.
+4. **Générer les lignes JSON** → copier le bloc Oiseaux puis le bloc Lieux dans l'éditeur (**Coller des lignes → Vérifier → Appliquer →
+   Enregistrer sur GitHub**). Puis **Marquer comme traitées** : la prochaine fois, « non traitées » ne montrera que les nouvelles réponses.
+
+Confidentialité : la page est verrouillée (la clé est vérifiée auprès de GitHub : seul le propriétaire du dépôt l'ouvre) et ne contient
+aucune donnée. Son code reste visible, comme tout le dépôt public ; les réponses, elles, ne quittent jamais la feuille Google et ton appareil.
 
 ## Sécurité
 

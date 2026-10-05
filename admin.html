@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<!-- Sécurité : page verrouillée par la Clé Admin (vérifiée auprès de GitHub) ; les réponses du formulaire sont lues depuis un fichier choisi sur l'appareil, rien n'est envoyé -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tri des propositions · Oiseaux d'Ouessant</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/polices.css">
+<link rel="stylesheet" href="css/commun.css">
+<link rel="stylesheet" href="css/editeur.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="index.html" class="home" title="Revenir à l'appli" aria-label="Revenir à l'appli"><img src="phare_creach.svg" alt=""></a>
+    <div class="intro">
+      <h1>Tri des propositions</h1>
+      <p class="sub">Regroupe les propositions reçues par le formulaire, espèce par espèce : tu valides ou tu rejettes, puis tu récupères les lignes JSON à coller dans l’éditeur.</p>
+    </div>
+  </header>
+
+  <!-- 0. Verrou : rien n'est affiché sans la Clé Admin -->
+  <section class="panel" id="lockPanel">
+    <h2>Page réservée</h2>
+    <p class="help">Entre la Clé Admin (la même que dans l’éditeur). Elle est vérifiée auprès de GitHub : seul le propriétaire du dépôt peut ouvrir cette page.</p>
+    <form id="lockForm" class="lock">
+      <input type="password" id="lockKey" autocomplete="off" spellcheck="false" placeholder="github_pat_…" aria-label="Clé Admin">
+      <button type="submit" class="btn primary">Déverrouiller</button>
+    </form>
+    <p class="msg" id="lockMsg" role="status"></p>
+  </section>
+
+  <!-- 1. Fichier des réponses -->
+  <section class="panel hidden" id="loadPanel">
+    <h2>1. Les réponses du formulaire</h2>
+    <p class="help">Dans Google Forms : onglet <b>Réponses</b> → <b>Afficher dans Sheets</b> ; puis dans la feuille : <b>Fichier → Télécharger → Valeurs séparées par des virgules (.csv)</b>. Choisis ensuite ce fichier ici (il reste sur ton appareil, rien n’est envoyé).</p>
+    <label class="drop" id="drop">
+      <input type="file" id="csvFile" accept=".csv,text/csv">
+      <span>Choisir le fichier .csv des réponses (ou le glisser ici)</span>
+    </label>
+    <p class="msg" id="loadMsg" role="status"></p>
+  </section>
+
+  <!-- 2. Tri -->
+  <section id="sortView" class="hidden">
+    <div class="bar admin-bar">
+      <div class="filters">
+        <label>Période <select id="period"></select></label>
+        <label>Trier par <select id="sortBy">
+          <option value="count">nombre de demandes</option>
+          <option value="name">nom (A → Z)</option>
+          <option value="type">type (suppressions, ajouts, modifications)</option>
+        </select></label>
+        <label>Afficher <select id="show">
+          <option value="todo">à décider</option>
+          <option value="ok">validées</option>
+          <option value="no">rejetées</option>
+          <option value="all">toutes</option>
+        </select></label>
+      </div>
+      <p class="count" id="summary"></p>
+    </div>
+    <div id="groups"></div>
+
+    <!-- 3. Résultat -->
+    <section class="panel" id="outPanel">
+      <h2>3. Les lignes JSON validées</h2>
+      <p class="help">Dans l’éditeur (avec ta clé) : onglet de la liste → <b>Coller des lignes</b> → colle → <b>Vérifier</b> → <b>Appliquer</b> → <b>Enregistrer sur GitHub</b>. Une liste à la fois : Oiseaux puis Lieux.</p>
+      <div class="actions"><button type="button" class="btn primary" id="genBtn">Générer les lignes JSON</button></div>
+      <div id="outBlocks"></div>
+      <div class="actions"><button type="button" class="btn" id="doneBtn" disabled>Marquer les propositions de cette période comme traitées</button></div>
+      <p class="msg" id="outMsg" role="status"></p>
+    </section>
+  </section>
+
+  <p class="back"><a class="btn" href="editeur.html"><span aria-hidden="true">←</span> <span>Ouvrir l’éditeur</span></a> <a class="btn" href="index.html"><span>Revenir à l’appli</span></a></p>
+</div>
+<div class="toast hidden" id="toast" role="status"></div>
+<script src="js/version.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
