@@ -1,17 +1,18 @@
 /* Oiseaux d'Ouessant — mise en forme des noms d'oiseaux (éditeur + nettoyage de la liste).
    Règles :
    • français : une majuscule au premier mot, puis des minuscules, sauf les noms propres (« Bécasseau de Baird », mais « Bécasseau minute »).
-     Un mot qui suit « de / du / des / d' » garde la casse saisie (c'est souvent un nom propre : « d'Europe », « de Baird », mais « des roseaux »).
-     Les noms propres connus (PROPRES) gardent leur majuscule partout. Apostrophes droites ('). « (spp. x) » et « (S.c.x) » deviennent « (ssp. x) ».
+     Un mot qui suit « de » ou « d' » garde la casse saisie (c'est souvent un nom propre : « d'Europe », « de Baird »). Après « du » et « des » : minuscule
+     (« des roseaux »), sauf nom propre connu (« du Nord », « des Balkans »). Les noms propres connus (PROPRES) gardent leur majuscule partout. Apostrophes droites ('). « (spp. x) » et « (S.c.x) » deviennent « (ssp. x) ».
    • anglais : une majuscule à chaque mot (« Steppe Eagle ») ; les mots déjà en casse mixte (McCormick's) sont conservés.
    • scientifique : majuscule au genre, minuscules ensuite (« Aquila nipalensis »).
    Pour ajouter un nom propre : l'ajouter à PROPRES ci-dessous. */
 (function(root){
   'use strict';
   const PROPRES = ['Europe', 'Asie', 'Afrique', 'Amérique', 'Océanie', 'Sibérie', 'Groenland', 'Islande', 'Écosse', 'Irlande', 'France', 'Canada', 'Alaska', 'Méditerranée',
+    'Brésil', 'Mexique', 'Pérou', 'Chine', 'Japon', 'Inde', 'Mongolie', 'Tibet', 'Himalaya', 'Caucase', 'Oural', 'Sahara', 'Arabie', 'Égypte', 'Maroc', 'Espagne', 'Portugal', 'Italie', 'Grèce', 'Russie', 'Turquie',
+    'Chypre', 'Crète', 'Corse', 'Madère', 'Canaries', 'Açores', 'Hawaï', 'Californie', 'Floride', 'Louisiane', 'Antilles', 'Amazonie', 'Patagonie', 'Angleterre',
     'Balkans', 'Baléares', 'Macaronésie', 'Colchide', 'Caroline', 'Baltimore', 'Petchora', 'Bassan', 'Nord', 'Anglais', 'Saint-Martin', 'Jean-le-Blanc',
     'Baird', 'Bonaparte', 'Yarrell', 'Cetti', 'Kumlien', 'Troïl', 'McCormick', 'Franklin', 'Sabine', 'Wilson', 'Godlewski', 'Richard', 'Bonelli', 'Hume', 'Pallas', 'Schwarz', 'Temminck', 'Scopoli', 'Dougall', 'Belon'];
-  const SUIT_DE = new Set(['de', 'du', 'des']);   // après ces mots, la casse saisie est conservée (nom propre possible)
   const propre = new Map(PROPRES.map(p => [p.toLowerCase(), p]));
   const cap = w => w ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : w;
 
@@ -33,8 +34,8 @@
       else if (pre === "d'" || apresDe) r = (!propre.has(low) && /^[A-ZÀ-ÖØ-Þ]/.test(w)) ? w : low;   // après de / d' : casse saisie conservée
       else r = low;
       if (i === 0 && !pre) r = r.charAt(0).toUpperCase() + r.slice(1);
-      // « de » / « du » / « des » ouvrent la porte à un nom propre ; « la » / « le » / « les » la laissent ouverte
-      if (SUIT_DE.has(low) || pre === "d'") apresDe = true; else if (!(apresDe && (low === 'la' || low === 'le' || low === 'les'))) apresDe = false;
+      // « de » / « d' » ouvrent la porte à un nom propre (casse saisie conservée) ; « la » / « le » / « les » la laissent ouverte ; « du » / « des » la ferment
+      if (low === 'de' || pre === "d'") apresDe = true; else if (!(apresDe && (low === 'la' || low === 'le' || low === 'les'))) apresDe = false;
       return pre + r;
     });
     return out.join(' ') + rest;
