@@ -292,6 +292,20 @@
     }
     return body.length ? title + '\n\n' + body.join('\n') : title;
   }
+  // Numéro de version des listes : version de l'appli + nombre d'enregistrements depuis cette version (3.21.1, 3.21.2…).
+  // Stocké dans version_listes.json ; repart à 1 quand la version de l'appli (js/version.js) a changé.
+  async function bumpListsVersion(br){
+    try {
+      const app = window.OUESSANT_APP_VERSION; if (!app) return null;
+      const p = '/contents/version_listes.json', r0 = await api(`${p}?ref=${encodeURIComponent(br)}`);
+      let cur = {}, sha;
+      if (r0.ok){ const j0 = await r0.json(); sha = j0.sha; try { cur = JSON.parse(b64dec(j0.content)); } catch (_) {} }
+      else if (r0.status !== 404) return null;
+      const rev = (cur.app === app && Number.isInteger(cur.rev) ? cur.rev : 0) + 1;
+      const r = await api(p, { method: 'PUT', body: JSON.stringify({ message: `Version des listes : ${app}.${rev}`, content: b64enc(JSON.stringify({ app, rev }) + '\n'), sha, branch: br }) });
+      return r.ok ? `${app}.${rev}` : null;
+    } catch (_) { return null; }
+  }
   $('ghSaveBtn').addEventListener('click', () => {
     if (!getToken()){ openKey(); return; }
     ['pastePanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
@@ -321,11 +335,12 @@
       if (r.status === 403 || r.status === 404) throw new Error('la clé n’a pas le droit d’écrire dans ce dépôt (permission « Contents : Read and write » manquante ?).');
       if (!r.ok) throw new Error('erreur ' + r.status);
       const j = await r.json();
+      const ver = await bumpListsVersion(br);
       gh = { path, sha: j.content.sha, branch: br };
       items.forEach(it => { it.orig = clone(it.data); }); deleted = [];   // l'état enregistré devient la nouvelle référence
       save(); render();
       out.className = 'msg good';
-      out.innerHTML = `Enregistré sur <b>${esc(br)}</b> ! <a href="${esc(j.commit.html_url)}" target="_blank" rel="noopener">Voir le commit</a>. ` + (br === 'main'
+      out.innerHTML = `Enregistré sur <b>${esc(br)}</b> ! <a href="${esc(j.commit.html_url)}" target="_blank" rel="noopener">Voir le commit</a>. <span>${esc(ver ? 'Version des listes : ' + ver + '.' : 'Le numéro de version des listes n’a pas pu être mis à jour.')}</span> ` + (br === 'main'
         ? 'L’appli en ligne sera à jour d’ici quelques minutes.'
         : `L’appli en ligne ne change pas tant que cette branche n’est pas fusionnée : <a href="https://github.com/${GH.owner}/${GH.repo}/compare/main...${encodeURIComponent(br)}?expand=1" target="_blank" rel="noopener">ouvrir une pull request vers main</a>.`);
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Échec : ' + e.message; $('ghCommit').disabled = false; }

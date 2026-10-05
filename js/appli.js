@@ -3,13 +3,15 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.22';
+  const APP_VERSION = window.OUESSANT_APP_VERSION || '?';
+  let listsRev = null;   // { app, rev } lu dans version_listes.json
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function versionText(){
     const fmt = h => { const d = h ? new Date(h) : null; return d && !isNaN(d) ? d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB') : null; };
     const b = fmt(listsDate.birds), p = fmt(listsDate.places);
     const dates = b && p && b !== p ? T('listsOfBoth')(b, p) : (b || p) ? T('listsOf')(b || p) : '';
-    return 'v' + APP_VERSION + (dates ? ' · ' + dates : '');
+    const rev = listsRev && listsRev.app === APP_VERSION && listsRev.rev > 0 ? '.' + listsRev.rev : '';   // autre version d'appli : on repart de zéro
+    return 'v' + APP_VERSION + rev + (dates ? ' · ' + dates : '');
   }
   const showVersion = () => { if (!$('pharePanel').hidden) renderPhare(); };
   const URL_DATA = 'ouessant_birds.json';
@@ -708,6 +710,7 @@
   updatePhare();
 
   // 1) GitHub  2) copie enregistrée dans le navigateur  3) import manuel
+  fetch('version_listes.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()).then(v => { if (v && typeof v.rev === 'number') { listsRev = v; showVersion(); } }).catch(() => {});
   fetch(URL_DATA)
     .then(r => { if(!r.ok) throw new Error(r.status); listsDate.birds = r.headers.get('last-modified'); return r.json(); })
     .then(data => { setData(data, 'sourceGithub'); showVersion(); })
