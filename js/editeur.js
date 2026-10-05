@@ -41,15 +41,17 @@
     // fond : la carte, recadrée sur la zone quadrillée
     const bw = (MAP_W / (GRID_X[cols] - GRID_X[0]) * 100).toFixed(3), bx = (GRID_X[0] / (MAP_W - (GRID_X[cols] - GRID_X[0])) * 100).toFixed(3);
     const by = (GRID_Y[0] / (MAP_H - (GRID_Y[rows] - GRID_Y[0])) * 100).toFixed(3);
-    let h = `<div class="cells-tools" role="group" aria-label="Zoom de la carte">
-        <button type="button" class="zb" data-zoom="-" aria-label="Dézoomer">−</button>
-        <span class="zl" data-zoom-label>${Math.round(zoom * 100)} %</span>
-        <button type="button" class="zb" data-zoom="+" aria-label="Zoomer">+</button>
+    let h = `<div class="cells-tools">
         <button type="button" class="btn ghost" data-zoom="sel">Centrer sur la sélection</button>
         <button type="button" class="btn ghost" data-zoom="fit">Toute la carte</button>
         ${hasGeo() ? '<span style="flex:1"></span><button type="button" class="btn" data-gps>Je suis sur place : envoyer ma position GPS</button><button type="button" class="btn" data-pick aria-pressed="false">Placer le point GPS sur la carte</button>' : ''}
       </div>
       ${hasGeo() ? '<p class="geo-hint" data-geo-hint></p>' : ''}
+      <div class="zoom-row" role="group" aria-label="Zoom de la carte">
+        <button type="button" class="zb" data-zoom="-" aria-label="Dézoomer">−</button>
+        <span class="zl" data-zoom-label>${Math.round(zoom * 100)} %</span>
+        <button type="button" class="zb" data-zoom="+" aria-label="Zoomer">+</button>
+      </div>
       <div class="cells-scroll"><div class="cells-wrap" style="--z:${zoom}"><div class="cells-head" style="grid-template-columns:${fx}">${Array.from({ length: cols }, (_, c) => `<span>${String.fromCharCode(65 + c)}</span>`).join('')}</div>
       <div class="cells-body"><div class="cells-side" style="grid-template-rows:${fy}">${Array.from({ length: rows }, (_, r) => `<span>${r + 1}</span>`).join('')}</div>
       <div class="cells${mapOk ? ' with-map' : ''}" role="group" aria-label="Carrés de la carte" style="grid-template-columns:${fx};grid-template-rows:${fy};aspect-ratio:${GRID_X[cols] - GRID_X[0]} / ${GRID_Y[rows] - GRID_Y[0]};background-size:${bw}% auto;background-position:${bx}% ${by}%">`;
