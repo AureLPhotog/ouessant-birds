@@ -548,9 +548,13 @@
       const en = window.OuessantEditeurLangue && window.OuessantEditeurLangue.lang === 'en' && fields.includes(K_EN);
       return [en ? K_EN : K_FR, K_SCI, K_CANAL];
     }
+    const geo = ['nom', 'carres', 'precision_m'];
+    if (geo.every(k => fields.includes(k))) return geo;
     return fields.slice(0, 3);
   }
   const cols = () => shownFields().length;
+  const HEAD = { nom: 'Nom', carres: 'Carrés', precision_m: 'Précision (m)' };
+  const headName = k => HEAD[k] || dispName(k);   // en-têtes du tableau des lieux
   const dispName = k => k === K_CANAL ? 'Canal de diffusion' : k;   // nom affiché du champ (la clé dans le fichier ne change pas)
   phone.addEventListener('change', () => { if (items.length) render(); });
   document.addEventListener('click', e => { if (e.target.closest('.lang button') && items.length) setTimeout(render, 0); });   // changement de langue : la colonne du nom suit
@@ -566,7 +570,7 @@
       (c.del ? `<span class="badge del">${c.del} supprimée${c.del > 1 ? 's' : ''}</span>` : '');
     const thead = $('table').tHead, tbody = $('table').tBodies[0];
     const shownF = shownFields();
-    thead.innerHTML = '<tr>' + shownF.map(k => `<th scope="col"><button type="button" data-sort="${esc(k)}">${esc(dispName(k))}${sortField === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</button></th>`).join('') + '</tr>';
+    thead.innerHTML = '<tr>' + shownF.map(k => `<th scope="col"><button type="button" data-sort="${esc(k)}">${esc(headName(k))}${sortField === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</button></th>`).join('') + '</tr>';
     const rows = list.slice(0, shown).map(it => {
       const st = stateOf(it);
       let html = `<tr class="item${st ? ' is-' + st : ''}${openId === it.id ? ' is-open' : ''}" data-id="${it.id}" tabindex="0" aria-expanded="${openId === it.id}">` + shownF.map(k => {
