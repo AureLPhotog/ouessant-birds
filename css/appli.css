@@ -31,7 +31,7 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
 .day .dw{display:flex;justify-content:center;align-items:center;gap:.2rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.76rem}
 .pp-ver{margin:0 0 .3rem;font-size:.8rem;color:var(--granite);font-variant-numeric:tabular-nums}
 .pp-foot .link{font-size:.85rem}
-.pp-foot .legal{margin-top:.6rem;padding:0;border:0;background:none;max-width:none;font-size:.82rem}
+.pp-foot .legal{margin-top:.6rem;padding:.75rem .85rem;border:1px solid color-mix(in srgb,var(--new) 35%,var(--paper));border-radius:10px;background:var(--new-bg);max-width:none;font-size:.82rem}
 .pp-src{margin:.6rem 0 0;font-size:.75rem;color:var(--granite)}
 @media (max-width:420px){ .day .dw svg{display:none} }
 .pp-src a{color:inherit}
