@@ -3,7 +3,7 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.15';
+  const APP_VERSION = '3.16';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
@@ -446,7 +446,7 @@
     }
     const near = ranked.slice(0, NEAR_N);
     $('shareLoc').hidden = false;
-    st.textContent = T('youAre')(cellName(cell), Math.round(acc));
+    st.textContent = T('youAre')(cellName(cell), Math.round(acc)) + (acc > 100 ? ' ' + T('gpsLow') : '');
     const dirs = T('dirs');
     out.innerHTML = '<ul class="list">' + near.map((n, i) => `<li class="near">
         <span class="num">${i + 1}</span>
@@ -462,6 +462,22 @@
     loadMap().then(img => drawPreview(view, [cellName(cell)], img, marks, T('whereCaption')(cellName(cell))),
       () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
+  // Position GPS : le premier relevé d'un téléphone est souvent grossier (antennes, Wi-Fi : parfois ± 2 km).
+  // On écoute le GPS jusqu'à 15 s, on garde le relevé le plus précis et on s'arrête dès qu'il est bon (≤ 30 m).
+  function locate(onProgress, onDone, onError){
+    let best = null, wid = null, timer = null, over = false;
+    const stop = () => { over = true; clearTimeout(timer); try { navigator.geolocation.clearWatch(wid); } catch (_) {} };
+    const finish = () => { if (over) return; stop(); best ? onDone(best) : onError(); };
+    wid = navigator.geolocation.watchPosition(pos => {
+      if (over) return;
+      const f = { lat: pos.coords.latitude, lon: pos.coords.longitude, acc: pos.coords.accuracy };
+      if (!best || f.acc <= best.acc) best = f;
+      if (best.acc <= 30) return finish();
+      onProgress(best);
+    }, () => finish(), { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    timer = setTimeout(finish, 15000);
+  }
+
   // ---------- Alerte : message prêt à coller dans le groupe Telegram / WhatsApp ----------
   // Aucun lien de groupe n'est publié : l'appli copie le message et ouvre l'appli de messagerie, l'utilisateur choisit le groupe.
   function alertParts(b, fix){
@@ -480,6 +496,7 @@
   // Sur l'île ? (dans la carte, et à moins de 3 km d'un lieu-dit, comme dans « Où suis-je ? »)
   const onIsland = fix => cellAt(...toPixel(fix.lat, fix.lon)) && (!PLACES.length || Math.min(...PLACES.map(p => distM(fix.lat, fix.lon, p[2], p[3]))) <= 3000);
   function fillAlert(box, b, kind, fix, failed){
+    if (fix && fix.acc > 500){ box.innerHTML = `<p class="astat bad" role="alert">${esc(T('alertImprecise')(Math.round(fix.acc)))}</p><div class="actions"><button type="button" data-aretry>${esc(T('retry'))}</button></div>`; return; }
     if (fix && !onIsland(fix)){ box.innerHTML = `<p class="astat bad" role="alert">${esc(T('alertOff'))}</p>`; return; }
     const { head, url, text } = alertParts(b, fix);
     const open = kind === 'whatsapp' ? 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text)
@@ -491,9 +508,12 @@
     const done = () => { st.textContent = T('alertCopied'); };
     const bad = () => { st.textContent = T('alertCopyFail'); };
     if (failed) st.textContent = T('alertNoGps');
+    else if (fix && fix.acc > 100) st.textContent = T('alertApprox')(Math.round(fix.acc));
     else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, bad); else bad();
   }
   results.addEventListener('click', e => {
+    const rt = e.target.closest('[data-aretry]');
+    if (rt){ const li = rt.closest('.row'); runAlert(li.querySelector('.alertbox'), shownBirds[+li.dataset.bi], li.querySelector('.canal-btn').dataset.alert); return; }
     const cp = e.target.closest('[data-acopy]');
     if (cp){
       const box = cp.closest('.alertbox'), text = box.querySelector('.atext').value;
@@ -506,14 +526,16 @@
     const show = box.hidden;
     box.hidden = !show; btn.setAttribute('aria-expanded', String(show));
     if (!show) return;
-    const kind = btn.dataset.alert, token = box.dataset.t = String(Date.now());
+    runAlert(box, b, btn.dataset.alert);
+  });
+  function runAlert(box, b, kind){
+    const token = box.dataset.t = String(Date.now()), live = () => box.dataset.t === token && !box.hidden;
     box.innerHTML = `<p class="astat" aria-live="polite">${esc(T('gpsWait'))}</p>`;
     if (!navigator.geolocation){ fillAlert(box, b, kind, null, true); return; }
-    navigator.geolocation.getCurrentPosition(
-      pos => { if (box.dataset.t === token && !box.hidden) fillAlert(box, b, kind, { lat: pos.coords.latitude, lon: pos.coords.longitude }, false); },
-      () => { if (box.dataset.t === token && !box.hidden) fillAlert(box, b, kind, null, true); },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
-  });
+    locate(f => { if (live()) box.querySelector('.astat').textContent = T('gpsWait') + ' (± ' + Math.round(f.acc) + ' m)'; },
+      fix => { if (live()) fillAlert(box, b, kind, fix, false); },
+      () => { if (live()) fillAlert(box, b, kind, null, true); });
+  }
 
   // Partager ma position : message prêt à envoyer (lieu-dit le plus proche, coordonnées, lien Google Maps)
   $('shareLoc').addEventListener('click', () => {
@@ -530,11 +552,12 @@
     const st = $('wstatus');
     if (!navigator.geolocation){ st.textContent = T('gpsErr'); return; }
     st.textContent = T('gpsWait');
-    navigator.geolocation.getCurrentPosition(pos => {
-      lastFix = { lat: pos.coords.latitude, lon: pos.coords.longitude, acc: pos.coords.accuracy };
-      $('locate').querySelector('span').textContent = T('relocateBtn');
-      renderWhere();
-    }, () => { st.textContent = T('gpsErr'); }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    locate(f => { st.textContent = T('gpsWait') + ' (± ' + Math.round(f.acc) + ' m)'; },
+      fix => {
+        lastFix = fix;
+        $('locate').querySelector('span').textContent = T('relocateBtn');
+        renderWhere();
+      }, () => { st.textContent = T('gpsErr'); });
   });
 
   let t;
