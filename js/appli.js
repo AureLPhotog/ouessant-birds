@@ -731,23 +731,23 @@
     + '</linearGradient>'
     + '</defs>'
     // Aile arrière
-    + '<g transform="translate(4 0)">'
+    + '<g transform="translate(36 0) scale(.85 1) translate(-32 0)">'
     + '<g class="eb-far">'
     + '<path fill="#555" d="M31 16.6C30.4 12 28.8 7.8 26 4.4C23 0.8 18.4-1.5 12.4-1.8C9.4-2 6.4-1.6 3.6-1L8 2.3L6 3.7L10.4 5.6L8.6 7.2L13.2 8.8L11.6 10.4L16.2 11.6L14.8 13.2L19.4 14.2L18.2 15.8L22.9 16.4L22.2 17.7L26.4 17.9C28.4 18 30 17.7 31 16.6Z"/>'
     + '<path fill="#666" d="M3.6-1C10-1.7 17-0.2 22.6 3.8C17.5 0.5 11.2-0.9 3.6-1Z"/>'
     + '<path fill="#4a4a4a" d="M8.6 7.2C14.6 7.6 20.4 9.8 25.6 14C21 11 15 8.4 8.6 7.2Z"/>'
     + '</g>'
     + '</g>'
-    // Queue : 6 plumes, extrémités échelonnées (décalée vers l'avant : corps raccourci)
-    + '<g transform="translate(2.5 0)">'
+    // Queue : 6 plumes, extrémités échelonnées (raccourcie de 28 % et rapprochée du corps)
+    + '<g transform="translate(24.2 0) scale(.72 1) translate(-21.2 0)">'
     + '<path fill="#222" d="M21.2 18.2C16.4 17.2 11.2 15.6 6 14L2 12.6L4.6 14.8L3.4 15.4L6.2 17L4.4 18.4L7.4 19.2L5.2 20.6L8 21.2L5.8 22.8C11.8 22 17 21.2 21.2 20.8Z"/>'
     + '<path fill="#333" d="M21 19.2C16 19.6 11.2 20.6 6.2 22L2.2 23.6L6.6 23.2L5.6 24.4C10.4 23.6 15.8 22.6 21 21.6Z"/>'
     + '<path fill="none" stroke="#444" stroke-width=".3" stroke-linecap="round" d="M20.6 18.7C15 18.4 9.4 17.4 4.4 15.2M20.6 19.4C15 19.7 9.4 20.4 3.4 22.9"/>'
     + '</g>'
-    // Corps (raccourci de 15 %)
-    + '<path transform="translate(43 0) scale(.85 1) translate(-43 0)" fill="#222" d="M18.1 18.7c1.1-3.4 4.7-6.2 10.1-6.8 4.9-.6 9.7.4 12.5 2.1.7.4 1.4 1 2.1 1.5 1 2.3-.2 4.6-2.1 6.1-2 .6-4 .9-6 .9C30.3 23.7 25.7 22.8 21.1 22.1 19 21.3 18.1 19.8 18.1 18.7z"/>'
+    // Corps (raccourci de 20 %)
+    + '<path transform="translate(43 0) scale(.8 1) translate(-43 0)" fill="#222" d="M18.1 18.7c1.1-3.4 4.7-6.2 10.1-6.8 4.9-.6 9.7.4 12.5 2.1.7.4 1.4 1 2.1 1.5 1 2.3-.2 4.6-2.1 6.1-2 .6-4 .9-6 .9C30.3 23.7 25.7 22.8 21.1 22.1 19 21.3 18.1 19.8 18.1 18.7z"/>'
     // Aile avant : 8 plumes primaires/secondaires + couvertures
-    + '<g transform="translate(4 0)">'
+    + '<g transform="translate(36 0) scale(.85 1) translate(-32 0)">'
     + '<g class="eb-near">'
     + '<path fill="#292929" d="M32.8 17.6C32.2 13 30.6 8.8 27.8 5.4C24.8 1.7 20.2-0.6 14.2-0.9C11.2-1.1 8.2-0.7 5.4-0.1L9.8 3.3L7.8 4.7L12.2 6.6L10.4 8.2L15 9.8L13.4 11.4L18 12.6L16.6 14.2L21.2 15.2L20 16.8L24.7 17.4L24 18.7L28.2 18.9C30.2 19 31.7 18.7 32.8 17.6Z"/>'
     // séparations des plumes
