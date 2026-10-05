@@ -73,7 +73,8 @@ mark{background:var(--mark);color:inherit;border-radius:3px}
 .more{padding:.8rem;text-align:center;color:var(--granite)}
 
 /* Formulaire d'édition */
-tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:1rem}
+tr.editor td{background:color-mix(in srgb,var(--ocean) 14%,var(--paper));padding:1rem;border-bottom:2px solid var(--ocean)}
+tr.item.is-open td{background:color-mix(in srgb,var(--ocean) 22%,var(--paper));font-weight:600}
 .form{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.8rem}
 .form label{display:grid;gap:.25rem;font-size:.8rem;color:var(--granite);font-weight:600}
 .form label .was{font-weight:400;font-size:.75rem;color:var(--granite)}
@@ -133,7 +134,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 .toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--foam);
   padding:.65rem 1rem;border-radius:10px;font-size:.9rem;display:flex;gap:.8rem;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:50;max-width:calc(100% - 2rem)}
 .toast button{all:unset;cursor:pointer;font-weight:700;text-decoration:underline}
-@media (max-width:640px){ th:nth-child(n+4),td:nth-child(n+4){display:none}
+@media (max-width:640px){
   /* téléphone : le tableau tient dans l'écran ; texte un peu plus petit, mots coupés proprement (césure) plutôt qu'au milieu d'une lettre */
   table{table-layout:fixed;font-size:.85rem} th,td{padding:.45rem .5rem;overflow-wrap:break-word;hyphens:auto}
   th{white-space:normal;font-size:.7rem} th:nth-child(1){width:40%} th:nth-child(2){width:32%} }

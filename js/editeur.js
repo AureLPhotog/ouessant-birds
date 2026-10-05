@@ -496,7 +496,7 @@
   function buildFilters(){
     $('filters').innerHTML = fields.filter(k => types[k].choices || types[k].t === 'bool').map(k => {
       const opts = types[k].t === 'bool' ? [['true','oui'],['false','non']] : types[k].choices.map(c => [c, labelOf(k, c) || c]);
-      return `<label>${esc(k)} <select data-filter="${esc(k)}"><option value="">Tous</option>${opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('')}<option value="__empty">(vide)</option></select></label>`;
+      return `<label>${esc(dispName(k))} <select data-filter="${esc(k)}"><option value="">Tous</option>${opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('')}<option value="__empty">(vide)</option></select></label>`;
     }).join('') + `<label>État <select data-filter="__state"><option value="">Tous</option><option value="mod">Modifiés</option><option value="new">Ajoutés</option><option value="any">Modifiés ou ajoutés</option></select></label>`;
   }
   $('filters').addEventListener('change', e => {
@@ -538,10 +538,22 @@
     const mod = items.filter(it => it.orig && !same(it.data, it.orig)).length, add = items.filter(it => !it.orig).length, del = deleted.filter(it => it.orig).length;
     return { mod, add, del, total: mod + add + del };
   }
-  // Téléphone : seules les 3 premières colonnes sont affichées ; les lignes pleine largeur (formulaire, « Afficher plus ») doivent s'étendre sur ces 3 colonnes
+  // Téléphone : 3 colonnes seulement. Pour les oiseaux : le nom dans la langue choisie (français ou anglais), le nom scientifique et le canal ;
+  // pour les lieux : les 3 premiers champs. Les lignes pleine largeur (formulaire, « Afficher plus ») s'étendent sur ces colonnes.
   const phone = matchMedia('(max-width:640px)');
-  const cols = () => phone.matches ? Math.min(3, fields.length) : fields.length;
+  const K_FR = 'Nom Français', K_EN = 'Nom Anglais', K_SCI = 'Nom Scientifique', K_CANAL = 'Proposition de Canal de Diffusion Ouessant';
+  function shownFields(){
+    if (!phone.matches) return fields;
+    if ([K_FR, K_SCI, K_CANAL].every(k => fields.includes(k))){
+      const en = window.OuessantEditeurLangue && window.OuessantEditeurLangue.lang === 'en' && fields.includes(K_EN);
+      return [en ? K_EN : K_FR, K_SCI, K_CANAL];
+    }
+    return fields.slice(0, 3);
+  }
+  const cols = () => shownFields().length;
+  const dispName = k => k === K_CANAL ? 'Canal de diffusion' : k;   // nom affiché du champ (la clé dans le fichier ne change pas)
   phone.addEventListener('change', () => { if (items.length) render(); });
+  document.addEventListener('click', e => { if (e.target.closest('.lang button') && items.length) setTimeout(render, 0); });   // changement de langue : la colonne du nom suit
   function render(){
     const list = visible(), c = changes();
     $('proposeBtn').classList.toggle('attention', c.total > 0);   // jaune : « c'est ici qu'on soumet »
@@ -553,10 +565,11 @@
       (c.add ? `<span class="badge new">${c.add} ajoutée${c.add > 1 ? 's' : ''}</span> ` : '') +
       (c.del ? `<span class="badge del">${c.del} supprimée${c.del > 1 ? 's' : ''}</span>` : '');
     const thead = $('table').tHead, tbody = $('table').tBodies[0];
-    thead.innerHTML = '<tr>' + fields.map(k => `<th scope="col"><button type="button" data-sort="${esc(k)}">${esc(k)}${sortField === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</button></th>`).join('') + '</tr>';
+    const shownF = shownFields();
+    thead.innerHTML = '<tr>' + shownF.map(k => `<th scope="col"><button type="button" data-sort="${esc(k)}">${esc(dispName(k))}${sortField === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</button></th>`).join('') + '</tr>';
     const rows = list.slice(0, shown).map(it => {
       const st = stateOf(it);
-      let html = `<tr class="item${st ? ' is-' + st : ''}" data-id="${it.id}" tabindex="0" aria-expanded="${openId === it.id}">` + fields.map(k => {
+      let html = `<tr class="item${st ? ' is-' + st : ''}${openId === it.id ? ' is-open' : ''}" data-id="${it.id}" tabindex="0" aria-expanded="${openId === it.id}">` + shownF.map(k => {
         const v = showK(k, it.data[k]);
         return `<td class="${['number','numlist'].includes(types[k].t) ? 'num' : ''}">${v === '' ? '<span class="empty">vide</span>' : hl(v)}</td>`;
       }).join('') + '</tr>';
@@ -637,19 +650,19 @@
     if (cfg && cfg.type === 'select'){
       const known = cfg.options.some(o => o[0] === v);
       const opts = (v && !known ? [[v, v + ' (valeur non reconnue)']] : []).concat(cfg.options);
-      return `<label${cls}>${esc(k)}<select data-k="${esc(k)}">${v === undefined || v === '' ? '<option value="">— choisir —</option>' : ''}${opts.map(([val, lab]) => `<option value="${esc(val)}"${val === v ? ' selected' : ''}>${esc(lab)}</option>`).join('')}</select>${was}</label>`;
+      return `<label${cls}>${esc(dispName(k))}<select data-k="${esc(k)}">${v === undefined || v === '' ? '<option value="">— choisir —</option>' : ''}${opts.map(([val, lab]) => `<option value="${esc(val)}"${val === v ? ' selected' : ''}>${esc(lab)}</option>`).join('')}</select>${was}</label>`;
     }
     if (cfg && cfg.type === 'cells'){
       const list = Array.isArray(v) ? v : [];
-      return `<div class="cells-field${was ? ' changed' : ''}"><label>${esc(k)}<input type="text" data-k="${esc(k)}" data-cells value="${esc(list.join(', '))}" autocomplete="off" placeholder="clique sur la grille ou tape B8, B9"></label>${was}${cellsHtml(list)}</div>`;
+      return `<div class="cells-field${was ? ' changed' : ''}"><label>${esc(dispName(k))}<input type="text" data-k="${esc(k)}" data-cells value="${esc(list.join(', '))}" autocomplete="off" placeholder="clique sur la grille ou tape B8, B9"></label>${was}${cellsHtml(list)}</div>`;
     }
-    if (t === 'bool') return `<label${cls}><span>${esc(k)}</span><span class="chk"><input type="checkbox" data-k="${esc(k)}"${v ? ' checked' : ''}> ${v ? 'oui' : 'non'}</span>${was}</label>`;
-    if (t === 'number') return `<label${cls}>${esc(k)}<input type="text" inputmode="decimal" data-k="${esc(k)}" value="${esc(v ?? '')}" autocomplete="off">${was}</label>`;
-    if (t === 'json') return `<label${cls}>${esc(k)}<textarea rows="2" data-k="${esc(k)}">${esc(v === undefined ? '' : JSON.stringify(v))}</textarea>${was}</label>`;
+    if (t === 'bool') return `<label${cls}><span>${esc(dispName(k))}</span><span class="chk"><input type="checkbox" data-k="${esc(k)}"${v ? ' checked' : ''}> ${v ? 'oui' : 'non'}</span>${was}</label>`;
+    if (t === 'number') return `<label${cls}>${esc(dispName(k))}<input type="text" inputmode="decimal" data-k="${esc(k)}" value="${esc(v ?? '')}" autocomplete="off">${was}</label>`;
+    if (t === 'json') return `<label${cls}>${esc(dispName(k))}<textarea rows="2" data-k="${esc(k)}">${esc(v === undefined ? '' : JSON.stringify(v))}</textarea>${was}</label>`;
     const val = show(v, t), list = ch ? ` list="dl-${esc(k)}"` : '';
     const dl = ch ? `<datalist id="dl-${esc(k)}">${ch.map(c => `<option value="${esc(c)}">`).join('')}</datalist>` : '';
     const ph = t === 'list' || t === 'numlist' ? ' placeholder="valeurs séparées par des virgules"' : '';
-    return `<label${cls}>${esc(k)}<input type="text" data-k="${esc(k)}" value="${esc(val)}"${list}${ph} autocomplete="off">${dl}${was}</label>`;
+    return `<label${cls}>${esc(dispName(k))}<input type="text" data-k="${esc(k)}" value="${esc(val)}"${list}${ph} autocomplete="off">${dl}${was}</label>`;
   }
   function editorHtml(it){
     return `<div class="form-wrap" data-id="${it.id}"><div class="form">${fields.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
