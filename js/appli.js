@@ -459,12 +459,12 @@
     $('shareLoc').hidden = false;
     st.textContent = T('youAre')(cellName(cell), Math.round(acc), near.length) + (acc > 100 ? ' ' + T('gpsLow') : '');
     const dirs = T('dirs');
-    out.innerHTML = '<ul class="list">' + near.map((n, i) => `<li class="near">
+    out.innerHTML = '<ul class="list">' + near.map((n, i) => `<li class="near"><a class="nlink" href="https://www.google.com/maps/search/?api=1&query=${n.p[2]},${n.p[3]}" target="_blank" rel="noopener" title="${esc(T('openMap'))}">
         <span class="num">${i + 1}</span>
         <span class="nm">${esc(n.p[0])}</span>
         <span class="sq">${esc(T('square')(n.p[1].length))} ${esc(n.p[1].join(', '))}${n.p[5] ? ', ' + esc(T('checkedShort')) : ''}</span>
         <span class="dist">≈ ${fmtDist(n.d)}<small>${dirs[Math.round(bearing(lat, lon, n.p[2], n.p[3]) / 45) % 8]}</small></span>
-      </li>`).join('') + '</ul>';
+      </a></li>`).join('') + '</ul>';
     mapBox.hidden = false;
     mapBox.innerHTML = `<div class="pview"><p>${esc(T('mapLoading'))}</p></div>`;
     const view = mapBox.querySelector('.pview');
