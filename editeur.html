@@ -2,21 +2,24 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<!-- Sécurité : scripts de l'éditeur uniquement (les deux scripts intégrés sont autorisés par leur empreinte : à recalculer s'ils changent, voir README) ; connexions limitées à GitHub et iNaturalist -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-6v26MpxMBIZoiMpGUM14toNbRLeE5vGMSC7c61XvzZo=' 'sha256-qcJLScUig6XBb4R6MvLeLpBQm2USq0BlBXuiIJjpS6Y=' https://aurelphotog.github.io; style-src 'self' 'unsafe-inline' https://aurelphotog.github.io; img-src 'self' data: blob: https://aurelphotog.github.io; font-src 'self' https://aurelphotog.github.io; connect-src 'self' https://api.github.com https://api.inaturalist.org; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Éditeur de listes · Oiseaux d'Ouessant</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="https://aurelphotog.github.io/ouessant-birds/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/commun.css" onerror="this.onerror=null;this.href='https://aurelphotog.github.io/ouessant-birds/css/commun.css'">
-<link rel="stylesheet" href="css/editeur.css" onerror="this.onerror=null;this.href='https://aurelphotog.github.io/ouessant-birds/css/editeur.css'">
+<script>// Secours : un fichier introuvable (éditeur ouvert seul) est repris sur le site en ligne. Et l'éditeur refuse de s'afficher dans le cadre d'un autre site (clickjacking).
+if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (_) {} }
+document.addEventListener('error', function (e) { var t = e.target, f = t && t.getAttribute && t.getAttribute('data-secours'); if (!f) { if (t && t.hasAttribute && t.hasAttribute('data-retirer')) t.remove(); return; } t.removeAttribute('data-secours'); if (t.tagName === 'LINK') t.href = f; else t.src = f; }, true);</script>
+<link rel="stylesheet" href="css/polices.css" data-secours="https://aurelphotog.github.io/ouessant-birds/css/polices.css">
+<link rel="stylesheet" href="css/commun.css" data-secours="https://aurelphotog.github.io/ouessant-birds/css/commun.css">
+<link rel="stylesheet" href="css/editeur.css" data-secours="https://aurelphotog.github.io/ouessant-birds/css/editeur.css">
 
 </head>
 <body>
 <div class="wrap">
   <header>
-    <a href="index.html" class="home" title="Revenir à l'appli" aria-label="Revenir à l'appli"><img src="phare_creach.svg" alt="" onerror="if(!this.dataset.web){this.dataset.web=1;this.src='https://aurelphotog.github.io/ouessant-birds/phare_creach.svg'}else this.remove()"></a>
+    <a href="index.html" class="home" title="Revenir à l'appli" aria-label="Revenir à l'appli"><img src="phare_creach.svg" alt="" data-secours="https://aurelphotog.github.io/ouessant-birds/phare_creach.svg" data-retirer></a>
     <div class="intro">
       <h1>Éditeur de listes</h1>
       <p class="sub">Cherche un oiseau ou un lieu-dit, corrige-le ou ajoutes-en un, puis envoie ta proposition.</p>
