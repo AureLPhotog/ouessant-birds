@@ -198,7 +198,7 @@
         <span class="sci" lang="la">${highlight(b[K_SCI], raw)}</span>
         ${alt ? `<span class="en" lang="${lang === 'en' ? 'fr' : 'en'}">${highlight(alt, raw)}</span>` : ''}
         ${canalHtml}
-        <a class="bedit-btn" href="${editorLink('oiseaux', { cherche: b[K_SCI] })}">${esc(T('proposeEdit'))}</a>
+        <a class="bedit-btn" href="${editorLink('oiseaux', { cherche: b[K_SCI] })}" title="${esc(T('proposeEdit'))}" aria-label="${esc(T('proposeEdit'))}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
         <div class="alertbox" hidden></div>
       </li>`;
     }).join('') + '</ul>';

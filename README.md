@@ -95,7 +95,7 @@ partagée (sur Chrome Android : menu ⋮ → Paramètres → Paramètres des sit
 
 1. Ouvrir l'éditeur : <https://aurelphotog.github.io/ouessant-birds/editeur.html>
 2. Choisir l'onglet **Oiseaux** ou **Lieux**, modifier, puis **Enregistrer sur GitHub** (il faut la « Clé Admin », voir ci-dessous).
-3. Les **propositions des visiteurs** passent aussi par l'éditeur : dans l'appli, « Proposer une modification »,
+3. Les **propositions des visiteurs** passent aussi par l'éditeur : dans l'appli, le petit crayon ✎ à droite d'une espèce,
    « Proposer une meilleure position », « Proposer un nouvel oiseau / lieu-dit » ouvrent l'éditeur sur la bonne liste
    et la bonne entrée (pour un lieu, le bouton « Je suis sur place : envoyer ma position GPS » est dans l'éditeur).
    Le visiteur modifie, puis clique sur **Envoyer ma proposition** : un formulaire Google unique s'ouvre, prérempli avec
