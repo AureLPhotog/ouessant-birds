@@ -8,16 +8,16 @@
   // Oriole de Baltimore (photo détourée et légèrement stylisée) posé sur l'angle du cadre du QR code, et petite fougère (émoji) au pied
   const ORIOLE = '<span class="oriole" aria-hidden="true"><img class="o-sh" src="oriole_baltimore.webp" alt="" width="47" height="69"><img class="o-bd" src="oriole_baltimore.webp" alt="" width="47" height="69"></span>';
   const FERN = '<span class="fern" aria-hidden="true">🌿</span>';
-  // Rideau de fougères (easter egg) : 4 rangées de 3 émojis cachent le phare jusqu'à mi-hauteur, puis s'ouvrent de part et d'autre
+  // Rideau de fougères (easter egg) : 3 rangées de 3 émojis cachent le pied du phare, puis s'ouvrent de part et d'autre
   const HUES = [-55, 0, 25, -40, 0, -70, 15, -25, 10, -60, 0, -35];
   const RIDEAU = [];
-  for (let row = 0; row < 4; row++) for (let k = 0; k < 3; k++){
+  for (let row = 0; row < 3; row++) for (let k = 0; k < 3; k++){
     const side = k === 0 ? -1 : k === 2 ? 1 : (row % 2 ? 1 : -1);           // la fougère du milieu part à gauche, puis à droite, une rangée sur deux
     const n = RIDEAU.length, j = RIDEAU.filter(e => e.side === side).length;
     RIDEAU.push({
       side, cx: (k - 1) * 15 + (row % 2 ? 4 : -4), cr: (k - 1) * 14 + (row % 2 ? 6 : -6),   // fermé : serrées devant le phare
       ox: side * (34 + j * 7), or: side * (30 + j * 14),                                      // ouvert : écartées de chaque côté
-      hue: HUES[n % HUES.length], b: row * 14 + (k % 2) * 4,
+      hue: HUES[n % HUES.length], b: row * 12 + (k % 2) * 4,
       f: (j % 2 ? -1 : 1) * side,                                                             // symétrie : les fougères de droite sont les inverses de celles de gauche
       d: (row * 0.04 + k * 0.05).toFixed(2)
     });
@@ -705,7 +705,7 @@
     const now = Date.now();
     if (now < eggLock) return;                                   // juste après l'oiseau, on ignore les clics en trop
     clicks = clicks.filter(t => now - t < 2000); clicks.push(now);
-    if (clicks.length >= 5){ clicks = []; eggLock = now + 1500; openPhare(false); egg(); return; }
+    if (clicks.length >= 5){ clicks = []; eggLock = now + 6800; openPhare(false); egg(); return; }
     openPhare($('pharePanel').hidden);
   });
   $('pharePanel').addEventListener('click', e => {
@@ -720,17 +720,49 @@
   });
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
+  // L'oiseau sort de derrière les fougères, tourne autour du phare (devant puis derrière la tour) et repart vers la droite
+  const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
+    + '<g class="eb-far"><path d="M32 16C30 6 22-1 8 0c8 4 12 9 14 17z" opacity=".55"/></g>'
+    + '<path d="M18 17L1 13.5l2 7L18 21z"/><ellipse cx="30" cy="18" rx="13.5" ry="5.6"/>'
+    + '<circle cx="44" cy="15" r="4.7"/><path d="M48 13.6L58 16.2 48 17.8z"/><circle cx="45.6" cy="14" r="1" fill="var(--paper)"/>'
+    + '<g class="eb-near"><path d="M33 16C31 5 22-2 6-1c9 4 13 9 15 18z"/></g></svg>';
+  function flyBird(btn){
+    btn.insertAdjacentHTML('beforeend', BIRD_SVG);
+    const bird = btn.querySelector('.egg-flyer:last-child'), near = bird.querySelector('.eb-near'), far = bird.querySelector('.eb-far');
+    const rect = btn.getBoundingClientRect(), exitX = Math.max(rect.width + 80, innerWidth - rect.left - 10);
+    const CX = rect.width / 2, R = 30, RY = 8, DELAY = 1000, DUR = 5400, ORB = 0.74, TURNS = 1.25;
+    const t0 = performance.now(); let lastX = CX, dir = 1;
+    const wing = (g, k) => g.setAttribute('transform', `translate(28 16) scale(1 ${k.toFixed(2)}) translate(-28 -16)`);
+    (function frame(now){
+      const el = now - t0 - DELAY;
+      if (el < 0){ bird.style.opacity = 0; requestAnimationFrame(frame); return; }
+      const u = Math.min(1, el / DUR); let x, y, depth, k = 1;
+      if (u < ORB){
+        const w = u / ORB, e = w * w * (3 - 2 * w), th = Math.PI * 2 * TURNS * e;
+        x = CX + R * Math.sin(th); depth = Math.cos(th); y = 112 - 66 * e + RY * depth;
+        k = Math.min(1, w * 5);
+      } else {
+        const v = (u - ORB) / (1 - ORB), x0 = CX + R, y0 = 46;
+        x = x0 + (exitX - x0) * v * (0.35 + 0.65 * v); y = y0 - 30 * v; depth = 1;
+      }
+      if (Math.abs(x - lastX) > 0.05){ dir = x > lastX ? 1 : -1; lastX = x; }
+      const sc = (0.95 + 0.22 * depth) * (0.55 + 0.45 * (u < ORB ? Math.min(1, u / ORB * 4) : 1));
+      bird.style.transform = `translate(${(x - 20).toFixed(1)}px,${(y - 11.4).toFixed(1)}px) scale(${(dir * sc).toFixed(3)},${sc.toFixed(3)})`;
+      bird.style.zIndex = u < 0.1 ? 1 : depth > 0 ? 3 : -1;                   // 1 : derrière les fougères (z 2) ; -1 : derrière la tour
+      bird.style.opacity = Math.min(1, el / 250, Math.max(0, (exitX - x) / 70));
+      const ph = el / 1000 * Math.PI * 2 * 4.6; wing(near, Math.sin(ph)); wing(far, Math.sin(ph - 0.7));
+      if (u < 1) requestAnimationFrame(frame); else bird.remove();
+    })(performance.now());
+  }
   function egg(){
     const rares = birds.filter(b => canalKind(b[K_CANAL]) === 'telegram' && !isSsp(b));
     const b = rares.length ? rares[Math.floor(Math.random() * rares.length)] : null;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduce){
-      const header = document.querySelector('header');
       const btn = $('phareBtn');
       btn.insertAdjacentHTML('beforeend', rideauHtml());
       const ferns = btn.querySelector('.egg-ferns'); setTimeout(() => ferns.remove(), 4300);
-      header.insertAdjacentHTML('beforeend', `<svg class="egg-bird" viewBox="0 0 48 28" aria-hidden="true"><path d="M2 14 C10 4, 18 6, 24 14 C30 6, 38 4, 46 14 C38 10, 30 12, 24 18 C18 12, 10 10, 2 14 Z" fill="currentColor"/></svg>`);
-      const bird = header.querySelector('.egg-bird:last-child'); setTimeout(() => bird.remove(), 3600);
+      flyBird(btn);
     }
     const t = document.createElement('div'); t.className = 'egg-toast'; t.setAttribute('role', 'status');
     t.textContent = b ? T('egg')(mainName(b)) : T('eggNone'); document.body.appendChild(t); setTimeout(() => t.remove(), 4500);
