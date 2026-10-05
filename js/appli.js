@@ -8,11 +8,21 @@
   // Oriole de Baltimore (photo détourée et légèrement stylisée) posé sur l'angle du cadre du QR code, et petite fougère (émoji) au pied
   const ORIOLE = '<span class="oriole" aria-hidden="true"><img class="o-sh" src="oriole_baltimore.webp" alt="" width="47" height="69"><img class="o-bd" src="oriole_baltimore.webp" alt="" width="47" height="69"></span>';
   const FERN = '<span class="fern" aria-hidden="true">🌿</span>';
-  // Rideau de fougères (easter egg) : chaque feuille = [décalage fermé, angle fermé, décalage ouvert, angle ouvert, teinte, hauteur, inversée (-1) ou non (1)]
-  const RIDEAU = [[-20, 8, -34, -30, -55, 0, 1], [-11, -4, -42, -45, 0, 9, 1], [-3, 10, -50, -60, 25, 2, -1],
-                  [20, -8, 34, 30, 0, 0, -1], [11, 4, 42, 45, -40, 9, -1], [3, -10, 50, 60, -70, 2, 1]];
-  const rideauHtml = () => '<span class="egg-ferns" aria-hidden="true">' + RIDEAU.map(([cx, cr, ox, or, hue, b, f], i) =>
-    `<span class="ef" style="--cx:${cx}px;--cr:${cr}deg;--ox:${ox}px;--or:${or}deg;--hue:${hue}deg;--f:${f};bottom:${b}px;animation-delay:${(i % 3) * 0.08}s">🌿</span>`).join('') + '</span>';
+  // Rideau de fougères (easter egg) : 4 rangées de 6 émojis cachent le phare jusqu'à mi-hauteur, puis s'ouvrent (3 à gauche, 3 à droite)
+  const HUES = [-55, 0, 25, -40, 0, -70, 15, -25];
+  const RIDEAU = [];
+  for (let row = 0; row < 4; row++) for (const side of [-1, 1]) for (let k = 0; k < 3; k++){
+    const i = row * 6 + (side < 0 ? 0 : 3) + k;
+    RIDEAU.push({
+      cx: side * (4 + k * 9 + (row % 2) * 3), cr: side * (-8 + k * 9 + row * 2),            // fermé : serrées devant le phare
+      ox: side * (32 + k * 9 + row * 2), or: side * (28 + k * 16),                          // ouvert : écartées de chaque côté
+      hue: HUES[i % HUES.length], b: row * 13 + (k % 2) * 4,
+      f: (side < 0) === (k < 2) ? 1 : -1,                                                   // symétrie : à gauche 2 classiques + 1 inversée, à droite l'inverse
+      d: (row * 0.04 + k * 0.05).toFixed(2)
+    });
+  }
+  const rideauHtml = () => '<span class="egg-ferns" aria-hidden="true">' + RIDEAU.map(e =>
+    `<span class="ef" style="--cx:${e.cx}px;--cr:${e.cr}deg;--ox:${e.ox}px;--or:${e.or}deg;--hue:${e.hue}deg;--f:${e.f};bottom:${e.b}px;animation-delay:${e.d}s">🌿</span>`).join('') + '</span>';
   const APP_VERSION = window.OUESSANT_APP_VERSION || '?';
   let listsRev = null;   // { app, rev } lu dans version_listes.json
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
