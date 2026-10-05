@@ -3,7 +3,7 @@
    ⚠️ À chaque mise en ligne d'une nouvelle version des fichiers de l'appli (HTML, CSS, JS, images),
    augmente le numéro ci-dessous (v3.2 → v3.3…) : c'est ce qui déclenche la mise à jour chez les utilisateurs.
    Les listes (JSON) n'ont pas besoin de ce changement : elles sont toujours vérifiées en ligne en premier. */
-const VERSION = 'v4.22';
+const VERSION = 'v4.24';
 const CACHE = 'ouessant-' + VERSION;
 const RUNTIME = 'ouessant-runtime';
 
