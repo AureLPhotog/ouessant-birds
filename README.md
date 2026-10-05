@@ -34,7 +34,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
 | `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
 | `manifest.webmanifest` | raccourci sur l'écran d'accueil du téléphone |
-| `docs/Guide_application.pdf`, `docs/Guide_editeur.pdf` | guides d'utilisation à partager (l'appli, l'éditeur) |
+| `docs/Guide_utilisation.pdf` | guide d'utilisation à partager (l'appli, puis l'éditeur pour proposer une correction) |
 | `scripts/verifier_listes.py` | vérification des listes (voir « Vérifier les listes ») |
 
 ## Les listes
