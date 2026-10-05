@@ -709,7 +709,7 @@
     // une ligne par objet, sans virgules entre elles
     return t.split(/\n+/).map(l => l.trim().replace(/,\s*$/, '')).filter(Boolean).map(l => JSON.parse(l));
   }
-  $('pasteLinesBtn').addEventListener('click', () => { $('pastePanel').classList.toggle('hidden'); $('pasteLines').focus(); });
+  $('pasteLinesBtn').addEventListener('click', () => { ['ghPanel','proposePanel','keyPanel'].forEach(id => $(id).classList.add('hidden')); $('pastePanel').classList.toggle('hidden'); $('pasteLines').focus(); });   // un seul panneau ouvert à la fois
   $('pasteClose').addEventListener('click', () => $('pastePanel').classList.add('hidden'));
   $('pasteCheck').addEventListener('click', () => {
     const msg = $('pasteMsg'), pv = $('pastePreview'); pending = []; pv.innerHTML = ''; $('pasteApply').disabled = true;
