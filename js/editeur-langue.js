@@ -39,7 +39,7 @@
     "Coller des lignes": "Paste lines",
     "Envoyer ma proposition": "Send my suggestion",
     "Enregistrer sur GitHub": "Save to GitHub",
-    "Clé GitHub": "GitHub key",
+    "Clé Admin": "Admin key",
     "Tous": "All", "(vide)": "(empty)", "État": "Status", "Modifiés": "Modified", "Ajoutés": "Added", "Modifiés ou ajoutés": "Modified or added",
     "Aucune entrée ne correspond.": "No entry matches.",
     "vide": "empty", "oui": "yes", "non": "no",
