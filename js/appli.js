@@ -3,15 +3,15 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.20';
+  const APP_VERSION = '3.22';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
-  function showVersion(){
-    const el = document.getElementById('version'); if (!el) return;
+  function versionText(){
     const fmt = h => { const d = h ? new Date(h) : null; return d && !isNaN(d) ? d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB') : null; };
     const b = fmt(listsDate.birds), p = fmt(listsDate.places);
     const dates = b && p && b !== p ? T('listsOfBoth')(b, p) : (b || p) ? T('listsOf')(b || p) : '';
-    el.textContent = 'v' + APP_VERSION + (dates ? ' · ' + dates : '');
+    return 'v' + APP_VERSION + (dates ? ' · ' + dates : '');
   }
+  const showVersion = () => { if (!$('pharePanel').hidden) renderPhare(); };
   const URL_DATA = 'ouessant_birds.json';
 
   const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant';
@@ -108,7 +108,6 @@
     q.setAttribute('aria-label', T('searchLabel'));
     chips.setAttribute('aria-label', T('channelsLabel'));
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
-    if (!$('legal').hidden) $('legal').innerHTML = T('legalHtml');
     if (showingImport) showImport();
     else if (!birds.length) status.textContent = T('loading');
     else { buildChips(); updateSource(); render(); }
@@ -648,8 +647,12 @@
       <div class="pp-sec"><h2 class="pp-h">${esc(T('shTitle'))}</h2><div class="qr">
         <div class="qr-box">${box}</div>
         <div class="qr-txt">${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
-      </div></div>`;
+      </div></div>
+      <div class="pp-sec pp-foot"><p class="pp-ver">${esc(versionText())}</p>
+        <button type="button" class="link" data-ph="legal" aria-expanded="${legalOpen}">${esc(T('legalBtn'))}</button>
+        ${legalOpen ? `<div class="legal">${T('legalHtml')}</div>` : ''}</div>`;
   }
+  let legalOpen = false;
   function openPhare(open){
     $('pharePanel').hidden = !open; $('phareBtn').setAttribute('aria-expanded', String(open));
     if (open){ loadWx(); loadQr(); renderPhare(); }
@@ -676,6 +679,7 @@
   $('pharePanel').addEventListener('click', e => {
     e.stopPropagation();
     const b = e.target.closest('[data-ph]'); if (!b) return;
+    if (b.dataset.ph === 'legal'){ legalOpen = !legalOpen; renderPhare(); return; }
     if (b.dataset.ph === 'share') navigator.share({ title: T('title'), text: T('lede').replace(/<[^>]+>/g, ''), url: APP_URL }).catch(() => {});
     else {
       const done = () => { b.textContent = T('shCopied'); setTimeout(() => { b.textContent = T('shCopy'); }, 1600); };
@@ -697,11 +701,6 @@
     t.textContent = b ? T('egg')(mainName(b)) : T('eggNone'); document.body.appendChild(t); setTimeout(() => t.remove(), 4500);
   }
 
-  $('legalBtn').addEventListener('click', () => {
-    const l = $('legal'), open = l.hidden;
-    l.hidden = !open; $('legalBtn').setAttribute('aria-expanded', String(open));
-    if (open){ l.innerHTML = T('legalHtml'); l.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
-  });
   bindFiles();
   showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds');
   window.addEventListener('hashchange', () => showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds'));

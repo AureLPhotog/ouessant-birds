@@ -14,7 +14,7 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
 .phare-btn[aria-expanded="true"] .phare{transform:translateY(-2px)}
 @media (prefers-reduced-motion:reduce){.phare-btn .phare{transition:none}}
 /* Panneau du phare : météo + partage */
-.phare-panel{position:absolute;left:0;top:calc(100% - .6rem);z-index:20;width:min(23rem,calc(100vw - 2.5rem));background:var(--paper);
+.phare-panel{position:absolute;left:0;top:calc(100% - .6rem);z-index:20;width:min(23rem,calc(100vw - 2.5rem));max-height:calc(100vh - 7rem);overflow-y:auto;background:var(--paper);
   border:1px solid var(--line);border-radius:14px;padding:1rem;box-shadow:0 12px 32px rgba(0,0,0,.2)}
 .phare-panel[hidden]{display:none}
 .pp-h{margin:0 0 .5rem;font:700 1.05rem var(--serif);color:var(--ocean)}
@@ -29,6 +29,9 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
 .day{background:var(--foam);border-radius:10px;padding:.45rem .35rem;text-align:center;font-size:.76rem;line-height:1.35}
 .day b{display:block;font-size:.82rem}
 .day .dw{display:flex;justify-content:center;align-items:center;gap:.2rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.76rem}
+.pp-ver{margin:0 0 .3rem;font-size:.8rem;color:var(--granite);font-variant-numeric:tabular-nums}
+.pp-foot .link{font-size:.85rem}
+.pp-foot .legal{margin-top:.6rem;padding:0;border:0;background:none;max-width:none;font-size:.82rem}
 .pp-src{margin:.6rem 0 0;font-size:.75rem;color:var(--granite)}
 @media (max-width:420px){ .day .dw svg{display:none} }
 .pp-src a{color:inherit}
@@ -230,7 +233,6 @@ section[hidden]{display:none}
   @keyframes in{from{opacity:0}to{opacity:1}}
 }
 
-.version{margin-left:auto;font-size:.8rem;color:var(--granite);font-variant-numeric:tabular-nums}
 
 /* Liens vers l'éditeur (propositions) */
 a.sbtn{display:inline-block;text-decoration:none;text-align:center}
