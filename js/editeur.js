@@ -172,23 +172,6 @@
     $('importView').classList.add('hidden'); $('editView').classList.remove('hidden');
     render(); save();
   }
-  function readFile(f){
-    const r = new FileReader();
-    r.onload = () => { try { load(f.name, JSON.parse(r.result)); gh = null; applyFormat(detectFormat(r.result)); $('importMsg').textContent = ''; } catch (e) { $('importMsg').textContent = 'Fichier illisible : ' + (e.message || 'JSON invalide'); } };
-    r.readAsText(f, 'utf-8');
-  }
-  $('file').addEventListener('change', e => { const f = e.target.files[0]; if (f) readFile(f); e.target.value = ''; });
-  const drop = $('drop');
-  drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); $('file').click(); } });
-  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
-  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
-  drop.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) readFile(f); });
-  $('pasteJsonBtn').addEventListener('click', () => { $('pasteJsonBox').classList.toggle('hidden'); $('pasteJson').focus(); });
-  $('pasteJsonGo').addEventListener('click', () => {
-    try { load('liste.json', JSON.parse($('pasteJson').value)); gh = null; $('importMsg').textContent = ''; }
-    catch (e) { $('importMsg').textContent = 'JSON illisible : ' + (e.message || ''); }
-  });
-
   // ---------- GitHub : ouvrir et enregistrer directement dans le dépôt ----------
   const GH = { owner: 'AureLPhotog', repo: 'ouessant-birds', files: ['ouessant_birds.json', 'lieux_ouessant.json'] };
   const branch = 'main';   // l'éditeur lit et enregistre toujours sur main
@@ -234,7 +217,6 @@
       : 'Lecture possible sans clé. Pour enregistrer sur GitHub, il faudra une clé d’accès. <button type="button" class="btn ghost" data-key>Ajouter une clé</button>';
     updateSaveBtn();
   }
-  $('ghFile').innerHTML = GH.files.map(f => `<option value="${esc(f)}">${esc(listLabel(f))}</option>`).join('');
   keyInfo();
   document.addEventListener('click', e => { if (e.target.closest('[data-key]')) openKey(); });
   async function ghOpen(path){
@@ -250,9 +232,9 @@
       gh = { path, sha: j.sha, branch }; applyFormat(detectFormat(text)); save(); render();
       out.textContent = '';
       toast(`${listLabel(path)} : ${countText(items.length)} chargés depuis GitHub.`);
-    } catch (e) { out.className = 'msg bad'; out.textContent = 'Impossible d’ouvrir depuis GitHub : ' + e.message + '.'; }
+      return true;
+    } catch (e) { out.className = 'msg bad'; out.textContent = 'Impossible d’ouvrir depuis GitHub : ' + e.message + '.'; return false; }
   }
-  $('ghOpenBtn').addEventListener('click', () => ghOpen($('ghFile').value));
 
   // clé d'accès
   function openKey(){ ['ghPanel','pastePanel'].forEach(id => $(id).classList.add('hidden')); $('keyPanel').classList.remove('hidden');
@@ -353,18 +335,23 @@
   const CLE = { 'ouessant_birds.json': 'Nom Scientifique', 'lieux_ouessant.json': 'nom' };
   const params = new URLSearchParams(location.search);
   const visitMode = !!FICHIERS[params.get('fichier')];
-  async function openFromApp(){
-    const path = FICHIERS[params.get('fichier')];
+  // Ouvre une liste : depuis GitHub avec la clé (pour pouvoir enregistrer), sinon le fichier du site, sinon GitHub en lecture
+  async function openList(path){
     $('importMsg').className = 'msg'; $('importMsg').textContent = 'Chargement de la liste…';
-    if (getToken()) await ghOpen(path);                  // avec la clé : depuis GitHub, pour pouvoir enregistrer
-    if (!items.length){
+    let ok = false;
+    if (getToken()) ok = await ghOpen(path);
+    if (!ok){
       try {
         const r = await fetch(path, { cache: 'no-cache' }); if (!r.ok) throw 0;
-        const text = await r.text(); load(path, JSON.parse(text)); gh = null; applyFormat(detectFormat(text));
-      } catch (_) { await ghOpen(path); }               // éditeur ouvert ailleurs : lecture sur GitHub
+        const text = await r.text(); load(path, JSON.parse(text)); gh = null; applyFormat(detectFormat(text)); ok = true;
+      } catch (_) { ok = await ghOpen(path); }
     }
-    if (!items.length) return;
-    $('importMsg').textContent = '';
+    if (ok) $('importMsg').textContent = ''; else if (!$('editView').classList.contains('hidden')) toast($('importMsg').textContent);
+    return ok;
+  }
+  async function openFromApp(){
+    const path = FICHIERS[params.get('fichier')];
+    if (!(await openList(path))) return;
     $('visitBanner').classList.remove('hidden');
     const k = CLE[path], wanted = params.get('cherche');
     if (wanted){
@@ -376,6 +363,14 @@
       const f = document.querySelector(`.form-wrap [data-k="${NOM[path]}"]`); if (f){ f.value = params.get('nouveau'); f.focus(); }
     }
   }
+  // Choix de la liste (onglets Oiseaux / Lieux, comme sur l'index)
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+    const path = FICHIERS[b.dataset.list];
+    if (b.getAttribute('aria-selected') === 'true' && items.length) return;
+    if (items.length && changes().total && !confirm('Tes modifications non envoyées de cette liste seront perdues. Changer de liste ?')) return;
+    $('visitBanner').classList.add('hidden'); $('proposePanel').classList.add('hidden'); $('pastePanel').classList.add('hidden'); $('ghPanel').classList.add('hidden');
+    openList(path);
+  }));
 
   // ---------- Envoyer ma proposition (formulaire Google unique) ----------
   // Lien prérempli du formulaire : tape MODIFS, COMMENTAIRE et JSON dans ses trois champs, puis colle le lien ici.
@@ -461,12 +456,6 @@
       };
     } catch (_) {}
   })();
-  $('closeBtn').addEventListener('click', () => {
-    if (changes().total && !confirm('Tes modifications non envoyées restent dans le brouillon, tu pourras les reprendre. Changer de liste ?')) return;
-    $('editView').classList.add('hidden'); $('importView').classList.remove('hidden');
-    location.href = location.pathname;
-  });
-
   // ---------- Filtres et tri ----------
   function buildFilters(){
     $('filters').innerHTML = fields.filter(k => types[k].choices || types[k].t === 'bool').map(k => {
@@ -515,7 +504,8 @@
   }
   function render(){
     const list = visible(), c = changes();
-    $('fileName').textContent = listLabel(gh ? gh.path : fileName);
+    const kind = kindOf(gh ? gh.path : fileName);
+    document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.list === (kind === 'birds' ? 'oiseaux' : kind === 'places' ? 'lieux' : ''))));
     $('countInfo').textContent = countText(items.length) + (list.length !== items.length ? `, ${list.length} affichés` : '');
     $('changeInfo').innerHTML = (c.mod ? `<span class="badge mod">${c.mod} modifiée${c.mod > 1 ? 's' : ''}</span> ` : '') +
       (c.add ? `<span class="badge new">${c.add} ajoutée${c.add > 1 ? 's' : ''}</span> ` : '') +
@@ -781,4 +771,5 @@
   }
   window.addEventListener('beforeunload', e => { if (items.length && changes().total){ save(); } });
   if (visitMode) openFromApp();
+  else if ($('resumeBtn').hidden) openList(FICHIERS.oiseaux);   // sans brouillon à reprendre : la liste des oiseaux s'ouvre d'elle-même
 })();

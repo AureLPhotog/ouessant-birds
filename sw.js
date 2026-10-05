@@ -1,9 +1,9 @@
 /* Oiseaux d'Ouessant — mode hors ligne.
    Le navigateur garde l'appli, les listes et la carte en mémoire, pour fonctionner sans réseau sur l'île.
    ⚠️ À chaque mise en ligne d'une nouvelle version des fichiers de l'appli (HTML, CSS, JS, images),
-   augmente le numéro ci-dessous (v3.1 → v3.2…) : c'est ce qui déclenche la mise à jour chez les utilisateurs.
+   augmente le numéro ci-dessous (v3.2 → v3.3…) : c'est ce qui déclenche la mise à jour chez les utilisateurs.
    Les listes (JSON) n'ont pas besoin de ce changement : elles sont toujours vérifiées en ligne en premier. */
-const VERSION = 'v3.1';
+const VERSION = 'v3.2';
 const CACHE = 'ouessant-' + VERSION;
 const RUNTIME = 'ouessant-runtime';
 
@@ -62,7 +62,7 @@ self.addEventListener('fetch', event => {
 
   if (url.origin === location.origin){
     // l'éditeur et ses échanges avec GitHub ne passent pas par le cache
-    if (url.pathname.endsWith('editeur.html')) return;
+    if (/editeur/.test(url.pathname)) return;   // editeur.html, js/editeur*.js, css/editeur.css
     // pages et listes : toujours la version en ligne si possible
     if (req.mode === 'navigate' || url.pathname.endsWith('.json')){
       event.respondWith(networkFirst(req, CACHE).catch(() => caches.match('index.html')));

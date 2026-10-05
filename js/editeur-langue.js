@@ -32,7 +32,7 @@
     "Chargement depuis GitHub…": "Loading from GitHub…",
     "Chargement de la liste…": "Loading the list…",
     // barre d'outils
-    "Changer de liste": "Change list",
+    
     "Rechercher dans tous les champs…": "Search all fields…",
     "Rechercher": "Search",
     "+ Ajouter une entrée": "+ Add an entry",
@@ -129,7 +129,8 @@
     "ce jeton peut lire le dépôt mais pas y écrire : ajoute la permission « Contents : Read and write ».": "this token can read the repository but not write to it: add the “Contents: Read and write” permission.",
     "Clé valide : l'éditeur peut enregistrer dans AureLPhotog/ouessant-birds. Elle est mémorisée sur cet appareil.": "Valid key: the editor can save to AureLPhotog/ouessant-birds. It is remembered on this device.",
     "Clé valide : l'éditeur peut enregistrer dans AureLPhotog/ouessant-birds. Elle sera oubliée à la fermeture de l'onglet.": "Valid key: the editor can save to AureLPhotog/ouessant-birds. It will be forgotten when the tab closes.",
-    "Tes modifications non envoyées restent dans le brouillon, tu pourras les reprendre. Changer de liste ?": "Changes not yet sent stay in the draft, you can resume them later. Change list?",
+    "Tes modifications non envoyées de cette liste seront perdues. Changer de liste ?": "Your unsent changes to this list will be lost. Change list?",
+    "Choix de la liste": "Choose a list",
     // noms des champs (seul l'affichage est traduit : les fichiers gardent leurs noms de champs)
     "Nom Français": "French name", "Nom Scientifique": "Scientific name", "Nom Anglais": "English name",
     "Type de taxon": "Taxon type", "Proposition de Canal de Diffusion Ouessant": "Reporting channel (Ouessant)",

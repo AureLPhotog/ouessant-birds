@@ -39,31 +39,18 @@
     </div>
   </header>
 
-  <!-- 1. Import -->
+  <nav class="tabs" role="tablist" aria-label="Choix de la liste">
+    <button type="button" role="tab" aria-selected="false" data-list="oiseaux">Oiseaux</button>
+    <button type="button" role="tab" aria-selected="false" data-list="lieux">Lieux</button>
+  </nav>
+
+  <!-- 1. Accueil -->
   <section id="importView">
-    <div class="gh-open">
-      <h2>Depuis GitHub</h2>
-      <div class="gh-row">
-        <select id="ghFile" aria-label="Fichier du dépôt"></select>
-        <button type="button" class="btn primary" id="ghOpenBtn">Ouvrir depuis GitHub</button>
-      </div>
-      <p class="gh-key" id="ghKeyInfo"></p>
-    </div>
-    <p class="or-sep">ou depuis ton ordinateur</p>
-    <label class="drop" id="drop" tabindex="0">
-      <strong>Glisse ton fichier JSON ici</strong>
-      <p>ou clique pour le choisir (ouessant_birds.json, lieux_ouessant.json…)</p>
-      <input type="file" id="file" accept=".json,application/json" class="hidden">
-    </label>
     <div class="or">
-      <button type="button" class="btn" id="pasteJsonBtn">Coller du JSON</button>
       <button type="button" class="btn" id="resumeBtn" hidden>Reprendre le brouillon</button>
       <span class="count" id="resumeInfo"></span>
     </div>
-    <div class="paste-box hidden" id="pasteJsonBox">
-      <textarea id="pasteJson" rows="8" placeholder='[ {"Nom Français": "…", …}, … ]'></textarea>
-      <div><button type="button" class="btn primary" id="pasteJsonGo">Charger</button></div>
-    </div>
+    <p class="gh-key" id="ghKeyInfo"></p>
     <p class="msg bad" id="importMsg" role="alert"></p>
   </section>
 
@@ -71,11 +58,8 @@
   <section id="editView" class="hidden">
     <div class="bar">
       <div class="file">
-        <b id="fileName"></b>
         <span class="count" id="countInfo"></span>
         <span id="changeInfo"></span>
-        <span style="flex:1"></span>
-        <button type="button" class="btn ghost" id="closeBtn">Changer de liste</button>
       </div>
       <div class="tools">
         <input type="search" id="search" class="grow" placeholder="Rechercher dans tous les champs…" aria-label="Rechercher" autocomplete="off">

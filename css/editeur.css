@@ -17,6 +17,12 @@ input[type=text],input[type=number],input[type=search],select,textarea{backgroun
 textarea{font-family:var(--mono);font-size:.85rem}
 .hidden{display:none !important}
 
+/* Choix de la liste : mêmes onglets que sur l'index */
+.tabs{display:flex;gap:.25rem;border-bottom:1px solid var(--line);margin:0 0 .75rem}
+.tabs button{border:0;background:none;color:var(--granite);font:600 1rem var(--sans);padding:.6rem .9rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ocean);border-bottom-color:var(--ocean)}
+.tabs button:focus-visible{outline:3px solid #8C5E83;outline-offset:-3px}
+
 /* Import */
 .drop{display:grid;place-items:center;text-align:center;gap:.6rem;border:2px dashed var(--line);border-radius:14px;background:var(--paper);padding:2.4rem 1.2rem;cursor:pointer}
 .drop.over{border-color:var(--ocean);background:color-mix(in srgb,var(--ocean) 6%,var(--paper))}
