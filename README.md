@@ -50,7 +50,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 - **Type de taxon** : `espèce` ou `sous-espèce`.
 
 **Règles d'écriture des noms** (appliquées automatiquement par l'éditeur à l'enregistrement, code dans `js/noms.js`) :
-- **français** : une majuscule au premier mot, puis des minuscules, sauf les noms propres : `Bécasseau de Baird`, mais `Bécasseau minute`, `Grand corbeau`, `Pouillot ibérique`. Un mot qui suit « de » ou « d' » garde la casse saisie (`d'Europe`, `de Baird`) ; après « du » et « des », minuscule (`des roseaux`) sauf nom propre connu (`du Nord`, `des Balkans`). Apostrophes droites ('). Sous-espèces : `(ssp. nom)`.
+- **français** : une majuscule au premier mot, puis des minuscules, sauf les noms propres : `Bécasseau de Baird`, mais `Bécasseau minute`, `Grand corbeau`, `Pouillot ibérique`. Un mot qui suit « de » ou « d' » garde la casse saisie (`d'Europe`, `de Baird`) ; après « du » et « des », minuscule (`des roseaux`) sauf nom propre connu (`du Canada`, `des Balkans`). Apostrophes droites ('). Sous-espèces : `(ssp. nom)`.
 - **anglais** : une majuscule à chaque mot (`Steppe Eagle`, `Rough-legged Buzzard`).
 - **scientifique** : majuscule au genre, minuscules ensuite (`Aquila nipalensis`).
 
