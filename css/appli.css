@@ -2,9 +2,11 @@
 .wrap{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem}
 
 /* En-tête : illustration du phare du Créac'h (phare_creach.svg) */
-header{display:flex;gap:1rem;align-items:flex-end;padding:2.25rem 0 1.5rem}
-.phare{flex:0 0 auto;width:56px;height:auto;align-self:flex-end;overflow:visible}
-.phare-btn{all:unset;flex:0 0 auto;align-self:flex-end;display:block;cursor:pointer;border-radius:8px;line-height:0;-webkit-tap-highlight-color:transparent}
+header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
+/* bloc de texte : au moins la hauteur du phare, texte calé en bas quand il est court */
+.intro{align-self:stretch;min-height:131px;display:flex;flex-direction:column;justify-content:flex-end}
+.phare{flex:0 0 auto;width:56px;height:auto;align-self:flex-start;overflow:visible}
+.phare-btn{all:unset;flex:0 0 auto;align-self:flex-start;display:block;cursor:pointer;border-radius:8px;line-height:0;-webkit-tap-highlight-color:transparent}
 .phare-btn .phare{display:block;transition:transform .2s ease}
 .phare-btn:hover .phare{transform:translateY(-2px)}
 .phare-btn:active .phare{transform:scale(.96)}
