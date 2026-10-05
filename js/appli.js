@@ -8,16 +8,17 @@
   // Oriole de Baltimore (photo détourée et légèrement stylisée) posé sur l'angle du cadre du QR code, et petite fougère (émoji) au pied
   const ORIOLE = '<span class="oriole" aria-hidden="true"><img class="o-sh" src="oriole_baltimore.webp" alt="" width="47" height="69"><img class="o-bd" src="oriole_baltimore.webp" alt="" width="47" height="69"></span>';
   const FERN = '<span class="fern" aria-hidden="true">🌿</span>';
-  // Rideau de fougères (easter egg) : 4 rangées de 6 émojis cachent le phare jusqu'à mi-hauteur, puis s'ouvrent (3 à gauche, 3 à droite)
-  const HUES = [-55, 0, 25, -40, 0, -70, 15, -25];
+  // Rideau de fougères (easter egg) : 4 rangées de 3 émojis cachent le phare jusqu'à mi-hauteur, puis s'ouvrent de part et d'autre
+  const HUES = [-55, 0, 25, -40, 0, -70, 15, -25, 10, -60, 0, -35];
   const RIDEAU = [];
-  for (let row = 0; row < 4; row++) for (const side of [-1, 1]) for (let k = 0; k < 3; k++){
-    const i = row * 6 + (side < 0 ? 0 : 3) + k;
+  for (let row = 0; row < 4; row++) for (let k = 0; k < 3; k++){
+    const side = k === 0 ? -1 : k === 2 ? 1 : (row % 2 ? 1 : -1);           // la fougère du milieu part à gauche, puis à droite, une rangée sur deux
+    const n = RIDEAU.length, j = RIDEAU.filter(e => e.side === side).length;
     RIDEAU.push({
-      cx: side * (4 + k * 9 + (row % 2) * 3), cr: side * (-8 + k * 9 + row * 2),            // fermé : serrées devant le phare
-      ox: side * (32 + k * 9 + row * 2), or: side * (28 + k * 16),                          // ouvert : écartées de chaque côté
-      hue: HUES[i % HUES.length], b: row * 13 + (k % 2) * 4,
-      f: (side < 0) === (k < 2) ? 1 : -1,                                                   // symétrie : à gauche 2 classiques + 1 inversée, à droite l'inverse
+      side, cx: (k - 1) * 15 + (row % 2 ? 4 : -4), cr: (k - 1) * 14 + (row % 2 ? 6 : -6),   // fermé : serrées devant le phare
+      ox: side * (34 + j * 7), or: side * (30 + j * 14),                                      // ouvert : écartées de chaque côté
+      hue: HUES[n % HUES.length], b: row * 14 + (k % 2) * 4,
+      f: (j % 2 ? -1 : 1) * side,                                                             // symétrie : les fougères de droite sont les inverses de celles de gauche
       d: (row * 0.04 + k * 0.05).toFixed(2)
     });
   }
