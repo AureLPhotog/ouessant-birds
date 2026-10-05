@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Salle polyvalente",
+    "carres": [
+      "H7"
+    ],
+    "lat": 48.45835,
+    "lon": -5.10021,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Ancienne déchèterie",
     "carres": [
       "J10"
