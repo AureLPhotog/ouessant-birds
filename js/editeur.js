@@ -415,7 +415,7 @@
     const path = FICHIERS[b.dataset.list];
     if (b.getAttribute('aria-selected') === 'true' && items.length) return;
     if (items.length && changes().total && !confirm('Tes modifications non envoyées de cette liste seront perdues. Changer de liste ?')) return;
-    $('visitBanner').classList.add('hidden'); $('proposePanel').classList.add('hidden'); $('pastePanel').classList.add('hidden'); $('ghPanel').classList.add('hidden');
+    $('visitBanner').classList.add('hidden'); $('pastePanel').classList.add('hidden'); $('ghPanel').classList.add('hidden');
     openList(path);
   }));
 
@@ -431,17 +431,14 @@
     } catch (_) { return null; }
   })();
   function proposalParts(){
-    return { MODIFS: commitMessage(), COMMENTAIRE: $('propComment').value.trim(), JSON: changesText() };
+    return { MODIFS: commitMessage(), COMMENTAIRE: '', JSON: changesText() };
   }
+  // « Envoyer ma proposition » : ouvre directement le formulaire Google, déjà rempli (un commentaire peut s'y ajouter)
   $('proposeBtn').addEventListener('click', () => {
-    ['pastePanel','ghPanel','keyPanel'].forEach(id => $(id).classList.add('hidden'));
-    $('proposePanel').classList.toggle('hidden');
-    const c = changes(), out = $('propOut');
-    out.className = 'msg'; out.textContent = '';
-    $('propSummary').textContent = c.total ? commitMessage() : 'Aucune modification pour l\u2019instant : modifie, ajoute ou supprime une entrée, puis reviens ici.';
-    $('propSend').disabled = !c.total;
+    if (!changes().total){ toast('Aucune modification à envoyer : modifie d\u2019abord une entrée.'); return; }
+    const st = openProposalForm();
+    toast(st === 'off' ? 'L\u2019envoi n\u2019est pas encore configuré.' : st === 'long' ? 'Proposition longue : les lignes JSON ont été copiées, à coller dans le formulaire.' : 'Le formulaire s\u2019est ouvert, déjà rempli : il ne reste qu\u2019à cliquer sur « Envoyer ».', null, null, 6000);
   });
-  $('propClose').addEventListener('click', () => $('proposePanel').classList.add('hidden'));
   // Ouvre le formulaire Google déjà rempli (à appeler directement depuis un clic). Renvoie 'ok', 'long' (JSON copié) ou 'off' (formulaire non configuré).
   function openProposalForm(){
     const parts = proposalParts();
@@ -456,17 +453,6 @@
     window.open(href, '_blank', 'noopener');   // (avec « noopener », window.open renvoie toujours null : on ne peut pas détecter un blocage)
     return status;
   }
-  $('propSend').addEventListener('click', () => {
-    const out = $('propOut'), st = openProposalForm();
-    if (st === 'off'){ out.className = 'msg bad'; out.textContent = 'L\u2019envoi n\u2019est pas encore configuré. Utilise « Copier ma proposition ».'; return; }
-    out.className = 'msg good';
-    out.textContent = st === 'long' ? 'Ta proposition est longue : les lignes JSON ont été copiées. Colle-les dans le champ « Lignes JSON » du formulaire qui vient de s\u2019ouvrir, puis clique sur « Envoyer ».'
-      : 'Le formulaire s\u2019est ouvert, déjà rempli : il ne reste qu\u2019à cliquer sur « Envoyer ». Ta proposition sera vérifiée, puis prise en compte dans les prochains jours.';
-  });
-  $('propCopy').addEventListener('click', () => {
-    const p = proposalParts(); copyText(`${p.MODIFS}\n\n${p.COMMENTAIRE}\n\n${p.JSON}`);
-    $('propOut').className = 'msg good'; $('propOut').textContent = 'Proposition copiée.';
-  });
   function copyText(t){
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).catch(() => {});
     else { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (_) {} ta.remove(); }
@@ -483,10 +469,9 @@
     $('keyBtn').classList.remove('hidden');   // toujours accessible : ajouter ou gérer la clé
     $('keyBtn').textContent = t ? 'Gérer la clé' : 'Clé Admin';
     $('proposeBtn').classList.toggle('hidden', t);
-    if (t) $('proposePanel').classList.add('hidden');
     $('visitText').innerHTML = t
       ? '<b>Clé GitHub active.</b> Corrige l\u2019entrée ouverte ci-dessous, clique sur « Enregistrer », puis sur <b>« Enregistrer sur GitHub »</b> : la modification sera en ligne directement.'
-      : '<b>Tu proposes une modification.</b> Corrige l\u2019entrée ouverte ci-dessous (ou complète la nouvelle), puis clique sur <b>« Envoyer ma proposition »</b> : le formulaire s\u2019ouvre déjà rempli. Elle sera vérifiée avant d\u2019être intégrée.';
+      : '<b>Tu proposes une modification.</b> Corrige l\u2019entrée ouverte ci-dessous (ou complète la nouvelle), clique sur « Enregistrer », puis sur <b>« Envoyer ma proposition »</b> (en jaune) : le formulaire s\u2019ouvre déjà rempli. Elle sera vérifiée avant d\u2019être intégrée.';
   }
   updateSaveBtn();
   document.addEventListener('click', () => setTimeout(updateSaveBtn, 0));
@@ -555,6 +540,7 @@
   }
   function render(){
     const list = visible(), c = changes();
+    $('proposeBtn').classList.toggle('attention', c.total > 0);   // jaune : « c'est ici qu'on soumet »
     const kind = kindOf(gh ? gh.path : fileName);
     $('addBtn').textContent = kind === 'birds' ? '+ Ajouter un oiseau' : kind === 'places' ? '+ Ajouter un lieu' : '+ Ajouter une entrée';
     document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.list === (kind === 'birds' ? 'oiseaux' : kind === 'places' ? 'lieux' : ''))));
@@ -664,8 +650,7 @@
   function editorHtml(it){
     return `<div class="form-wrap" data-id="${it.id}"><div class="form">${fields.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
       <div class="actions">
-        ${getToken() ? '' : '<button type="button" class="btn primary" data-act="send">Envoyer ma proposition</button>'}
-        <button type="button" class="btn${getToken() ? ' primary' : ''}" data-act="save">Enregistrer</button>
+        <button type="button" class="btn primary" data-act="save">Enregistrer</button>
         <button type="button" class="btn" data-act="cancel">Fermer</button>
         ${it.orig && !same(it.data, it.orig) ? '<button type="button" class="btn" data-act="revert">Revenir à l\u2019original</button>' : ''}
         <span class="sep"></span>
@@ -703,14 +688,13 @@
   function editorAction(act, id){
     const i = items.findIndex(x => x.id === id); if (i < 0) return;
     const it = items[i], wrap = document.querySelector(`.form-wrap[data-id="${id}"]`);
-    if (act === 'save' || act === 'forcesave' || act === 'send' || act === 'forcesend'){
-      const sending = act === 'send' || act === 'forcesend';
+    if (act === 'save' || act === 'forcesave'){
       try {
-        const pb = (act === 'save' || act === 'send') && geoProblem(wrap);
+        const pb = act === 'save' && geoProblem(wrap);
         if (pb){
           wrap.querySelector('[data-msg]').innerHTML = esc(pb.text) +
             (pb.cell ? ` <button type="button" class="btn ghost" data-addcell="${pb.cell}">Ajouter ${pb.cell}</button>` : '') +
-            ` <button type="button" class="btn ghost" data-act="${sending ? 'forcesend' : 'forcesave'}">${sending ? 'Envoyer quand même' : 'Enregistrer quand même'}</button>`;
+            ` <button type="button" class="btn ghost" data-act="forcesave">Enregistrer quand même</button>`;
           return;
         }
         const d = readForm(wrap);
@@ -721,13 +705,10 @@
           else if (k in it.data && !(k in d)) merged[k] = it.data[k];
         });
         const fmt = formatNames(merged);
-        const y = window.scrollY;
-        it.data = merged; render(); initCells(); save(); window.scrollTo(0, y);   // l'entrée reste ouverte (« Fermer » la referme) : on voit le résultat, noms mis en forme compris
-        if (sending && !changes().total) toast('Aucune modification à envoyer : modifie d\u2019abord l\u2019entrée.');
-        else if (sending){   // un seul clic : enregistrement de l'entrée, puis ouverture du formulaire prérempli
-          const st = openProposalForm();
-          toast(st === 'off' ? 'L\u2019envoi n\u2019est pas encore configuré.' : st === 'long' ? 'Proposition longue : les lignes JSON ont été copiées, à coller dans le formulaire.' : 'Le formulaire s\u2019est ouvert, déjà rempli : il ne reste qu\u2019à cliquer sur « Envoyer ».');
-        } else toast(fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.');
+        it.data = merged; openId = null; render(); save();
+        window.scrollTo({ top: 0, behavior: 'smooth' });   // retour en haut : le bouton « Envoyer ma proposition » (en jaune) est là
+        toast(getToken() ? (fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.')
+          : (fmt ? 'Entrée enregistrée, noms mis en forme. Pour la soumettre : « Envoyer ma proposition » (en jaune).' : 'Entrée enregistrée. Pour la soumettre : « Envoyer ma proposition » (en jaune).'), null, null, 6000);
       } catch (e) { wrap.querySelector('[data-msg]').textContent = e.message; }
     } else if (act === 'cancel'){ openId = null; render(); }
     else if (act === 'revert'){ it.data = clone(it.orig); render(); initCells(); save(); toast('Entrée remise comme à l\u2019origine.'); }
@@ -829,7 +810,7 @@
     // une ligne par objet, sans virgules entre elles
     return t.split(/\n+/).map(l => l.trim().replace(/,\s*$/, '')).filter(Boolean).map(l => JSON.parse(l));
   }
-  $('pasteLinesBtn').addEventListener('click', () => { ['ghPanel','proposePanel','keyPanel'].forEach(id => $(id).classList.add('hidden')); $('pastePanel').classList.toggle('hidden'); $('pasteLines').focus(); });   // un seul panneau ouvert à la fois
+  $('pasteLinesBtn').addEventListener('click', () => { ['ghPanel','keyPanel'].forEach(id => $(id).classList.add('hidden')); $('pastePanel').classList.toggle('hidden'); $('pasteLines').focus(); });   // un seul panneau ouvert à la fois
   $('pasteClose').addEventListener('click', () => $('pastePanel').classList.add('hidden'));
   $('pasteCheck').addEventListener('click', () => {
     const msg = $('pasteMsg'), pv = $('pastePreview'); pending = []; pv.innerHTML = ''; $('pasteApply').disabled = true;
@@ -900,12 +881,12 @@
 
   // ---------- Notification ----------
   let tt;
-  function toast(text, actLabel, act){
+  function toast(text, actLabel, act, ms){
     const t = $('toast'); clearTimeout(tt);
     t.innerHTML = `<span>${esc(text)}</span>` + (actLabel ? `<button type="button">${esc(actLabel)}</button>` : '');
     t.classList.remove('hidden');
     if (act) t.querySelector('button').onclick = () => { act(); t.classList.add('hidden'); };
-    tt = setTimeout(() => t.classList.add('hidden'), actLabel ? 7000 : 3000);
+    tt = setTimeout(() => t.classList.add('hidden'), ms || (actLabel ? 7000 : 3000));
   }
   window.addEventListener('beforeunload', e => { if (items.length && changes().total){ save(); } });
   if (visitMode) openFromApp();
