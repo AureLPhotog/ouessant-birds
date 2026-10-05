@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Auberge de jeunesse",
+    "carres": [
+      "H7"
+    ],
+    "lat": 48.45904,
+    "lon": -5.09689,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Salle polyvalente",
     "carres": [
       "H7"
