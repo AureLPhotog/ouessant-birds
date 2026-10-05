@@ -162,9 +162,11 @@
     (t === 'list' || t === 'numlist') ? v.join(', ') : t === 'bool' ? (v ? 'oui' : 'non') : typeof v === 'object' ? JSON.stringify(v) : String(v);
 
   // ---------- Chargement ----------
-  function load(name, data, origs){
+  // g : fichier GitHub d'origine (ou null) ; fixé avant l'affichage et la sauvegarde du brouillon, pour ne jamais garder la cible de la liste précédente
+  function load(name, data, origs, g){
     if (!Array.isArray(data)) throw new Error('Le fichier doit contenir une liste [ … ] d\u2019entrées.');
     if (!data.every(x => x && typeof x === 'object' && !Array.isArray(x))) throw new Error('Chaque entrée de la liste doit être un objet { … }.');
+    if (g !== undefined) gh = g;
     fileName = name || 'liste.json';
     items = data.map((d, i) => ({ id: ++uid, data: clone(d), orig: origs ? origs[i] : clone(d) }));
     deleted = []; openId = null; filters = {}; sortField = null; shown = 200; $('search').value = '';
@@ -228,7 +230,7 @@
       if (r.status === 403) throw new Error('accès refusé ou limite de requêtes atteinte, réessaie dans quelques minutes');
       if (!r.ok) throw new Error('erreur ' + r.status);
       const j = await r.json(), text = b64dec(j.content);
-      load(path, JSON.parse(text));
+      load(path, JSON.parse(text), undefined, { path, sha: j.sha, branch });
       gh = { path, sha: j.sha, branch }; applyFormat(detectFormat(text)); save(); render();
       out.textContent = '';
       toast(`${listLabel(path)} : ${countText(items.length)} chargés depuis GitHub.`);
@@ -343,7 +345,7 @@
     if (!ok){
       try {
         const r = await fetch(path, { cache: 'no-cache' }); if (!r.ok) throw 0;
-        const text = await r.text(); load(path, JSON.parse(text)); gh = null; applyFormat(detectFormat(text)); ok = true;
+        const text = await r.text(); load(path, JSON.parse(text), undefined, null); applyFormat(detectFormat(text)); ok = true;
       } catch (_) { ok = await ghOpen(path); }
     }
     if (ok) $('importMsg').textContent = ''; else if (!$('editView').classList.contains('hidden')) toast($('importMsg').textContent);
@@ -451,7 +453,7 @@
       $('resumeBtn').hidden = false;
       $('resumeInfo').textContent = `${listLabel(d.gh ? d.gh.path : d.fileName)}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
       $('resumeBtn').onclick = () => {
-        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1])); gh = d.gh || null;  if (d.fmtHint) applyFormat(d.fmtHint);
+        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1]), d.gh || null); if (d.fmtHint) applyFormat(d.fmtHint);
         deleted = (d.deleted || []).map(o => ({ id: ++uid, data: o, orig: o })); render();
       };
     } catch (_) {}

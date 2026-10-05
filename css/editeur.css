@@ -27,20 +27,10 @@ textarea{font-family:var(--mono);font-size:.85rem}
 .tabs button:focus-visible{outline:3px solid #8C5E83;outline-offset:-3px}
 
 /* Import */
-.drop{display:grid;place-items:center;text-align:center;gap:.6rem;border:2px dashed var(--line);border-radius:14px;background:var(--paper);padding:2.4rem 1.2rem;cursor:pointer}
-.drop.over{border-color:var(--ocean);background:color-mix(in srgb,var(--ocean) 6%,var(--paper))}
-.drop strong{font-size:1.05rem}
-.drop p{margin:0;color:var(--granite)}
 .or{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem;align-items:center}
-.paste-box{margin-top:.8rem;display:grid;gap:.5rem}
 
 /* GitHub */
-.gh-open{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem}
-.gh-open h2{margin:0 0 .6rem;font:600 1rem var(--sans)}
-.gh-row{display:flex;flex-wrap:wrap;gap:.5rem}
-.gh-row select{width:auto;flex:1 1 220px}
 .gh-key{margin:.6rem 0 0;font-size:.85rem;color:var(--granite)}
-.or-sep{margin:1.2rem 0 .6rem;color:var(--granite);font-size:.88rem;text-align:center}
 .gh-lab{display:grid;gap:.25rem;font-size:.82rem;color:var(--granite);font-weight:600;margin-top:.4rem}
 .panel a{color:var(--ocean-2)}
 .remember{display:flex;align-items:center;gap:.5rem;margin-top:.7rem;font-size:.9rem;cursor:pointer}
@@ -132,9 +122,6 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 .msg.bad{color:var(--warn);font-weight:600}
 .msg.good{color:var(--ok);font-weight:600}
 
-/* Export */
-.export-opts{display:flex;flex-wrap:wrap;gap:.8rem 1.2rem;align-items:center;font-size:.88rem}
-.export-opts label{display:flex;align-items:center;gap:.4rem}
 
 /* Notification */
 .toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--foam);

@@ -3,7 +3,7 @@
    ⚠️ À chaque mise en ligne d'une nouvelle version des fichiers de l'appli (HTML, CSS, JS, images),
    augmente le numéro ci-dessous (v3.2 → v3.3…) : c'est ce qui déclenche la mise à jour chez les utilisateurs.
    Les listes (JSON) n'ont pas besoin de ce changement : elles sont toujours vérifiées en ligne en premier. */
-const VERSION = 'v3.11';
+const VERSION = 'v3.13';
 const CACHE = 'ouessant-' + VERSION;
 const RUNTIME = 'ouessant-runtime';
 
@@ -39,7 +39,7 @@ async function networkFirst(req, cacheName){
   const cache = await caches.open(cacheName);
   try {
     const res = await fetch(req, { cache: 'no-cache' });
-    if (res && res.ok) cache.put(req, res.clone());
+    if (res && res.status === 200) cache.put(req, res.clone()).catch(() => {});
     return res;
   } catch (_) {
     const hit = await cache.match(req, { ignoreSearch: true });
@@ -51,13 +51,13 @@ async function networkFirst(req, cacheName){
 async function staleWhileRevalidate(req, cacheName){
   const cache = await caches.open(cacheName);
   const hit = await cache.match(req);
-  const update = fetch(req).then(res => { if (res && (res.ok || res.type === 'opaque')) cache.put(req, res.clone()); return res; }).catch(() => null);
+  const update = fetch(req).then(res => { if (res && (res.status === 200 || res.type === 'opaque')) cache.put(req, res.clone()).catch(() => {}); return res; }).catch(() => null);
   return hit || update.then(r => r || Response.error());
 }
 
 self.addEventListener('fetch', event => {
   const req = event.request;
-  if (req.method !== 'GET') return;
+  if (req.method !== 'GET' || req.headers.has('range')) return;   // les lectures partielles (PDF, médias) passent par le réseau
   const url = new URL(req.url);
 
   if (url.origin === location.origin){

@@ -3,7 +3,7 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.11';
+  const APP_VERSION = '3.13';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
@@ -253,7 +253,8 @@
 
   function dms(v, pos, neg){
     const h = v >= 0 ? pos : neg; v = Math.abs(v);
-    const d = Math.floor(v), mF = (v - d) * 60, m = Math.floor(mF), sec = Math.round((mF - m) * 60);
+    let t = Math.round(v * 3600);   // tout en secondes entières : pas de « 60″ »
+    const d = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), sec = t % 60;
     return `${d}°${String(m).padStart(2,'0')}′${String(sec).padStart(2,'0')}″${h}`;
   }
 
