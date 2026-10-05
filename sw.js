@@ -3,7 +3,7 @@
    ⚠️ À chaque mise en ligne d'une nouvelle version des fichiers de l'appli (HTML, CSS, JS, images),
    augmente le numéro ci-dessous (v3.2 → v3.3…) : c'est ce qui déclenche la mise à jour chez les utilisateurs.
    Les listes (JSON) n'ont pas besoin de ce changement : elles sont toujours vérifiées en ligne en premier. */
-const VERSION = 'v4.16-test';
+const VERSION = 'v4.18-test';
 const CACHE = 'ouessant-' + VERSION;
 const RUNTIME = 'ouessant-runtime';
 
@@ -14,7 +14,7 @@ const SHELL = [
   'js/version.js', 'js/textes.js', 'js/carte.js', 'js/recherche.js', 'js/appli.js',
   'ouessant_birds.json', 'lieux_ouessant.json', 'version_listes.json',
   'phare_creach.svg', 'phare_creach_eteint.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png',
-  'carte_ouessant.webp'
+  'carte_ouessant.webp', 'oriole_baltimore.webp'
 ];
 
 self.addEventListener('install', event => {
