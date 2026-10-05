@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Votre marché des îles",
+    "carres": [
+      "I6"
+    ],
+    "lat": 48.4601424,
+    "lon": -5.0907874,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Mac Ludo (pizza)",
     "carres": [
       "I7"
