@@ -721,11 +721,11 @@
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
   // L'oiseau sort de derrière les fougères, fait un tour du phare (devant puis derrière la tour) et s'envole vers la droite
-  const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 64 40" aria-hidden="true">'
-    + '<g class="eb-far"><path d="M37 15.5C36 6 29 0 12-1l3 4-1.5 1.5 4 3-1 2 4.500 2C26 13 31 14.500 33 17.500z" opacity=".5"/></g>'
-    + '<path d="M62 16L53 14.600C51 11 46 10.500 43 12.500 38 11 31 13 25 17 19 20 12 22 4 21.500L2 25.500 9 24 3 29.500 14 25.500C22 24.500 31 25 38 23 44 22 48 20 53 17.600z"/>'
-    + '<circle cx="47.500" cy="14.300" r="1" fill="var(--paper)"/>'
-    + '<g class="eb-near"><path d="M37 15.500C36 6 29 0 12-1l3 4-1.500 1.500 4 3-1 2 4.500 2C26 13 31 14.500 33 17.500z"/></g></svg>';
+  const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
+    + '<g class="eb-far"><path d="M32 16C30 6 22-1 8 0l3 3.200-1.500 1 3.500 2.300c4 1.500 7.500 4 9 10.500z" opacity=".55"/></g>'
+    + '<path d="M19 17.500L2 12.500l4.500 5L2 22.500 19 21z"/><ellipse cx="30" cy="18" rx="13.500" ry="5.600" transform="rotate(-5 30 18)"/>'
+    + '<circle cx="44" cy="15" r="4.700"/><path d="M47.500 13.800L57 16.200 47.500 17.600z"/><circle cx="45.600" cy="14" r="1" fill="var(--paper)"/>'
+    + '<g class="eb-near"><path d="M33 16C31 5 22-2 6-1l3.200 3.400-1.700 1 3.800 2.400-1 1.800 4 2C21 11 25 13 27 14.500 30 15.500 31.500 16.500 33 17z"/></g></svg>';
   function flyBird(btn){
     btn.insertAdjacentHTML('beforeend', BIRD_SVG);
     const bird = btn.querySelector('.egg-flyer:last-child'), near = bird.querySelector('.eb-near'), far = bird.querySelector('.eb-far');
@@ -739,7 +739,7 @@
       if (t <= T1){ const a = th(t), u = t / T1; return { x: CX + R * Math.sin(a), y: Y0 + (Y1 - Y0) * sm(u) + RY * Math.cos(a), d: Math.cos(a), u }; }
       const q = t - T1; return { x: CX + vxEnd * q + ax * q * q / 2 + 0 * R, y: Y1 + RY - 16 * q * q, d: 1, u: 1 + q / T2 };
     };
-    const wing = (g, k) => g.setAttribute('transform', `translate(34 17) scale(1 ${k.toFixed(2)}) translate(-34 -17)`);
+    const wing = (g, k) => g.setAttribute('transform', `translate(28 16) scale(1 ${k.toFixed(2)}) translate(-28 -16)`);
     const t0 = performance.now();
     (function frame(now){
       const t = (now - t0) / 1000 - DELAY;
@@ -748,7 +748,7 @@
       const turn = Math.max(-1, Math.min(1, vx / 35));                         // le demi-tour se fait en s'écrasant, sans saut
       const sc = (0.9 + 0.2 * P.d) * Math.min(1, 0.55 + t * 0.9);
       const vy = (Q.y - P.y) / 0.016, tilt = Math.max(-12, Math.min(12, vy * 0.06));      // le bec se lève quand il monte
-      bird.style.transform = `translate(${(P.x - 15).toFixed(1)}px,${(P.y - 9.4).toFixed(1)}px) scale(${(turn * sc).toFixed(3)},${sc.toFixed(3)}) rotate(${tilt.toFixed(1)}deg)`;
+      bird.style.transform = `translate(${(P.x - 15).toFixed(1)}px,${(P.y - 8.5).toFixed(1)}px) scale(${(turn * sc).toFixed(3)},${sc.toFixed(3)}) rotate(${tilt.toFixed(1)}deg)`;
       bird.style.zIndex = P.d > 0 ? (P.y > 78 ? 1 : 3) : -1;           // 1 : derrière les fougères (z 2) tant qu'il est à leur hauteur ; 3 : devant la tour ; -1 : derrière la tour
       bird.style.opacity = Math.min(1, t * 5, Math.max(0, (exitX - P.x) / 80));
       const ph = t * Math.PI * 2 * 5; wing(near, 0.15 + 0.85 * Math.sin(ph)); wing(far, 0.15 + 0.85 * Math.sin(ph - 0.6));
