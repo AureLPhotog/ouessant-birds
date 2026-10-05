@@ -686,7 +686,9 @@
           else if (k in it.data && !(k in d)) merged[k] = it.data[k];
         });
         const fmt = formatNames(merged);
-        it.data = merged; openId = null; render(); save(); toast(fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.');
+        const y = window.scrollY;
+        it.data = merged; render(); initCells(); save(); window.scrollTo(0, y);   // l'entrée reste ouverte (« Fermer » la referme) : on voit le résultat, noms mis en forme compris
+        toast(fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.');
       } catch (e) { wrap.querySelector('[data-msg]').textContent = e.message; }
     } else if (act === 'cancel'){ openId = null; render(); }
     else if (act === 'revert'){ it.data = clone(it.orig); render(); initCells(); save(); toast('Entrée remise comme à l\u2019origine.'); }
