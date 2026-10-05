@@ -35,7 +35,7 @@
     
     "Rechercher dans tous les champs…": "Search all fields…",
     "Rechercher": "Search",
-    "+ Ajouter une entrée": "+ Add an entry",
+    "+ Ajouter une entrée": "+ Add an entry", "+ Ajouter un oiseau": "+ Add a bird", "+ Ajouter un lieu": "+ Add a place",
     "Coller des lignes": "Paste lines",
     "Envoyer ma proposition": "Send my suggestion",
     "Enregistrer sur GitHub": "Save to GitHub",

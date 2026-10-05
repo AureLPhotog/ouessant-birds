@@ -505,6 +505,7 @@
   function render(){
     const list = visible(), c = changes();
     const kind = kindOf(gh ? gh.path : fileName);
+    $('addBtn').textContent = kind === 'birds' ? '+ Ajouter un oiseau' : kind === 'places' ? '+ Ajouter un lieu' : '+ Ajouter une entrée';
     document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.list === (kind === 'birds' ? 'oiseaux' : kind === 'places' ? 'lieux' : ''))));
     $('countInfo').textContent = countText(items.length) + (list.length !== items.length ? `, ${list.length} affichés` : '');
     $('changeInfo').innerHTML = (c.mod ? `<span class="badge mod">${c.mod} modifiée${c.mod > 1 ? 's' : ''}</span> ` : '') +
