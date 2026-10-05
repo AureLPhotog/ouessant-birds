@@ -428,7 +428,16 @@
   document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
 
   // ---------- Où suis-je ? ----------
-  const NEAR_N = 5;
+  const NEAR_MIN = 3, NEAR_MAX = 10, NEAR_KEY = 'ouessant-near-n';
+  let NEAR_N = 5;   // nombre de lieux-dits affichés autour de soi (réglable de 3 à 10)
+  try { const n = parseInt(localStorage.getItem(NEAR_KEY), 10); if (n >= NEAR_MIN && n <= NEAR_MAX) NEAR_N = n; } catch (_) {}
+  $('nearN').value = NEAR_N; $('nearOut').textContent = NEAR_N;
+  $('nearN').addEventListener('input', e => {
+    NEAR_N = Math.min(NEAR_MAX, Math.max(NEAR_MIN, parseInt(e.target.value, 10) || 5));
+    $('nearOut').textContent = NEAR_N;
+    try { localStorage.setItem(NEAR_KEY, String(NEAR_N)); } catch (_) {}
+    renderWhere();   // sans nouvelle localisation : on réutilise la dernière position
+  });
   let lastFix = null;
   function bearing(a, b, c, d){
     const r = Math.PI / 180, y = Math.sin((d - b) * r) * Math.cos(c * r);
@@ -448,7 +457,7 @@
     }
     const near = ranked.slice(0, NEAR_N);
     $('shareLoc').hidden = false;
-    st.textContent = T('youAre')(cellName(cell), Math.round(acc)) + (acc > 100 ? ' ' + T('gpsLow') : '');
+    st.textContent = T('youAre')(cellName(cell), Math.round(acc), near.length) + (acc > 100 ? ' ' + T('gpsLow') : '');
     const dirs = T('dirs');
     out.innerHTML = '<ul class="list">' + near.map((n, i) => `<li class="near">
         <span class="num">${i + 1}</span>
