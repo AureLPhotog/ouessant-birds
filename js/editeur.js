@@ -538,6 +538,10 @@
     const mod = items.filter(it => it.orig && !same(it.data, it.orig)).length, add = items.filter(it => !it.orig).length, del = deleted.filter(it => it.orig).length;
     return { mod, add, del, total: mod + add + del };
   }
+  // Téléphone : seules les 3 premières colonnes sont affichées ; les lignes pleine largeur (formulaire, « Afficher plus ») doivent s'étendre sur ces 3 colonnes
+  const phone = matchMedia('(max-width:640px)');
+  const cols = () => phone.matches ? Math.min(3, fields.length) : fields.length;
+  phone.addEventListener('change', () => { if (items.length) render(); });
   function render(){
     const list = visible(), c = changes();
     $('proposeBtn').classList.toggle('attention', c.total > 0);   // jaune : « c'est ici qu'on soumet »
@@ -556,11 +560,11 @@
         const v = showK(k, it.data[k]);
         return `<td class="${['number','numlist'].includes(types[k].t) ? 'num' : ''}">${v === '' ? '<span class="empty">vide</span>' : hl(v)}</td>`;
       }).join('') + '</tr>';
-      if (openId === it.id) html += `<tr class="editor"><td colspan="${fields.length}">${editorHtml(it)}</td></tr>`;
+      if (openId === it.id) html += `<tr class="editor"><td colspan="${cols()}">${editorHtml(it)}</td></tr>`;
       return html;
     }).join('');
-    tbody.innerHTML = rows || `<tr><td colspan="${fields.length}" class="more">Aucune entrée ne correspond.</td></tr>`;
-    if (list.length > shown) tbody.insertAdjacentHTML('beforeend', `<tr><td colspan="${fields.length}" class="more"><button type="button" class="btn" id="moreBtn">Afficher ${Math.min(200, list.length - shown)} de plus (${list.length - shown} restantes)</button></td></tr>`);
+    tbody.innerHTML = rows || `<tr><td colspan="${cols()}" class="more">Aucune entrée ne correspond.</td></tr>`;
+    if (list.length > shown) tbody.insertAdjacentHTML('beforeend', `<tr><td colspan="${cols()}" class="more"><button type="button" class="btn" id="moreBtn">Afficher ${Math.min(200, list.length - shown)} de plus (${list.length - shown} restantes)</button></td></tr>`);
   }
   $('search').addEventListener('input', () => { shown = 200; render(); });
   $('table').addEventListener('click', e => {
