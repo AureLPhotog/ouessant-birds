@@ -118,13 +118,15 @@ Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce
 1. Ouvrir l'éditeur avec la Clé Admin → bouton **Trier les propositions** (ou directement `admin.html`, qui demande la clé).
 2. Dans Google Forms : **Réponses → Afficher dans Sheets**, puis **Fichier → Télécharger → .csv**, et choisir ce fichier dans la page.
    Le fichier est lu sur l'appareil : rien n'est mis en ligne.
-3. Choisir la période (un jour, « non traitées » ou tout). Chaque espèce / lieu-dit a sa carte : la valeur actuelle, chaque proposition
+3. Choisir l'onglet **Oiseaux** ou **Lieux** (les deux listes ne sont jamais mélangées : tri, lignes JSON et marquage se font
+   onglet par onglet), puis la période (tous les jours ou un jour). Chaque espèce / lieu-dit a sa carte : la valeur actuelle, chaque proposition
    différente (avec le nombre de personnes, les dates et les commentaires), et les boutons **Valider** / **Tout rejeter**.
    Les propositions déjà conformes à la liste sont signalées et ignorées. Les décisions sont gardées dans le navigateur.
-4. **Générer les lignes JSON** → copier le bloc Oiseaux puis le bloc Lieux dans l'éditeur (**Coller des lignes → Vérifier → Appliquer →
+4. **Générer les lignes JSON des oiseaux** (ou **des lieux**) → les coller dans le **même onglet** de l'éditeur (l'éditeur refuse
+   des lignes de lieux dans les oiseaux et inversement) (**Coller des lignes → Vérifier → Appliquer →
    Enregistrer sur GitHub**). Puis **Marquer les réponses décidées comme traitées** : avec le script Google, la date est écrite dans une
    colonne **« Traitée »** de la feuille (ajoutée à droite des réponses) et ces réponses ne sont plus proposées au tri suivant ;
-   avec le fichier .csv seul, c'est noté dans le navigateur (période « non traitées »). Une réponse qui contient encore une proposition
+   avec le fichier .csv seul, la feuille n'est pas modifiée : c'est noté dans le navigateur, et ces réponses sont écartées à la lecture. Une réponse qui contient encore une proposition
    « à décider » n'est pas marquée. Rien n'est effacé : la case **Inclure les réponses déjà marquées « traitées »** les fait réapparaître.
 
 ### Récupération automatique des réponses (à installer une fois)

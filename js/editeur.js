@@ -851,6 +851,13 @@
     let objs;
     try { objs = parseLines($('pasteLines').value); } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Lignes illisibles : vérifie qu\u2019il s\u2019agit bien de JSON ({ … }).'; return; }
     if (!objs.length){ msg.className = 'msg bad'; msg.textContent = 'Rien à coller.'; return; }
+    // garde-fou : des lignes de lieux ne se collent pas dans les oiseaux (et inversement)
+    const target = (gh && gh.path) || fileName, declared = ($('pasteLines').value.match(/Modifications de\s+(\S+\.json)/) || [])[1];
+    const other = { 'ouessant_birds.json': 'Lieux', 'lieux_ouessant.json': 'Oiseaux' };
+    const wrongFields = objs.some(o => o && typeof o === 'object' && !fields.some(k => k in o));
+    if ((declared && GH.files.includes(declared) && declared !== target) || wrongFields){
+      msg.className = 'msg bad'; msg.textContent = `Ces lignes ne correspondent pas à cette liste${other[target] ? ' : elles sont pour l’onglet ' + other[target] : ''}. Change d’onglet avant de coller.`; return;
+    }
     const key = $('keyField').value;
     objs.forEach(o => {
       if (!o || typeof o !== 'object' || Array.isArray(o)) return;

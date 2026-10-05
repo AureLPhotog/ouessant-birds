@@ -24,12 +24,17 @@
     'ouessant_birds.json': { label: 'Oiseau', key: 'Nom Scientifique', name: 'Nom Français' },
     'lieux_ouessant.json': { label: 'Lieu', key: 'nom', name: 'nom' }
   };
-  const DECISIONS = 'ouessant-admin-decisions', DONE = 'ouessant-admin-traite';
+  const DECISIONS = 'ouessant-admin-decisions', DONE_SET = 'ouessant-admin-traitees';
+  // réponses traitées quand on travaille avec le fichier .csv (sans le script) : leur empreinte est gardée dans ce navigateur
+  const hash = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
+  let doneSet; try { doneSet = new Set(JSON.parse(store.get(DONE_SET) || '[]')); } catch (_) { doneSet = new Set(); }
+  const saveDone = () => store.set(DONE_SET, JSON.stringify([...doneSet].slice(-20000)));
   const META = ['_action', '_cle_avant'];
   let current = {};            // fichier → { entries: [...], byKey: Map }
   let proposals = [];          // toutes les propositions lues dans le fichier
   let answers = [];            // une entrée par réponse (ligne de la feuille) : { row, when, day, ids }
-  let lastRows = null, lastSource = null;   // dernières lignes lues et leur origine ('csv' ou 'script')
+  let lastRows = null, lastSource = null;
+  let LIST = 'ouessant_birds.json';   // onglet affiché : les oiseaux et les lieux sont triés et générés séparément   // dernières lignes lues et leur origine ('csv' ou 'script')
   let decisions = {};          // clé de groupe → signature de la variante retenue, ou 'reject'
   try { decisions = JSON.parse(store.get(DECISIONS) || '{}') || {}; } catch (_) { decisions = {}; }
   const saveDecisions = () => store.set(DECISIONS, JSON.stringify(decisions));
@@ -149,9 +154,11 @@
       proposals = []; answers = [];
       rows.slice(1).forEach((r, ri) => {
         if (!r.some(c => c.trim() !== '')) return;
-        if (col.done >= 0 && (r[col.done] || '').trim() && !withDone){ skipped++; return; }   // déjà traitée (colonne « Traitée » de la feuille)
+        const sig = (r[col.date] || '') + '|' + hash(r[col.json] || '');
+        const isDone = (col.done >= 0 && (r[col.done] || '').trim()) || doneSet.has(sig);   // colonne « Traitée » de la feuille, ou noté dans ce navigateur
+        if (isDone && !withDone){ skipped++; return; }
         const when = parseDate(r[col.date], col.dayFirst), comment = col.comment >= 0 ? (r[col.comment] || '').trim() : '';
-        const ans = { row: ri + 2, when, day: dayOf(when), ids: [] }; answers.push(ans);   // row : numéro de la ligne dans la feuille (1 = titres)
+        const ans = { row: ri + 2, sig, when, day: dayOf(when), ids: [] }; answers.push(ans);   // row : numéro de la ligne dans la feuille (1 = titres)
         linesOf(r[col.json]).forEach(({ o, file, hint }, li) => {
           const f = fileOf(o, file); if (!f) return;
           const L = LISTS[f], data = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
@@ -172,7 +179,8 @@
       });
       if (!answers.length) throw new Error(skipped ? `Rien de nouveau : les ${skipped} réponse(s) sont déjà marquées « traitées ».` : 'Aucune réponse pour l’instant.');
       msg.className = 'msg good'; msg.textContent = `${answers.length} réponse(s) à trier, ${proposals.length} proposition(s)` + (skipped ? ` (${skipped} déjà traitée(s), masquée(s))` : '') + '. Les listes en ligne ont été chargées pour comparer.';
-      buildPeriods(); $('sortView').classList.remove('hidden'); render();
+      buildPeriods(); $('sortView').classList.remove('hidden');
+      setList(proposals.some(p => p.file === LIST && p.type !== 'same') || !proposals.some(p => p.type !== 'same') ? LIST : proposals.find(p => p.type !== 'same').file);
   }
   // ---------- Récupération automatique : script Google (Apps Script) attaché à la feuille des réponses ----------
   // Le script ne répond qu'avec le code secret ; l'adresse et le code sont gardés dans ce navigateur, jamais dans le dépôt.
@@ -215,27 +223,24 @@
   drop.addEventListener('drop', e => { const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) readFile(f); });
 
   // ---------- Période ----------
+  // (les réponses déjà traitées sont écartées dès la lecture : la période ne porte que sur les réponses à trier)
   function buildPeriods(){
-    const done = +store.get(DONE) || 0, days = {};
+    const keep = $('period').value, days = {};
     proposals.forEach(p => { days[p.day] = (days[p.day] || 0) + 1; });
-    const fresh = proposals.filter(p => !p.when || +p.when > done).length;
-    const opts = [];
-    if (done) opts.push(['new', `non traitées (${fresh})`]);
+    const opts = [['all', `tous les jours (${proposals.length})`]];
     Object.keys(days).sort().reverse().forEach(d => opts.push(['d:' + d, `${dayLabel(d)} (${days[d]})`]));
-    opts.push(['all', `toutes (${proposals.length})`]);
     $('period').innerHTML = opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('');
+    if (opts.some(([v]) => v === keep)) $('period').value = keep;
   }
   function inPeriod(p){
     const v = $('period').value;
-    if (v === 'all') return true;
-    if (v === 'new') return !p.when || +p.when > (+store.get(DONE) || 0);
-    return 'd:' + p.day === v;
+    return v === 'all' || 'd:' + p.day === v;
   }
 
   // ---------- Regroupement : une carte par espèce / lieu-dit, une variante par proposition différente ----------
   function groups(){
     const map = new Map();
-    proposals.filter(inPeriod).forEach(p => {
+    proposals.filter(p => p.file === LIST && inPeriod(p)).forEach(p => {
       const gk = p.file + '|' + norm(p.origKey);
       if (!map.has(gk)) map.set(gk, { gk, file: p.file, origKey: p.origKey, cur: p.cur, variants: new Map(), same: 0, total: 0 });
       const g = map.get(gk); g.total++;
@@ -258,6 +263,8 @@
   function render(){
     const all = groups(), sortBy = $('sortBy').value, showV = $('show').value;
     const counts = { todo: 0, ok: 0, no: 0 }; all.forEach(g => counts[stateOf(g)]++);
+    const nIn = f => proposals.filter(p => p.file === f && inPeriod(p) && p.type !== 'same').length;
+    $('nBirds').textContent = `(${nIn('ouessant_birds.json')})`; $('nPlaces').textContent = `(${nIn('lieux_ouessant.json')})`;
     const conflicts = all.filter(g => g.variants.size > 1).length;
     $('summary').textContent = `${all.length} espèce(s) ou lieu(x) concerné(s) : ${counts.todo} à décider, ${counts.ok} validé(s), ${counts.no} rejeté(s)` + (conflicts ? ` · ${conflicts} avec des propositions différentes` : '') + (groups.alreadyOk ? ` · ${groups.alreadyOk} demande(s) déjà conforme(s) à la liste, ignorée(s)` : '');
     const rank = { del: 0, add: 1, mod: 2 };
@@ -307,6 +314,19 @@
     saveDecisions(); render();
   });
   ['period', 'sortBy', 'show'].forEach(id => $(id).addEventListener('change', render));
+  const LIST_NAME = { 'ouessant_birds.json': ['Oiseaux', 'des oiseaux'], 'lieux_ouessant.json': ['Lieux', 'des lieux'] };
+  function setList(f){
+    LIST = f;
+    document.querySelectorAll('.tabs [data-file]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.file === f)));
+    const [tab, de] = LIST_NAME[f];
+    $('outTitle').textContent = `3. Les lignes JSON ${de} validées`;
+    $('outHelp').innerHTML = `Dans l’éditeur (avec ta clé) : onglet <b>${tab}</b> → <b>Coller des lignes</b> → colle → <b>Vérifier</b> → <b>Appliquer</b> → <b>Enregistrer sur GitHub</b>. Ces lignes ne contiennent que ${de}.`;
+    $('genBtn').textContent = `Générer les lignes JSON ${de}`;
+    $('doneBtn').textContent = `Marquer comme traitées les réponses ${de} décidées`;
+    $('outBlocks').innerHTML = ''; $('outMsg').textContent = '';
+    render();
+  }
+  document.querySelectorAll('.tabs [data-file]').forEach(b => b.addEventListener('click', () => setList(b.dataset.file)));
 
   // ---------- Lignes JSON validées (même format que « Envoyer ma proposition » de l'éditeur) ----------
   $('genBtn').addEventListener('click', () => {
@@ -314,7 +334,7 @@
     const out = $('outBlocks'); $('outMsg').textContent = '';
     if (!ok.length){ out.innerHTML = '<p class="help">Aucune proposition validée pour l’instant.</p>'; return; }
     const today = new Date().toLocaleDateString('fr-FR');
-    out.innerHTML = Object.keys(LISTS).map(f => {
+    out.innerHTML = [LIST].map(f => {
       const L = LISTS[f], mine = ok.filter(g => g.file === f); if (!mine.length) return '';
       const c = { mod: 0, add: 0, del: 0 }, lines = [];
       mine.forEach(g => {
@@ -325,7 +345,7 @@
         if (!same(o[L.key], g.cur[L.key])) o._cle_avant = g.cur[L.key];
         lines.push(`// modifiée : ${show(g.cur[L.key])}`, JSON.stringify(o));
       });
-      const text = [`// Modifications de ${f}, validées le ${today}`, `// ${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s). À coller dans l’éditeur : « Coller des lignes ».`, ...lines].join('\n') + '\n';
+      const text = [`// Modifications de ${f}, validées le ${today} — à coller dans l’onglet ${LIST_NAME[f][0]} de l’éditeur`, `// ${c.mod} modifiée(s), ${c.add} ajoutée(s), ${c.del} supprimée(s). À coller dans l’éditeur : « Coller des lignes ».`, ...lines].join('\n') + '\n';
       return `<div class="out"><h3>${f === 'ouessant_birds.json' ? 'Oiseaux' : 'Lieux'} — ${mine.length} entrée(s)</h3>
         <textarea readonly rows="${Math.min(14, lines.length + 3)}" spellcheck="false">${esc(text)}</textarea>
         <div class="actions"><button type="button" class="btn" data-copy>Copier</button></div></div>`;
@@ -343,11 +363,11 @@
   const byId = () => new Map(proposals.map(p => [p.id, p]));
   function doneRows(){
     const m = byId();
-    return answers.filter(a => (!a.when || inPeriod(a)) && a.ids.every(id => decided(m.get(id))));
+    return answers.filter(a => (!a.when || inPeriod(a)) && (a.ids.length ? a.ids.every(id => m.get(id).file === LIST && decided(m.get(id))) : true));   // réponse sans proposition lisible : rien à décider
   }
   $('doneBtn').addEventListener('click', async () => {
     const rows = doneRows(), out = $('outMsg'); if (!rows.length) return;
-    const left = answers.filter(a => (!a.when || inPeriod(a))).length - rows.length;
+    const m = byId(), left = answers.filter(a => (!a.when || inPeriod(a)) && a.ids.some(id => m.get(id).file === LIST)).length - rows.length;
     if (!confirm(`Marquer ${rows.length} réponse(s) comme traitée(s) ?` + (left ? ` (${left} autre(s) gardée(s) : elles ont encore des propositions « à décider ».)` : '') + ' Pense à enregistrer les lignes JSON dans l’éditeur avant.')) return;
     out.className = 'msg'; out.textContent = 'Marquage…';
     try {
@@ -359,10 +379,8 @@
         }
         out.className = 'msg good'; out.textContent = `${n} réponse(s) marquée(s) « traitée(s) » dans la feuille Google : elles ne seront plus proposées.`;
       } else {
-        const withDate = rows.filter(a => a.when);
-        const max = Math.max(+store.get(DONE) || 0, ...withDate.map(a => +a.when));
-        store.set(DONE, String(max));
-        out.className = 'msg good'; out.textContent = `C’est noté dans ce navigateur : réponses jusqu’au ${new Date(max).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })} traitées (période « non traitées »). Avec le script Google, le marquage se fait directement dans la feuille.`;
+        rows.forEach(a => doneSet.add(a.sig)); saveDone();
+        out.className = 'msg good'; out.textContent = `${rows.length} réponse(s) notée(s) « traitée(s) » dans ce navigateur (tu as chargé un fichier .csv : la feuille Google n’est pas modifiée). Avec « Récupérer les réponses » (script Google), le marquage s’écrit dans la feuille, colonne « Traitée ».`;
       }
       const marked = new Set(rows.map(a => a.row));
       answers = answers.filter(a => !marked.has(a.row)); proposals = proposals.filter(p => !marked.has(p.row));
