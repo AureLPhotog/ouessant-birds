@@ -720,38 +720,39 @@
   });
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
-  // L'oiseau sort de derrière les fougères, tourne autour du phare (devant puis derrière la tour) et repart vers la droite
-  const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
-    + '<g class="eb-far"><path d="M32 16C30 6 22-1 8 0c8 4 12 9 14 17z" opacity=".55"/></g>'
-    + '<path d="M18 17L1 13.5l2 7L18 21z"/><ellipse cx="30" cy="18" rx="13.5" ry="5.6"/>'
-    + '<circle cx="44" cy="15" r="4.7"/><path d="M48 13.6L58 16.2 48 17.8z"/><circle cx="45.6" cy="14" r="1" fill="var(--paper)"/>'
-    + '<g class="eb-near"><path d="M33 16C31 5 22-2 6-1c9 4 13 9 15 18z"/></g></svg>';
+  // L'oiseau sort de derrière les fougères, fait un tour du phare (devant puis derrière la tour) et s'envole vers la droite
+  const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 64 40" aria-hidden="true">'
+    + '<g class="eb-far"><path d="M37 15.5C36 6 29 0 12-1l3 4-1.5 1.5 4 3-1 2 4.500 2C26 13 31 14.500 33 17.500z" opacity=".5"/></g>'
+    + '<path d="M62 16L53 14.600C51 11 46 10.500 43 12.500 38 11 31 13 25 17 19 20 12 22 4 21.500L2 25.500 9 24 3 29.500 14 25.500C22 24.500 31 25 38 23 44 22 48 20 53 17.600z"/>'
+    + '<circle cx="47.500" cy="14.300" r="1" fill="var(--paper)"/>'
+    + '<g class="eb-near"><path d="M37 15.500C36 6 29 0 12-1l3 4-1.500 1.500 4 3-1 2 4.500 2C26 13 31 14.500 33 17.500z"/></g></svg>';
   function flyBird(btn){
     btn.insertAdjacentHTML('beforeend', BIRD_SVG);
     const bird = btn.querySelector('.egg-flyer:last-child'), near = bird.querySelector('.eb-near'), far = bird.querySelector('.eb-far');
-    const rect = btn.getBoundingClientRect(), exitX = Math.max(rect.width + 80, innerWidth - rect.left - 10);
-    const CX = rect.width / 2, R = 30, RY = 8, DELAY = 1000, DUR = 5400, ORB = 0.74, TURNS = 1.25;
-    const t0 = performance.now(); let lastX = CX, dir = 1;
-    const wing = (g, k) => g.setAttribute('transform', `translate(28 16) scale(1 ${k.toFixed(2)}) translate(-28 -16)`);
+    const rect = btn.getBoundingClientRect(), exitX = Math.max(rect.width + 120, innerWidth - rect.left + 20);
+    const CX = rect.width / 2, R = 30, RY = 8, DELAY = 1.0, OM = 2.7, RAMP = 0.45, Y0 = 112, Y1 = 52;
+    const T1 = 2 * Math.PI / OM + RAMP / 2;                                   // fin du tour : devant le phare, vers la droite, à pleine vitesse
+    const th = t => t < RAMP ? OM * t * t / (2 * RAMP) : OM * (t - RAMP / 2);  // angle : départ progressif puis vitesse constante
+    const sm = u => u * u * (3 - 2 * u);
+    const vxEnd = R * OM, T2 = 1.7, ax = 2 * ((exitX - CX) - vxEnd * T2) / (T2 * T2);   // sortie : même vitesse qu'à la fin du tour, puis accélération douce
+    const pos = t => {
+      if (t <= T1){ const a = th(t), u = t / T1; return { x: CX + R * Math.sin(a), y: Y0 + (Y1 - Y0) * sm(u) + RY * Math.cos(a), d: Math.cos(a), u }; }
+      const q = t - T1; return { x: CX + vxEnd * q + ax * q * q / 2 + 0 * R, y: Y1 + RY - 16 * q * q, d: 1, u: 1 + q / T2 };
+    };
+    const wing = (g, k) => g.setAttribute('transform', `translate(34 17) scale(1 ${k.toFixed(2)}) translate(-34 -17)`);
+    const t0 = performance.now();
     (function frame(now){
-      const el = now - t0 - DELAY;
-      if (el < 0){ bird.style.opacity = 0; requestAnimationFrame(frame); return; }
-      const u = Math.min(1, el / DUR); let x, y, depth, k = 1;
-      if (u < ORB){
-        const w = u / ORB, e = w * w * (3 - 2 * w), th = Math.PI * 2 * TURNS * e;
-        x = CX + R * Math.sin(th); depth = Math.cos(th); y = 112 - 66 * e + RY * depth;
-        k = Math.min(1, w * 5);
-      } else {
-        const v = (u - ORB) / (1 - ORB), x0 = CX + R, y0 = 46;
-        x = x0 + (exitX - x0) * v * (0.35 + 0.65 * v); y = y0 - 30 * v; depth = 1;
-      }
-      if (Math.abs(x - lastX) > 0.05){ dir = x > lastX ? 1 : -1; lastX = x; }
-      const sc = (0.95 + 0.22 * depth) * (0.55 + 0.45 * (u < ORB ? Math.min(1, u / ORB * 4) : 1));
-      bird.style.transform = `translate(${(x - 20).toFixed(1)}px,${(y - 11.4).toFixed(1)}px) scale(${(dir * sc).toFixed(3)},${sc.toFixed(3)})`;
-      bird.style.zIndex = u < 0.1 ? 1 : depth > 0 ? 3 : -1;                   // 1 : derrière les fougères (z 2) ; -1 : derrière la tour
-      bird.style.opacity = Math.min(1, el / 250, Math.max(0, (exitX - x) / 70));
-      const ph = el / 1000 * Math.PI * 2 * 4.6; wing(near, Math.sin(ph)); wing(far, Math.sin(ph - 0.7));
-      if (u < 1) requestAnimationFrame(frame); else bird.remove();
+      const t = (now - t0) / 1000 - DELAY;
+      if (t < 0){ bird.style.opacity = 0; requestAnimationFrame(frame); return; }
+      const P = pos(t), Q = pos(t + 0.016), vx = (Q.x - P.x) / 0.016;
+      const turn = Math.max(-1, Math.min(1, vx / 35));                         // le demi-tour se fait en s'écrasant, sans saut
+      const sc = (0.9 + 0.2 * P.d) * Math.min(1, 0.55 + t * 0.9);
+      const vy = (Q.y - P.y) / 0.016, tilt = Math.max(-12, Math.min(12, vy * 0.06));      // le bec se lève quand il monte
+      bird.style.transform = `translate(${(P.x - 15).toFixed(1)}px,${(P.y - 9.4).toFixed(1)}px) scale(${(turn * sc).toFixed(3)},${sc.toFixed(3)}) rotate(${tilt.toFixed(1)}deg)`;
+      bird.style.zIndex = P.d > 0 ? (P.y > 78 ? 1 : 3) : -1;           // 1 : derrière les fougères (z 2) tant qu'il est à leur hauteur ; 3 : devant la tour ; -1 : derrière la tour
+      bird.style.opacity = Math.min(1, t * 5, Math.max(0, (exitX - P.x) / 80));
+      const ph = t * Math.PI * 2 * 5; wing(near, 0.15 + 0.85 * Math.sin(ph)); wing(far, 0.15 + 0.85 * Math.sin(ph - 0.6));
+      if (P.x < exitX + 10 && t < T1 + T2 + 0.5) requestAnimationFrame(frame); else bird.remove();
     })(performance.now());
   }
   function egg(){
