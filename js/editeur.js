@@ -127,6 +127,34 @@
     if (keepCenter){ scroll.scrollLeft = rx * scroll.scrollWidth - scroll.clientWidth / 2; scroll.scrollTop = ry * scroll.scrollHeight - scroll.clientHeight / 2; }
     else centerOn(scroll, selectedCells(field));
   }
+  // Pincement à deux doigts sur la carte : zoom continu (le pourcentage affiché suit), centré entre les doigts
+  (function pinch(){
+    const ZMIN = ZOOMS[0], ZMAX = ZOOMS[ZOOMS.length - 1];
+    let st = null;   // { field, scroll, wrap, dist0, zoom0 }
+    const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    const table = $('table');
+    table.addEventListener('touchstart', e => {
+      const scroll = e.target.closest && e.target.closest('.cells-scroll');
+      if (!scroll || e.touches.length !== 2){ if (e.touches.length < 2) st = null; return; }
+      const field = scroll.closest('.cells-field');
+      st = { field, scroll, wrap: field.querySelector('.cells-wrap'), dist0: dist(e.touches) || 1, zoom0: zoom };
+    }, { passive: true });
+    table.addEventListener('touchmove', e => {
+      if (!st || e.touches.length !== 2) return;
+      if (e.cancelable) e.preventDefault();
+      const { scroll, wrap, field } = st, R = scroll.getBoundingClientRect();
+      const z = Math.min(ZMAX, Math.max(ZMIN, st.zoom0 * dist(e.touches) / st.dist0));
+      const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - R.left, my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - R.top;
+      const fx = (scroll.scrollLeft + mx) / scroll.scrollWidth, fy = (scroll.scrollTop + my) / scroll.scrollHeight;   // point de la carte sous les doigts
+      zoom = z; zoomChosen = true; wrap.style.setProperty('--z', z);
+      field.querySelector('[data-zoom-label]').textContent = Math.round(z * 100) + ' %';
+      scroll.scrollLeft = fx * scroll.scrollWidth - mx; scroll.scrollTop = fy * scroll.scrollHeight - my;
+    }, { passive: false });
+    const end = e => { if (e.touches.length < 2) st = null; };
+    table.addEventListener('touchend', end, { passive: true }); table.addEventListener('touchcancel', end, { passive: true });
+    // Safari (iPhone) : empêche le zoom de la page pendant le pincement sur la carte
+    ['gesturestart', 'gesturechange'].forEach(ev => table.addEventListener(ev, e => { if (e.target.closest && e.target.closest('.cells-scroll')) e.preventDefault(); }));
+  })();
   function initCells(){
     document.querySelectorAll('.cells-field').forEach(f => {
       const sel = selectedCells(f);
@@ -552,10 +580,9 @@
     const tr = e.target.closest('tr.item'); if (tr){ toggle(+tr.dataset.id); return; }
     const zb = e.target.closest('[data-zoom]');
     if (zb){
-      const f = zb.closest('.cells-field'), i = ZOOMS.indexOf(zoom), cur = i < 0 ? ZOOMS.findIndex(z => z >= zoom) : i;
-      const v = zb.dataset.zoom;
-      if (v === '+') setZoom(f, ZOOMS[Math.min(ZOOMS.length - 1, cur + 1)], true);
-      else if (v === '-') setZoom(f, ZOOMS[Math.max(0, cur - 1)], true);
+      const f = zb.closest('.cells-field'), v = zb.dataset.zoom;
+      if (v === '+') setZoom(f, ZOOMS.find(z => z > zoom + 0.01) || ZOOMS[ZOOMS.length - 1], true);
+      else if (v === '-') setZoom(f, [...ZOOMS].reverse().find(z => z < zoom - 0.01) || ZOOMS[0], true);
       else if (v === 'fit') setZoom(f, 1, true);
       else centerOn(f.querySelector('.cells-scroll'), selectedCells(f));
       return;
