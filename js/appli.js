@@ -3,7 +3,7 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.19';
+  const APP_VERSION = '3.20';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
@@ -464,21 +464,23 @@
       () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
   // Position GPS : le premier relevé d'un téléphone est souvent grossier (antennes, Wi-Fi : parfois ± 2 km).
-  // On écoute le GPS jusqu'à 15 s, on garde le relevé le plus précis et on s'arrête dès qu'il est bon (≤ 30 m).
+  // On écoute le GPS, on garde le relevé le plus précis et on s'arrête dès qu'il est suffisant :
+  // tout de suite si ≤ 50 m, après 3 s si ≤ 150 m, sinon au bout de 8 s avec le meilleur relevé obtenu.
   const COARSE_M = 1900;   // au-delà, le téléphone n'a donné qu'une position approximative
   const coarseHtml = acc => `<div class="notice" role="alert">${T('coarseHtml')(Math.round(acc))}</div>`;
   function locate(onProgress, onDone, onError){
-    let best = null, wid = null, timer = null, over = false;
-    const stop = () => { over = true; clearTimeout(timer); try { navigator.geolocation.clearWatch(wid); } catch (_) {} };
+    let best = null, wid = null, timer = null, soon = null, over = false;
+    const stop = () => { over = true; clearTimeout(timer); clearTimeout(soon); try { navigator.geolocation.clearWatch(wid); } catch (_) {} };
     const finish = () => { if (over) return; stop(); best ? onDone(best) : onError(); };
     wid = navigator.geolocation.watchPosition(pos => {
       if (over) return;
       const f = { lat: pos.coords.latitude, lon: pos.coords.longitude, acc: pos.coords.accuracy };
       if (!best || f.acc <= best.acc) best = f;
-      if (best.acc <= 30) return finish();
+      if (best.acc <= 50) return finish();
       onProgress(best);
     }, () => finish(), { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
-    timer = setTimeout(finish, 15000);
+    soon = setTimeout(() => { if (best && best.acc <= 150) finish(); }, 3000);   // assez précis après 3 s : inutile d'attendre
+    timer = setTimeout(finish, 8000);
   }
 
   // ---------- Alerte : message prêt à coller dans le groupe Telegram / WhatsApp ----------
