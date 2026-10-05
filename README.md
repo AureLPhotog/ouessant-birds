@@ -150,6 +150,22 @@ Pour changer le code : modifier la propriété `CODE` dans Apps Script, puis dan
 **Déployer → Gérer les déploiements → Archiver**. Documentation Google : <https://developers.google.com/apps-script/guides/web>.
 Le fichier .csv reste possible en secours.
 
+### Alertes par mail (facultatif)
+
+Le même script peut t'envoyer un mail : **toutes les Y nouvelles réponses**, et/ou **chaque matin vers 8 h si la plus ancienne
+réponse non traitée a plus de X jours** (rappel répété tant qu'elle n'est pas traitée).
+
+1. Dans Apps Script → **Paramètres du projet → Propriétés du script**, ajouter (au choix) :
+   `ALERTE_NB` = Y (ex. `20`), `ALERTE_JOURS` = X (ex. `3`), et si besoin `ALERTE_MAIL` = l'adresse qui reçoit les mails
+   (par défaut : ton compte Google). Vide ou `0` = alerte coupée. Modifiable à tout moment, sans rien réinstaller.
+2. En haut de l'éditeur Apps Script, choisir la fonction **installerAlertes** → **Exécuter** → autoriser l'envoi de mails
+   (une seule fois). Pour tout arrêter : exécuter **couperAlertes**.
+
+« Non traitée » = colonne **Traitée** vide : elle est remplie par le bouton « Marquer les réponses décidées comme traitées » de la page
+de tri **en mode récupération automatique** (avec le .csv, le marquage reste sur l'appareil et le script ne le voit pas).
+Documentation Google : <https://developers.google.com/apps-script/guides/triggers/installable> et quotas d'envoi :
+<https://developers.google.com/apps-script/guides/services/quotas>.
+
 Confidentialité : la page est verrouillée (la clé est vérifiée auprès de GitHub : seul le propriétaire du dépôt l'ouvre) et ne contient
 aucune donnée. Son code reste visible, comme tout le dépôt public ; les réponses, elles, ne quittent jamais la feuille Google et ton appareil.
 
