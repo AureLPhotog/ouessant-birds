@@ -84,6 +84,8 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 .cells-field{grid-column:1 / -1;display:grid;gap:.4rem}
 .cells-field > label{display:grid;gap:.25rem;font-size:.8rem;color:var(--granite);font-weight:600;max-width:22rem}
 .cells-tools{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;max-width:640px}
+.cells-tools .btn{white-space:normal;text-align:left}   /* un long libellé ne doit pas élargir la page au-delà de l'écran */
+.zoom-row{display:flex;justify-content:flex-end;align-items:center;gap:.35rem;max-width:640px}
 .zb{width:2rem;height:2rem;border:1px solid var(--line);border-radius:8px;background:var(--paper);font:700 1.1rem/1 var(--sans);cursor:pointer}
 .zb:focus-visible{outline:3px solid #8C5E83;outline-offset:2px}
 .zl{min-width:3.4rem;text-align:center;font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--granite)}
