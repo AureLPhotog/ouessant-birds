@@ -3,7 +3,7 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.13';
+  const APP_VERSION = '3.14';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
@@ -182,13 +182,18 @@
     shownBirds = list;
     if(!list.length){ results.innerHTML = ''; return; }
     results.innerHTML = '<ul class="list">' + list.map((b, i) => {
-      const c = canalOf(b), alt = altName(b);
+      const c = canalOf(b), alt = altName(b), kind = canalKind(c);
+      const canal = `<span class="dot" style="background:${colorOf[c]||'#5E676B'}"></span>${esc(canalLabel(c))}`;
+      const canalHtml = (kind === 'telegram' || kind === 'whatsapp')
+        ? `<button type="button" class="canal canal-btn" data-alert="${kind}" aria-expanded="false" title="${esc(T('alertHint'))}">${canal}<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`
+        : `<span class="canal">${canal}</span>`;
       return `<li class="row" data-bi="${i}">
         <span class="fr" lang="${lang === 'en' && b[K_EN] ? 'en' : 'fr'}">${highlight(mainName(b), raw)}${isSsp(b) ? `<span class="tag">${esc(T('ssp'))}</span>` : ''}</span>
         <span class="sci" lang="la">${highlight(b[K_SCI], raw)}</span>
         ${alt ? `<span class="en" lang="${lang === 'en' ? 'fr' : 'en'}">${highlight(alt, raw)}</span>` : ''}
-        <span class="canal"><span class="dot" style="background:${colorOf[c]||'#5E676B'}"></span>${esc(canalLabel(c))}</span>
+        ${canalHtml}
         <a class="bedit-btn" href="${editorLink('oiseaux', { cherche: b[K_SCI] })}">${esc(T('proposeEdit'))}</a>
+        <div class="alertbox" hidden></div>
       </li>`;
     }).join('') + '</ul>';
   }
@@ -457,6 +462,56 @@
     loadMap().then(img => drawPreview(view, [cellName(cell)], img, marks, T('whereCaption')(cellName(cell))),
       () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
+  // ---------- Alerte : message prêt à coller dans le groupe Telegram / WhatsApp ----------
+  // Aucun lien de groupe n'est publié : l'appli copie le message et ouvre l'appli de messagerie, l'utilisateur choisit le groupe.
+  function alertParts(b, fix){
+    let place = null, pos = null, url = null;
+    if (fix){
+      const { lat, lon } = fix;
+      pos = `${lat.toFixed(5)}, ${lon.toFixed(5)}`; url = `https://www.google.com/maps?q=${lat.toFixed(6)},${lon.toFixed(6)}`;
+      if (cellAt(...toPixel(lat, lon)) && PLACES.length){
+        const n = PLACES.map(p => ({ p, d: distM(lat, lon, p[2], p[3]) })).sort((a, c) => a.d - c.d)[0];
+        if (n.d <= 3000) place = n.p[0];
+      }
+    }
+    const head = T('alertMsg')(b[K_FR], b[K_SCI], pos, place);
+    return { head, url, text: url ? head + '\n' + url : head };
+  }
+  function fillAlert(box, b, kind, fix, failed){
+    const { head, url, text } = alertParts(b, fix);
+    const open = kind === 'whatsapp' ? 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text)
+      : url ? 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(head) : 'https://t.me/';
+    box.innerHTML = `<p class="astat" aria-live="polite"></p>
+      <textarea class="atext" readonly rows="${text.split('\n').length + 1}" aria-label="${esc(T('alertHint'))}">${esc(text)}</textarea>
+      <div class="actions"><a href="${esc(open)}" target="_blank" rel="noopener">${esc(T(kind === 'whatsapp' ? 'openWhatsapp' : 'openTelegram'))}</a><button type="button" data-acopy>${esc(T('copy'))}</button></div>`;
+    const st = box.querySelector('.astat');
+    const done = () => { st.textContent = T('alertCopied'); };
+    const bad = () => { st.textContent = T('alertCopyFail'); };
+    if (failed) st.textContent = T('alertNoGps');
+    else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, bad); else bad();
+  }
+  results.addEventListener('click', e => {
+    const cp = e.target.closest('[data-acopy]');
+    if (cp){
+      const box = cp.closest('.alertbox'), text = box.querySelector('.atext').value;
+      const ok = () => { box.querySelector('.astat').textContent = T('alertCopied'); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, () => fallbackCopy(text, ok)); else fallbackCopy(text, ok);
+      return;
+    }
+    const btn = e.target.closest('.canal-btn'); if (!btn) return;
+    const li = btn.closest('.row'), box = li.querySelector('.alertbox'), b = shownBirds[+li.dataset.bi]; if (!b) return;
+    const show = box.hidden;
+    box.hidden = !show; btn.setAttribute('aria-expanded', String(show));
+    if (!show) return;
+    const kind = btn.dataset.alert, token = box.dataset.t = String(Date.now());
+    box.innerHTML = `<p class="astat" aria-live="polite">${esc(T('gpsWait'))}</p>`;
+    if (!navigator.geolocation){ fillAlert(box, b, kind, null, true); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => { if (box.dataset.t === token && !box.hidden) fillAlert(box, b, kind, { lat: pos.coords.latitude, lon: pos.coords.longitude }, false); },
+      () => { if (box.dataset.t === token && !box.hidden) fillAlert(box, b, kind, null, true); },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+  });
+
   // Partager ma position : message prêt à envoyer (lieu-dit le plus proche, coordonnées, lien Google Maps)
   $('shareLoc').addEventListener('click', () => {
     if (!lastFix) return;
