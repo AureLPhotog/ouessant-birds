@@ -57,6 +57,8 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
 /* Œuf de Pâques : un oiseau traverse le faisceau */
 .phare-btn{position:relative;z-index:0}
 .egg-flyer{position:absolute;left:0;top:0;width:30px;height:auto;overflow:visible;pointer-events:none;color:var(--ink);fill:currentColor;opacity:0;will-change:transform}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .egg-flyer{filter:invert(.9)} }
+:root[data-theme="dark"] .egg-flyer{filter:invert(.9)}
 .egg-ferns{position:absolute;left:0;right:0;bottom:0;height:0;pointer-events:none;z-index:2}
 .ef{position:absolute;left:50%;margin-left:-14px;font-size:28px;line-height:1;transform-origin:50% 100%;opacity:0;filter:hue-rotate(var(--hue)) saturate(1.15);animation:fern-curtain 4s ease-in-out forwards}
 @keyframes fern-curtain{
