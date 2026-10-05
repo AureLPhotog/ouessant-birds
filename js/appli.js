@@ -721,11 +721,80 @@
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
   // L'oiseau sort de derrière les fougères, fait un tour du phare (devant puis derrière la tour) et s'envole vers la droite
-  const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
-    + '<g class="eb-far"><path d="M32 16C30 6 22-1 8 0l3 3.200-1.500 1 3.500 2.300c4 1.500 7.500 4 9 10.500z" opacity=".55"/></g>'
-    + '<path d="M19 17.500L2 12.500l4.500 5L2 22.500 19 21z"/><ellipse cx="30" cy="18" rx="13.500" ry="5.600" transform="rotate(-5 30 18)"/>'
-    + '<circle cx="44" cy="15" r="4.700"/><path d="M47.500 13.800L57 16.200 47.500 17.600z"/><circle cx="45.600" cy="14" r="1" fill="var(--paper)"/>'
-    + '<g class="eb-near"><path d="M33 16C31 5 22-2 6-1l3.200 3.400-1.700 1 3.800 2.400-1 1.800 4 2C21 11 25 13 27 14.500 30 15.500 31.500 16.500 33 17z"/></g></svg>';
+ const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
+    // Aile arrière : plus fine et avec des rémiges distinctes
+    + '<g class="eb-far">'
+    + '<path d="M29.8 16.4'
+    + 'C28.1 11.2 25.3 6.4 21 3.1'
+    + 'C17.1 0.1 11.8-.9 6.1-.3'
+    + 'L10.1 3.1'
+    + 'L7.9 4.3'
+    + 'L12.1 6.6'
+    + 'L9.9 8.1'
+    + 'L14.7 10.2'
+    + 'C19.1 10.9 23.5 13.1 27.1 16.8'
+    + 'C28 17.1 29 17 29.8 16.4Z" opacity=".48"/>'
+    + '</g>'
+
+    // Queue : deux groupes de plumes plutôt qu'un simple triangle
+    + '<path d="M20.4 18.2'
+    + 'C14.8 16.9 8.5 14.4 2.3 12.8'
+    + 'C4.1 15.1 6.5 17.2 9.1 18.4'
+    + 'C6.5 19.6 4.2 21.8 2.1 23.7'
+    + 'C8.4 22.3 14.7 20.6 20.8 20.1'
+    + 'Z"/>'
+
+    // Corps + poitrine + dos : forme plus naturelle qu'une ellipse
+    + '<path d="M18.2 18.7'
+    + 'C19.4 14.9 23.1 12.1 28.7 11.8'
+    + 'C33.4 11.5 37.8 12.7 40.6 14.2'
+    + 'C42.4 15.2 43.5 16.8 43.4 18.1'
+    + 'C43.3 19.7 41.6 20.9 39.1 21.8'
+    + 'C35.5 23.1 30.2 23.8 25.7 22.8'
+    + 'C22.1 22.1 19.3 20.6 18.2 18.7Z"/>'
+
+    // Tête
+    + '<path d="M38.5 14.2'
+    + 'C40 11.5 43 10.1 45.5 10.9'
+    + 'C47.3 11.5 48.5 13.1 48.5 14.9'
+    + 'C48.5 16.8 47.3 18.4 45.5 19.1'
+    + 'C43.4 19.9 40.7 19.1 39.2 17.3'
+    + 'C38.4 16.3 38.1 15.2 38.5 14.2Z"/>'
+
+    // Bec
+    + '<path d="M47.2 13.8'
+    + 'L57.7 15.8'
+    + 'C58.2 15.9 58.2 16.5 57.7 16.7'
+    + 'L47.1 17.4'
+    + 'C47.8 16.3 47.8 14.8 47.2 13.8Z"/>'
+
+    // Œil
+    + '<circle cx="44.9" cy="14.1" r="1.05" fill="var(--paper)"/>'
+
+    // Aile avant : forme principale
+    + '<g class="eb-near">'
+    + '<path d="M32.7 17.1'
+    + 'C32.1 13.2 30.6 9.1 27.8 5.6'
+    + 'C24.8 1.8 20.2-.4 14.3-.8'
+    + 'C11.4-1 8.4-.6 5.5.1'
+    + 'L10.1 3.8'
+    + 'L8.1 5.1'
+    + 'L12.5 7.1'
+    + 'L10.8 8.8'
+    + 'L15.4 10.4'
+    + 'C20.5 11.5 25 13.6 28.7 16.6'
+    + 'C30 17.7 31.5 18.2 32.7 17.1Z"/>'
+
+    // Quelques rémiges visibles sur l'aile
+    + '<path d="M15.1 10.3'
+    + 'C19.5 11.6 24 13.6 28.7 16.7'
+    + 'C25.2 12.6 21.2 9.9 16.2 8.7Z" opacity=".72"/>'
+    + '<path d="M12.3 7.1'
+    + 'C17.5 8.9 22.8 11.5 27.8 15.7'
+    + 'C23.8 10.7 19 7.7 13.7 6Z" opacity=".58"/>'
+    + '</g>'
+
+    + '</svg>';
   function flyBird(btn){
     btn.insertAdjacentHTML('beforeend', BIRD_SVG);
     const bird = btn.querySelector('.egg-flyer:last-child'), near = bird.querySelector('.eb-near'), far = bird.querySelector('.eb-far');
