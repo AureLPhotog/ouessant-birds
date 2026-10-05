@@ -3,7 +3,7 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.8';
+  const APP_VERSION = '3.9';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
@@ -108,6 +108,7 @@
     q.setAttribute('aria-label', T('searchLabel'));
     chips.setAttribute('aria-label', T('channelsLabel'));
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    if (!$('legal').hidden) $('legal').innerHTML = T('legalHtml');
     if (showingImport) showImport();
     else if (!birds.length) status.textContent = T('loading');
     else { buildChips(); updateSource(); render(); }
@@ -608,6 +609,11 @@
     t.textContent = b ? T('egg')(mainName(b)) : T('eggNone'); document.body.appendChild(t); setTimeout(() => t.remove(), 4500);
   }
 
+  $('legalBtn').addEventListener('click', () => {
+    const l = $('legal'), open = l.hidden;
+    l.hidden = !open; $('legalBtn').setAttribute('aria-expanded', String(open));
+    if (open){ l.innerHTML = T('legalHtml'); l.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+  });
   bindFiles();
   showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds');
   window.addEventListener('hashchange', () => showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds'));

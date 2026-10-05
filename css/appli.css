@@ -201,6 +201,13 @@ section[hidden]{display:none}
 .link{background:none;border:0;padding:0;color:var(--ocean-2);text-decoration:underline;font:inherit;cursor:pointer}
 .link input{position:absolute;width:1px;height:1px;opacity:0}
 
+.legal{margin-top:1rem;padding:1rem 1.1rem;background:var(--paper);border:1px solid var(--line);border-radius:12px;font-size:.88rem;color:var(--granite);max-width:62ch}
+.legal[hidden]{display:none}
+.legal h2{margin:0 0 .5rem;font:700 1.05rem var(--serif);color:var(--ocean)}
+.legal p{margin:.5rem 0 0}
+.legal strong{color:var(--ink)}
+.legal a{color:var(--ocean-2)}
+
 @media (max-width:520px){
   .row{grid-template-columns:1fr}
   .row .bform{grid-column:1}
