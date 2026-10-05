@@ -52,6 +52,8 @@ textarea{font-family:var(--mono);font-size:.85rem}
 .badge.del{background:var(--warn-bg);color:var(--warn)}
 .tools{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
 .tools .grow{flex:1 1 220px}
+#addBtn{min-width:11.5rem}
+@media (max-width:640px){.tools .grow{flex:1 1 100%}}
 .filters{display:flex;flex-wrap:wrap;gap:.5rem}
 .filters label{display:flex;align-items:center;gap:.35rem;font-size:.85rem;color:var(--granite)}
 .filters select{width:auto;max-width:14rem;padding:.35rem .5rem}
