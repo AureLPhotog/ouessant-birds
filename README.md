@@ -33,6 +33,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `sw.js` | mode hors connexion |
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
 | `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
+| `oriole_baltimore.webp` | oriole de Baltimore posé sur le cadre du QR code (panneau du phare) : photo d'Aurélien, détourée et légèrement stylisée. Seule cette version retouchée est dans le dépôt, pas la photo d'origine ; pour la remplacer, garder le même nom et la même taille (≈ 158 × 270 px, fond transparent). L'oiseau en vol de l'easter egg (5 clics sur le phare) est un dessin dans `js/appli.js` (`BIRD_SVG`) |
 | `manifest.webmanifest` | raccourci sur l'écran d'accueil du téléphone |
 | `docs/Guide_utilisation.pdf` | guide d'utilisation (l'appli, puis l'éditeur pour proposer une correction) : à partager, et lié en bas de l'appli et de l'éditeur |
 | `scripts/verifier_listes.py` | vérification des listes (voir « Vérifier les listes ») |

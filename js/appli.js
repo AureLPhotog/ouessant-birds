@@ -721,80 +721,7 @@
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
   // L'oiseau sort de derrière les fougères, fait un tour du phare (devant puis derrière la tour) et s'envole vers la droite
- const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
-    // Aile arrière : plus fine et avec des rémiges distinctes
-    + '<g class="eb-far">'
-    + '<path d="M29.8 16.4'
-    + 'C28.1 11.2 25.3 6.4 21 3.1'
-    + 'C17.1 0.1 11.8-.9 6.1-.3'
-    + 'L10.1 3.1'
-    + 'L7.9 4.3'
-    + 'L12.1 6.6'
-    + 'L9.9 8.1'
-    + 'L14.7 10.2'
-    + 'C19.1 10.9 23.5 13.1 27.1 16.8'
-    + 'C28 17.1 29 17 29.8 16.4Z" opacity=".48"/>'
-    + '</g>'
-
-    // Queue : deux groupes de plumes plutôt qu'un simple triangle
-    + '<path d="M20.4 18.2'
-    + 'C14.8 16.9 8.5 14.4 2.3 12.8'
-    + 'C4.1 15.1 6.5 17.2 9.1 18.4'
-    + 'C6.5 19.6 4.2 21.8 2.1 23.7'
-    + 'C8.4 22.3 14.7 20.6 20.8 20.1'
-    + 'Z"/>'
-
-    // Corps + poitrine + dos : forme plus naturelle qu'une ellipse
-    + '<path d="M18.2 18.7'
-    + 'C19.4 14.9 23.1 12.1 28.7 11.8'
-    + 'C33.4 11.5 37.8 12.7 40.6 14.2'
-    + 'C42.4 15.2 43.5 16.8 43.4 18.1'
-    + 'C43.3 19.7 41.6 20.9 39.1 21.8'
-    + 'C35.5 23.1 30.2 23.8 25.7 22.8'
-    + 'C22.1 22.1 19.3 20.6 18.2 18.7Z"/>'
-
-    // Tête
-    + '<path d="M38.5 14.2'
-    + 'C40 11.5 43 10.1 45.5 10.9'
-    + 'C47.3 11.5 48.5 13.1 48.5 14.9'
-    + 'C48.5 16.8 47.3 18.4 45.5 19.1'
-    + 'C43.4 19.9 40.7 19.1 39.2 17.3'
-    + 'C38.4 16.3 38.1 15.2 38.5 14.2Z"/>'
-
-    // Bec
-    + '<path d="M47.2 13.8'
-    + 'L57.7 15.8'
-    + 'C58.2 15.9 58.2 16.5 57.7 16.7'
-    + 'L47.1 17.4'
-    + 'C47.8 16.3 47.8 14.8 47.2 13.8Z"/>'
-
-    // Œil
-    + '<circle cx="44.9" cy="14.1" r="1.05" fill="var(--paper)"/>'
-
-    // Aile avant : forme principale
-    + '<g class="eb-near">'
-    + '<path d="M32.7 17.1'
-    + 'C32.1 13.2 30.6 9.1 27.8 5.6'
-    + 'C24.8 1.8 20.2-.4 14.3-.8'
-    + 'C11.4-1 8.4-.6 5.5.1'
-    + 'L10.1 3.8'
-    + 'L8.1 5.1'
-    + 'L12.5 7.1'
-    + 'L10.8 8.8'
-    + 'L15.4 10.4'
-    + 'C20.5 11.5 25 13.6 28.7 16.6'
-    + 'C30 17.7 31.5 18.2 32.7 17.1Z"/>'
-
-    // Quelques rémiges visibles sur l'aile
-    + '<path d="M15.1 10.3'
-    + 'C19.5 11.6 24 13.6 28.7 16.7'
-    + 'C25.2 12.6 21.2 9.9 16.2 8.7Z" opacity=".72"/>'
-    + '<path d="M12.3 7.1'
-    + 'C17.5 8.9 22.8 11.5 27.8 15.7'
-    + 'C23.8 10.7 19 7.7 13.7 6Z" opacity=".58"/>'
-    + '</g>'
-
-    + '</svg>';
+  const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true"><g class="eb-far"><path fill="#555" d="M31.2 16.8C29.5 11.2 26.8 6.3 22.7 3C18.8-0.1 13.1-1 7-0.2L10.8 3L8.2 4.3L12.2 6.4L10.2 8L14.8 10.2L13.4 11.7L18 12.8L17 14.3L21.6 15.2C24.5 15.7 27.2 16.4 29 17.3C29.8 17.6 30.7 17.5 31.2 16.8Z"/><path fill="#777" d="M7-0.2C12.5-1 17.8 0 22.7 3C18.4 0.5 13.2-0.3 7-0.2Z"/><path fill="#666" d="M8.2 4.3C14.1 4.5 19.8 6.7 24.9 10.7C20.7 7 16.2 4.6 8.2 4.3Z"/><path fill="#444" d="M10.2 8C16.6 8.6 22.5 11.3 27.5 15.4C23.1 11.5 17.6 8.7 10.2 8Z"/></g><g><path fill="#222" d="M21 18.1C14.7 16.7 8.2 14.3 2.2 12.7C4.5 15.2 7.3 17.2 10.2 18.3C7.3 18.9 4.6 20.1 2.1 21.8C8.4 21.3 15 20.6 21.2 20Z"/><path fill="#333" d="M20.9 19.1C14.7 19.4 8.5 21.1 2.1 23.5C7.5 23 14.1 21.9 20.8 21Z"/></g><path fill="#222" d="M18.1 18.7C19.2 15.3 22.8 12.5 28.2 11.9C33.1 11.3 37.9 12.3 40.7 14C42.7 15.2 43.8 16.7 43.6 18.2C43.4 19.8 41.6 21.1 39.1 21.9C35.3 23.1 30.3 23.7 25.7 22.8C22 22.1 19.1 20.6 18.1 18.7Z"/><g class="eb-near"><path fill="#292929" d="M33 17.4C32.4 13.3 30.7 9.1 27.8 5.6C24.8 1.8 20.2-0.5 14.2-0.8C11.2-1 8.2-0.6 5.4 0L10 3.7L8 5L12.5 7L10.7 8.7L15.4 10.4L13.6 12L18.4 13L17.2 14.7L22 15.5L21 17.2L26 17.6C28.5 17.9 31 18.3 33 17.4Z"/><path fill="#333" d="M33 17.4C32.2 13.8 30.4 10 27.4 6.8C24.4 3.6 20.4 1.6 16 1.1C20.2 4 23.2 7.6 25 11.6C26.4 14.4 28.6 16.7 31.2 17.8Z"/><path fill="#3d3d3d" d="M5.4 0C12.1-0.7 19.1 1.2 24.6 5.2C19.2 1.3 12.9-0.2 5.4 0Z"/><path fill="#444" d="M8 5C14.5 5.1 20.8 7.7 26 11.7C21.2 7.5 15.3 5 8 5Z"/><path fill="#505050" d="M10.7 8.7C17.2 9 23 11.5 28.8 16.7C24.5 12.2 18.5 9.2 10.7 8.7Z"/><path fill="#484848" d="M13.6 12C18.6 12.4 23.6 14 28 17C24 14 19 12.4 13.6 12Z"/><path fill="none" stroke="#666" stroke-width=".45" stroke-linecap="round" d="M15.3 10.4C20.5 11.7 25 13.8 28.8 16.7"/></g><path fill="#222" d="M38.4 14.3C39.7 11.7 42.5 10.2 45.1 10.7C47.2 11.1 48.6 12.8 48.6 14.8C48.6 16.8 47.3 18.5 45.3 19.1C43.2 19.7 40.6 19 39.2 17.3C38.3 16.2 37.9 15.1 38.4 14.3Z"/><path fill="#222" d="M47.1 13.8L53.4 15.6C53.9 15.7 53.9 16.2 53.4 16.4L47 17.4C47.6 16.2 47.7 14.9 47.1 13.8Z"/><circle cx="44.9" cy="14.1" r="1.05" fill="white"/><circle cx="45.15" cy="13.8" r=".3" fill="#222"/></svg>';
   function flyBird(btn){
     btn.insertAdjacentHTML('beforeend', BIRD_SVG);
     const bird = btn.querySelector('.egg-flyer:last-child'), near = bird.querySelector('.eb-near'), far = bird.querySelector('.eb-far');
@@ -808,7 +735,7 @@
       if (t <= T1){ const a = th(t), u = t / T1; return { x: CX + R * Math.sin(a), y: Y0 + (Y1 - Y0) * sm(u) + RY * Math.cos(a), d: Math.cos(a), u }; }
       const q = t - T1; return { x: CX + vxEnd * q + ax * q * q / 2 + 0 * R, y: Y1 + RY - 16 * q * q, d: 1, u: 1 + q / T2 };
     };
-    const wing = (g, k) => g.setAttribute('transform', `translate(28 16) scale(1 ${k.toFixed(2)}) translate(-28 -16)`);
+    const wing = (g, k) => g.setAttribute('transform', `translate(31 17) scale(1 ${k.toFixed(2)}) translate(-31 -17)`);
     const t0 = performance.now();
     (function frame(now){
       const t = (now - t0) / 1000 - DELAY;
