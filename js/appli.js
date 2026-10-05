@@ -660,9 +660,9 @@
   function renderPhare(){
     const box = qrSvg();
     $('pharePanel').innerHTML = `<div class="pp-sec"><h2 class="pp-h">${esc(T('wTitle'))}</h2>${wxHtml()}</div>
-      <div class="pp-sec"><h2 class="pp-h">${esc(T('shTitle'))}</h2><div class="qr">
+      <div class="pp-sec"><div class="qr">
         <div class="qr-box">${ORIOLE}${FERN}${box}</div>
-        <div class="qr-txt">${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
+        <div class="qr-txt"><h2 class="pp-h">${esc(T('shTitle'))}</h2>${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
       </div></div>
       <div class="pp-sec pp-foot"><p class="pp-ver">${esc(versionText())}</p>
         <button type="button" class="link" data-ph="legal" aria-expanded="${legalOpen}">${esc(T('legalBtn'))}</button>
