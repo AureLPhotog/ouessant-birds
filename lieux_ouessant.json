@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Villa des tempêtes",
+    "carres": [
+      "B9"
+    ],
+    "lat": 48.44897,
+    "lon": -5.13989,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Auberge de jeunesse",
     "carres": [
       "H7"
