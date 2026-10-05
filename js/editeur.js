@@ -704,7 +704,33 @@
     const c = new AbortController(), t = setTimeout(() => c.abort(), 8000);
     try { const r = await fetch(url, { signal: c.signal }); if (!r.ok) throw new Error('inat ' + r.status); return await r.json(); } finally { clearTimeout(t); }
   }
+  const lev = (a, b) => { const d = Array.from({ length: b.length + 1 }, (_, j) => j);
+    for (let i = 1; i <= a.length; i++){ let prev = d[0]; d[0] = i;
+      for (let j = 1; j <= b.length; j++){ const t = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = t; } }
+    return d[b.length]; };
+  // Faute de frappe : iNaturalist cherche par début de nom ; on récupère les espèces dont le nom commence comme la saisie,
+  // puis on garde le nom le plus proche, seulement s'il est proche ET sans ambiguïté avec une autre espèce.
+  async function fixTypo(name){
+    const n = norm(name); if (n.length < 6) return null;
+    let results = [];
+    for (const [len, per] of [[6, 50], [3, 200]]){
+      const j = await inatGet(`${INAT}?q=${encodeURIComponent(name.trim().slice(0, len))}&taxon_id=${AVES}&rank=species&per_page=${per}&locale=fr`);
+      results = j.results || []; if (results.length) break;
+    }
+    const scored = [];
+    results.forEach(r => [r.matched_term, r.preferred_common_name].forEach(s => { if (!s) return; const c = norm(s);
+      scored.push({ s, id: r.id, d: Math.min(lev(n, c), lev(n, c.slice(0, n.length)) + 1) }); }));   // saisie tronquée : comparée au début du nom (avec une pénalité)
+    scored.sort((a, b) => a.d - b.d); const best = scored[0]; if (!best) return null;
+    const limit = Math.max(1, Math.floor(n.length * 0.16)), rival = scored.find(x => x.id !== best.id);
+    if (best.d > limit || (rival && rival.d - best.d < 2)) return null;   // une autre espèce serait presque aussi proche : on ne devine pas
+    return best.s;
+  }
   async function lookupNames(name){
+    const exact = await lookupExact(name); if (exact) return exact;
+    const fixed = await fixTypo(name); if (!fixed || norm(fixed) === norm(name)) return null;
+    const r = await lookupExact(fixed); return r && Object.assign(r, { corrected: true });
+  }
+  async function lookupExact(name){
     const n = norm(name);
     const j = await inatGet(`${INAT}?q=${encodeURIComponent(name)}&taxon_id=${AVES}&rank=species&per_page=8&locale=fr`);
     const hits = (j.results || []).filter(r => [r.matched_term, r.preferred_common_name, r.name].some(x => x && norm(x) === n));
@@ -715,7 +741,7 @@
     const typedIs = distinct && norm(fr) === n ? 'fr' : norm(eng) === n ? 'en' : norm(r.name) === n ? 'sci' : null;   // sans nom français distinct, un « nom français » identique à l'anglais est l'anglais
     if (!typedIs) return null;                                                 // le nom saisi n'est ni le nom français, ni l'anglais, ni le scientifique
     // noms à placer : le nom saisi reste dans sa langue ; l'autre vient d'iNaturalist (vide s'il n'existe pas vraiment)
-    return { sci: r.name, fr: typedIs === 'fr' ? name : (distinct ? fr : ''), en: typedIs === 'en' ? name : eng };
+    return { sci: r.name, fr: typedIs === 'fr' ? (r.preferred_common_name || name) : (distinct ? fr : ''), en: typedIs === 'en' ? (eng || name) : eng };
   }
   const lookupTimers = new WeakMap();
   $('table').addEventListener('input', e => {
@@ -736,7 +762,7 @@
         let filled = false;
         if (found){ filled = [put('Nom Scientifique', found.sci), put('Nom Français', found.fr, true), put('Nom Anglais', found.en, true), put('Type de taxon', 'espèce')].some(Boolean); }
         msg.className = 'msg' + (filled ? ' good' : '');
-        msg.textContent = filled ? 'Noms retrouvés sur iNaturalist : à vérifier avant d’enregistrer.' : 'Aucun nom retrouvé automatiquement : complète les champs à la main.';
+        msg.textContent = filled ? (found.corrected ? 'Faute de frappe corrigée, noms retrouvés sur iNaturalist : à vérifier avant d’enregistrer.' : 'Noms retrouvés sur iNaturalist : à vérifier avant d’enregistrer.') : 'Aucun nom retrouvé automatiquement : complète les champs à la main.';
       } catch (_) { if (wrap.isConnected){ msg.className = 'msg'; msg.textContent = 'Recherche automatique indisponible : complète les champs à la main.'; } }
     }, 700));
   });
