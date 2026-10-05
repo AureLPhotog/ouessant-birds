@@ -1,7 +1,9 @@
 [
   {
     "nom": "Ancienne déchetterie",
-    "carres": [],
+    "carres": [
+      "J10"
+    ],
     "lat": 48.443459,
     "lon": -5.08879,
     "precision_m": 25,
