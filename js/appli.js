@@ -8,8 +8,11 @@
   // Oriole de Baltimore (photo détourée et légèrement stylisée) posé sur l'angle du cadre du QR code, et petite fougère (émoji) au pied
   const ORIOLE = '<span class="oriole" aria-hidden="true"><img class="o-sh" src="oriole_baltimore.webp" alt="" width="47" height="69"><img class="o-bd" src="oriole_baltimore.webp" alt="" width="47" height="69"></span>';
   const FERN = '<span class="fern" aria-hidden="true">🌿</span>';
-  // Deux fougères qui s'ouvrent comme un rideau devant le pied du phare (easter egg)
-  const FERN_UP = '<svg viewBox="0 0 80 100" aria-hidden="true"><path d="M40,98Q38,52 46,6" fill="none" stroke="#3f6b35" stroke-width="1.5" stroke-linecap="round"/><path d="M39.6 82.3Q38.8 80.1 36.5 80.7Q37.3 82.9 39.6 82.3ZM39.6 82.3Q41.9 82.9 42.7 80.7Q40.4 80.1 39.6 82.3ZM39.6 77.7Q38.8 75.4 36.5 76.0Q37.3 78.2 39.6 77.7ZM39.6 77.7Q41.9 78.2 42.7 76.0Q40.4 75.4 39.6 77.7ZM39.7 73.0Q37.6 70.0 34.0 69.7Q36.0 72.7 39.7 73.0ZM39.7 73.0Q43.3 72.8 45.4 69.8Q41.8 70.0 39.7 73.0ZM39.7 68.3Q36.2 64.0 30.7 62.7Q34.3 67.1 39.7 68.3ZM39.7 68.3Q45.3 67.3 49.0 63.2Q43.5 64.2 39.7 68.3ZM39.9 63.7Q35.3 57.7 28.1 55.8Q32.7 61.8 39.9 63.7ZM39.9 63.7Q47.3 62.3 52.3 56.7Q44.9 58.1 39.9 63.7ZM40.1 59.0Q34.8 51.6 26.0 49.0Q31.4 56.4 40.1 59.0ZM40.1 59.0Q49.0 57.3 55.1 50.5Q46.1 52.2 40.1 59.0ZM40.4 54.4Q34.5 45.7 24.6 42.5Q30.4 51.1 40.4 54.4ZM40.4 54.4Q50.6 52.3 57.4 44.4Q47.2 46.5 40.4 54.4ZM40.7 49.7Q34.5 40.1 23.7 36.2Q29.9 45.8 40.7 49.7ZM40.7 49.7Q51.9 47.4 59.3 38.7Q48.1 41.0 40.7 49.7ZM41.0 45.1Q34.8 34.7 23.5 30.2Q29.7 40.6 41.0 45.1ZM41.0 45.1Q52.8 42.5 60.7 33.3Q48.8 35.8 41.0 45.1ZM41.4 40.4Q35.4 29.6 24.0 24.7Q30.0 35.5 41.4 40.4ZM41.4 40.4Q53.5 37.7 61.5 28.2Q49.4 30.9 41.4 40.4ZM41.9 35.8Q36.2 24.9 25.0 19.7Q30.7 30.6 41.9 35.8ZM41.9 35.8Q53.9 33.0 61.7 23.5Q49.7 26.3 41.9 35.8ZM42.4 31.1Q37.2 20.5 26.6 15.2Q31.8 25.8 42.4 31.1ZM42.4 31.1Q53.9 28.4 61.4 19.2Q49.9 21.9 42.4 31.1ZM42.9 26.5Q38.4 16.4 28.6 11.2Q33.2 21.3 42.9 26.5ZM42.9 26.5Q53.7 23.8 60.6 15.2Q49.8 17.8 42.9 26.5ZM43.5 21.8Q39.7 12.7 31.1 7.8Q35.0 16.9 43.5 21.8ZM43.5 21.8Q53.1 19.4 59.3 11.6Q49.7 14.0 43.5 21.8ZM44.2 17.1Q41.2 9.3 34.0 4.9Q37.0 12.8 44.2 17.1ZM44.2 17.1Q52.4 15.0 57.5 8.4Q49.4 10.5 44.2 17.1ZM44.9 12.5Q42.7 6.2 37.1 2.5Q39.3 8.9 44.9 12.5ZM44.9 12.5Q51.4 10.8 55.5 5.5Q49.0 7.2 44.9 12.5ZM45.7 7.8Q44.3 3.3 40.4 0.7Q41.7 5.2 45.7 7.8ZM45.7 7.8Q50.3 6.7 53.1 2.8Q48.5 4.0 45.7 7.8Z" fill="#5d9a4a" stroke="#3f6b35" stroke-width=".35" stroke-linejoin="round"/></svg>';
+  // Rideau de fougères (easter egg) : chaque feuille = [décalage fermé, angle fermé, décalage ouvert, angle ouvert, teinte, hauteur] 
+  const RIDEAU = [[-20, 8, -34, -30, -55, 0], [-11, -4, -42, -45, 0, 9], [-3, 10, -50, -60, 25, 2],
+                  [20, -8, 34, 30, 0, 0], [11, 4, 42, 45, -40, 9], [3, -10, 50, 60, -70, 2]];
+  const rideauHtml = () => '<span class="egg-ferns" aria-hidden="true">' + RIDEAU.map(([cx, cr, ox, or, hue, b], i) =>
+    `<span class="ef" style="--cx:${cx}px;--cr:${cr}deg;--ox:${ox}px;--or:${or}deg;--hue:${hue}deg;bottom:${b}px;animation-delay:${(i % 3) * 0.08}s">🌿</span>`).join('') + '</span>';
   const APP_VERSION = window.OUESSANT_APP_VERSION || '?';
   let listsRev = null;   // { app, rev } lu dans version_listes.json
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
@@ -713,7 +716,7 @@
     if (!reduce){
       const header = document.querySelector('header');
       const btn = $('phareBtn');
-      btn.insertAdjacentHTML('beforeend', `<span class="egg-ferns" aria-hidden="true"><span class="ef l">${FERN_UP}</span><span class="ef r">${FERN_UP}</span></span>`);
+      btn.insertAdjacentHTML('beforeend', rideauHtml());
       const ferns = btn.querySelector('.egg-ferns'); setTimeout(() => ferns.remove(), 4300);
       header.insertAdjacentHTML('beforeend', `<svg class="egg-bird" viewBox="0 0 48 28" aria-hidden="true"><path d="M2 14 C10 4, 18 6, 24 14 C30 6, 38 4, 46 14 C38 10, 30 12, 24 18 C18 12, 10 10, 2 14 Z" fill="currentColor"/></svg>`);
       const bird = header.querySelector('.egg-bird:last-child'); setTimeout(() => bird.remove(), 3600);
