@@ -42,6 +42,10 @@
     "Clé Admin": "Admin key",
     "Tous": "All", "(vide)": "(empty)", "État": "Status", "Modifiés": "Modified", "Ajoutés": "Added", "Modifiés ou ajoutés": "Modified or added",
     "Aucune entrée ne correspond.": "No entry matches.",
+    "Recherche des noms sur iNaturalist…": "Looking up the names on iNaturalist…",
+    "Noms retrouvés sur iNaturalist : à vérifier avant d'enregistrer.": "Names found on iNaturalist: check them before saving.",
+    "Aucun nom retrouvé automatiquement : complète les champs à la main.": "No name found automatically: fill in the fields by hand.",
+    "Recherche automatique indisponible : complète les champs à la main.": "Automatic lookup unavailable: fill in the fields by hand.",
     "vide": "empty", "oui": "yes", "non": "no",
     // bandeau d'arrivée depuis l'appli
     "Clé GitHub active.": "GitHub key active.",
