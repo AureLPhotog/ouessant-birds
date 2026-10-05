@@ -77,7 +77,7 @@
     "Recherche de ta position…": "Getting your position…",
     "Ta position est en dehors de la carte d'Ouessant : rien n'a été modifié.": "Your position is outside the Ouessant map: nothing was changed.",
     "Position GPS indisponible : autorise la localisation, ou place le point sur la carte.": "GPS position unavailable: allow location access, or place the point on the map.",
-    "Entrée enregistrée.": "Entry saved.",
+    "Entrée enregistrée.": "Entry saved.", "Entrée enregistrée. Noms mis en forme.": "Entry saved. Names formatted.",
     "Entrée remise comme à l'origine.": "Entry reverted to the original.",
     "Copie ajoutée juste en dessous : modifie-la.": "Copy added just below: edit it.",
     "Entrée supprimée.": "Entry deleted.",
