@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Camping",
+    "carres": [
+      "I7"
+    ],
+    "lat": 48.45894,
+    "lon": -5.0909,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Votre marché des îles",
     "carres": [
       "I6"
