@@ -733,15 +733,6 @@
     "carres": [
       "J11"
     ],
-    "lat": 48.43912,
-    "lon": -5.08862,
-    "precision_m": 100
-  },
-  {
-    "nom": "Enez Penn ar Roc'h",
-    "carres": [
-      "J11"
-    ],
     "lat": 48.43928,
     "lon": -5.08879,
     "precision_m": 25,
