@@ -41,8 +41,8 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
 .qr-box .oriole{position:absolute;left:-10px;top:-43px;width:47px;height:69px;pointer-events:none}
 .qr-box .oriole img{position:absolute;left:0;top:0;width:100%;height:100%}
 /* contour sombre (mode clair) : visible autour de l'oiseau, mais coupé au niveau du cadre pour ne rien dessiner dans le QR code ; l'oiseau lui-même reste devant */
-.qr-box .o-sh{filter:drop-shadow(0 0 .6px rgba(28,40,46,.95)) drop-shadow(0 0 .6px rgba(28,40,46,.95));-webkit-clip-path:polygon(-8px -8px,200px -8px,200px 42px,9px 42px,9px 200px,-8px 200px);clip-path:polygon(-8px -8px,200px -8px,200px 42px,9px 42px,9px 200px,-8px 200px)}
-.qr-box{border-color:rgba(28,40,46,.7)}
+.qr-box .o-sh{filter:drop-shadow(.6px 0 0 #60686d) drop-shadow(-.6px 0 0 #60686d) drop-shadow(0 .6px 0 #60686d) drop-shadow(0 -.6px 0 #60686d);-webkit-clip-path:polygon(-8px -8px,200px -8px,200px 42px,9px 42px,9px 200px,-8px 200px);clip-path:polygon(-8px -8px,200px -8px,200px 42px,9px 42px,9px 200px,-8px 200px)}
+.qr-box{border-color:#60686d}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .qr-box .o-sh{display:none} :root:not([data-theme="light"]) .qr-box{border-color:var(--line)} }
 :root[data-theme="dark"] .qr-box .o-sh{display:none}
 :root[data-theme="dark"] .qr-box{border-color:var(--line)}
