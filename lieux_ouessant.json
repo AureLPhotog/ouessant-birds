@@ -1,5 +1,38 @@
 [
   {
+    "nom": "Ancienne déchèterie",
+    "carres": [
+      "J10"
+    ],
+    "lat": 48.443459,
+    "lon": -5.08879,
+    "precision_m": 25,
+    "verifie": true,
+    "source": ""
+  },
+  {
+    "nom": "Déchèterie",
+    "carres": [
+      "M5"
+    ],
+    "lat": 48.4667649,
+    "lon": -5.0665808,
+    "precision_m": 25,
+    "verifie": true,
+    "source": ""
+  },
+  {
+    "nom": "Camping",
+    "carres": [
+      "I7"
+    ],
+    "lat": 48.45894,
+    "lon": -5.0909,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Votre marché des îles",
     "carres": [
       "I6"
