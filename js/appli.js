@@ -3,7 +3,7 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.16';
+  const APP_VERSION = '3.17';
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
   function showVersion(){
     const el = document.getElementById('version'); if (!el) return;
@@ -439,6 +439,7 @@
     $('shareLoc').hidden = true;
     if (!lastFix){ st.textContent = ''; out.innerHTML = ''; mapBox.hidden = true; return; }
     const { lat, lon, acc } = lastFix;
+    if (acc > COARSE_M){ st.textContent = ''; out.innerHTML = coarseHtml(acc); mapBox.hidden = true; return; }
     const ranked = PLACES.map(p => ({ p, d: distM(lat, lon, p[2], p[3]) })).sort((a, b) => a.d - b.d || a.p[0].localeCompare(b.p[0], 'fr'));
     const [x, y] = toPixel(lat, lon), cell = cellAt(x, y);
     if (!cell || ranked[0].d > 3000){
@@ -464,6 +465,8 @@
   }
   // Position GPS : le premier relevé d'un téléphone est souvent grossier (antennes, Wi-Fi : parfois ± 2 km).
   // On écoute le GPS jusqu'à 15 s, on garde le relevé le plus précis et on s'arrête dès qu'il est bon (≤ 30 m).
+  const COARSE_M = 1900;   // au-delà, le téléphone n'a donné qu'une position approximative
+  const coarseHtml = acc => `<div class="notice" role="alert">${T('coarseHtml')(Math.round(acc))}</div>`;
   function locate(onProgress, onDone, onError){
     let best = null, wid = null, timer = null, over = false;
     const stop = () => { over = true; clearTimeout(timer); try { navigator.geolocation.clearWatch(wid); } catch (_) {} };
@@ -496,6 +499,7 @@
   // Sur l'île ? (dans la carte, et à moins de 3 km d'un lieu-dit, comme dans « Où suis-je ? »)
   const onIsland = fix => cellAt(...toPixel(fix.lat, fix.lon)) && (!PLACES.length || Math.min(...PLACES.map(p => distM(fix.lat, fix.lon, p[2], p[3]))) <= 3000);
   function fillAlert(box, b, kind, fix, failed){
+    if (fix && fix.acc > COARSE_M){ box.innerHTML = coarseHtml(fix.acc) + `<div class="actions"><button type="button" data-aretry>${esc(T('retry'))}</button></div>`; return; }
     if (fix && fix.acc > 500){ box.innerHTML = `<p class="astat bad" role="alert">${esc(T('alertImprecise')(Math.round(fix.acc)))}</p><div class="actions"><button type="button" data-aretry>${esc(T('retry'))}</button></div>`; return; }
     if (fix && !onIsland(fix)){ box.innerHTML = `<p class="astat bad" role="alert">${esc(T('alertOff'))}</p>`; return; }
     const { head, url, text } = alertParts(b, fix);

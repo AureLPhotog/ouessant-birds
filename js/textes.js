@@ -49,6 +49,8 @@ window.OUESSANT_TEXTES = {
       alertOff: 'Tu n’es pas sur l’île d’Ouessant : tu ne peux donc pas signaler cet oiseau.',
       alertImprecise: m => `Position trop imprécise (± ${m} m) pour savoir où tu es. Sors à découvert, vérifie que la localisation « précise » est activée, attends quelques secondes puis réessaie.`,
       alertApprox: m => `Position approximative (± ${m} m) : le lieu-dit peut être faux. Message copié ; tu peux réessayer à découvert.`,
+      coarseHtml: m => `<p><strong>Tu n’as pas partagé ta position exacte</strong> (précision ± ${m} m, soit une zone de plusieurs kilomètres). Les résultats seraient faux, donc l’appli ne les affiche pas.</p>
+        <p>Pour partager ta position <strong>précise</strong> : dans Chrome, touche l’icône d’informations à gauche de la barre d’adresse, puis « Autorisations », puis « Réinitialiser les autorisations ». Recharge la page, touche à nouveau le bouton et choisis la position <strong>exacte</strong>. Vérifie aussi, dans les réglages du téléphone, que la localisation précise est autorisée pour Chrome.</p>`,
       retry: 'Réessayer', gpsLow: 'Précision faible : sors à découvert, vérifie que la localisation « précise » est activée, puis actualise.',
       alertHint: 'Préparer le message d’alerte', openWhatsapp: 'Ouvrir WhatsApp', openTelegram: 'Ouvrir Telegram',
       alertCopied: 'Message copié. Ouvre l’appli, choisis le bon groupe et colle-le.', alertCopyFail: 'Copie automatique impossible : appuie sur « Copier ».',
@@ -157,6 +159,8 @@ window.OUESSANT_TEXTES = {
       alertOff: 'You are not on Ouessant: you cannot report this bird.',
       alertImprecise: m => `Position too imprecise (± ${m} m) to know where you are. Go out in the open, check that “precise” location is on, wait a few seconds and try again.`,
       alertApprox: m => `Approximate position (± ${m} m): the place name may be wrong. Message copied; you can try again in the open.`,
+      coarseHtml: m => `<p><strong>You did not share your exact position</strong> (accuracy ± ${m} m, an area several kilometres wide). The results would be wrong, so the app does not show them.</p>
+        <p>To share your <strong>precise</strong> position: in Chrome, tap the information icon left of the address bar, then “Permissions”, then “Reset permissions”. Reload the page, tap the button again and choose the <strong>exact</strong> position. Also check in your phone settings that precise location is allowed for Chrome.</p>`,
       retry: 'Try again', gpsLow: 'Low accuracy: go out in the open, check that “precise” location is on, then update.',
       alertHint: 'Prepare the alert message', openWhatsapp: 'Open WhatsApp', openTelegram: 'Open Telegram',
       alertCopied: 'Message copied. Open the app, pick the right group and paste it.', alertCopyFail: 'Automatic copy failed: press “Copy”.',
