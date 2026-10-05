@@ -57,6 +57,11 @@
 
   <!-- 2. Tri -->
   <section id="sortView" class="hidden">
+    <!-- Oiseaux et lieux ne se mélangent jamais : un onglet par liste, comme dans l'éditeur -->
+    <nav class="tabs" role="tablist" aria-label="Liste à trier">
+      <button type="button" role="tab" aria-selected="true" data-file="ouessant_birds.json">Oiseaux <span class="n" id="nBirds"></span></button>
+      <button type="button" role="tab" aria-selected="false" data-file="lieux_ouessant.json">Lieux <span class="n" id="nPlaces"></span></button>
+    </nav>
     <div class="bar admin-bar">
       <div class="filters">
         <label>Période <select id="period"></select></label>
@@ -78,8 +83,8 @@
 
     <!-- 3. Résultat -->
     <section class="panel" id="outPanel">
-      <h2>3. Les lignes JSON validées</h2>
-      <p class="help">Dans l’éditeur (avec ta clé) : onglet de la liste → <b>Coller des lignes</b> → colle → <b>Vérifier</b> → <b>Appliquer</b> → <b>Enregistrer sur GitHub</b>. Une liste à la fois : Oiseaux puis Lieux.</p>
+      <h2 id="outTitle">3. Les lignes JSON validées</h2>
+      <p class="help" id="outHelp"></p>
       <div class="actions"><button type="button" class="btn primary" id="genBtn">Générer les lignes JSON</button></div>
       <div id="outBlocks"></div>
       <div class="actions"><button type="button" class="btn" id="doneBtn" disabled>Marquer les réponses décidées comme traitées</button></div>
