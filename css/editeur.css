@@ -89,7 +89,7 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 .zb{width:2rem;height:2rem;border:1px solid var(--line);border-radius:8px;background:var(--paper);font:700 1.1rem/1 var(--sans);cursor:pointer}
 .zb:focus-visible{outline:3px solid #8C5E83;outline-offset:2px}
 .zl{min-width:3.4rem;text-align:center;font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--granite)}
-.cells-scroll{max-width:640px;max-height:min(460px,60vh);overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper);overscroll-behavior:contain}
+.cells-scroll{max-width:640px;max-height:min(460px,60vh);overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper);overscroll-behavior:contain;touch-action:pan-x pan-y}   /* glisser = défiler ; le pincement est géré par l'éditeur (zoom de la carte) et non par la page */
 .cells-wrap{width:calc(var(--z,1) * 100%);min-width:100%}
 .cells-head{position:sticky;top:0;z-index:2;background:var(--paper);padding:.15rem 0}
 .cells-side{position:sticky;left:0;z-index:1;background:var(--paper)}
