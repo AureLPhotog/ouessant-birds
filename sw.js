@@ -14,7 +14,7 @@ const SHELL = [
   'js/version.js', 'js/textes.js', 'js/carte.js', 'js/recherche.js', 'js/appli.js',
   'ouessant_birds.json', 'lieux_ouessant.json', 'version_listes.json',
   'phare_creach.svg', 'phare_creach_eteint.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png',
-  'carte_ouessant.webp'
+  'carte_ouessant.webp', 'oriole_baltimore.webp'
 ];
 
 self.addEventListener('install', event => {
