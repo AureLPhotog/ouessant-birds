@@ -174,6 +174,8 @@
     [/^sur la branche$/, () => 'on branch'],
     [/^\. (\d+) modifiée\(s\), (\d+) ajoutée\(s\), (\d+) supprimée\(s\)\.$/, (m, a, d) => `. ${m} modified, ${a} added, ${d} deleted.`],
     [/^\. Aucune modification à enregistrer\.$/, () => '. No change to save.'],
+    [/^Version des listes : (.+)\.$/, (v) => `Lists version: ${v}.`],
+    [/^Le numéro de version des listes n'a pas pu être mis à jour\.$/, () => 'The lists version number could not be updated.'],
     [/^Enregistré sur$/, () => 'Saved to'],
     [/^!$/, () => '!'],
     [/^Remplacer (.+) sur GitHub par cette version \?$/, (f) => `Replace ${f} on GitHub with this version?`],

@@ -3,15 +3,17 @@
   // Outils partagés : carte de l'île (js/carte.js) et recherche tolérante aux fautes (js/recherche.js)
   const { GRID_X, GRID_Y, MAP_W, toPixel, fromPixel, cellIdx, cellName, cellAt, cellsCenter, distM } = window.OuessantCarte;
   const fuzzy = window.OuessantRecherche.fuzzy;
-  const APP_VERSION = '3.15-test';
+  const APP_VERSION = window.OUESSANT_APP_VERSION || '?';
+  let listsRev = null;   // { app, rev } lu dans version_listes.json
   const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
-  function showVersion(){
-    const el = document.getElementById('version'); if (!el) return;
+  function versionText(){
     const fmt = h => { const d = h ? new Date(h) : null; return d && !isNaN(d) ? d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB') : null; };
     const b = fmt(listsDate.birds), p = fmt(listsDate.places);
     const dates = b && p && b !== p ? T('listsOfBoth')(b, p) : (b || p) ? T('listsOf')(b || p) : '';
-    el.textContent = 'v' + APP_VERSION + (dates ? ' · ' + dates : '');
+    const rev = listsRev && listsRev.app === APP_VERSION && listsRev.rev > 0 ? '.' + listsRev.rev : '';   // autre version d'appli : on repart de zéro
+    return 'v' + APP_VERSION + rev + (dates ? ' · ' + dates : '');
   }
+  const showVersion = () => { if (!$('pharePanel').hidden) renderPhare(); };
   const URL_DATA = 'ouessant_birds.json';
 
   const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant';
@@ -108,7 +110,6 @@
     q.setAttribute('aria-label', T('searchLabel'));
     chips.setAttribute('aria-label', T('channelsLabel'));
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
-    if (!$('legal').hidden) $('legal').innerHTML = T('legalHtml');
     if (showingImport) showImport();
     else if (!birds.length) status.textContent = T('loading');
     else { buildChips(); updateSource(); render(); }
@@ -439,6 +440,7 @@
     $('shareLoc').hidden = true;
     if (!lastFix){ st.textContent = ''; out.innerHTML = ''; mapBox.hidden = true; return; }
     const { lat, lon, acc } = lastFix;
+    if (acc > COARSE_M){ st.textContent = ''; out.innerHTML = coarseHtml(acc); mapBox.hidden = true; return; }
     const ranked = PLACES.map(p => ({ p, d: distM(lat, lon, p[2], p[3]) })).sort((a, b) => a.d - b.d || a.p[0].localeCompare(b.p[0], 'fr'));
     const [x, y] = toPixel(lat, lon), cell = cellAt(x, y);
     if (!cell || ranked[0].d > 3000){
@@ -446,7 +448,7 @@
     }
     const near = ranked.slice(0, NEAR_N);
     $('shareLoc').hidden = false;
-    st.textContent = T('youAre')(cellName(cell), Math.round(acc));
+    st.textContent = T('youAre')(cellName(cell), Math.round(acc)) + (acc > 100 ? ' ' + T('gpsLow') : '');
     const dirs = T('dirs');
     out.innerHTML = '<ul class="list">' + near.map((n, i) => `<li class="near">
         <span class="num">${i + 1}</span>
@@ -462,6 +464,26 @@
     loadMap().then(img => drawPreview(view, [cellName(cell)], img, marks, T('whereCaption')(cellName(cell))),
       () => { view.innerHTML = `<p class="err">${esc(T('mapMissing'))}</p>`; });
   }
+  // Position GPS : le premier relevé d'un téléphone est souvent grossier (antennes, Wi-Fi : parfois ± 2 km).
+  // On écoute le GPS, on garde le relevé le plus précis et on s'arrête dès qu'il est suffisant :
+  // tout de suite si ≤ 50 m, après 3 s si ≤ 150 m, sinon au bout de 8 s avec le meilleur relevé obtenu.
+  const COARSE_M = 1900;   // au-delà, le téléphone n'a donné qu'une position approximative
+  const coarseHtml = acc => `<div class="notice" role="alert">${T('coarseHtml')(Math.round(acc))}</div>`;
+  function locate(onProgress, onDone, onError){
+    let best = null, wid = null, timer = null, soon = null, over = false;
+    const stop = () => { over = true; clearTimeout(timer); clearTimeout(soon); try { navigator.geolocation.clearWatch(wid); } catch (_) {} };
+    const finish = () => { if (over) return; stop(); best ? onDone(best) : onError(); };
+    wid = navigator.geolocation.watchPosition(pos => {
+      if (over) return;
+      const f = { lat: pos.coords.latitude, lon: pos.coords.longitude, acc: pos.coords.accuracy };
+      if (!best || f.acc <= best.acc) best = f;
+      if (best.acc <= 50) return finish();
+      onProgress(best);
+    }, () => finish(), { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    soon = setTimeout(() => { if (best && best.acc <= 150) finish(); }, 3000);   // assez précis après 3 s : inutile d'attendre
+    timer = setTimeout(finish, 8000);
+  }
+
   // ---------- Alerte : message prêt à coller dans le groupe Telegram / WhatsApp ----------
   // Aucun lien de groupe n'est publié : l'appli copie le message et ouvre l'appli de messagerie, l'utilisateur choisit le groupe.
   function alertParts(b, fix){
@@ -480,6 +502,8 @@
   // Sur l'île ? (dans la carte, et à moins de 3 km d'un lieu-dit, comme dans « Où suis-je ? »)
   const onIsland = fix => cellAt(...toPixel(fix.lat, fix.lon)) && (!PLACES.length || Math.min(...PLACES.map(p => distM(fix.lat, fix.lon, p[2], p[3]))) <= 3000);
   function fillAlert(box, b, kind, fix, failed){
+    if (fix && fix.acc > COARSE_M){ box.innerHTML = coarseHtml(fix.acc) + `<div class="actions"><button type="button" data-aretry>${esc(T('retry'))}</button></div>`; return; }
+    if (fix && fix.acc > 500){ box.innerHTML = `<p class="astat bad" role="alert">${esc(T('alertImprecise')(Math.round(fix.acc)))}</p><div class="actions"><button type="button" data-aretry>${esc(T('retry'))}</button></div>`; return; }
     if (fix && !onIsland(fix)){ box.innerHTML = `<p class="astat bad" role="alert">${esc(T('alertOff'))}</p>`; return; }
     const { head, url, text } = alertParts(b, fix);
     const open = kind === 'whatsapp' ? 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text)
@@ -491,9 +515,12 @@
     const done = () => { st.textContent = T('alertCopied'); };
     const bad = () => { st.textContent = T('alertCopyFail'); };
     if (failed) st.textContent = T('alertNoGps');
+    else if (fix && fix.acc > 100) st.textContent = T('alertApprox')(Math.round(fix.acc));
     else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, bad); else bad();
   }
   results.addEventListener('click', e => {
+    const rt = e.target.closest('[data-aretry]');
+    if (rt){ const li = rt.closest('.row'); runAlert(li.querySelector('.alertbox'), shownBirds[+li.dataset.bi], li.querySelector('.canal-btn').dataset.alert); return; }
     const cp = e.target.closest('[data-acopy]');
     if (cp){
       const box = cp.closest('.alertbox'), text = box.querySelector('.atext').value;
@@ -506,14 +533,16 @@
     const show = box.hidden;
     box.hidden = !show; btn.setAttribute('aria-expanded', String(show));
     if (!show) return;
-    const kind = btn.dataset.alert, token = box.dataset.t = String(Date.now());
+    runAlert(box, b, btn.dataset.alert);
+  });
+  function runAlert(box, b, kind){
+    const token = box.dataset.t = String(Date.now()), live = () => box.dataset.t === token && !box.hidden;
     box.innerHTML = `<p class="astat" aria-live="polite">${esc(T('gpsWait'))}</p>`;
     if (!navigator.geolocation){ fillAlert(box, b, kind, null, true); return; }
-    navigator.geolocation.getCurrentPosition(
-      pos => { if (box.dataset.t === token && !box.hidden) fillAlert(box, b, kind, { lat: pos.coords.latitude, lon: pos.coords.longitude }, false); },
-      () => { if (box.dataset.t === token && !box.hidden) fillAlert(box, b, kind, null, true); },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
-  });
+    locate(f => { if (live()) box.querySelector('.astat').textContent = T('gpsWait') + ' (± ' + Math.round(f.acc) + ' m)'; },
+      fix => { if (live()) fillAlert(box, b, kind, fix, false); },
+      () => { if (live()) fillAlert(box, b, kind, null, true); });
+  }
 
   // Partager ma position : message prêt à envoyer (lieu-dit le plus proche, coordonnées, lien Google Maps)
   $('shareLoc').addEventListener('click', () => {
@@ -530,11 +559,12 @@
     const st = $('wstatus');
     if (!navigator.geolocation){ st.textContent = T('gpsErr'); return; }
     st.textContent = T('gpsWait');
-    navigator.geolocation.getCurrentPosition(pos => {
-      lastFix = { lat: pos.coords.latitude, lon: pos.coords.longitude, acc: pos.coords.accuracy };
-      $('locate').querySelector('span').textContent = T('relocateBtn');
-      renderWhere();
-    }, () => { st.textContent = T('gpsErr'); }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    locate(f => { st.textContent = T('gpsWait') + ' (± ' + Math.round(f.acc) + ' m)'; },
+      fix => {
+        lastFix = fix;
+        $('locate').querySelector('span').textContent = T('relocateBtn');
+        renderWhere();
+      }, () => { st.textContent = T('gpsErr'); });
   });
 
   let t;
@@ -619,8 +649,12 @@
       <div class="pp-sec"><h2 class="pp-h">${esc(T('shTitle'))}</h2><div class="qr">
         <div class="qr-box">${box}</div>
         <div class="qr-txt">${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
-      </div></div>`;
+      </div></div>
+      <div class="pp-sec pp-foot"><p class="pp-ver">${esc(versionText())}</p>
+        <button type="button" class="link" data-ph="legal" aria-expanded="${legalOpen}">${esc(T('legalBtn'))}</button>
+        ${legalOpen ? `<div class="legal">${T('legalHtml')}</div>` : ''}</div>`;
   }
+  let legalOpen = false;
   function openPhare(open){
     $('pharePanel').hidden = !open; $('phareBtn').setAttribute('aria-expanded', String(open));
     if (open){ loadWx(); loadQr(); renderPhare(); }
@@ -647,6 +681,7 @@
   $('pharePanel').addEventListener('click', e => {
     e.stopPropagation();
     const b = e.target.closest('[data-ph]'); if (!b) return;
+    if (b.dataset.ph === 'legal'){ legalOpen = !legalOpen; renderPhare(); return; }
     if (b.dataset.ph === 'share') navigator.share({ title: T('title'), text: T('lede').replace(/<[^>]+>/g, ''), url: APP_URL }).catch(() => {});
     else {
       const done = () => { b.textContent = T('shCopied'); setTimeout(() => { b.textContent = T('shCopy'); }, 1600); };
@@ -668,11 +703,6 @@
     t.textContent = b ? T('egg')(mainName(b)) : T('eggNone'); document.body.appendChild(t); setTimeout(() => t.remove(), 4500);
   }
 
-  $('legalBtn').addEventListener('click', () => {
-    const l = $('legal'), open = l.hidden;
-    l.hidden = !open; $('legalBtn').setAttribute('aria-expanded', String(open));
-    if (open){ l.innerHTML = T('legalHtml'); l.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
-  });
   bindFiles();
   showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds');
   window.addEventListener('hashchange', () => showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds'));
@@ -680,6 +710,7 @@
   updatePhare();
 
   // 1) GitHub  2) copie enregistrée dans le navigateur  3) import manuel
+  fetch('version_listes.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()).then(v => { if (v && typeof v.rev === 'number') { listsRev = v; showVersion(); } }).catch(() => {});
   fetch(URL_DATA)
     .then(r => { if(!r.ok) throw new Error(r.status); listsDate.birds = r.headers.get('last-modified'); return r.json(); })
     .then(data => { setData(data, 'sourceGithub'); showVersion(); })

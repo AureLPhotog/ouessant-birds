@@ -47,6 +47,11 @@ window.OUESSANT_TEXTES = {
       ledeWhere: 'Trouve les 5 lieux-dits les plus proches de ta position.',
       locateBtn: 'Me localiser', relocateBtn: 'Actualiser ma position',
       alertOff: 'Tu n’es pas sur l’île d’Ouessant : tu ne peux donc pas signaler cet oiseau.',
+      alertImprecise: m => `Position trop imprécise (± ${m} m) pour savoir où tu es. Sors à découvert, vérifie que la localisation « précise » est activée, attends quelques secondes puis réessaie.`,
+      alertApprox: m => `Position approximative (± ${m} m) : le lieu-dit peut être faux. Message copié ; tu peux réessayer à découvert.`,
+      coarseHtml: m => `<p><strong>Tu n’as pas partagé ta position exacte</strong> (précision ± ${m} m, soit une zone de plusieurs kilomètres). Les résultats seraient faux, donc l’appli ne les affiche pas.</p>
+        <p>Pour partager ta position <strong>précise</strong>, dans Chrome : menu <strong>⋮</strong> → <strong>Paramètres</strong> → <strong>Paramètres des sites</strong> → <strong>Position</strong> → dans la liste « Autorisé », touche ce site → choisis <strong>Exacte</strong> (au lieu d’Approximative) → <strong>Confirmer</strong>. Reviens ensuite sur l’appli, recharge la page et touche à nouveau le bouton.</p>`,
+      retry: 'Réessayer', gpsLow: 'Précision faible : sors à découvert, vérifie que la localisation « précise » est activée, puis actualise.',
       alertHint: 'Préparer le message d’alerte', openWhatsapp: 'Ouvrir WhatsApp', openTelegram: 'Ouvrir Telegram',
       alertCopied: 'Message copié. Ouvre l’appli, choisis le bon groupe et colle-le.', alertCopyFail: 'Copie automatique impossible : appuie sur « Copier ».',
       alertNoGps: 'Position GPS indisponible : le message ne contient que l’espèce. Autorise la localisation pour l’ajouter.',
@@ -152,6 +157,11 @@ window.OUESSANT_TEXTES = {
       ledeWhere: 'Find the 5 place names closest to where you are.',
       locateBtn: 'Locate me', relocateBtn: 'Update my position',
       alertOff: 'You are not on Ouessant: you cannot report this bird.',
+      alertImprecise: m => `Position too imprecise (± ${m} m) to know where you are. Go out in the open, check that “precise” location is on, wait a few seconds and try again.`,
+      alertApprox: m => `Approximate position (± ${m} m): the place name may be wrong. Message copied; you can try again in the open.`,
+      coarseHtml: m => `<p><strong>You did not share your exact position</strong> (accuracy ± ${m} m, an area several kilometres wide). The results would be wrong, so the app does not show them.</p>
+        <p>To share your <strong>precise</strong> position, in Chrome: menu <strong>⋮</strong> → <strong>Settings</strong> → <strong>Site settings</strong> → <strong>Location</strong> → in the “Allowed” list, tap this site → choose <strong>Exact</strong> (instead of Approximate) → <strong>Confirm</strong>. Then go back to the app, reload the page and tap the button again.</p>`,
+      retry: 'Try again', gpsLow: 'Low accuracy: go out in the open, check that “precise” location is on, then update.',
       alertHint: 'Prepare the alert message', openWhatsapp: 'Open WhatsApp', openTelegram: 'Open Telegram',
       alertCopied: 'Message copied. Open the app, pick the right group and paste it.', alertCopyFail: 'Automatic copy failed: press “Copy”.',
       alertNoGps: 'GPS position unavailable: the message only contains the species. Allow location access to add it.',

@@ -17,7 +17,7 @@
 <div class="wrap">
   <header>
     <a href="index.html" class="home" title="Revenir à l'appli" aria-label="Revenir à l'appli"><img src="phare_creach.svg" alt="" onerror="if(!this.dataset.web){this.dataset.web=1;this.src='https://aurelphotog.github.io/ouessant-birds/phare_creach.svg'}else this.remove()"></a>
-    <div>
+    <div class="intro">
       <h1>Éditeur de listes</h1>
       <p class="sub">Cherche un oiseau ou un lieu-dit, corrige-le ou ajoutes-en un, puis envoie ta proposition.</p>
     </div>
@@ -122,7 +122,7 @@
 <script>
 // Charge les scripts partagés depuis le dossier de l'éditeur, ou depuis le site en ligne s'il est ouvert seul
 (function(){
-  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/carte.js', 'js/editeur-langue.js', 'js/editeur.js'];
+  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/version.js', 'js/carte.js', 'js/editeur-langue.js', 'js/editeur.js'];
   (function next(i, web){
     if (i >= files.length) return;
     const s = document.createElement('script'); s.src = (web ? SITE : '') + files[i];

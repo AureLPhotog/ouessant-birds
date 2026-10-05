@@ -2,9 +2,11 @@
 .wrap{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem}
 
 /* En-tête : illustration du phare du Créac'h (phare_creach.svg) */
-header{display:flex;gap:1rem;align-items:flex-end;padding:2.25rem 0 1.5rem}
-.phare{flex:0 0 auto;width:56px;height:auto;align-self:flex-end;overflow:visible}
-.phare-btn{all:unset;flex:0 0 auto;align-self:flex-end;display:block;cursor:pointer;border-radius:8px;line-height:0;-webkit-tap-highlight-color:transparent}
+header{display:flex;gap:1rem;align-items:flex-start;padding:2.25rem 0 1.5rem}
+/* bloc de texte : au moins la hauteur du phare, texte calé en bas quand il est court */
+.intro{align-self:stretch;min-height:131px;display:flex;flex-direction:column;justify-content:flex-end}
+.phare{flex:0 0 auto;width:56px;height:auto;align-self:flex-start;overflow:visible}
+.phare-btn{all:unset;flex:0 0 auto;align-self:flex-start;display:block;cursor:pointer;border-radius:8px;line-height:0;-webkit-tap-highlight-color:transparent}
 .phare-btn .phare{display:block;transition:transform .2s ease}
 .phare-btn:hover .phare{transform:translateY(-2px)}
 .phare-btn:active .phare{transform:scale(.96)}
@@ -12,7 +14,7 @@ header{display:flex;gap:1rem;align-items:flex-end;padding:2.25rem 0 1.5rem}
 .phare-btn[aria-expanded="true"] .phare{transform:translateY(-2px)}
 @media (prefers-reduced-motion:reduce){.phare-btn .phare{transition:none}}
 /* Panneau du phare : météo + partage */
-.phare-panel{position:absolute;left:0;top:calc(100% - .6rem);z-index:20;width:min(23rem,calc(100vw - 2.5rem));background:var(--paper);
+.phare-panel{position:absolute;left:0;top:calc(100% - .6rem);z-index:20;width:min(23rem,calc(100vw - 2.5rem));max-height:calc(100vh - 7rem);overflow-y:auto;background:var(--paper);
   border:1px solid var(--line);border-radius:14px;padding:1rem;box-shadow:0 12px 32px rgba(0,0,0,.2)}
 .phare-panel[hidden]{display:none}
 .pp-h{margin:0 0 .5rem;font:700 1.05rem var(--serif);color:var(--ocean)}
@@ -27,6 +29,9 @@ header{display:flex;gap:1rem;align-items:flex-end;padding:2.25rem 0 1.5rem}
 .day{background:var(--foam);border-radius:10px;padding:.45rem .35rem;text-align:center;font-size:.76rem;line-height:1.35}
 .day b{display:block;font-size:.82rem}
 .day .dw{display:flex;justify-content:center;align-items:center;gap:.2rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.76rem}
+.pp-ver{margin:0 0 .3rem;font-size:.8rem;color:var(--granite);font-variant-numeric:tabular-nums}
+.pp-foot .link{font-size:.85rem}
+.pp-foot .legal{margin-top:.6rem;padding:.75rem .85rem;border:1px solid color-mix(in srgb,var(--new) 35%,var(--paper));border-radius:10px;background:var(--new-bg);max-width:none;font-size:.82rem}
 .pp-src{margin:.6rem 0 0;font-size:.75rem;color:var(--granite)}
 @media (max-width:420px){ .day .dw svg{display:none} }
 .pp-src a{color:inherit}
@@ -228,7 +233,6 @@ section[hidden]{display:none}
   @keyframes in{from{opacity:0}to{opacity:1}}
 }
 
-.version{margin-left:auto;font-size:.8rem;color:var(--granite);font-variant-numeric:tabular-nums}
 
 /* Liens vers l'éditeur (propositions) */
 a.sbtn{display:inline-block;text-decoration:none;text-align:center}
