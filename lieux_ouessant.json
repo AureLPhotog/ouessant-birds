@@ -1,5 +1,25 @@
 [
   {
+    "nom": "Ancienne déchetterie",
+    "carres": [],
+    "lat": 48.443459,
+    "lon": -5.08879,
+    "precision_m": 25,
+    "verifie": true,
+    "source": ""
+  },
+  {
+    "nom": "Déchetterie",
+    "carres": [
+      "M5"
+    ],
+    "lat": 48.4667649,
+    "lon": -5.0665808,
+    "precision_m": 25,
+    "verifie": true,
+    "source": ""
+  },
+  {
     "nom": "Camping",
     "carres": [
       "I7"
