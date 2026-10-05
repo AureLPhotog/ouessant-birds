@@ -442,23 +442,26 @@
     $('propSend').disabled = !c.total;
   });
   $('propClose').addEventListener('click', () => $('proposePanel').classList.add('hidden'));
-  $('propSend').addEventListener('click', () => {
-    const out = $('propOut'), parts = proposalParts();
-    if (!PFORM){
-      out.className = 'msg bad'; out.textContent = 'L\u2019envoi n\u2019est pas encore configuré. Utilise « Copier ma proposition ».';
-      return;
-    }
+  // Ouvre le formulaire Google déjà rempli (à appeler directement depuis un clic). Renvoie 'ok', 'long' (JSON copié) ou 'off' (formulaire non configuré).
+  function openProposalForm(){
+    const parts = proposalParts();
+    if (!PFORM) return 'off';
     const url = f => { const q = new URLSearchParams({ usp: 'pp_url' }); Object.entries(f).forEach(([k, v]) => { if (PFORM.map[k] && v) q.set(PFORM.map[k], v); }); return PFORM.base + '?' + q.toString(); };
-    let href = url(parts);
+    let href = url(parts), status = 'ok';
     if (href.length > 7500){
       // trop long pour une adresse : on copie les lignes JSON, à coller dans le formulaire
       href = url({ MODIFS: parts.MODIFS.split('\n')[0], COMMENTAIRE: parts.COMMENTAIRE });
-      copyText(parts.JSON);
-      out.className = 'msg good'; out.textContent = 'Ta proposition est longue : les lignes JSON ont été copiées. Colle-les dans le champ « Lignes JSON » du formulaire qui vient de s\u2019ouvrir, puis clique sur « Envoyer ».';
-    } else {
-      out.className = 'msg good'; out.textContent = 'Le formulaire s\u2019est ouvert, déjà rempli : il ne reste qu\u2019à cliquer sur « Envoyer ». Ta proposition sera vérifiée, puis prise en compte dans les prochains jours.';
+      copyText(parts.JSON); status = 'long';
     }
-    window.open(href, '_blank', 'noopener');
+    window.open(href, '_blank', 'noopener');   // (avec « noopener », window.open renvoie toujours null : on ne peut pas détecter un blocage)
+    return status;
+  }
+  $('propSend').addEventListener('click', () => {
+    const out = $('propOut'), st = openProposalForm();
+    if (st === 'off'){ out.className = 'msg bad'; out.textContent = 'L\u2019envoi n\u2019est pas encore configuré. Utilise « Copier ma proposition ».'; return; }
+    out.className = 'msg good';
+    out.textContent = st === 'long' ? 'Ta proposition est longue : les lignes JSON ont été copiées. Colle-les dans le champ « Lignes JSON » du formulaire qui vient de s\u2019ouvrir, puis clique sur « Envoyer ».'
+      : 'Le formulaire s\u2019est ouvert, déjà rempli : il ne reste qu\u2019à cliquer sur « Envoyer ». Ta proposition sera vérifiée, puis prise en compte dans les prochains jours.';
   });
   $('propCopy').addEventListener('click', () => {
     const p = proposalParts(); copyText(`${p.MODIFS}\n\n${p.COMMENTAIRE}\n\n${p.JSON}`);
@@ -477,12 +480,13 @@
     const ok = tokenValid();
     $('pasteLinesBtn').classList.toggle('hidden', !ok);
     if (!ok) $('pastePanel').classList.add('hidden');
-    $('keyBtn').classList.toggle('hidden', t);
+    $('keyBtn').classList.remove('hidden');   // toujours accessible : ajouter ou gérer la clé
+    $('keyBtn').textContent = t ? 'Gérer la clé' : 'Clé Admin';
     $('proposeBtn').classList.toggle('hidden', t);
     if (t) $('proposePanel').classList.add('hidden');
     $('visitText').innerHTML = t
       ? '<b>Clé GitHub active.</b> Corrige l\u2019entrée ouverte ci-dessous, clique sur « Enregistrer », puis sur <b>« Enregistrer sur GitHub »</b> : la modification sera en ligne directement.'
-      : '<b>Tu proposes une modification.</b> Corrige l\u2019entrée ouverte ci-dessous (ou complète la nouvelle), clique sur « Enregistrer », puis sur <b>« Envoyer ma proposition »</b>. Elle sera vérifiée avant d\u2019être intégrée.';
+      : '<b>Tu proposes une modification.</b> Corrige l\u2019entrée ouverte ci-dessous (ou complète la nouvelle), puis clique sur <b>« Envoyer ma proposition »</b> : le formulaire s\u2019ouvre déjà rempli. Elle sera vérifiée avant d\u2019être intégrée.';
   }
   updateSaveBtn();
   document.addEventListener('click', () => setTimeout(updateSaveBtn, 0));
@@ -660,7 +664,8 @@
   function editorHtml(it){
     return `<div class="form-wrap" data-id="${it.id}"><div class="form">${fields.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
       <div class="actions">
-        <button type="button" class="btn primary" data-act="save">Enregistrer</button>
+        ${getToken() ? '' : '<button type="button" class="btn primary" data-act="send">Envoyer ma proposition</button>'}
+        <button type="button" class="btn${getToken() ? ' primary' : ''}" data-act="save">Enregistrer</button>
         <button type="button" class="btn" data-act="cancel">Fermer</button>
         ${it.orig && !same(it.data, it.orig) ? '<button type="button" class="btn" data-act="revert">Revenir à l\u2019original</button>' : ''}
         <span class="sep"></span>
@@ -698,13 +703,14 @@
   function editorAction(act, id){
     const i = items.findIndex(x => x.id === id); if (i < 0) return;
     const it = items[i], wrap = document.querySelector(`.form-wrap[data-id="${id}"]`);
-    if (act === 'save' || act === 'forcesave'){
+    if (act === 'save' || act === 'forcesave' || act === 'send' || act === 'forcesend'){
+      const sending = act === 'send' || act === 'forcesend';
       try {
-        const pb = act === 'save' && geoProblem(wrap);
+        const pb = (act === 'save' || act === 'send') && geoProblem(wrap);
         if (pb){
           wrap.querySelector('[data-msg]').innerHTML = esc(pb.text) +
             (pb.cell ? ` <button type="button" class="btn ghost" data-addcell="${pb.cell}">Ajouter ${pb.cell}</button>` : '') +
-            ` <button type="button" class="btn ghost" data-act="forcesave">Enregistrer quand même</button>`;
+            ` <button type="button" class="btn ghost" data-act="${sending ? 'forcesend' : 'forcesave'}">${sending ? 'Envoyer quand même' : 'Enregistrer quand même'}</button>`;
           return;
         }
         const d = readForm(wrap);
@@ -717,7 +723,11 @@
         const fmt = formatNames(merged);
         const y = window.scrollY;
         it.data = merged; render(); initCells(); save(); window.scrollTo(0, y);   // l'entrée reste ouverte (« Fermer » la referme) : on voit le résultat, noms mis en forme compris
-        toast(fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.');
+        if (sending && !changes().total) toast('Aucune modification à envoyer : modifie d\u2019abord l\u2019entrée.');
+        else if (sending){   // un seul clic : enregistrement de l'entrée, puis ouverture du formulaire prérempli
+          const st = openProposalForm();
+          toast(st === 'off' ? 'L\u2019envoi n\u2019est pas encore configuré.' : st === 'long' ? 'Proposition longue : les lignes JSON ont été copiées, à coller dans le formulaire.' : 'Le formulaire s\u2019est ouvert, déjà rempli : il ne reste qu\u2019à cliquer sur « Envoyer ».');
+        } else toast(fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.');
       } catch (e) { wrap.querySelector('[data-msg]').textContent = e.message; }
     } else if (act === 'cancel'){ openId = null; render(); }
     else if (act === 'revert'){ it.data = clone(it.orig); render(); initCells(); save(); toast('Entrée remise comme à l\u2019origine.'); }

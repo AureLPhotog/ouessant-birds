@@ -130,7 +130,9 @@ tr.editor td{background:color-mix(in srgb,var(--ocean) 4%,var(--paper));padding:
 .toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--foam);
   padding:.65rem 1rem;border-radius:10px;font-size:.9rem;display:flex;gap:.8rem;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:50;max-width:calc(100% - 2rem)}
 .toast button{all:unset;cursor:pointer;font-weight:700;text-decoration:underline}
-@media (max-width:640px){ th:nth-child(n+4),td:nth-child(n+4){display:none} }
+@media (max-width:640px){ th:nth-child(n+4),td:nth-child(n+4){display:none}
+  /* téléphone : le tableau tient dans l'écran (en-têtes et textes passent à la ligne), le formulaire d'une entrée n'a plus à être défilé sur le côté */
+  table{table-layout:fixed} th{white-space:normal;overflow-wrap:anywhere} td{overflow-wrap:anywhere} }
 
 /* Retour à l'appli par le phare */
 header .home{display:block;line-height:0;border-radius:6px}
