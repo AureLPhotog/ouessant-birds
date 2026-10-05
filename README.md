@@ -22,6 +22,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
 | `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
+| `css/polices.css`, `polices/` | polices Spectral et Public Sans hébergées avec l'appli (licence SIL OFL 1.1, voir `polices/LICENCES.txt`) : plus d'appel à Google Fonts |
 | `css/commun.css` | couleurs (clair, sombre, daltonisme) et bases, partagées par l'appli et l'éditeur |
 | `css/appli.css`, `css/editeur.css` | mise en page de l'appli et de l'éditeur |
 | `js/textes.js` | **tous les textes de l'appli**, en français et en anglais |
@@ -107,6 +108,21 @@ partagée (sur Chrome Android : menu ⋮ → Paramètres → Paramètres des sit
 
 **Clé Admin** : jeton GitHub « à granularité fine », limité au dépôt `ouessant-birds`, permission
 *Contents : Read and write*, avec une date d'expiration. Ne jamais la partager ni l'écrire dans un fichier.
+Cochée « Mémoriser la clé sur cet appareil », elle est oubliée automatiquement au bout de **30 jours** ; sinon elle disparaît à la fermeture de l'onglet.
+
+## Sécurité
+
+- **Politique de sécurité du contenu (CSP)** : une balise `<meta http-equiv="Content-Security-Policy">` en tête de `index.html` et
+  d'`editeur.html` n'autorise que les scripts de l'appli et les connexions nécessaires (Open-Meteo pour l'appli ; GitHub et
+  iNaturalist pour l'éditeur). **Ajouter un service extérieur** (autre API, autre script) demande de l'ajouter dans cette balise.
+- **Scripts intégrés de l'éditeur** : les deux balises `<script>` d'`editeur.html` sont autorisées par leur empreinte SHA-256
+  (`'sha256-…'` dans la CSP). Si l'une change, il faut recalculer son empreinte, sinon l'éditeur ne se charge plus :
+  `python3 -c "import re,hashlib,base64;s=open('editeur.html').read();print([base64.b64encode(hashlib.sha256(x.encode()).digest()).decode() for x in re.findall(r'<script>(.*?)</script>',s,re.S)])"`
+- **Clickjacking** : l'éditeur refuse de s'afficher dans le cadre (`iframe`) d'un autre site.
+- **Polices** hébergées dans le dépôt : les visiteurs ne sont plus envoyés vers Google (vie privée, RGPD).
+- **À garder en tête** : tous les sites GitHub Pages du compte partagent l'origine `aurelphotog.github.io` (et donc le stockage
+  du navigateur, où peut se trouver la clé mémorisée). Ne publier sur GitHub Pages, sous ce compte, que des projets de confiance.
+  La clé Admin peut modifier tout le dépôt (y compris le code) : en cas de doute, la révoquer sur GitHub.
 
 À chaque enregistrement d'une liste, l'éditeur fait **deux commits** : la liste, puis `version_listes.json` (numéro de version des listes).
 

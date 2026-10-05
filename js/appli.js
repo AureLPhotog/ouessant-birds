@@ -162,11 +162,11 @@
     const list = data.filter(b => b && b[K_FR]);
     if(!list.length) throw new Error('vide');
     birds = list; sourceKey = key; showingImport = false;
-    counts = {};
+    counts = Object.create(null);   // objet sans prototype : un canal nommé « __proto__ » ne peut rien casser
     birds.forEach(b => { const c = canalOf(b); counts[c] = (counts[c]||0)+1; });
     const RANK = { telegram: 0, whatsapp: 1, none: 2 };   // ordre : du plus rare au plus courant
     channels = Object.keys(counts).sort((a,b) => ((RANK[canalKind(a)] ?? 3) - (RANK[canalKind(b)] ?? 3)) || a.localeCompare(b,'fr'));
-    colorOf = {}; channels.forEach((c,i) => colorOf[c] = CHANNEL_COLORS[canalKind(c)] || COLORS[i % COLORS.length]);
+    colorOf = Object.create(null); channels.forEach((c,i) => colorOf[c] = CHANNEL_COLORS[canalKind(c)] || COLORS[i % COLORS.length]);
     if (activeChannel && !counts[activeChannel]) activeChannel = null;
     q.disabled = false;
     buildChips(); updateSource(); render();

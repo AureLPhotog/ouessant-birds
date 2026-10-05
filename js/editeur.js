@@ -207,11 +207,22 @@
   // ---------- GitHub : ouvrir et enregistrer directement dans le dépôt ----------
   const GH = { owner: 'AureLPhotog', repo: 'ouessant-birds', files: ['ouessant_birds.json', 'lieux_ouessant.json'] };
   const branch = 'main';   // l'éditeur lit et enregistre toujours sur main
-  const TOKEN_KEY = 'gh-token-ouessant', OK_KEY = TOKEN_KEY + '-ok';   // OK_KEY : la clé a été vérifiée auprès de GitHub
+  const TOKEN_KEY = 'gh-token-ouessant', OK_KEY = TOKEN_KEY + '-ok', AT_KEY = TOKEN_KEY + '-le';   // OK_KEY : la clé a été vérifiée auprès de GitHub ; AT_KEY : date de mémorisation
+  const KEEP_DAYS = 30;   // une clé mémorisée sur l'appareil est oubliée au bout de 30 jours (moins de risque si l'appareil ou le navigateur est compromis)
   let gh = null;            // { path, sha } du fichier ouvert depuis GitHub
   let fmtHint = null;       // mise en forme d'origine du fichier, pour l'export
   // La clé est gardée dans l'onglet (sessionStorage) par défaut, ou sur l'appareil (localStorage) si on le demande
+  function expireToken(){
+    try {
+      if (!localStorage.getItem(TOKEN_KEY)) return;
+      const at = +localStorage.getItem(AT_KEY) || 0;
+      if (!at){ localStorage.setItem(AT_KEY, String(Date.now())); return; }   // clé mémorisée avant cette règle : le délai part d'aujourd'hui
+      if (Date.now() - at > KEEP_DAYS * 864e5) [TOKEN_KEY, OK_KEY, AT_KEY].forEach(k => localStorage.removeItem(k));
+    } catch (_) {}
+  }
+  expireToken();
   const getToken = () => { try { return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; } };
+  const keptUntil = () => { try { const at = +localStorage.getItem(AT_KEY); return at ? new Date(at + KEEP_DAYS * 864e5).toLocaleDateString('fr-FR') : ''; } catch (_) { return ''; } };
   const tokenRemembered = () => { try { return !!localStorage.getItem(TOKEN_KEY); } catch (_) { return false; } };
   const tokenValid = () => { try { return !!getToken() && (sessionStorage.getItem(OK_KEY) || localStorage.getItem(OK_KEY)) === getToken().slice(-8); } catch (_) { return false; } };
   function setTokenValid(ok){
@@ -222,12 +233,12 @@
   }
   function storeToken(t, remember){
     try {
-      if (remember){ localStorage.setItem(TOKEN_KEY, t); sessionStorage.removeItem(TOKEN_KEY); }
-      else { sessionStorage.setItem(TOKEN_KEY, t); localStorage.removeItem(TOKEN_KEY); }
+      if (remember){ localStorage.setItem(TOKEN_KEY, t); localStorage.setItem(AT_KEY, String(Date.now())); sessionStorage.removeItem(TOKEN_KEY); }
+      else { sessionStorage.setItem(TOKEN_KEY, t); localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(AT_KEY); }
     } catch (_) {}
     setTokenValid(false);   // nouvelle clé : pas encore vérifiée
   }
-  function forgetToken(){ try { [localStorage, sessionStorage].forEach(s => { s.removeItem(TOKEN_KEY); s.removeItem(OK_KEY); }); } catch (_) {} }
+  function forgetToken(){ try { [localStorage, sessionStorage].forEach(s => { s.removeItem(TOKEN_KEY); s.removeItem(OK_KEY); s.removeItem(AT_KEY); }); } catch (_) {} }
   const api = (path, opts = {}) => {
     const h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
     const t = getToken(); if (t) h['Authorization'] = 'Bearer ' + t;
@@ -245,7 +256,7 @@
   function applyFormat(h){ fmtHint = h; }
   function keyInfo(){
     const t = getToken();
-    $('ghKeyInfo').innerHTML = t ? (tokenRemembered() ? 'Clé GitHub mémorisée sur cet appareil.' : 'Clé GitHub active dans cet onglet (oubliée à sa fermeture).') + ' <button type="button" class="btn ghost" data-key>Gérer la clé</button>'
+    $('ghKeyInfo').innerHTML = t ? (tokenRemembered() ? `Clé GitHub mémorisée sur cet appareil${keptUntil() ? ' jusqu’au ' + keptUntil() : ''}.` : 'Clé GitHub active dans cet onglet (oubliée à sa fermeture).') + ' <button type="button" class="btn ghost" data-key>Gérer la clé</button>'
       : 'Lecture possible sans clé. Pour enregistrer sur GitHub, il faudra une clé d’accès. <button type="button" class="btn ghost" data-key>Ajouter une clé</button>';
     updateSaveBtn();
   }
@@ -370,7 +381,7 @@
       items.forEach(it => { it.orig = clone(it.data); }); deleted = [];   // l'état enregistré devient la nouvelle référence
       save(); render();
       out.className = 'msg good';
-      out.innerHTML = `Enregistré sur <b>${esc(br)}</b> ! <a href="${esc(j.commit.html_url)}" target="_blank" rel="noopener">Voir le commit</a>. <span>${esc(ver ? 'Version des listes : ' + ver + '.' : 'Le numéro de version des listes n’a pas pu être mis à jour.')}</span> ` + (br === 'main'
+      out.innerHTML = `Enregistré sur <b>${esc(br)}</b> ! <a href="${esc(/^https:\/\/github\.com\//.test(j.commit.html_url) ? j.commit.html_url : 'https://github.com/' + GH.owner + '/' + GH.repo + '/commits')}" target="_blank" rel="noopener">Voir le commit</a>. <span>${esc(ver ? 'Version des listes : ' + ver + '.' : 'Le numéro de version des listes n’a pas pu être mis à jour.')}</span> ` + (br === 'main'
         ? 'L’appli en ligne sera à jour d’ici quelques minutes.'
         : `L’appli en ligne ne change pas tant que cette branche n’est pas fusionnée : <a href="https://github.com/${GH.owner}/${GH.repo}/compare/main...${encodeURIComponent(br)}?expand=1" target="_blank" rel="noopener">ouvrir une pull request vers main</a>.`);
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Échec : ' + e.message; $('ghCommit').disabled = false; }
@@ -487,7 +498,8 @@
       $('resumeBtn').hidden = false;
       $('resumeInfo').textContent = `${listLabel(d.gh ? d.gh.path : d.fileName)}, modifié le ${new Date(d.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}`;
       $('resumeBtn').onclick = () => {
-        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1]), d.gh || null); if (d.fmtHint) applyFormat(d.fmtHint);
+        const g = d.gh, okGh = g && GH.files.includes(g.path) && typeof g.sha === 'string' && (!g.branch || /^[\w.\/-]{1,100}$/.test(g.branch));   // cible GitHub du brouillon : seulement un des fichiers des listes
+        load(d.fileName, d.items.map(x => x[0]), d.items.map(x => x[1]), okGh ? g : null); if (d.fmtHint) applyFormat(d.fmtHint);
         deleted = (d.deleted || []).map(o => ({ id: ++uid, data: o, orig: o })); render();
       };
     } catch (_) {}

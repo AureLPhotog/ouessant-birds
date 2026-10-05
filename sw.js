@@ -3,17 +3,17 @@
    ⚠️ À chaque mise en ligne d'une nouvelle version des fichiers de l'appli (HTML, CSS, JS, images),
    augmente le numéro ci-dessous (v3.2 → v3.3…) : c'est ce qui déclenche la mise à jour chez les utilisateurs.
    Les listes (JSON) n'ont pas besoin de ce changement : elles sont toujours vérifiées en ligne en premier. */
-const VERSION = 'v4.26-test';
+const VERSION = 'v5.0-test';
 const CACHE = 'ouessant-' + VERSION;
-const RUNTIME = 'ouessant-runtime';
 
 // Fichiers gardés dès la première visite
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
-  'css/commun.css', 'css/appli.css',
+  'css/polices.css', 'css/commun.css', 'css/appli.css',
+  'polices/public-sans-latin-400-normal.woff2', 'polices/public-sans-latin-500-normal.woff2', 'polices/public-sans-latin-600-normal.woff2', 'polices/spectral-latin-400-italic.woff2', 'polices/spectral-latin-500-italic.woff2', 'polices/spectral-latin-500-normal.woff2', 'polices/spectral-latin-700-normal.woff2',
   'js/version.js', 'js/textes.js', 'js/carte.js', 'js/recherche.js', 'js/appli.js',
   'ouessant_birds.json', 'lieux_ouessant.json', 'version_listes.json',
-  'phare_creach.svg', 'phare_creach_eteint.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png',
+  'phare_creach.svg', 'phare_creach_eteint.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png',
   'carte_ouessant.webp', 'oriole_baltimore.webp'
 ];
 
@@ -29,7 +29,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k.startsWith('ouessant-') && k !== CACHE && k !== RUNTIME).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('ouessant-') && k !== CACHE).map(k => caches.delete(k))))   // y compris l'ancien cache des polices Google
       .then(() => self.clients.claim())
   );
 });
@@ -71,10 +71,6 @@ self.addEventListener('fetch', event => {
     // le reste (CSS, JS, images, carte) : depuis la mémoire, mis à jour en arrière-plan
     event.respondWith(staleWhileRevalidate(req, CACHE));
     return;
-  }
-  // polices Google : gardées pour l'affichage hors ligne
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com'){
-    event.respondWith(staleWhileRevalidate(req, RUNTIME));
   }
   // tout le reste (météo, API GitHub…) : réseau normal, jamais gardé
 });
