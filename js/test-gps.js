@@ -1,4 +1,4 @@
-/* MODE TEST (branche test-gps uniquement, ne jamais fusionner dans main).
+/* MODE TEST (branche test uniquement, ne jamais fusionner dans main).
    Simule une position GPS sur l'île d'Ouessant pour tester les alertes et « Où suis-je ? » depuis n'importe où.
    Toucher le bandeau rouge en bas de l'écran permet de choisir la position sur la carte.
    Position imposée par l'adresse : ?lat=48.4502&lon=-5.139 */
