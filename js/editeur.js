@@ -377,7 +377,7 @@
       else { $('search').value = wanted; render(); }
     } else if (params.has('nouveau')){
       $('addBtn').click();
-      const f = document.querySelector(`.form-wrap [data-k="${NOM[path]}"]`); if (f){ f.value = params.get('nouveau'); f.focus(); }
+      const f = document.querySelector(`.form-wrap [data-k="${NOM[path]}"]`); if (f){ f.value = params.get('nouveau'); f.focus(); f.dispatchEvent(new Event('input', { bubbles: true })); }
     }
   }
   // Choix de la liste (onglets Oiseaux / Lieux, comme sur l'index)
@@ -637,7 +637,7 @@
         <span class="sep"></span>
         <button type="button" class="btn" data-act="dup">Dupliquer</button>
         <button type="button" class="btn danger" data-act="del">Supprimer</button>
-      </div><p class="msg bad" data-msg></p></div>`;
+      </div><p class="msg bad" data-msg></p>${fields.includes('Nom Scientifique') && !it.orig ? '<p class="msg" data-lookup aria-live="polite"></p>' : ''}</div>`;
   }
   function readForm(wrap){
     const out = {};
@@ -694,6 +694,51 @@
     const n = { id: ++uid, data: d, orig: null }; items.unshift(n); openId = n.id;
     $('search').value = ''; filters = {}; buildFilters(); sortField = null; render(); initCells(); save();
     const f = document.querySelector('.form-wrap [data-k]'); if (f) f.focus();
+  });
+
+  // ---------- Nouvel oiseau : recherche automatique des noms (iNaturalist) ----------
+  // Dès qu'on saisit un nom français ou anglais, on retrouve le nom scientifique et le nom dans l'autre langue.
+  // Prudence : on ne remplit que si le nom saisi correspond exactement à une seule espèce d'oiseau, et jamais un champ déjà rempli.
+  const INAT = 'https://api.inaturalist.org/v1/taxa', AVES = 3;
+  async function inatGet(url){
+    const c = new AbortController(), t = setTimeout(() => c.abort(), 8000);
+    try { const r = await fetch(url, { signal: c.signal }); if (!r.ok) throw new Error('inat ' + r.status); return await r.json(); } finally { clearTimeout(t); }
+  }
+  async function lookupNames(name){
+    const n = norm(name);
+    const j = await inatGet(`${INAT}?q=${encodeURIComponent(name)}&taxon_id=${AVES}&rank=species&per_page=8&locale=fr`);
+    const hits = (j.results || []).filter(r => [r.matched_term, r.preferred_common_name, r.name].some(x => x && norm(x) === n));
+    if (!hits.length || new Set(hits.map(r => r.id)).size > 1) return null;   // rien, ou ambigu : on ne devine pas
+    const r = hits[0], en = await inatGet(`${INAT}/${r.id}?locale=en`);
+    const fr = r.preferred_common_name || '', eng = (en.results && en.results[0] && en.results[0].preferred_common_name) || '';
+    const distinct = norm(fr) !== norm(eng);                                   // sans nom français, iNaturalist renvoie le nom anglais : on l'ignore
+    const typedIs = distinct && norm(fr) === n ? 'fr' : norm(eng) === n ? 'en' : norm(r.name) === n ? 'sci' : null;   // sans nom français distinct, un « nom français » identique à l'anglais est l'anglais
+    if (!typedIs) return null;                                                 // le nom saisi n'est ni le nom français, ni l'anglais, ni le scientifique
+    // noms à placer : le nom saisi reste dans sa langue ; l'autre vient d'iNaturalist (vide s'il n'existe pas vraiment)
+    return { sci: r.name, fr: typedIs === 'fr' ? name : (distinct ? fr : ''), en: typedIs === 'en' ? name : eng };
+  }
+  const lookupTimers = new WeakMap();
+  $('table').addEventListener('input', e => {
+    const k = e.target.dataset && e.target.dataset.k; if (k !== 'Nom Français' && k !== 'Nom Anglais') return;
+    const wrap = e.target.closest('.form-wrap'), msg = wrap && wrap.querySelector('[data-lookup]'); if (!msg) return;   // seulement pour un nouvel oiseau
+    clearTimeout(lookupTimers.get(wrap));
+    const name = e.target.value.trim(); if (name.length < 4){ msg.textContent = ''; return; }
+    lookupTimers.set(wrap, setTimeout(async () => {
+      msg.className = 'msg'; msg.textContent = 'Recherche des noms sur iNaturalist…';
+      try {
+        const found = await lookupNames(name);
+        if (!wrap.isConnected || e.target.value.trim() !== name) return;      // l'utilisateur a continué à écrire ou fermé le formulaire
+        // on ne remplit qu'un champ vide ; le nom saisi lui-même peut être déplacé s'il était dans le mauvais champ (ex. un nom anglais dans « Nom Français »)
+        const put = (key, v, typed) => { const el = wrap.querySelector(`[data-k="${key}"]`); if (!el) return false; const cur = el.value.trim();
+          if (cur && !(typed && cur === name)) return false;
+          if (v === cur) return false;
+          el.value = v; el.closest('label') && el.closest('label').classList.add('changed'); return true; };
+        let filled = false;
+        if (found){ filled = [put('Nom Scientifique', found.sci), put('Nom Français', found.fr, true), put('Nom Anglais', found.en, true), put('Type de taxon', 'espèce')].some(Boolean); }
+        msg.className = 'msg' + (filled ? ' good' : '');
+        msg.textContent = filled ? 'Noms retrouvés sur iNaturalist : à vérifier avant d’enregistrer.' : 'Aucun nom retrouvé automatiquement : complète les champs à la main.';
+      } catch (_) { if (wrap.isConnected){ msg.className = 'msg'; msg.textContent = 'Recherche automatique indisponible : complète les champs à la main.'; } }
+    }, 700));
   });
 
   // ---------- Coller des lignes (ex. depuis le Google Sheet) ----------

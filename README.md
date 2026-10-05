@@ -139,6 +139,7 @@ au pire 95 m. Les coefficients sont dans `js/carte.js` (`AFF`) et, à l'identiqu
 
 - Carte de l'île : réalisée par Gaëtan Mineau pour l'Association Naturaliste d'Ouessant.
 - Météo : [Open-Meteo.com](https://open-meteo.com/).
+- Aide à la saisie d'un nouvel oiseau dans l'éditeur (noms scientifique et dans l'autre langue) : [iNaturalist](https://www.inaturalist.org/), via son API publique. Rien n'est rempli si le nom ne correspond qu'à une seule espèce d'oiseau.
 - Classement des espèces : établi à la main d'après des données de Faune France. L'appli n'interroge pas leur base de données.
 
 ## Licence
