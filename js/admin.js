@@ -355,10 +355,10 @@
     document.querySelectorAll('.tabs [data-file]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.file === f)));
     const [tab, de] = LIST_NAME[f];
     $('outTitle').textContent = `3. Les lignes JSON ${de} validées`;
-    $('outHelp').innerHTML = `Dans l’éditeur (avec ta clé) : onglet <b>${tab}</b> → <b>Coller des lignes</b> → colle → <b>Vérifier</b> → <b>Appliquer</b> → <b>Enregistrer sur GitHub</b>. Ces lignes ne contiennent que ${de}.`;
+    $('outHelp').innerHTML = `<b>Enregistrer sur GitHub</b> applique directement les propositions validées à la liste ${de} (un commit, comme depuis l’éditeur). Ou, pour vérifier dans l’éditeur d’abord : <b>Générer les lignes JSON</b>, puis dans l’éditeur, onglet <b>${tab}</b> → <b>Coller des lignes</b> → <b>Vérifier</b> → <b>Appliquer</b> → <b>Enregistrer sur GitHub</b>.`;
     $('genBtn').textContent = `Générer les lignes JSON ${de}`;
     $('doneBtn').textContent = f === 'messages' ? 'Marquer ces messages comme lus' : `Marquer comme traitées les réponses ${de} décidées`;
-    const isMsg = f === 'messages'; $('genBtn').classList.toggle('hidden', isMsg); $('outTitle').textContent = isMsg ? '3. Messages lus' : $('outTitle').textContent;
+    const isMsg = f === 'messages'; $('genBtn').classList.toggle('hidden', isMsg); $('saveGhBtn').classList.toggle('hidden', isMsg); $('outTitle').textContent = isMsg ? '3. Messages lus' : $('outTitle').textContent;
     if (isMsg) $('outHelp').textContent = 'Une fois les messages lus, marque-les : ils ne seront plus affichés (la case « Inclure les réponses déjà marquées » les fait réapparaître).';
     $('outBlocks').innerHTML = ''; $('outMsg').textContent = '';
     render();
@@ -387,6 +387,59 @@
         <textarea readonly rows="${Math.min(14, lines.length + 3)}" spellcheck="false">${esc(text)}</textarea>
         <div class="actions"><button type="button" class="btn" data-copy>Copier</button></div></div>`;
     }).join('');
+  });
+  // ---------- Enregistrer sur GitHub : applique les propositions validées de l'onglet à la liste, sans passer par l'éditeur ----------
+  const b64enc = str => { const by = new TextEncoder().encode(str); let bin = ''; for (let i = 0; i < by.length; i += 8192) bin += String.fromCharCode.apply(null, by.subarray(i, i + 8192)); return btoa(bin); };
+  // même mise en forme que le fichier d'origine (une entrée par ligne, ou indenté), comme l'éditeur
+  function formatLike(text, list){
+    const lines = text.trim().split('\n');
+    if (lines.length > 2 && lines.slice(1, -1).every(l => /^\s*\{.*\},?\s*$/.test(l))) return '[\n' + list.map(o => JSON.stringify(o)).join(',\n') + '\n]\n';
+    const m = text.match(/^\[\s*\n( +)\{/); return JSON.stringify(list, null, m ? m[1].length : 2) + '\n';
+  }
+  $('saveGhBtn').addEventListener('click', async () => {
+    const f = LIST, L = LISTS[f], ok = groups().filter(g => g.file === f && stateOf(g) === 'ok'), out = $('outMsg');
+    if (!ok.length){ out.className = 'msg bad'; out.textContent = 'Aucune proposition validée dans cet onglet.'; return; }
+    const c = { mod: 0, add: 0, del: 0 }; ok.forEach(g => c[g.variants.get(decisions[g.gk]).type]++);
+    if (!confirm(`Enregistrer directement dans la liste ${LIST_NAME[f][1]} sur GitHub : ${c.mod} modification(s), ${c.add} ajout(s), ${c.del} suppression(s) ? L’appli sera à jour d’ici quelques minutes.`)) return;
+    $('saveGhBtn').disabled = true; out.className = 'msg'; out.textContent = 'Lecture de la liste sur GitHub…';
+    try {
+      const file = await getFile(f); if (!file || !Array.isArray(file.list)) throw new Error('liste introuvable sur GitHub');
+      const list = file.list.slice(), idx = k => list.findIndex(e => norm(e[L.key]) === norm(k));
+      const done = { mod: [], add: [], del: [] }, skipped = [];
+      ok.forEach(g => {
+        const v = g.variants.get(decisions[g.gk]), name = show((g.cur || v.data)[L.name]) || show(g.origKey);
+        if (v.type === 'add'){
+          if (idx(v.data[L.key]) >= 0){ skipped.push(name + ' (déjà dans la liste)'); return; }
+          list.push(v.data); done.add.push({ name, o: v.data }); return;
+        }
+        const i = idx(g.cur[L.key]);
+        if (i < 0){ skipped.push(name + ' (n’est plus dans la liste)'); return; }
+        if (v.type === 'del'){ list.splice(i, 1); done.del.push({ name }); return; }
+        if (v.diffs.every(d => same(list[i][d.k], d.after))){ skipped.push(name + ' (déjà à jour)'); return; }   // déjà enregistrée : pas de commit inutile
+        const o = Object.assign({}, list[i]); v.diffs.forEach(d => { o[d.k] = d.after; });
+        done.mod.push({ name, diffs: v.diffs }); list[i] = o;
+      });
+      const n = done.mod.length + done.add.length + done.del.length;
+      if (!n) throw new Error('rien à enregistrer' + (skipped.length ? ' : ' + skipped.join(', ') : ''));
+      // message du commit, dans le même style que l'éditeur
+      const part = (arr, w) => arr.length ? `${arr.length} ${w}${arr.length > 1 ? 's' : ''} (${arr.slice(0, 3).map(x => x.name).join(', ')}${arr.length > 3 ? '…' : ''})` : '';
+      const SHORT = { 'Proposition de Canal de Diffusion Ouessant': 'Canal', 'Nom Scientifique': 'Nom sci.', 'precision_m': 'précision' };
+      const body = [];
+      if (done.mod.length){ body.push('Modifiées :'); done.mod.slice(0, 60).forEach(x => body.push(`- ${x.name} : ` + x.diffs.map(d => `${SHORT[d.k] || d.k} : ${show(d.before) || '(vide)'} → ${show(d.after) || '(vide)'}`).join(' ; '))); }
+      if (done.add.length){ body.push('Ajoutées :'); done.add.slice(0, 60).forEach(x => body.push(`- ${x.name}`)); }
+      if (done.del.length){ body.push('Supprimées :'); done.del.slice(0, 60).forEach(x => body.push(`- ${x.name}`)); }
+      const title = `${LIST_NAME[f][0]} : ` + [part(done.mod, 'modifiée'), part(done.add, 'ajoutée'), part(done.del, 'supprimée')].filter(Boolean).join(', ') + ' (page Administration)';
+      out.textContent = 'Enregistrement sur GitHub…';
+      try { await putFile(f, b64enc(formatLike(file.text, list)), title + '\n\n' + body.join('\n'), file.sha); }
+      catch (e) { throw e.conflict ? new Error('la liste vient d’être modifiée ailleurs : recommence') : e; }
+      const ver = await bumpListsVersion();
+      // la liste en mémoire devient celle enregistrée : les propositions appliquées apparaissent « déjà conformes »
+      current[f] = { entries: list, byKey: new Map(list.map(e => [norm(e[L.key]), e])) };
+      out.className = 'msg good';
+      out.textContent = `Enregistré sur GitHub : ${n} changement(s) dans la liste ${LIST_NAME[f][1]}${ver ? ' (version des listes ' + ver + ')' : ''}. L’appli sera à jour d’ici quelques minutes.` +
+        (skipped.length ? ` Non appliquées : ${skipped.join(', ')}.` : '') + ' Tu peux maintenant marquer ces réponses comme traitées.';
+    } catch (e) { out.className = 'msg bad'; out.textContent = 'Enregistrement impossible : ' + (e.message || e); }
+    $('saveGhBtn').disabled = false;
   });
   $('outBlocks').addEventListener('click', e => {
     if (!e.target.closest('[data-copy]')) return;
@@ -465,7 +518,8 @@
       const rev = (cur.app === app && Number.isInteger(cur.rev) ? cur.rev : 0) + 1;
       const txt = JSON.stringify({ app, rev }) + '\n', by = new TextEncoder().encode(txt);
       await putFile('version_listes.json', btoa(String.fromCharCode(...by)), `Version des listes : ${app}.${rev}`, sha);
-    } catch (_) {}
+      return `${app}.${rev}`;
+    } catch (_) { return null; }
   }
   const archLabel = a => a.snap ? `Sauvegarde du ${a.snap.toLocaleDateString('fr-FR')} à ${a.snap.toLocaleTimeString('fr-FR')}` : `Liste ${a.year}`;
   async function listArchives(){
