@@ -37,7 +37,7 @@
   const showVersion = () => { if (!$('pharePanel').hidden) renderPhare(); };
   const URL_DATA = 'ouessant_birds.json';
 
-  const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant';
+  const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant', K_LOCK = 'Verrouillée';
   const STORE = 'ouessant-birds-data', LANG_KEY = 'ouessant-birds-lang';
   const COLORS = ['#B4532A','#2C7A6B','#8C5E83','#3E6FA8','#A3802A','#5E676B','#B03A5B','#4F7A2C'];
   // WhatsApp en vert, Telegram en bleu, pas d'annonce en gris
@@ -214,7 +214,9 @@
         <span class="sci" lang="la">${highlight(b[K_SCI], raw)}</span>
         ${alt ? `<span class="en" lang="${lang === 'en' ? 'fr' : 'en'}">${highlight(alt, raw)}</span>` : ''}
         ${canalHtml}
-        <a class="bedit-btn" href="${editorLink('oiseaux', { cherche: b[K_SCI] })}" title="${esc(T('proposeEdit'))}" aria-label="${esc(T('proposeEdit'))}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
+        ${b[K_LOCK] === true   // espèce commune verrouillée : pas de proposition de modification (cadenas à la place du crayon)
+          ? `<span class="bedit-btn is-locked" role="img" title="${esc(T('lockedSp'))}" aria-label="${esc(T('lockedSp'))}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>`
+          : `<a class="bedit-btn" href="${editorLink('oiseaux', { cherche: b[K_SCI] })}" title="${esc(T('proposeEdit'))}" aria-label="${esc(T('proposeEdit'))}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>`}
         <div class="alertbox" hidden></div>
       </li>`;
     }).join('') + '</ul>';

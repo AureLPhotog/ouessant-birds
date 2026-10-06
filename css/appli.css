@@ -190,6 +190,8 @@ section[hidden]{display:none}
   border:1px solid var(--line);background:var(--foam);color:var(--granite);text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .bedit-btn:hover{color:var(--ocean-2);background:color-mix(in srgb,var(--ocean) 10%,var(--foam))}
 .bedit-btn:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
+.bedit-btn.is-locked{cursor:default;border-color:transparent;background:transparent;opacity:.6}
+.bedit-btn.is-locked:hover{color:var(--granite);background:transparent}
 .row .bform{grid-column:1 / -1;margin-top:.5rem}
 .bform select{font:400 1rem var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.5rem .6rem;width:100%}
 .bform select:focus-visible{outline:3px solid var(--heather);outline-offset:2px}

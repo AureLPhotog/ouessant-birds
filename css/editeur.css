@@ -181,3 +181,7 @@ header h1{padding-right:8.5rem}
 /* mode sombre : liseré clair autour du phare, comme dans l'appli */
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) header .home img{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))} }
 :root[data-theme="dark"] header .home img{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))}
+/* espèces communes verrouillées */
+.lock{font-size:.85em}
+fieldset.form{border:0;margin:0;padding:0;min-width:0;opacity:.75}
+.lock-msg{margin:0 0 .6rem}

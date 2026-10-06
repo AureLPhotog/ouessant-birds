@@ -25,7 +25,8 @@
   "Nom Scientifique": "Prunella modularis",
   "Nom Anglais": "Dunnock",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Faucon pèlerin de type toundra",
@@ -53,7 +54,8 @@
   "Nom Scientifique": "Egretta garzetta",
   "Nom Anglais": "Little Egret",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Albatros à sourcils noirs",
@@ -74,7 +76,8 @@
   "Nom Scientifique": "Alauda arvensis",
   "Nom Anglais": "Eurasian Skylark",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Alouette haussecol",
@@ -88,7 +91,8 @@
   "Nom Scientifique": "Lullula arborea",
   "Nom Anglais": "Woodlark",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Autour des palombes",
@@ -144,7 +148,8 @@
   "Nom Scientifique": "Scolopax rusticola",
   "Nom Anglais": "Eurasian Woodcock",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bécasseau cocorli",
@@ -193,7 +198,8 @@
   "Nom Scientifique": "Calidris alba",
   "Nom Anglais": "Sanderling",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bécasseau semipalmé",
@@ -214,14 +220,16 @@
   "Nom Scientifique": "Calidris alpina",
   "Nom Anglais": "Dunlin",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bécasseau violet",
   "Nom Scientifique": "Calidris maritima",
   "Nom Anglais": "Purple Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bécassin à long bec",
@@ -235,7 +243,8 @@
   "Nom Scientifique": "Gallinago gallinago",
   "Nom Anglais": "Common Snipe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bécassine double",
@@ -249,7 +258,8 @@
   "Nom Scientifique": "Lymnocryptes minimus",
   "Nom Anglais": "Jack Snipe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bergeronnette citrine",
@@ -263,7 +273,8 @@
   "Nom Scientifique": "Motacilla alba yarrellii",
   "Nom Anglais": "Pied Wagtail (yarrellii)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bergeronnette des Balkans (ssp. feldegg)",
@@ -277,7 +288,8 @@
   "Nom Scientifique": "Motacilla cinerea",
   "Nom Anglais": "Grey Wagtail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bergeronnette flavéole (ssp. flavissima)",
@@ -291,14 +303,16 @@
   "Nom Scientifique": "Motacilla alba",
   "Nom Anglais": "White Wagtail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bergeronnette grise (ssp. alba)",
   "Nom Scientifique": "Motacilla alba alba",
   "Nom Anglais": "White Wagtail (alba)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bergeronnette nordique (ssp. thunbergi)",
@@ -319,14 +333,16 @@
   "Nom Scientifique": "Motacilla flava",
   "Nom Anglais": "Western Yellow Wagtail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bergeronnette printanière (ssp. flava)",
   "Nom Scientifique": "Motacilla flava flava",
   "Nom Anglais": "Blue-headed Wagtail (flava)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bernache cravant",
@@ -382,14 +398,16 @@
   "Nom Scientifique": "Cettia cetti",
   "Nom Anglais": "Cetti's Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bouvreuil pivoine",
   "Nom Scientifique": "Pyrrhula pyrrhula",
   "Nom Anglais": "Eurasian Bullfinch",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bouvreuil trompeteur",
@@ -424,7 +442,8 @@
   "Nom Scientifique": "Emberiza schoeniclus",
   "Nom Anglais": "Common Reed Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Bruant jaune",
@@ -515,7 +534,8 @@
   "Nom Scientifique": "Circus aeruginosus",
   "Nom Anglais": "Western Marsh Harrier",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Busard pâle",
@@ -529,7 +549,8 @@
   "Nom Scientifique": "Circus cyaneus",
   "Nom Anglais": "Hen Harrier",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Buse pattue",
@@ -543,7 +564,8 @@
   "Nom Scientifique": "Buteo buteo",
   "Nom Anglais": "Common Buzzard",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Caille des blés",
@@ -571,21 +593,24 @@
   "Nom Scientifique": "Anas platyrhynchos",
   "Nom Anglais": "Mallard",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Canard mandarin",
   "Nom Scientifique": "Aix galericulata",
   "Nom Anglais": "Mandarin Duck",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Canard musqué",
   "Nom Scientifique": "Cairina moschata",
   "Nom Anglais": "Muscovy Duck",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Canard noir",
@@ -620,7 +645,8 @@
   "Nom Scientifique": "Euodice malabarica",
   "Nom Anglais": "Indian Silverbill",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Cardinal à poitrine rose",
@@ -634,7 +660,8 @@
   "Nom Scientifique": "Carduelis carduelis",
   "Nom Anglais": "European Goldfinch",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Chevalier à pattes jaunes",
@@ -662,14 +689,16 @@
   "Nom Scientifique": "Tringa ochropus",
   "Nom Anglais": "Green Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Chevalier gambette",
   "Nom Scientifique": "Tringa totanus",
   "Nom Anglais": "Common Redshank",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Chevalier grivelé",
@@ -683,7 +712,8 @@
   "Nom Scientifique": "Actitis hypoleucos",
   "Nom Anglais": "Common Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Chevalier solitaire",
@@ -718,7 +748,8 @@
   "Nom Scientifique": "Coloeus monedula spermologus",
   "Nom Anglais": "Western Jackdaw (spermologus)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Choucas des tours oriental",
@@ -753,7 +784,8 @@
   "Nom Scientifique": "Cisticola juncidis",
   "Nom Anglais": "Zitting Cisticola",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Cochevis huppé",
@@ -788,7 +820,8 @@
   "Nom Scientifique": "Gulosus aristotelis",
   "Nom Anglais": "European Shag",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Corneille mantelée",
@@ -802,7 +835,8 @@
   "Nom Scientifique": "Corvus corone",
   "Nom Anglais": "Carrion Crow",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Coucou geai",
@@ -830,14 +864,16 @@
   "Nom Scientifique": "Numenius arquata",
   "Nom Anglais": "Eurasian Curlew",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Courlis corlieu",
   "Nom Scientifique": "Numenius phaeopus",
   "Nom Anglais": "Eurasian Whimbrel",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Crabier chevelu",
@@ -851,7 +887,8 @@
   "Nom Scientifique": "Pyrrhocorax pyrrhocorax",
   "Nom Anglais": "Red-billed Chough",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Cygne chanteur",
@@ -928,7 +965,8 @@
   "Nom Scientifique": "Accipiter nisus",
   "Nom Anglais": "Eurasian Sparrowhawk",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Étourneau roselin",
@@ -942,7 +980,8 @@
   "Nom Scientifique": "Sturnus vulgaris",
   "Nom Anglais": "Common Starling",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Étourneau unicolore",
@@ -956,14 +995,16 @@
   "Nom Scientifique": "Phasianus colchicus",
   "Nom Anglais": "Common Pheasant",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Faucon crécerelle",
   "Nom Scientifique": "Falco tinnunculus",
   "Nom Anglais": "Common Kestrel",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Faucon crécerellette",
@@ -977,7 +1018,8 @@
   "Nom Scientifique": "Falco columbarius",
   "Nom Anglais": "Merlin",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Faucon gerfaut",
@@ -1005,21 +1047,24 @@
   "Nom Scientifique": "Falco peregrinus",
   "Nom Anglais": "Peregrine Falcon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Fauvette à tête noire",
   "Nom Scientifique": "Sylvia atricapilla",
   "Nom Anglais": "Eurasian Blackcap",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Fauvette babillarde",
   "Nom Scientifique": "Curruca curruca",
   "Nom Anglais": "Lesser Whitethroat",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Fauvette babillarde (ssp. blythi)",
@@ -1047,7 +1092,8 @@
   "Nom Scientifique": "Sylvia borin",
   "Nom Anglais": "Garden Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Fauvette épervière",
@@ -1061,7 +1107,8 @@
   "Nom Scientifique": "Curruca communis",
   "Nom Anglais": "Common Whitethroat",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Fauvette mélanocéphale",
@@ -1082,7 +1129,8 @@
   "Nom Scientifique": "Curruca undata",
   "Nom Anglais": "Dartford Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Fou brun",
@@ -1096,14 +1144,16 @@
   "Nom Scientifique": "Morus bassanus",
   "Nom Anglais": "Northern Gannet",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Foulque macroule",
   "Nom Scientifique": "Fulica atra",
   "Nom Anglais": "Eurasian Coot",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Fuligule milouin",
@@ -1138,7 +1188,8 @@
   "Nom Scientifique": "Gallinula chloropus",
   "Nom Anglais": "Common Moorhen",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Garrot à œil d'or",
@@ -1173,7 +1224,8 @@
   "Nom Scientifique": "Muscicapa striata",
   "Nom Anglais": "Spotted Flycatcher",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Gobemouche nain",
@@ -1187,7 +1239,8 @@
   "Nom Scientifique": "Ficedula hypoleuca",
   "Nom Anglais": "European Pied Flycatcher",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Goéland à ailes blanches",
@@ -1201,21 +1254,24 @@
   "Nom Scientifique": "Larus argentatus",
   "Nom Anglais": "European Herring Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Goéland argenté (ssp. argentatus)",
   "Nom Scientifique": "Larus argentatus argentatus",
   "Nom Anglais": "European Herring Gull (argentatus)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Goéland argenté (ssp. argenteus)",
   "Nom Scientifique": "Larus argentatus argenteus",
   "Nom Anglais": "European Herring Gull (argenteus)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Goéland bourgmestre",
@@ -1229,7 +1285,8 @@
   "Nom Scientifique": "Larus fuscus",
   "Nom Anglais": "Lesser Black-backed Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Goéland brun (ssp. graellsii)",
@@ -1278,7 +1335,8 @@
   "Nom Scientifique": "Larus marinus",
   "Nom Anglais": "Great Black-backed Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Goéland pontique",
@@ -1306,35 +1364,40 @@
   "Nom Scientifique": "Corvus corax",
   "Nom Anglais": "Northern Raven",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grand cormoran",
   "Nom Scientifique": "Phalacrocorax carbo",
   "Nom Anglais": "Great Cormorant",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grand cormoran (ssp. carbo)",
   "Nom Scientifique": "Phalacrocorax carbo carbo",
   "Nom Anglais": "Great Cormorant (carbo)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grand gravelot",
   "Nom Scientifique": "Charadrius hiaticula",
   "Nom Anglais": "Common Ringed Plover",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grand labbe",
   "Nom Scientifique": "Stercorarius skua",
   "Nom Anglais": "Great Skua",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grande aigrette",
@@ -1439,21 +1502,24 @@
   "Nom Scientifique": "Turdus viscivorus",
   "Nom Anglais": "Mistle Thrush",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grive litorne",
   "Nom Scientifique": "Turdus pilaris",
   "Nom Anglais": "Fieldfare",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grive mauvis",
   "Nom Scientifique": "Turdus iliacus",
   "Nom Anglais": "Redwing",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grive mauvis (ssp. coburni)",
@@ -1467,7 +1533,8 @@
   "Nom Scientifique": "Turdus philomelos",
   "Nom Anglais": "Song Thrush",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grive obscure",
@@ -1481,7 +1548,8 @@
   "Nom Scientifique": "Coccothraustes coccothraustes",
   "Nom Anglais": "Hawfinch",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Grue cendrée",
@@ -1523,7 +1591,8 @@
   "Nom Scientifique": "Uria aalge",
   "Nom Anglais": "Common Murre",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Harelde boréale",
@@ -1558,7 +1627,8 @@
   "Nom Scientifique": "Ardea cinerea",
   "Nom Anglais": "Grey Heron",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Héron garde-boeufs",
@@ -1579,7 +1649,8 @@
   "Nom Scientifique": "Asio flammeus",
   "Nom Anglais": "Short-eared Owl",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Hibou moyen-duc",
@@ -1600,14 +1671,16 @@
   "Nom Scientifique": "Delichon urbicum",
   "Nom Anglais": "Western House Martin",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Hirondelle de rivage",
   "Nom Scientifique": "Riparia riparia",
   "Nom Anglais": "Sand Martin",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Hirondelle rousseline",
@@ -1621,14 +1694,16 @@
   "Nom Scientifique": "Hirundo rustica",
   "Nom Anglais": "Barn Swallow",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Huîtrier pie",
   "Nom Scientifique": "Haematopus ostralegus",
   "Nom Anglais": "Eurasian Oystercatcher",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Huppe fasciée",
@@ -1705,7 +1780,8 @@
   "Nom Scientifique": "Stercorarius parasiticus",
   "Nom Anglais": "Parasitic Jaeger",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Labbe pomarin",
@@ -1719,7 +1795,8 @@
   "Nom Scientifique": "Linaria cannabina",
   "Nom Anglais": "Common Linnet",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Locustelle luscinioïde",
@@ -1747,7 +1824,8 @@
   "Nom Scientifique": "Fratercula arctica",
   "Nom Anglais": "Atlantic Puffin",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Macreuse à front blanc",
@@ -1768,7 +1846,8 @@
   "Nom Scientifique": "Melanitta nigra",
   "Nom Anglais": "Common Scoter",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Marouette de Caroline",
@@ -1789,7 +1868,8 @@
   "Nom Scientifique": "Alcedo atthis",
   "Nom Anglais": "Common Kingfisher",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Martinet à ventre blanc",
@@ -1810,7 +1890,8 @@
   "Nom Scientifique": "Apus apus",
   "Nom Anglais": "Common Swift",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Martinet pâle",
@@ -1831,7 +1912,8 @@
   "Nom Scientifique": "Turdus torquatus",
   "Nom Anglais": "Ring Ouzel",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Merle à plastron nordique",
@@ -1845,35 +1927,40 @@
   "Nom Scientifique": "Turdus merula",
   "Nom Anglais": "Common Blackbird",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Mésange à longue queue",
   "Nom Scientifique": "Aegithalos caudatus",
   "Nom Anglais": "Long-tailed Tit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Mésange bleue",
   "Nom Scientifique": "Cyanistes caeruleus",
   "Nom Anglais": "Eurasian Blue Tit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Mésange charbonnière",
   "Nom Scientifique": "Parus major",
   "Nom Anglais": "Great Tit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Mésange noire",
   "Nom Scientifique": "Periparus ater",
   "Nom Anglais": "Coal Tit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Milan noir",
@@ -1894,7 +1981,8 @@
   "Nom Scientifique": "Passer domesticus",
   "Nom Anglais": "House Sparrow",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Moineau friquet",
@@ -1936,7 +2024,8 @@
   "Nom Scientifique": "Ichthyaetus melanocephalus",
   "Nom Anglais": "Mediterranean Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Mouette pygmée",
@@ -1950,14 +2039,16 @@
   "Nom Scientifique": "Chroicocephalus ridibundus",
   "Nom Anglais": "Black-headed Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Mouette tridactyle",
   "Nom Scientifique": "Rissa tridactyla",
   "Nom Anglais": "Black-legged Kittiwake",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Océanite culblanc",
@@ -1999,7 +2090,8 @@
   "Nom Scientifique": "Anser caerulescens",
   "Nom Anglais": "Snow Goose",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Oie rieuse",
@@ -2076,7 +2168,8 @@
   "Nom Scientifique": "Alectoris rufa",
   "Nom Anglais": "Red-legged Partridge",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Petit gravelot",
@@ -2104,7 +2197,8 @@
   "Nom Scientifique": "Acrocephalus schoenobaenus",
   "Nom Anglais": "Sedge Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pic épeiche",
@@ -2181,35 +2275,40 @@
   "Nom Scientifique": "Columba oenas",
   "Nom Anglais": "Stock Dove",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pigeon ramier",
   "Nom Scientifique": "Columba palumbus",
   "Nom Anglais": "Common Wood Pigeon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pingouin torda",
   "Nom Scientifique": "Alca torda",
   "Nom Anglais": "Razorbill",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pinson des arbres",
   "Nom Scientifique": "Fringilla coelebs",
   "Nom Anglais": "Common Chaffinch",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pinson du Nord",
   "Nom Scientifique": "Fringilla montifringilla",
   "Nom Anglais": "Brambling",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pipit à dos olive",
@@ -2251,7 +2350,8 @@
   "Nom Scientifique": "Anthus richardi",
   "Nom Anglais": "Richard's Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pipit des arbres",
@@ -2265,28 +2365,32 @@
   "Nom Scientifique": "Anthus pratensis",
   "Nom Anglais": "Meadow Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pipit maritime",
   "Nom Scientifique": "Anthus petrosus",
   "Nom Anglais": "Eurasian Rock Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pipit maritime (ssp. littoralis)",
   "Nom Scientifique": "Anthus petrosus littoralis",
   "Nom Anglais": "Eurasian Rock Pipit (littoralis)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pipit maritime (ssp. petrosus)",
   "Nom Scientifique": "Anthus petrosus petrosus",
   "Nom Anglais": "Eurasian Rock Pipit (petrosus)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pipit rousseline",
@@ -2328,7 +2432,8 @@
   "Nom Scientifique": "Pluvialis squatarola",
   "Nom Anglais": "Grey Plover",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pluvier bronzé",
@@ -2342,7 +2447,8 @@
   "Nom Scientifique": "Pluvialis apricaria",
   "Nom Anglais": "European Golden Plover",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pluvier guignard",
@@ -2356,7 +2462,8 @@
   "Nom Scientifique": "Phylloscopus inornatus",
   "Nom Anglais": "Yellow-browed Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pouillot à pattes sombres",
@@ -2426,14 +2533,16 @@
   "Nom Scientifique": "Phylloscopus trochilus",
   "Nom Anglais": "Willow Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pouillot fitis (ssp. acredula)",
   "Nom Scientifique": "Phylloscopus trochilus acredula",
   "Nom Anglais": "Willow Warbler (acredula)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pouillot oriental",
@@ -2454,21 +2563,24 @@
   "Nom Scientifique": "Phylloscopus collybita",
   "Nom Anglais": "Common Chiffchaff",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pouillot véloce (ssp. abietinus)",
   "Nom Scientifique": "Phylloscopus collybita abietinus",
   "Nom Anglais": "Common Chiffchaff (abietinus)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pouillot véloce (ssp. collybita)",
   "Nom Scientifique": "Phylloscopus collybita collybita",
   "Nom Anglais": "Common Chiffchaff (collybita)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pouillot verdâtre",
@@ -2482,7 +2594,8 @@
   "Nom Scientifique": "Calonectris borealis",
   "Nom Anglais": "Cory's Shearwater",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Puffin de Macaronésie",
@@ -2503,28 +2616,32 @@
   "Nom Scientifique": "Puffinus puffinus",
   "Nom Anglais": "Manx Shearwater",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Puffin des Baléares",
   "Nom Scientifique": "Puffinus mauretanicus",
   "Nom Anglais": "Balearic Shearwater",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Puffin fuligineux",
   "Nom Scientifique": "Ardenna grisea",
   "Nom Anglais": "Sooty Shearwater",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Puffin majeur",
   "Nom Scientifique": "Ardenna gravis",
   "Nom Anglais": "Great Shearwater",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Pygargue à queue blanche",
@@ -2538,7 +2655,8 @@
   "Nom Scientifique": "Rallus aquaticus",
   "Nom Anglais": "Water Rail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Râle des genêts",
@@ -2566,14 +2684,16 @@
   "Nom Scientifique": "Regulus ignicapilla",
   "Nom Anglais": "Common Firecrest",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Roitelet huppé",
   "Nom Scientifique": "Regulus regulus",
   "Nom Anglais": "Goldcrest",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Rollier d'Europe",
@@ -2608,21 +2728,24 @@
   "Nom Scientifique": "Erithacus rubecula",
   "Nom Anglais": "European Robin",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Rougequeue à front blanc",
   "Nom Scientifique": "Phoenicurus phoenicurus",
   "Nom Anglais": "Common Redstart",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Rougequeue noir",
   "Nom Scientifique": "Phoenicurus ochruros",
   "Nom Anglais": "Black Redstart",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Rousserolle des buissons",
@@ -2636,7 +2759,8 @@
   "Nom Scientifique": "Acrocephalus scirpaceus",
   "Nom Anglais": "Common Reed Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Rousserolle isabelle",
@@ -2664,14 +2788,16 @@
   "Nom Scientifique": "Anas crecca",
   "Nom Anglais": "Eurasian Teal",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Serin cini",
   "Nom Scientifique": "Serinus serinus",
   "Nom Anglais": "European Serin",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Sizerin blanchâtre",
@@ -2692,14 +2818,16 @@
   "Nom Scientifique": "Acanthis flammea flammea",
   "Nom Anglais": "Mealy Redpoll (flammea)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Sizerin flammé du Groenland",
   "Nom Scientifique": "Acanthis flammea rostrata",
   "Nom Anglais": "Greenland Redpoll (rostrata)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Spatule blanche",
@@ -2720,7 +2848,8 @@
   "Nom Scientifique": "Thalasseus sandvicensis",
   "Nom Anglais": "Sandwich Tern",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Sterne de Dougall",
@@ -2783,35 +2912,40 @@
   "Nom Scientifique": "Saxicola rubetra",
   "Nom Anglais": "Whinchat",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Tarier pâtre",
   "Nom Scientifique": "Saxicola rubicola",
   "Nom Anglais": "European Stonechat",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Tarin des aulnes",
   "Nom Scientifique": "Spinus spinus",
   "Nom Anglais": "Eurasian Siskin",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Torcol fourmilier",
   "Nom Scientifique": "Jynx torquilla",
   "Nom Anglais": "Eurasian Wryneck",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Tournepierre à collier",
   "Nom Scientifique": "Arenaria interpres",
   "Nom Anglais": "Ruddy Turnstone",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Tourterelle des bois",
@@ -2832,7 +2966,8 @@
   "Nom Scientifique": "Streptopelia decaocto",
   "Nom Anglais": "Eurasian Collared Dove",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Traquet du désert",
@@ -2846,7 +2981,8 @@
   "Nom Scientifique": "Oenanthe oenanthe leucorhoa",
   "Nom Anglais": "Greenland Wheatear (leucorhoa)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Traquet isabelle",
@@ -2860,7 +2996,8 @@
   "Nom Scientifique": "Oenanthe oenanthe",
   "Nom Anglais": "Northern Wheatear",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Traquet oreillard",
@@ -2881,21 +3018,24 @@
   "Nom Scientifique": "Troglodytes troglodytes",
   "Nom Anglais": "Eurasian Wren",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Vanneau huppé",
   "Nom Scientifique": "Vanellus vanellus",
   "Nom Anglais": "Northern Lapwing",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Verdier d'Europe",
   "Nom Scientifique": "Chloris chloris",
   "Nom Anglais": "European Greenfinch",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Verrouillée": true
  },
  {
   "Nom Français": "Viréo à oeil rouge",
