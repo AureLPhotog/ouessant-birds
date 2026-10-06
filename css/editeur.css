@@ -190,5 +190,6 @@ header h1{padding-right:8.5rem}
 :root[data-theme="dark"] header .home img{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))}
 /* espèces communes verrouillées */
 .lock{font-size:.85em}
-fieldset.form{border:0;margin:0;padding:0;min-width:0;opacity:.75}
 .lock-msg{margin:0 0 .6rem}
+.sp-name{margin:0 0 .5rem;font-weight:600}
+.sp-name i{font-family:var(--serif);font-weight:400;color:var(--granite)}
