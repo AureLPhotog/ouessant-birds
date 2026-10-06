@@ -18,6 +18,7 @@
   // Grille des carrés et recalage GPS : partagés avec l'appli (js/carte.js)
   const { GRID_X, GRID_Y, MAP_W, MAP_H, toPixel, fromPixel, cellNameAt: cellAt } = window.OuessantCarte;
   let mapOk = false;
+  const PIN_HELP = 'Touche la carte à l’endroit exact : le point GPS s’y place et son carré se coche.', CELL_HELP = 'Touche les carrés pour les cocher ou les décocher (un lieu-dit peut en couvrir plusieurs).';
   // Carte en fond de grille : à côté de l'éditeur si elle y est, sinon celle du site en ligne
   const MAP_SOURCES = ['carte_ouessant.webp', 'carte_ouessant.jpg', 'https://aurelphotog.github.io/ouessant-birds/carte_ouessant.webp', 'https://aurelphotog.github.io/ouessant-birds/carte_ouessant.jpg'];
   (function tryMap(k){
@@ -44,8 +45,9 @@
     let h = `<div class="cells-tools">
         <button type="button" class="btn ghost" data-zoom="sel">Centrer sur la sélection</button>
         <button type="button" class="btn ghost" data-zoom="fit">Toute la carte</button>
-        ${hasGeo() ? '<span style="flex:1"></span><button type="button" class="btn" data-gps>Je suis sur place : envoyer ma position GPS</button><button type="button" class="btn" data-pick aria-pressed="false">Placer le point GPS sur la carte</button>' : ''}
+        ${hasGeo() ? '<span style="flex:1"></span><button type="button" class="btn" data-gps>Je suis sur place : envoyer ma position GPS</button>' : ''}
       </div>
+      ${hasGeo() ? `<div class="pick-mode"><span class="seg" role="group" aria-label="Toucher la carte pour"><button type="button" class="btn" data-pick="pin" aria-pressed="true">Placer le point</button><button type="button" class="btn" data-pick="cells" aria-pressed="false">Choisir les carrés</button></span><span class="help" data-pick-help>${PIN_HELP}</span></div>` : ''}
       ${hasGeo() ? '<p class="geo-hint" data-geo-hint></p>' : ''}
       <div class="zoom-row" role="group" aria-label="Zoom de la carte">
         <button type="button" class="zb" data-zoom="-" aria-label="Dézoomer">−</button>
@@ -623,8 +625,10 @@
     const gb = e.target.closest('[data-gps]');
     if (gb){ useGps(gb.closest('.form-wrap')); return; }
     const pk = e.target.closest('[data-pick]');
-    if (pk){ const on = pk.getAttribute('aria-pressed') !== 'true'; pk.setAttribute('aria-pressed', String(on)); pk.closest('.cells-field').classList.toggle('picking', on);
-      pk.textContent = on ? 'Clique sur la carte à l’endroit exact…' : 'Placer le point GPS sur la carte'; return; }
+    if (pk){   // toucher la carte : placer le point GPS (par défaut) ou cocher des carrés
+      const f = pk.closest('.cells-field'), on = pk.dataset.pick === 'pin';
+      f.querySelectorAll('[data-pick]').forEach(b => b.setAttribute('aria-pressed', String(b === pk)));
+      f.classList.toggle('picking', on); f.querySelector('[data-pick-help]').textContent = on ? PIN_HELP : CELL_HELP; return; }
     const ac = e.target.closest('[data-addcell]');
     if (ac){ const f = ac.closest('.form-wrap'), b = f.querySelector(`[data-cell="${ac.dataset.addcell}"]`); if (b && b.getAttribute('aria-pressed') !== 'true') b.click(); else { const inp = f.querySelector('[data-cells]'); inp.value = [inp.value, ac.dataset.addcell].filter(Boolean).join(', '); } f.querySelector('[data-msg]').innerHTML = ''; return; }
     const pickField = e.target.closest('.cells-field.picking');
@@ -680,7 +684,7 @@
     }
     if (cfg && cfg.type === 'cells'){
       const list = Array.isArray(v) ? v : [];
-      return `<div class="cells-field${was ? ' changed' : ''}"><label>${esc(dispName(k))}<input type="text" data-k="${esc(k)}" data-cells value="${esc(list.join(', '))}" autocomplete="off" placeholder="clique sur la grille ou tape B8, B9"></label>${was}${cellsHtml(list)}</div>`;
+      return `<div class="cells-field${was ? ' changed' : ''}${hasGeo() ? ' picking' : ''}"><label>${esc(dispName(k))}<input type="text" data-k="${esc(k)}" data-cells value="${esc(list.join(', '))}" autocomplete="off" placeholder="clique sur la grille ou tape B8, B9"></label>${was}${cellsHtml(list)}</div>`;
     }
     if (t === 'bool') return `<label${cls}><span>${esc(dispName(k))}</span><span class="chk"><input type="checkbox" data-k="${esc(k)}"${v ? ' checked' : ''}> ${v ? 'oui' : 'non'}</span>${was}</label>`;
     if (t === 'number') return `<label${cls}>${esc(dispName(k))}<input type="text" inputmode="decimal" data-k="${esc(k)}" value="${esc(v ?? '')}" autocomplete="off">${was}</label>`;
