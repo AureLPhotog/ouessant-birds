@@ -479,6 +479,7 @@
     const ok = tokenValid();
     $('pasteLinesBtn').classList.toggle('hidden', !ok);
     $('adminLink').classList.toggle('hidden', !ok);   // page de tri des propositions : seulement pour l'administrateur
+    $('adminBadge').hidden = !ok;   // repère « Mode admin » en haut à droite
     if (!ok) $('pastePanel').classList.add('hidden');
     if (ok !== updateSaveBtn.was){ const first = updateSaveBtn.was === undefined; updateSaveBtn.was = ok; if (!first && items.length) render(); }   // clé validée ou retirée : espèces verrouillées modifiables ou non
     $('keyBtn').classList.remove('hidden');   // toujours accessible : ajouter ou gérer la clé

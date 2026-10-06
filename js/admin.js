@@ -56,7 +56,7 @@
     if (!ok){ msg.className = 'msg bad'; msg.textContent = typed ? 'Clé refusée : elle ne donne pas accès au dépôt (ou GitHub est injoignable).' : ''; return; }
     if (typed) try { sessionStorage.setItem(TOKEN_KEY, t); } catch (_) {}   // gardée dans l'onglet seulement
     TOKEN = t;
-    $('lockPanel').classList.add('hidden'); $('loadPanel').classList.remove('hidden'); $('yearPanel').classList.remove('hidden');
+    $('lockPanel').classList.add('hidden'); $('loadPanel').classList.remove('hidden'); $('yearPanel').classList.remove('hidden'); $('adminBadge').hidden = false;
     initYears();
   }
   $('lockForm').addEventListener('submit', e => { e.preventDefault(); const t = $('lockKey').value.trim(); $('lockKey').value = ''; unlock(t, true); });
