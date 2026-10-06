@@ -154,7 +154,7 @@
     "Espèce commune verrouillée : pas de modification possible.": "Locked common species: no changes possible.",
     "Seul le canal de diffusion peut être modifié.": "Only the broadcast channel can be changed.",
     "🔒 Espèce commune : pour l'instant, seul le canal de diffusion peut être modifié.": "🔒 Common species: for now, only the broadcast channel can be changed.",
-    "Tu peux proposer un autre canal de diffusion. Une erreur dans un nom ? Signale-la avec « Une question, un retour ? » en bas de l'appli.": "You can suggest another broadcast channel. A mistake in a name? Report it with “A question or feedback?” at the bottom of the app.",
+    "Tu peux proposer un autre canal de diffusion.": "You can suggest another broadcast channel.",
     "nom": "name", "carres": "squares", "precision_m": "accuracy (m)", "verifie": "checked on site",
     // réglages d'affichage
     "Affichage": "Display", "Thème": "Theme", "Auto": "Auto", "Clair": "Light", "Sombre": "Dark",

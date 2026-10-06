@@ -708,7 +708,7 @@
   function editorHtml(it){
     const fs = isAdmin() ? fields : fields.filter(k => k !== K_LOCK);   // la case « Verrouillée » n'est montrée qu'à l'admin
     // visiteur : on n'affiche que ce qui est modifiable (le canal), ou rien pour une espèce verrouillée
-    if (canalOnly(it)) return `<div class="form-wrap" data-id="${it.id}">${isLocked(it) ? '<p class="msg lock-msg">🔒 Espèce commune : pour l’instant, seul le canal de diffusion peut être modifié.</p>' : '<p class="help lock-msg">Tu peux proposer un autre canal de diffusion. Une erreur dans un nom ? Signale-la avec « Une question, un retour ? » en bas de l’appli.</p>'}
+    if (canalOnly(it)) return `<div class="form-wrap" data-id="${it.id}">${isLocked(it) ? '<p class="msg lock-msg">🔒 Espèce commune : pour l’instant, seul le canal de diffusion peut être modifié.</p>' : '<p class="help lock-msg">Tu peux proposer un autre canal de diffusion.</p>'}
       <p class="sp-name">${esc(show(it.data[K_FR], 'text'))} <i>${esc(show(it.data[K_SCI], 'text'))}</i></p>
       <div class="form">${inputHtml(K_CANAL, it.data[K_CANAL], it.orig ? it.orig[K_CANAL] : undefined)}</div>
       <div class="actions"><button type="button" class="btn primary" data-act="save">Enregistrer</button><button type="button" class="btn" data-act="cancel">Fermer</button>${it.orig && !same(it.data, it.orig) ? '<button type="button" class="btn" data-act="revert">Revenir à l\u2019original</button>' : ''}</div><p class="msg bad" data-msg></p></div>`;
