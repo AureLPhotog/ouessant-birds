@@ -35,7 +35,6 @@
 .src summary{cursor:pointer;color:var(--ocean-2);font-weight:600}
 .src .gh-lab{display:grid;gap:.2rem;margin:.5rem 0;font-size:.85rem;color:var(--granite)}
 .src input{font:400 .95rem var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.5rem .6rem}
-.incl{display:flex;gap:.4rem;align-items:center;margin-top:.6rem;font-size:.85rem;color:var(--granite)}
 .years{list-style:none;margin:.4rem 0;padding:0;display:grid;gap:.5rem}
 .years li{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;border:1px solid var(--line);border-radius:10px;padding:.55rem .75rem;background:var(--paper)}
 .years .y-name{font-weight:600;flex:1 1 180px}
@@ -44,6 +43,12 @@
 .tag.lock{color:var(--ink)}
 .msg-text{margin:.2rem 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
 .msg-card{border-left-color:var(--ocean-2)}
+.past{margin-top:1rem}
+.past > summary{cursor:pointer;font-weight:600;color:var(--granite);padding:.4rem 0}
+.past[open] > summary{margin-bottom:.5rem}
+.past .grp{margin-bottom:.6rem}
+.past .grp.is-no{opacity:1}
+.past-st{margin:.15rem 0 .2rem}
 .modes{display:grid;gap:.45rem;margin:.5rem 0 .7rem}
 .modes label{display:flex;gap:.5rem;align-items:flex-start;font-size:.92rem;cursor:pointer}
 .modes input{margin-top:.2rem;accent-color:var(--ocean)}

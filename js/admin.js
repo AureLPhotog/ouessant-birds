@@ -29,12 +29,17 @@
   const hash = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
   let doneSet; try { doneSet = new Set(JSON.parse(store.get(DONE_SET) || '[]')); } catch (_) { doneSet = new Set(); }
   const saveDone = () => store.set(DONE_SET, JSON.stringify([...doneSet].slice(-20000)));
+  // … et la décision notée pour chacune (comme la colonne « Traitée » de la feuille avec le script)
+  const DONE_DETAIL = 'ouessant-admin-traitees-detail';
+  let doneDetail; try { doneDetail = JSON.parse(store.get(DONE_DETAIL) || '{}') || {}; } catch (_) { doneDetail = {}; }
+  const saveDoneDetail = () => { const k = Object.keys(doneDetail); k.slice(0, Math.max(0, k.length - 3000)).forEach(x => delete doneDetail[x]); store.set(DONE_DETAIL, JSON.stringify(doneDetail)); };
   const META = ['_action', '_cle_avant'];
   const LOCK = 'Verrouillée', CANAL = 'Proposition de Canal de Diffusion Ouessant';
   let regNow = { verrou: true, champs: 'canal' }, regReady = Promise.resolve();   // réglages de l'admin (reglages.json)
   let current = {};            // fichier → { entries: [...], byKey: Map }
   let proposals = [];          // toutes les propositions lues dans le fichier
   let answers = [];            // une entrée par réponse (ligne de la feuille) : { row, when, day, ids }
+  let history = [];            // réponses déjà traitées : { row, when, day, comment, msg, props, cell } (cell : décision notée)
   let lastRows = null, lastSource = null;
   let LIST = 'ouessant_birds.json';   // onglet affiché : les oiseaux et les lieux sont triés et générés séparément   // dernières lignes lues et leur origine ('csv' ou 'script')
   let decisions = {};          // clé de groupe → signature de la variante retenue, ou 'reject'
@@ -155,17 +160,17 @@
       lastRows = rows;
       if (rows.filter(r => r.some(c => c.trim() !== '')).length < 2) throw new Error('Aucune réponse pour l’instant.');
       const col = columns(rows[0], rows.slice(1));
-      const withDone = $('inclDone').checked; let skipped = 0;
+      let skipped = 0;
       if (col.json < 0) throw new Error('Aucune colonne ne contient de lignes JSON : est-ce bien le fichier des réponses du formulaire ?');
       await loadLists();
-      proposals = []; answers = [];
+      proposals = []; answers = []; history = [];
       rows.slice(1).forEach((r, ri) => {
         if (!r.some(c => c.trim() !== '')) return;
         const sig = (r[col.date] || '') + '|' + hash(r[col.json] || '');
-        const isDone = (col.done >= 0 && (r[col.done] || '').trim()) || doneSet.has(sig);   // colonne « Traitée » de la feuille, ou noté dans ce navigateur
-        if (isDone && !withDone){ skipped++; return; }
+        const cell = col.done >= 0 ? (r[col.done] || '').trim() : '';
+        const isDone = !!cell || doneSet.has(sig);   // colonne « Traitée » de la feuille, ou noté dans ce navigateur
         const when = parseDate(r[col.date], col.dayFirst), comment = col.comment >= 0 ? (r[col.comment] || '').trim() : '';
-        const ans = { row: ri + 2, sig, when, day: dayOf(when), ids: [], comment }; answers.push(ans);   // row : numéro de la ligne dans la feuille (1 = titres)
+        const ans = { row: ri + 2, sig, when, day: dayOf(when), ids: [], comment }, mine = [];   // row : numéro de la ligne dans la feuille (1 = titres)
         const lines = linesOf(r[col.json]), areg = lines.reg || regNow;
         lines.forEach(({ o, file, hint }, li) => {
           const f = fileOf(o, file); if (!f) return;
@@ -191,13 +196,17 @@
           // espèce verrouillée ('lock'), ou changement d'autre chose que le canal d'une espèce existante en mode « canal seulement » ('canal')
           const why = f !== 'ouessant_birds.json' ? null : lockedSp && areg.verrou ? 'lock' : areg.champs === 'canal' && (type === 'del' || (type === 'mod' && diffs.some(d => d.k !== CANAL))) ? 'canal' : null;
           const locked = !!why;
-          proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur, locked, lockedSp, why });
+          mine.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur, locked, lockedSp, why });
         });
         ans.msg = !ans.ids.length && !!comment;   // question ou retour sur l'appli (bouton « Une question, un retour ? ») : onglet Messages
+        // déjà traitée : plus à trier, mais gardée dans l'historique avec la décision notée
+        if (isDone){ skipped++; history.push({ row: ans.row, when, day: ans.day, comment, msg: ans.msg, props: mine, cell: cell || doneDetail[sig] || 'traitée' }); return; }
+        answers.push(ans); proposals.push(...mine);
       });
-      if (!answers.length) throw new Error(skipped ? `Rien de nouveau : les ${skipped} réponse(s) sont déjà marquées « traitées ».` : 'Aucune réponse pour l’instant.');
+      if (!answers.length && !history.length) throw new Error('Aucune réponse pour l’instant.');
       const nm = answers.filter(a => a.msg).length;
-      msg.className = 'msg good'; msg.textContent = `${answers.length} réponse(s) à trier, ${proposals.length} proposition(s)` + (nm ? `, ${nm} message(s)` : '') + (skipped ? ` (${skipped} déjà traitée(s), masquée(s))` : '') + '. Les listes en ligne ont été chargées pour comparer.';
+      msg.className = 'msg good'; msg.textContent = (answers.length ? `${answers.length} réponse(s) à trier, ${proposals.length} proposition(s)` + (nm ? `, ${nm} message(s)` : '') : 'Rien de nouveau à trier')
+        + (skipped ? ` · ${skipped} réponse(s) déjà traitée(s) : voir « Réponses déjà traitées » en bas de chaque onglet` : '') + '. Les listes en ligne ont été chargées pour comparer.';
       buildPeriods(); $('sortView').classList.remove('hidden');
       const todoFiles = proposals.filter(p => p.type !== 'same').map(p => p.file);
       setList(todoFiles.includes(LIST) || (LIST === 'messages' && nm) ? LIST : todoFiles[0] || (nm ? 'messages' : LIST));
@@ -235,7 +244,6 @@
     } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Récupération impossible : ' + (e.message || e) + ' Tu peux toujours utiliser le fichier .csv.'; }
   });
 
-  $('inclDone').addEventListener('change', () => { if (lastRows) processRows(lastRows).catch(e => { $('loadMsg').className = 'msg bad'; $('loadMsg').textContent = e.message || e; }); });
   $('csvFile').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) readFile(f); e.target.value = ''; });
   const drop = $('drop');
   ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
@@ -243,10 +251,11 @@
   drop.addEventListener('drop', e => { const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) readFile(f); });
 
   // ---------- Période ----------
-  // (les réponses déjà traitées sont écartées dès la lecture : la période ne porte que sur les réponses à trier)
+  // (le nombre entre parenthèses compte ce qui reste à trier ; un jour qui n'a plus que des réponses traitées reste choisi pour l'historique)
   function buildPeriods(){
     const keep = $('period').value, days = {};
     proposals.forEach(p => { days[p.day] = (days[p.day] || 0) + 1; }); answers.filter(a => a.msg).forEach(a => { days[a.day] = (days[a.day] || 0) + 1; });
+    history.forEach(h => { days[h.day] = days[h.day] || 0; });
     const opts = [['all', `tous les jours (${proposals.length + answers.filter(a => a.msg).length})`]];
     Object.keys(days).sort().reverse().forEach(d => opts.push(['d:' + d, `${dayLabel(d)} (${days[d]})`]));
     $('period').innerHTML = opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('');
@@ -258,6 +267,7 @@
   }
 
   // ---------- Regroupement : une carte par espèce / lieu-dit, une variante par proposition différente ----------
+  const sigOf = p => p.type + ':' + JSON.stringify(p.diffs.map(d => [d.k, d.after]).sort());
   function groups(){
     const map = new Map();
     proposals.filter(p => p.file === LIST && inPeriod(p)).forEach(p => {
@@ -266,7 +276,7 @@
       const g = map.get(gk); g.total++;
       if (p.type === 'same'){ g.same++; return; }
       g.locked = g.locked && p.locked;   // rejetée d'office seulement si toutes ses propositions le sont
-      const sig = p.type + ':' + JSON.stringify(p.diffs.map(d => [d.k, d.after]).sort());
+      const sig = sigOf(p);
       if (!g.variants.has(sig)) g.variants.set(sig, { sig, type: p.type, diffs: p.diffs, data: p.data, props: [] });
       g.variants.get(sig).props.push(p);
     });
@@ -287,7 +297,34 @@
     $('summary').textContent = `${list.length} message(s) : questions et retours envoyés depuis l’appli (« Une question, un retour ? »).`;
     $('groups').innerHTML = list.length ? list.map(a => `<article class="grp msg-card"><p class="var-h">${a.when ? `<time>${esc(a.when.toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }))}</time>` : 'sans date'} · ligne ${a.row} de la feuille</p><p class="msg-text">${esc(a.comment)}</p></article>`).join('')
       : '<p class="help empty">Aucun message pour cette période.</p>';
+    $('groups').insertAdjacentHTML('beforeend', pastHtml());
     $('doneBtn').disabled = !doneRows().length;
+  }
+  // ---------- Historique : réponses déjà traitées, avec la décision notée (colonne « Traitée ») ----------
+  const SHORT = { 'Proposition de Canal de Diffusion Ouessant': 'Canal', 'Nom Scientifique': 'Nom sci.', 'precision_m': 'précision' };
+  const nameOfP = p => show((p.cur || p.data)[LISTS[p.file].name]) || show(p.origKey);
+  function descOf(p){
+    if (p.type === 'del') return 'suppression';
+    if (p.type === 'add') return 'ajout' + (show(p.data[CANAL]) ? ` (Canal : ${show(p.data[CANAL])})` : '');
+    if (p.type === 'same') return 'déjà comme ça dans la liste' + (show(p.data[CANAL]) ? ` (Canal : ${show(p.data[CANAL])})` : '');
+    return p.diffs.map(d => `${SHORT[d.k] || d.k} : ${show(d.before) || '(vide)'} → ${show(d.after) || '(vide)'}`).join(' ; ');
+  }
+  const pastState = h => /^validée/.test(h.cell) ? 'ok' : /^(rejetée|en partie)/.test(h.cell) ? 'no' : 'past';
+  function pastHtml(){
+    const isMsg = LIST === 'messages';
+    const list = history.filter(h => inPeriod(h) && (isMsg ? h.msg : h.props.some(p => p.file === LIST))).sort((a, b) => (b.when || 0) - (a.when || 0));
+    if (!list.length) return '';
+    return `<details class="past"><summary>${isMsg ? 'Messages déjà lus' : 'Réponses déjà traitées'} (${list.length})</summary>` + list.map(h => {
+      const [head, ...lines] = h.cell.split(/\r?\n/).filter(l => l.trim());
+      // marquage ancien (« oui, le … ») : la décision n'était pas notée ; on montre ce que la réponse proposait, comparé à la liste actuelle
+      const items = lines.length ? lines : h.props.filter(p => p.file === LIST).map(p => `${nameOfP(p)} : ${descOf(p)}`);
+      return `<article class="grp past-card is-${pastState(h)}">
+        <p class="var-h">${h.when ? `envoyée le <time>${esc(h.when.toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }))}</time>` : 'sans date'} · ligne ${h.row} de la feuille</p>
+        <p class="past-st"><b>${esc(/^oui\b/i.test(head) ? 'traitée' + head.slice(3) + ' (décision non notée)' : head)}</b></p>
+        ${items.length ? `<ul class="diff">${items.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
+        ${h.comment ? `<p class="msg-text">${esc(h.comment)}</p>` : ''}
+      </article>`;
+    }).join('') + '</details>';
   }
   function render(){
     $('nMsgs').textContent = `(${answers.filter(a => a.msg && inPeriod(a)).length})`;
@@ -305,7 +342,7 @@
       if (sortBy === 'type') return (rank[[...a.variants.values()][0].type] - rank[[...b.variants.values()][0].type]) || nameOf(a).main.localeCompare(nameOf(b).main, 'fr');
       return (b.total - a.total) || nameOf(a).main.localeCompare(nameOf(b).main, 'fr');
     });
-    $('groups').innerHTML = list.length ? list.map(cardHtml).join('') : '<p class="help empty">Rien à afficher pour cette période et ce filtre.</p>';
+    $('groups').innerHTML = (list.length ? list.map(cardHtml).join('') : '<p class="help empty">Rien à afficher pour cette période et ce filtre.</p>') + pastHtml();
     $('doneBtn').disabled = !doneRows().length;
   }
   function cardHtml(g){
@@ -359,7 +396,7 @@
     $('genBtn').textContent = `Générer les lignes JSON ${de}`;
     $('doneBtn').textContent = f === 'messages' ? 'Marquer ces messages comme lus' : `Marquer comme traitées les réponses ${de} décidées`;
     const isMsg = f === 'messages'; $('genBtn').classList.toggle('hidden', isMsg); $('saveGhBtn').classList.toggle('hidden', isMsg); $('outTitle').textContent = isMsg ? '3. Messages lus' : $('outTitle').textContent;
-    if (isMsg) $('outHelp').textContent = 'Une fois les messages lus, marque-les : ils ne seront plus affichés (la case « Inclure les réponses déjà marquées » les fait réapparaître).';
+    if (isMsg) $('outHelp').textContent = 'Une fois les messages lus, marque-les : ils passent dans « Messages déjà lus », en bas.';
     $('outBlocks').innerHTML = ''; $('outMsg').textContent = '';
     render();
   }
@@ -423,7 +460,6 @@
       if (!n) throw new Error('rien à enregistrer' + (skipped.length ? ' : ' + skipped.join(', ') : ''));
       // message du commit, dans le même style que l'éditeur
       const part = (arr, w) => arr.length ? `${arr.length} ${w}${arr.length > 1 ? 's' : ''} (${arr.slice(0, 3).map(x => x.name).join(', ')}${arr.length > 3 ? '…' : ''})` : '';
-      const SHORT = { 'Proposition de Canal de Diffusion Ouessant': 'Canal', 'Nom Scientifique': 'Nom sci.', 'precision_m': 'précision' };
       const body = [];
       if (done.mod.length){ body.push('Modifiées :'); done.mod.slice(0, 60).forEach(x => body.push(`- ${x.name} : ` + x.diffs.map(d => `${SHORT[d.k] || d.k} : ${show(d.before) || '(vide)'} → ${show(d.after) || '(vide)'}`).join(' ; '))); }
       if (done.add.length){ body.push('Ajoutées :'); done.add.slice(0, 60).forEach(x => body.push(`- ${x.name}`)); }
@@ -456,6 +492,25 @@
     if (LIST === 'messages') return answers.filter(a => a.msg && (!a.when || inPeriod(a)));
     return answers.filter(a => !a.msg && (!a.when || inPeriod(a)) && (a.ids.length ? a.ids.every(id => m.get(id).file === LIST && decided(m.get(id))) : true));   // réponse sans proposition lisible ni message : rien à décider
   }
+  // Décision notée dans la colonne « Traitée » : 1re ligne « validée », « rejetée », « en partie validée »… ; puis une ligne par proposition
+  function decisionText(a){
+    if (a.msg) return 'lu';
+    const m = byId(), ps = a.ids.map(id => m.get(id)); let ok = 0, no = 0;
+    const lines = ps.map(p => {
+      const d = decisions[p.file + '|' + norm(p.origKey)];
+      let mark, note = '';
+      if (p.type === 'same'){
+        // déjà dans la liste : soit enregistrée après ta validation (puis réponses récupérées à nouveau), soit déjà comme ça
+        if (d !== undefined && d !== 'reject'){ mark = '✓'; ok++; note = ' (enregistrée)'; } else mark = '○';
+      } else if (d === undefined ? p.locked : d === 'reject'){
+        mark = '✗'; no++; if (d === undefined) note = p.why === 'lock' ? ' (rejetée d’office : espèce verrouillée)' : ' (rejetée d’office : hors canal)';
+      } else if (d === sigOf(p)){ mark = '✓'; ok++; }
+      else { mark = '✗'; no++; note = ' (une autre proposition a été retenue)'; }
+      return `${mark} ${nameOfP(p)} : ${descOf(p)}${note}`;
+    });
+    return [ok && no ? 'en partie validée' : ok ? 'validée' : no ? 'rejetée' : ps.length ? 'déjà conforme' : 'sans proposition', ...lines].join('\n');
+  }
+  const withDate = (t, quand) => { const [h, ...r] = t.split('\n'); return [h + ' le ' + quand, ...r].join('\n'); };
   $('doneBtn').addEventListener('click', async () => {
     const rows = doneRows(), out = $('outMsg'); if (!rows.length) return;
     const m = byId(), left = LIST === 'messages' ? 0 : Math.max(0, answers.filter(a => (!a.when || inPeriod(a)) && a.ids.some(id => m.get(id).file === LIST)).length - rows.length);
@@ -463,18 +518,27 @@
       : `Marquer ${rows.length} réponse(s) comme traitée(s) ?` + (left ? ` (${left} autre(s) gardée(s) : elles ont encore des propositions « à décider ».)` : '') + ' Pense à enregistrer les lignes JSON dans l’éditeur avant.')) return;
     out.className = 'msg'; out.textContent = 'Marquage…';
     try {
+      const texts = new Map(rows.map(a => { const t = decisionText(a); return [a.row, t.length > 1200 ? t.slice(0, 1200) + '…' : t]; }));
+      const quand = new Date().toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
       if (lastSource === 'script' && src.url && src.code){
-        let n = 0; const nums = rows.map(a => a.row);
-        for (let k = 0; k < nums.length; k += 300){   // par paquets, pour garder des adresses courtes
-          const r = await fetch(src.url + '?code=' + encodeURIComponent(src.code) + '&action=marquer&lignes=' + nums.slice(k, k + 300).join(','), { cache: 'no-store', credentials: 'omit' });
+        let n = 0, oldScript = false;
+        for (let k = 0; k < rows.length;){   // par paquets, pour garder des adresses courtes
+          const nums = [], etats = {};
+          while (k < rows.length && (!nums.length || nums.length < 300 && encodeURIComponent(JSON.stringify(etats)).length + encodeURIComponent(texts.get(rows[k].row)).length < 1800)){ nums.push(rows[k].row); etats[rows[k].row] = texts.get(rows[k].row); k++; }
+          const r = await fetch(src.url + '?code=' + encodeURIComponent(src.code) + '&action=marquer&lignes=' + nums.join(',') + '&etats=' + encodeURIComponent(JSON.stringify(etats)), { cache: 'no-store', credentials: 'omit' });
           const j = await r.json(); if (!j || !j.ok) throw new Error(j && j.erreur === 'code' ? 'code secret refusé' : 'réponse inattendue du script'); n += j.marquees || 0;
+          if (!j.detail) oldScript = true;
         }
-        out.className = 'msg good'; out.textContent = `${n} réponse(s) marquée(s) « traitée(s) » dans la feuille Google : elles ne seront plus proposées.`;
+        out.className = oldScript ? 'msg bad' : 'msg good';
+        out.textContent = `${n} réponse(s) marquée(s) « traitée(s) » dans la feuille Google : elles ne seront plus proposées au tri.` + (oldScript
+          ? ' Attention : le script Google est l’ancienne version, il n’a écrit que la date, pas la décision (validée ou rejetée). Recopie scripts/apps_script_reponses.gs dans Apps Script puis « Gérer les déploiements » → nouvelle version (voir README).'
+          : ' La décision est notée dans la colonne « Traitée » ; tu les retrouves dans « Réponses déjà traitées », en bas.');
       } else {
-        rows.forEach(a => doneSet.add(a.sig)); saveDone();
-        out.className = 'msg good'; out.textContent = `${rows.length} réponse(s) notée(s) « traitée(s) » dans ce navigateur (tu as chargé un fichier .csv : la feuille Google n’est pas modifiée). Avec « Récupérer les réponses » (script Google), le marquage s’écrit dans la feuille, colonne « Traitée ».`;
+        rows.forEach(a => { doneSet.add(a.sig); doneDetail[a.sig] = withDate(texts.get(a.row), quand); }); saveDone(); saveDoneDetail();
+        out.className = 'msg good'; out.textContent = `${rows.length} réponse(s) notée(s) « traitée(s) » dans ce navigateur, avec la décision (tu as chargé un fichier .csv : la feuille Google n’est pas modifiée). Avec « Récupérer les réponses » (script Google), le marquage s’écrit dans la feuille, colonne « Traitée ».`;
       }
       const marked = new Set(rows.map(a => a.row));
+      rows.forEach(a => history.push({ row: a.row, when: a.when, day: a.day, comment: a.comment, msg: a.msg, props: proposals.filter(p => p.row === a.row), cell: withDate(texts.get(a.row), quand) }));
       answers = answers.filter(a => !marked.has(a.row)); proposals = proposals.filter(p => !marked.has(p.row));
       buildPeriods(); render();
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Marquage impossible : ' + (e.message || e); }
