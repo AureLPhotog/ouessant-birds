@@ -7,6 +7,8 @@
   const norm = s => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
   const clone = o => JSON.parse(JSON.stringify(o));
+  // nouvelle entrée encore vide (rien de saisi) : ni comptée, ni envoyée
+  const isBlank = d => Object.values(d).every(v => v === undefined || v === null || v === '' || v === false || (Array.isArray(v) && !v.length));
 
   // ---------- Champs propres à l'appli Ouessant : menus déroulants et grille des carrés ----------
   const FIELD_CONFIG = {
@@ -307,7 +309,7 @@
   // enregistrement
   function commitMessage(){
     const key = ['Nom Français', 'nom'].find(k => fields.includes(k)) || $('keyField').value || fields[0], name = d => d && d[key] !== undefined ? show(d[key], types[key] ? types[key].t : 'text') : '?';
-    const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
+    const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig && !isBlank(it.data)), del = deleted.filter(it => it.orig);
     const part = (n, list, w) => list.length ? `${list.length} ${w}${list.length > 1 ? 's' : ''} (${list.slice(0, 3).map(it => name(it.data)).join(', ')}${list.length > 3 ? '…' : ''})` : '';
     const label = /bird|oiseau/i.test(gh ? gh.path : fileName) ? 'Oiseaux' : /lieu/i.test(gh ? gh.path : fileName) ? 'Lieux' : fileName;
     const title = `${label} : ` + [part(0, mod, 'modifiée'), part(0, add, 'ajoutée'), part(0, del, 'supprimée')].filter(Boolean).join(', ');
@@ -552,7 +554,7 @@
     return esc(t.slice(0, i)) + '<mark>' + esc(t.slice(i, i + q.length)) + '</mark>' + esc(t.slice(i + q.length));
   }
   function changes(){
-    const mod = items.filter(it => it.orig && !same(it.data, it.orig)).length, add = items.filter(it => !it.orig).length, del = deleted.filter(it => it.orig).length;
+    const mod = items.filter(it => it.orig && !same(it.data, it.orig)).length, add = items.filter(it => !it.orig && !isBlank(it.data)).length, del = deleted.filter(it => it.orig).length;
     return { mod, add, del, total: mod + add + del };
   }
   // Téléphone : 3 colonnes seulement. Pour les oiseaux : le nom dans la langue choisie (français ou anglais), le nom scientifique et le canal ;
@@ -785,7 +787,7 @@
         toast(getToken() ? (fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.')
           : (fmt ? 'Entrée enregistrée, noms mis en forme. Pour la soumettre : « Envoyer ma proposition » (en jaune).' : 'Entrée enregistrée. Pour la soumettre : « Envoyer ma proposition » (en jaune).'), null, null, 6000);
       } catch (e) { wrap.querySelector('[data-msg]').textContent = e.message; }
-    } else if (act === 'cancel'){ openId = null; render(); }
+    } else if (act === 'cancel'){ if (!it.orig && isBlank(it.data)){ items.splice(i, 1); save(); } openId = null; render(); }   // nouvelle entrée laissée vide : on la retire
     else if (act === 'revert'){ it.data = clone(it.orig); render(); initCells(); save(); toast('Entrée remise comme à l\u2019origine.'); }
     else if (act === 'dup'){ const n = { id: ++uid, data: clone(it.data), orig: null }; items.splice(i + 1, 0, n); openId = n.id; render(); initCells(); save(); toast('Copie ajoutée juste en dessous : modifie-la.'); }
     else if (act === 'del'){
@@ -941,7 +943,7 @@
   const META = ['_action', '_cle_avant'];
   function changesText(){
     const key = $('keyField').value || fields[0];
-    const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
+    const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig && !isBlank(it.data)), del = deleted.filter(it => it.orig);
     const lines = [
       `// Modifications de ${fileName}, le ${new Date().toLocaleDateString('fr-FR')}`,
       ...(kindOf(fileName) === 'birds' ? [`// réglages : verrou ${reg.verrou ? 'actif' : 'levé'}, champs ${reg.champs}`] : []),   // réglages du moment : la page Administration en tient compte
@@ -952,7 +954,7 @@
       if (!same(it.orig[key], it.data[key])) o._cle_avant = it.orig[key];   // la clé elle-même a changé : on garde l'ancienne pour retrouver l'entrée
       lines.push(`// modifiée : ${show(it.orig[key], types[key] ? types[key].t : 'text')}`, JSON.stringify(o));
     });
-    add.forEach(it => lines.push('// ajoutée', JSON.stringify(it.data)));
+    add.forEach(it => { const o = clone(it.data); if (!isAdmin()) delete o[K_LOCK]; lines.push('// ajoutée', JSON.stringify(o)); });   // la case « Verrouillée » est réservée à l'admin
     del.forEach(it => lines.push('// supprimée', JSON.stringify(Object.assign({ _action: 'supprimer' }, it.orig))));
     return lines.join('\n') + '\n';
   }

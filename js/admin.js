@@ -175,7 +175,11 @@
           const del = o._action === 'supprimer' || hint === 'del';
           let type, diffs = [];
           if (del){ if (!cur) return; type = 'del'; }
-          else if (!cur){ type = 'add'; diffs = Object.keys(data).filter(k => show(data[k]) !== '').map(k => ({ k, before: undefined, after: data[k] })); }
+          else if (!cur){
+            if (data[LOCK] === false) delete data[LOCK];   // case « Verrouillée » laissée décochée : rien à signaler
+            if (!show(data[L.key]) && !show(data[L.name])) return;   // ajout sans aucun nom (entrée vide envoyée par erreur) : ignoré
+            type = 'add'; diffs = Object.keys(data).filter(k => show(data[k]) !== '').map(k => ({ k, before: undefined, after: data[k] }));
+          }
           else {
             type = 'mod';
             diffs = Object.keys(data).filter(k => !same(data[k], cur[k])).map(k => ({ k, before: cur[k], after: data[k] }));
