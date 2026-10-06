@@ -41,3 +41,4 @@
 .years .y-name{font-weight:600;flex:1 1 180px}
 .years .actions{margin:0}
 #yearDiff details{margin:.3rem 0}
+.tag.lock{color:var(--ink)}

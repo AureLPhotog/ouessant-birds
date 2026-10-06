@@ -52,6 +52,9 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 
 - **Canal** : `Télégram`, `Whatsapp` ou `Pas d'annonce` (l'appli les affiche « Alerte Telegram », « Alerte WhatsApp », « Pas d'alerte »).
 - **Type de taxon** : `espèce` ou `sous-espèce`.
+- **Verrouillée** (facultatif) : `true` pour une **espèce commune** que les visiteurs ne doivent pas modifier.
+  Pré-rempli au départ avec toutes les espèces en `Pas d'annonce` (140), à ajuster dans l'éditeur avec la Clé Admin
+  (case **Verrouillée** ; décochée, le champ disparaît). Voir « Espèces communes verrouillées ».
 
 **Règles d'écriture des noms** (appliquées automatiquement par l'éditeur à l'enregistrement, code dans `js/noms.js`) :
 - **français** : une majuscule au premier mot, puis des minuscules, sauf les noms propres : `Bécasseau de Baird`, mais `Bécasseau minute`, `Grand corbeau`, `Pouillot ibérique`. Un mot qui suit « de » ou « d' » garde la casse saisie (`d'Europe`, `de Baird`) ; après « du » et « des », minuscule (`des roseaux`) sauf nom propre connu (`du Canada`, `des Balkans`). Apostrophes droites ('). Sous-espèces : `(ssp. nom)`.
@@ -185,6 +188,20 @@ Une espèce à annoncer sur WhatsApp une année peut ne plus l'être l'année su
 - **Sauvegarder la liste actuelle** fait une sauvegarde à la main, à tout moment.
 
 La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, ne sont pas concernés.
+
+## Espèces communes verrouillées
+
+- **Dans l'appli** : un **cadenas** remplace le crayon ✎ ; on ne peut pas proposer de modification.
+- **Dans l'éditeur, sans la Clé Admin** : l'espèce s'affiche avec 🔒, en lecture seule (pas d'Enregistrer, Supprimer ni Dupliquer),
+  et on ne peut pas la recréer comme « nouvel oiseau » (même nom scientifique). La case **Verrouillée** n'est pas montrée.
+- **Dans l'éditeur, avec la Clé Admin** : tout reste modifiable, avec un rappel ; la case **Verrouillée** et le filtre du même nom
+  servent à gérer la liste.
+- **Dans la page de tri** : une proposition sur une espèce verrouillée est **rejetée d'office** (filtre « rejetées », étiquette 🔒) ;
+  « Valider quand même » reste possible. Une proposition qui touche au verrou lui-même est signalée « change le verrou ».
+
+Le blocage de l'éditeur n'est qu'un confort : le formulaire Google est public, quelqu'un peut y envoyer n'importe quoi. La vraie
+barrière, c'est que seule la Clé Admin enregistre sur GitHub, et que la page de tri écarte ces propositions. Comme le verrou est
+dans `ouessant_birds.json`, il suit les **listes par année** (archivé chaque 1er janvier).
 
 ## Sécurité
 

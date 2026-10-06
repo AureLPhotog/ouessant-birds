@@ -30,6 +30,7 @@
   let doneSet; try { doneSet = new Set(JSON.parse(store.get(DONE_SET) || '[]')); } catch (_) { doneSet = new Set(); }
   const saveDone = () => store.set(DONE_SET, JSON.stringify([...doneSet].slice(-20000)));
   const META = ['_action', '_cle_avant'];
+  const LOCK = 'Verrouillée';
   let current = {};            // fichier → { entries: [...], byKey: Map }
   let proposals = [];          // toutes les propositions lues dans le fichier
   let answers = [];            // une entrée par réponse (ligne de la feuille) : { row, when, day, ids }
@@ -177,7 +178,8 @@
             if (!diffs.length) type = 'same';   // déjà comme ça dans la liste
           }
           const id = ri + '-' + li; ans.ids.push(id);
-          proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur });
+          const locked = f === 'ouessant_birds.json' && !!cur && cur[LOCK] === true;   // espèce commune verrouillée : rejetée d'office
+          proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur, locked });
         });
       });
       if (!answers.length) throw new Error(skipped ? `Rien de nouveau : les ${skipped} réponse(s) sont déjà marquées « traitées ».` : 'Aucune réponse pour l’instant.');
@@ -245,7 +247,7 @@
     const map = new Map();
     proposals.filter(p => p.file === LIST && inPeriod(p)).forEach(p => {
       const gk = p.file + '|' + norm(p.origKey);
-      if (!map.has(gk)) map.set(gk, { gk, file: p.file, origKey: p.origKey, cur: p.cur, variants: new Map(), same: 0, total: 0 });
+      if (!map.has(gk)) map.set(gk, { gk, file: p.file, origKey: p.origKey, cur: p.cur, locked: p.locked, variants: new Map(), same: 0, total: 0 });
       const g = map.get(gk); g.total++;
       if (p.type === 'same'){ g.same++; return; }
       const sig = p.type + ':' + JSON.stringify(p.diffs.map(d => [d.k, d.after]).sort());
@@ -256,7 +258,7 @@
     groups.alreadyOk = all.filter(g => !g.variants.size).reduce((n, g) => n + g.same, 0);   // demandes déjà conformes à la liste : rien à faire
     return all.filter(g => g.variants.size);
   }
-  const stateOf = g => { const d = decisions[g.gk]; return d === 'reject' ? 'no' : d && [...g.variants.keys()].includes(d) ? 'ok' : 'todo'; };
+  const stateOf = g => { const d = decisions[g.gk]; return d === 'reject' ? 'no' : d && [...g.variants.keys()].includes(d) ? 'ok' : g.locked ? 'no' : 'todo'; };   // verrouillée : rejetée tant que tu ne valides pas toi-même
   const nameOf = g => {
     const L = LISTS[g.file], src = g.cur || [...g.variants.values()][0].data;
     return g.file === 'ouessant_birds.json' ? { main: show(src[L.name]) || show(g.origKey), sub: show(src[L.key]) } : { main: show(src[L.name]) || show(g.origKey), sub: '' };
@@ -268,8 +270,8 @@
     const counts = { todo: 0, ok: 0, no: 0 }; all.forEach(g => counts[stateOf(g)]++);
     const nIn = f => proposals.filter(p => p.file === f && inPeriod(p) && p.type !== 'same').length;
     $('nBirds').textContent = `(${nIn('ouessant_birds.json')})`; $('nPlaces').textContent = `(${nIn('lieux_ouessant.json')})`;
-    const conflicts = all.filter(g => g.variants.size > 1).length;
-    $('summary').textContent = `${all.length} espèce(s) ou lieu(x) concerné(s) : ${counts.todo} à décider, ${counts.ok} validé(s), ${counts.no} rejeté(s)` + (conflicts ? ` · ${conflicts} avec des propositions différentes` : '') + (groups.alreadyOk ? ` · ${groups.alreadyOk} demande(s) déjà conforme(s) à la liste, ignorée(s)` : '');
+    const conflicts = all.filter(g => g.variants.size > 1).length, nLocked = all.filter(g => g.locked && decisions[g.gk] === undefined).length;
+    $('summary').textContent = `${all.length} espèce(s) ou lieu(x) concerné(s) : ${counts.todo} à décider, ${counts.ok} validé(s), ${counts.no} rejeté(s)` + (conflicts ? ` · ${conflicts} avec des propositions différentes` : '') + (nLocked ? ` · ${nLocked} espèce(s) verrouillée(s), rejetée(s) d’office (filtre « rejetées »)` : '') + (groups.alreadyOk ? ` · ${groups.alreadyOk} demande(s) déjà conforme(s) à la liste, ignorée(s)` : '');
     const rank = { del: 0, add: 1, mod: 2 };
     const list = all.filter(g => showV === 'all' || stateOf(g) === showV).sort((a, b) => {
       if (sortBy === 'name') return nameOf(a).main.localeCompare(nameOf(b).main, 'fr');
@@ -288,11 +290,14 @@
         <span class="tag">${esc(LISTS[g.file].label)}</span>
         <span class="tag n">${g.total} demande${g.total > 1 ? 's' : ''}</span>
         ${many ? '<span class="tag warn">propositions différentes</span>' : ''}
-        <span class="state">${st === 'ok' ? '✔ validée' : st === 'no' ? '✖ rejetée' : 'à décider'}</span>
+        ${g.locked ? '<span class="tag lock">🔒 verrouillée</span>' : ''}
+        ${[...g.variants.values()].some(v => v.diffs.some(d => d.k === LOCK)) ? '<span class="tag warn">change le verrou</span>' : ''}
+        <span class="state">${st === 'ok' ? '✔ validée' : st === 'no' ? (g.locked && chosen === undefined ? '✖ rejetée d’office' : '✖ rejetée') : 'à décider'}</span>
       </header>
+      ${g.locked ? '<p class="help">Espèce commune verrouillée : la proposition est rejetée d’office. Tu peux quand même la valider.</p>' : ''}
       ${g.same ? `<p class="help">${g.same} demande(s) déjà conforme(s) à la liste (rien à faire).</p>` : ''}
       ${[...g.variants.values()].sort((a, b) => b.props.length - a.props.length).map(v => variantHtml(g, v, chosen === v.sig, many)).join('')}
-      <div class="actions"><button type="button" class="btn danger" data-reject>${st === 'no' ? 'Rejetée' : 'Tout rejeter'}</button>${st !== 'todo' ? '<button type="button" class="btn ghost" data-undo>Annuler la décision</button>' : ''}</div>
+      <div class="actions"><button type="button" class="btn danger" data-reject>${st === 'no' ? 'Rejetée' : 'Tout rejeter'}</button>${chosen !== undefined ? '<button type="button" class="btn ghost" data-undo>Annuler la décision</button>' : ''}</div>
     </article>`;
   }
   function variantHtml(g, v, isChosen, many){
@@ -304,7 +309,7 @@
       <p class="var-h"><span class="badge ${cls}">${label}</span> <b>${v.props.length} personne${v.props.length > 1 ? 's' : ''}</b></p>
       <ul class="diff">${rows}</ul>
       ${notes ? `<details><summary>Dates et commentaires</summary><ul class="notes">${notes}</ul></details>` : ''}
-      <button type="button" class="btn${isChosen ? ' primary' : ''}" data-pick>${isChosen ? 'Validée' : many ? 'Valider celle-ci' : 'Valider'}</button>
+      <button type="button" class="btn${isChosen ? ' primary' : ''}" data-pick>${isChosen ? 'Validée' : g.locked ? 'Valider quand même' : many ? 'Valider celle-ci' : 'Valider'}</button>
     </div>`;
   }
   $('groups').addEventListener('click', e => {
@@ -362,7 +367,7 @@
     else { ta.select(); document.execCommand('copy'); done(); }
   });
   // Réponses « traitées » : celles de la période dont toutes les propositions ont une décision (validée, rejetée ou déjà conforme)
-  const decided = p => p.type === 'same' || decisions[p.file + '|' + norm(p.origKey)] !== undefined;
+  const decided = p => p.type === 'same' || p.locked || decisions[p.file + '|' + norm(p.origKey)] !== undefined;
   const byId = () => new Map(proposals.map(p => [p.id, p]));
   function doneRows(){
     const m = byId();

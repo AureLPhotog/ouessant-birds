@@ -478,6 +478,7 @@
     $('pasteLinesBtn').classList.toggle('hidden', !ok);
     $('adminLink').classList.toggle('hidden', !ok);   // page de tri des propositions : seulement pour l'administrateur
     if (!ok) $('pastePanel').classList.add('hidden');
+    if (ok !== updateSaveBtn.was){ const first = updateSaveBtn.was === undefined; updateSaveBtn.was = ok; if (!first && items.length) render(); }   // clé validée ou retirée : espèces verrouillées modifiables ou non
     $('keyBtn').classList.remove('hidden');   // toujours accessible : ajouter ou gérer la clé
     $('keyBtn').textContent = t ? 'Gérer la clé' : 'Clé Admin';
     $('proposeBtn').classList.toggle('hidden', t);
@@ -555,8 +556,15 @@
   // pour les lieux : les 3 premiers champs. Les lignes pleine largeur (formulaire, « Afficher plus ») s'étendent sur ces colonnes.
   const phone = matchMedia('(max-width:640px)');
   const K_FR = 'Nom Français', K_EN = 'Nom Anglais', K_SCI = 'Nom Scientifique', K_CANAL = 'Proposition de Canal de Diffusion Ouessant';
+  // Espèces communes verrouillées (« Verrouillée » : true) : sans la Clé Admin, on peut les voir mais pas les modifier, les supprimer ou les recréer.
+  // (Ce n'est qu'un confort : la vraie barrière reste que seule la clé enregistre sur GitHub, et la page de tri rejette d'office ces propositions.)
+  const K_LOCK = 'Verrouillée';
+  const isAdmin = () => tokenValid();
+  const isLocked = it => (it.orig || it.data)[K_LOCK] === true;
+  const lockedFor = it => isLocked(it) && !isAdmin();
+  const lockedSci = (sci, except) => items.find(x => x !== except && x.orig && x.orig[K_LOCK] === true && norm(show(x.orig[K_SCI], 'text')) === norm(sci));
   function shownFields(){
-    if (!phone.matches) return fields;
+    if (!phone.matches) return isAdmin() ? fields : fields.filter(k => k !== K_LOCK);
     if ([K_FR, K_SCI, K_CANAL].every(k => fields.includes(k))){
       const en = window.OuessantEditeurLangue && window.OuessantEditeurLangue.lang === 'en' && fields.includes(K_EN);
       return [en ? K_EN : K_FR, K_SCI, K_CANAL];
@@ -568,7 +576,8 @@
   const cols = () => shownFields().length;
   const HEAD = { nom: 'Nom', carres: 'Carrés', precision_m: 'Précision (m)' };
   const headName = k => HEAD[k] || dispName(k);   // en-têtes du tableau des lieux
-  const dispName = k => k === K_CANAL ? 'Canal de diffusion' : k;   // nom affiché du champ (la clé dans le fichier ne change pas)
+  const dispName = k => k === K_CANAL ? 'Canal de diffusion' : k;
+  const LOCK_ICON = '<span class="lock" title="Espèce commune verrouillée" aria-label="Espèce commune verrouillée">🔒</span> ';   // nom affiché du champ (la clé dans le fichier ne change pas)
   phone.addEventListener('change', () => { if (items.length) render(); });
   document.addEventListener('click', e => { if (e.target.closest('.lang button') && items.length) setTimeout(render, 0); });   // changement de langue : la colonne du nom suit
   function render(){
@@ -586,9 +595,9 @@
     thead.innerHTML = '<tr>' + shownF.map(k => `<th scope="col"><button type="button" data-sort="${esc(k)}">${esc(headName(k))}${sortField === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</button></th>`).join('') + '</tr>';
     const rows = list.slice(0, shown).map(it => {
       const st = stateOf(it);
-      let html = `<tr class="item${st ? ' is-' + st : ''}${openId === it.id ? ' is-open' : ''}" data-id="${it.id}" tabindex="0" aria-expanded="${openId === it.id}">` + shownF.map(k => {
+      let html = `<tr class="item${st ? ' is-' + st : ''}${openId === it.id ? ' is-open' : ''}" data-id="${it.id}" tabindex="0" aria-expanded="${openId === it.id}">` + shownF.map((k, ci) => {
         const v = showK(k, it.data[k]);
-        return `<td class="${['number','numlist'].includes(types[k].t) ? 'num' : ''}">${v === '' ? '<span class="empty">vide</span>' : hl(v)}</td>`;
+        return `<td class="${['number','numlist'].includes(types[k].t) ? 'num' : ''}">${ci === 0 && isLocked(it) ? LOCK_ICON : ''}${v === '' ? '<span class="empty">vide</span>' : hl(v)}</td>`;
       }).join('') + '</tr>';
       if (openId === it.id) html += `<tr class="editor"><td colspan="${cols()}">${editorHtml(it)}</td></tr>`;
       return html;
@@ -682,7 +691,11 @@
     return `<label${cls}>${esc(dispName(k))}<input type="text" data-k="${esc(k)}" value="${esc(val)}"${list}${ph} autocomplete="off">${dl}${was}</label>`;
   }
   function editorHtml(it){
-    return `<div class="form-wrap" data-id="${it.id}"><div class="form">${fields.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
+    const fs = isAdmin() ? fields : fields.filter(k => k !== K_LOCK);   // la case « Verrouillée » n'est montrée qu'à l'admin
+    if (lockedFor(it)) return `<div class="form-wrap" data-id="${it.id}"><p class="msg lock-msg">🔒 Espèce commune : elle est verrouillée et ne peut pas être modifiée.</p>
+      <fieldset class="form" disabled>${fs.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</fieldset>
+      <div class="actions"><button type="button" class="btn" data-act="cancel">Fermer</button></div></div>`;
+    return `<div class="form-wrap" data-id="${it.id}">${isLocked(it) ? '<p class="help lock-msg">🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier. Décoche « Verrouillée » pour la rouvrir aux propositions.</p>' : ''}<div class="form">${fs.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
       <div class="actions">
         <button type="button" class="btn primary" data-act="save">Enregistrer</button>
         <button type="button" class="btn" data-act="cancel">Fermer</button>
@@ -722,6 +735,7 @@
   function editorAction(act, id){
     const i = items.findIndex(x => x.id === id); if (i < 0) return;
     const it = items[i], wrap = document.querySelector(`.form-wrap[data-id="${id}"]`);
+    if (act !== 'cancel' && lockedFor(it)){ toast('Espèce commune verrouillée : pas de modification possible.'); return; }
     if (act === 'save' || act === 'forcesave'){
       try {
         const pb = act === 'save' && geoProblem(wrap);
@@ -738,7 +752,10 @@
           if (k in d && !(isEmpty(d[k]) && !(k in it.data))) merged[k] = d[k];   // un champ laissé vide n'est pas créé s'il n'existait pas
           else if (k in it.data && !(k in d)) merged[k] = it.data[k];
         });
+        if (merged[K_LOCK] === false) delete merged[K_LOCK];   // case décochée : le champ disparaît
         const fmt = formatNames(merged);
+        const twin = !isAdmin() && typeof merged[K_SCI] === 'string' && merged[K_SCI] && lockedSci(merged[K_SCI], it);
+        if (twin) throw new Error(`« ${show(twin.orig[K_FR], 'text') || merged[K_SCI]} » est déjà dans la liste, verrouillée (espèce commune) : pas de modification possible.`);
         it.data = merged; openId = null; render(); save();
         window.scrollTo({ top: 0, behavior: 'smooth' });   // retour en haut : le bouton « Envoyer ma proposition » (en jaune) est là
         toast(getToken() ? (fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.')
@@ -873,7 +890,7 @@
       o = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
       if (!match) return `<div class="pv"><h3><span class="badge new">Ajout</span> ${title}</h3><ul>${Object.entries(o).map(([k, v]) => `<li>${esc(k)} : <ins>${esc(show(v, types[k] ? types[k].t : 'json') || 'vide')}</ins></li>`).join('')}</ul></div>`;
       const diffs = Object.keys(o).filter(k => !same(o[k], match.data[k]));
-      return `<div class="pv"><h3><span class="badge mod">Remplacement</span> ${title}</h3>${diffs.length ? `<ul>${diffs.map(k => { const t = types[k] ? types[k].t : 'json'; return `<li>${esc(k)} : <del>${esc(show(match.data[k], t) || 'vide')}</del> → <ins>${esc(show(o[k], t) || 'vide')}</ins></li>`; }).join('')}</ul>` : '<p class="help" style="margin:0">Aucune différence.</p>'}</div>`;
+      return `<div class="pv"><h3><span class="badge mod">Remplacement</span> ${isLocked(match) ? LOCK_ICON : ''}${title}</h3>${diffs.length ? `<ul>${diffs.map(k => { const t = types[k] ? types[k].t : 'json'; return `<li>${esc(k)} : <del>${esc(show(match.data[k], t) || 'vide')}</del> → <ins>${esc(show(o[k], t) || 'vide')}</ins></li>`; }).join('')}</ul>` : '<p class="help" style="margin:0">Aucune différence.</p>'}</div>`;
     }).join('');
     const add = pending.filter(p => !p.match && !p.del).length, nd = pending.filter(p => p.del && p.match).length, rep = pending.filter(p => p.match && !p.del).length;
     msg.className = 'msg good';
