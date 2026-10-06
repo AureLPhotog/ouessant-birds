@@ -140,7 +140,9 @@ Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce
    avec leur décision, dans **« Réponses déjà traitées »** (ou **« Messages déjà lus »**) en bas de chaque onglet. Les réponses marquées
    avant la version 5.28 n'ont que la date : elles y apparaissent avec « décision non notée ». Pour revenir sur une décision :
    bouton **Remettre à trier** (ou **Remettre en non lu**) sur sa carte ; elle redevient « à décider », et sa case « Traitée »
-   est réécrite au prochain marquage (on peut aussi vider la case dans la feuille).
+   est réécrite au prochain marquage (on peut aussi vider la case dans la feuille). Une réponse dont tout est déjà appliqué
+   à la liste n'a pas ce bouton (il n'y a plus rien à décider) : pour revenir en arrière, remettre l'ancienne valeur dans l'éditeur,
+   et la proposition redevient « à décider ». Une proposition validée et appliquée reste notée « ✓ » si sa réponse est retriée.
 
 ### Récupération automatique des réponses (à installer une fois)
 
