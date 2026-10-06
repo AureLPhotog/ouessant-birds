@@ -47,3 +47,5 @@
 .modes{display:grid;gap:.45rem;margin:.5rem 0 .7rem}
 .modes label{display:flex;gap:.5rem;align-items:flex-start;font-size:.92rem;cursor:pointer}
 .modes input{margin-top:.2rem;accent-color:var(--ocean)}
+.opt-list{margin:.25rem 0 0;padding-left:1.1rem;color:var(--granite)}
+.opt-list b{color:var(--ink)}
