@@ -203,6 +203,7 @@
 
     shownBirds = list;
     if(!list.length){ results.innerHTML = ''; return; }
+    const admin = isAdmin();
     results.innerHTML = '<ul class="list">' + list.map((b, i) => {
       const c = canalOf(b), alt = altName(b), kind = canalKind(c);
       const canal = `<span class="dot" style="background:${colorOf[c]||'#5E676B'}"></span>${esc(canalLabel(c))}`;
@@ -214,7 +215,7 @@
         <span class="sci" lang="la">${highlight(b[K_SCI], raw)}</span>
         ${alt ? `<span class="en" lang="${lang === 'en' ? 'fr' : 'en'}">${highlight(alt, raw)}</span>` : ''}
         ${canalHtml}
-        ${b[K_LOCK] === true   // espèce commune verrouillée : pas de proposition de modification (cadenas à la place du crayon)
+        ${b[K_LOCK] === true && !admin   // espèce commune verrouillée : pas de proposition de modification (cadenas à la place du crayon), sauf pour l'admin
           ? `<span class="bedit-btn is-locked" role="img" title="${esc(T('lockedSp'))}" aria-label="${esc(T('lockedSp'))}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>`
           : `<a class="bedit-btn" href="${editorLink('oiseaux', { cherche: b[K_SCI] })}" title="${esc(T('proposeEdit'))}" aria-label="${esc(T('proposeEdit'))}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>`}
         <div class="alertbox" hidden></div>
@@ -260,6 +261,20 @@
   function buildPfuse(){}   // (la recherche des lieux n'a plus besoin d'index)
   buildPfuse();
   const PLACES_URL = 'lieux_ouessant.json';
+  // ---------- Admin : avec la Clé Admin entrée dans l'éditeur (et reconnue par GitHub), toutes les espèces ont leur crayon ----------
+  // On ne lit que la présence de la clé dans ce navigateur (rien n'est envoyé) ; l'éditeur reste seul à s'en servir.
+  // Mêmes règles que l'éditeur : clé vérifiée (marque « -ok »), et une clé mémorisée est oubliée au bout de 30 jours.
+  function isAdmin(){
+    try {
+      const K = 'gh-token-ouessant', t = sessionStorage.getItem(K) || localStorage.getItem(K) || '';
+      if (!t || (sessionStorage.getItem(K + '-ok') || localStorage.getItem(K + '-ok')) !== t.slice(-8)) return false;
+      const at = +localStorage.getItem(K + '-le') || 0;
+      return !(localStorage.getItem(K) === t && at && Date.now() - at > 30 * 864e5);
+    } catch (_) { return false; }
+  }
+  // retour depuis l'éditeur (page gardée en mémoire) ou clé changée dans un autre onglet : les crayons suivent
+  addEventListener('pageshow', e => { if (e.persisted && birds.length) render(); });
+  addEventListener('storage', e => { if (e.key && e.key.startsWith('gh-token-ouessant') && birds.length) render(); });
   // ---------- Propositions : elles passent par l'éditeur (editeur.html), qui ouvre la bonne liste sur la bonne entrée ----------
   function editorLink(fichier, opts){
     const q = new URLSearchParams({ fichier });
