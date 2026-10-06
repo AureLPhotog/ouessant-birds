@@ -162,7 +162,7 @@
         const isDone = (col.done >= 0 && (r[col.done] || '').trim()) || doneSet.has(sig);   // colonne « Traitée » de la feuille, ou noté dans ce navigateur
         if (isDone && !withDone){ skipped++; return; }
         const when = parseDate(r[col.date], col.dayFirst), comment = col.comment >= 0 ? (r[col.comment] || '').trim() : '';
-        const ans = { row: ri + 2, sig, when, day: dayOf(when), ids: [] }; answers.push(ans);   // row : numéro de la ligne dans la feuille (1 = titres)
+        const ans = { row: ri + 2, sig, when, day: dayOf(when), ids: [], comment }; answers.push(ans);   // row : numéro de la ligne dans la feuille (1 = titres)
         linesOf(r[col.json]).forEach(({ o, file, hint }, li) => {
           const f = fileOf(o, file); if (!f) return;
           const L = LISTS[f], data = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
@@ -181,11 +181,14 @@
           const locked = f === 'ouessant_birds.json' && !!cur && cur[LOCK] === true;   // espèce commune verrouillée : rejetée d'office
           proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur, locked });
         });
+        ans.msg = !ans.ids.length && !!comment;   // question ou retour sur l'appli (bouton « Une question, un retour ? ») : onglet Messages
       });
       if (!answers.length) throw new Error(skipped ? `Rien de nouveau : les ${skipped} réponse(s) sont déjà marquées « traitées ».` : 'Aucune réponse pour l’instant.');
-      msg.className = 'msg good'; msg.textContent = `${answers.length} réponse(s) à trier, ${proposals.length} proposition(s)` + (skipped ? ` (${skipped} déjà traitée(s), masquée(s))` : '') + '. Les listes en ligne ont été chargées pour comparer.';
+      const nm = answers.filter(a => a.msg).length;
+      msg.className = 'msg good'; msg.textContent = `${answers.length} réponse(s) à trier, ${proposals.length} proposition(s)` + (nm ? `, ${nm} message(s)` : '') + (skipped ? ` (${skipped} déjà traitée(s), masquée(s))` : '') + '. Les listes en ligne ont été chargées pour comparer.';
       buildPeriods(); $('sortView').classList.remove('hidden');
-      setList(proposals.some(p => p.file === LIST && p.type !== 'same') || !proposals.some(p => p.type !== 'same') ? LIST : proposals.find(p => p.type !== 'same').file);
+      const todoFiles = proposals.filter(p => p.type !== 'same').map(p => p.file);
+      setList(todoFiles.includes(LIST) || (LIST === 'messages' && nm) ? LIST : todoFiles[0] || (nm ? 'messages' : LIST));
   }
   // ---------- Récupération automatique : script Google (Apps Script) attaché à la feuille des réponses ----------
   // Le script ne répond qu'avec le code secret ; l'adresse et le code sont gardés dans ce navigateur, jamais dans le dépôt.
@@ -231,8 +234,8 @@
   // (les réponses déjà traitées sont écartées dès la lecture : la période ne porte que sur les réponses à trier)
   function buildPeriods(){
     const keep = $('period').value, days = {};
-    proposals.forEach(p => { days[p.day] = (days[p.day] || 0) + 1; });
-    const opts = [['all', `tous les jours (${proposals.length})`]];
+    proposals.forEach(p => { days[p.day] = (days[p.day] || 0) + 1; }); answers.filter(a => a.msg).forEach(a => { days[a.day] = (days[a.day] || 0) + 1; });
+    const opts = [['all', `tous les jours (${proposals.length + answers.filter(a => a.msg).length})`]];
     Object.keys(days).sort().reverse().forEach(d => opts.push(['d:' + d, `${dayLabel(d)} (${days[d]})`]));
     $('period').innerHTML = opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('');
     if (opts.some(([v]) => v === keep)) $('period').value = keep;
@@ -265,7 +268,18 @@
   };
   const TYPE = { mod: ['mod', 'Modification'], add: ['new', 'Ajout'], del: ['del', 'Suppression'] };
 
+  // Onglet Messages : questions et retours (commentaire seul, sans modification)
+  function renderMessages(){
+    const list = answers.filter(a => a.msg && inPeriod(a)).sort((a, b) => (b.when || 0) - (a.when || 0));
+    $('summary').textContent = `${list.length} message(s) : questions et retours envoyés depuis l’appli (« Une question, un retour ? »).`;
+    $('groups').innerHTML = list.length ? list.map(a => `<article class="grp msg-card"><p class="var-h">${a.when ? `<time>${esc(a.when.toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }))}</time>` : 'sans date'} · ligne ${a.row} de la feuille</p><p class="msg-text">${esc(a.comment)}</p></article>`).join('')
+      : '<p class="help empty">Aucun message pour cette période.</p>';
+    $('doneBtn').disabled = !doneRows().length;
+  }
   function render(){
+    $('nMsgs').textContent = `(${answers.filter(a => a.msg && inPeriod(a)).length})`;
+    document.querySelectorAll('.admin-bar .filters label:not(:first-child)').forEach(l => l.classList.toggle('hidden', LIST === 'messages'));
+    if (LIST === 'messages'){ $('nBirds').textContent = `(${proposals.filter(p => p.file === 'ouessant_birds.json' && inPeriod(p) && p.type !== 'same').length})`; $('nPlaces').textContent = `(${proposals.filter(p => p.file === 'lieux_ouessant.json' && inPeriod(p) && p.type !== 'same').length})`; renderMessages(); return; }
     const all = groups(), sortBy = $('sortBy').value, showV = $('show').value;
     const counts = { todo: 0, ok: 0, no: 0 }; all.forEach(g => counts[stateOf(g)]++);
     const nIn = f => proposals.filter(p => p.file === f && inPeriod(p) && p.type !== 'same').length;
@@ -322,7 +336,7 @@
     saveDecisions(); render();
   });
   ['period', 'sortBy', 'show'].forEach(id => $(id).addEventListener('change', render));
-  const LIST_NAME = { 'ouessant_birds.json': ['Oiseaux', 'des oiseaux'], 'lieux_ouessant.json': ['Lieux', 'des lieux'] };
+  const LIST_NAME = { 'ouessant_birds.json': ['Oiseaux', 'des oiseaux'], 'lieux_ouessant.json': ['Lieux', 'des lieux'], messages: ['Messages', 'des messages'] };
   function setList(f){
     LIST = f;
     document.querySelectorAll('.tabs [data-file]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.file === f)));
@@ -330,7 +344,9 @@
     $('outTitle').textContent = `3. Les lignes JSON ${de} validées`;
     $('outHelp').innerHTML = `Dans l’éditeur (avec ta clé) : onglet <b>${tab}</b> → <b>Coller des lignes</b> → colle → <b>Vérifier</b> → <b>Appliquer</b> → <b>Enregistrer sur GitHub</b>. Ces lignes ne contiennent que ${de}.`;
     $('genBtn').textContent = `Générer les lignes JSON ${de}`;
-    $('doneBtn').textContent = `Marquer comme traitées les réponses ${de} décidées`;
+    $('doneBtn').textContent = f === 'messages' ? 'Marquer ces messages comme lus' : `Marquer comme traitées les réponses ${de} décidées`;
+    const isMsg = f === 'messages'; $('genBtn').classList.toggle('hidden', isMsg); $('outTitle').textContent = isMsg ? '3. Messages lus' : $('outTitle').textContent;
+    if (isMsg) $('outHelp').textContent = 'Une fois les messages lus, marque-les : ils ne seront plus affichés (la case « Inclure les réponses déjà marquées » les fait réapparaître).';
     $('outBlocks').innerHTML = ''; $('outMsg').textContent = '';
     render();
   }
@@ -371,12 +387,14 @@
   const byId = () => new Map(proposals.map(p => [p.id, p]));
   function doneRows(){
     const m = byId();
-    return answers.filter(a => (!a.when || inPeriod(a)) && (a.ids.length ? a.ids.every(id => m.get(id).file === LIST && decided(m.get(id))) : true));   // réponse sans proposition lisible : rien à décider
+    if (LIST === 'messages') return answers.filter(a => a.msg && (!a.when || inPeriod(a)));
+    return answers.filter(a => !a.msg && (!a.when || inPeriod(a)) && (a.ids.length ? a.ids.every(id => m.get(id).file === LIST && decided(m.get(id))) : true));   // réponse sans proposition lisible ni message : rien à décider
   }
   $('doneBtn').addEventListener('click', async () => {
     const rows = doneRows(), out = $('outMsg'); if (!rows.length) return;
-    const m = byId(), left = answers.filter(a => (!a.when || inPeriod(a)) && a.ids.some(id => m.get(id).file === LIST)).length - rows.length;
-    if (!confirm(`Marquer ${rows.length} réponse(s) comme traitée(s) ?` + (left ? ` (${left} autre(s) gardée(s) : elles ont encore des propositions « à décider ».)` : '') + ' Pense à enregistrer les lignes JSON dans l’éditeur avant.')) return;
+    const m = byId(), left = LIST === 'messages' ? 0 : Math.max(0, answers.filter(a => (!a.when || inPeriod(a)) && a.ids.some(id => m.get(id).file === LIST)).length - rows.length);
+    if (!confirm(LIST === 'messages' ? `Marquer ${rows.length} message(s) comme lu(s) ? Ils ne seront plus affichés.`
+      : `Marquer ${rows.length} réponse(s) comme traitée(s) ?` + (left ? ` (${left} autre(s) gardée(s) : elles ont encore des propositions « à décider ».)` : '') + ' Pense à enregistrer les lignes JSON dans l’éditeur avant.')) return;
     out.className = 'msg'; out.textContent = 'Marquage…';
     try {
       if (lastSource === 'script' && src.url && src.code){

@@ -285,3 +285,13 @@ a.sbtn{display:inline-block;text-decoration:none;text-align:center}
 .az-bubble{position:fixed;z-index:7;top:50%;left:50%;transform:translate(-50%,-50%);width:4.2rem;height:4.2rem;display:grid;place-items:center;border-radius:16px;
   background:color-mix(in srgb,var(--ink) 82%,transparent);color:var(--paper);font:700 2.2rem/1 var(--sans);pointer-events:none}
 .az-bubble[hidden]{display:none}
+/* Contact : question ou retour sur l'appli (même formulaire Google, champ commentaire seulement) */
+.guide button{all:unset;display:inline-flex;align-items:center;gap:.45rem;color:var(--ocean-2);font-weight:600;font-size:.9rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.guide button:focus-visible{outline:3px solid var(--heather);outline-offset:3px;border-radius:4px}
+.contact{margin:.8rem 0 0;padding:.9rem 1rem;background:var(--paper);border:1px solid var(--line);border-radius:12px;max-width:62ch;display:grid;gap:.5rem}
+.contact[hidden]{display:none}
+.contact label{font-weight:600;font-size:.9rem}
+.contact textarea{font:400 1rem var(--sans);color:var(--ink);background:var(--foam);border:1px solid var(--line);border-radius:8px;padding:.55rem .65rem;resize:vertical;min-height:5.5rem}
+.contact textarea:focus-visible{outline:3px solid var(--heather);outline-offset:1px}
+.contact .sbtn{justify-self:start}
+.contact-help{margin:0;color:var(--granite);font-size:.82rem}

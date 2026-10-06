@@ -42,3 +42,5 @@
 .years .actions{margin:0}
 #yearDiff details{margin:.3rem 0}
 .tag.lock{color:var(--ink)}
+.msg-text{margin:.2rem 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg-card{border-left-color:var(--ocean-2)}
