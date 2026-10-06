@@ -2,7 +2,7 @@
 
 Petite appli web pour les observateurs d'oiseaux à Ouessant :
 
-- **Oiseaux** : sur quel canal annoncer une observation (Alerte Telegram, Alerte WhatsApp, Pas d'alerte). Toucher le canal prépare le **message d'alerte** (voir plus bas). Sur la liste complète, un **rail de lettres** à droite permet d'y glisser le doigt pour passer directement d'une lettre à l'autre (aussi dans **Lieux**) ;
+- **Oiseaux** : sur quel canal annoncer une observation (Alerte Telegram, Alerte WhatsApp, Pas d'alerte). Toucher le canal prépare le **message d'alerte** (voir plus bas). Un filtre de canal (Telegram, WhatsApp, Pas d'alerte) affiche en dessous un rappel discret de son usage habituel (rien pour « Toutes »). Sur la liste complète, un **rail de lettres** à droite permet d'y glisser le doigt pour passer directement d'une lettre à l'autre (aussi dans **Lieux**) ;
 - **Lieux** : coordonnées GPS indicatives des lieux-dits de l'île, avec un aperçu de la carte ;
 - **Où suis-je ?** : les lieux-dits les plus proches de sa position (de 3 à 10, au choix avec le curseur). Toucher un lieu-dit ouvre Google Maps sur son point GPS. Un bouton **Partager ma position** prépare un message (coordonnées, lien Google Maps, lieu-dit le plus proche) ;
 - **le phare** (en haut à gauche) : météo du jour à Ouessant, rappel « Quel canal ? » (Telegram : raretés à l'échelle nationale ; WhatsApp : raretés locales, espèces peu communes sur l'île et suivi des raretés déjà annoncées ; rien : espèces communes ou nicheuses), QR code pour partager l'appli, numéro de version et informations légales.

@@ -308,3 +308,6 @@ a.sbtn{display:inline-block;text-decoration:none;text-align:center}
 .pp-canaux{list-style:none;margin:.3rem 0 0;padding:0;display:grid;gap:.45rem;font-size:.92rem}
 .pp-canaux li{display:flex;gap:.55rem;align-items:baseline}
 .pp-canaux .dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 auto;transform:translateY(-1px)}
+.chip-rule{margin:.5rem 0 .2rem;padding:.35rem .7rem;border-left:3px solid var(--line);font-size:.86rem;color:var(--granite);line-height:1.4}
+.chip-rule[hidden]{display:none}
+.chip-rule b{color:var(--ink);font-weight:600}

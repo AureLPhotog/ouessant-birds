@@ -179,6 +179,9 @@
     const query = norm(raw);
     clearBtn.hidden = !raw;
     notice.innerHTML = '';
+    // canal choisi dans les filtres : rappel de son usage habituel (rien pour « Toutes »)
+    const rule = $('chipRule'), rk = activeChannel ? canalKind(activeChannel) : null, rt = { telegram: 'rTelegram', whatsapp: 'rWhatsapp', none: 'rNone' }[rk];
+    rule.hidden = !rt; if (rt){ rule.innerHTML = T(rt); rule.style.borderLeftColor = colorOf[activeChannel] || 'var(--line)'; }
 
     let list, mode = 'all';
     if(!query){
