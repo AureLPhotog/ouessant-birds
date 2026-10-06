@@ -30,5 +30,7 @@ body{margin:0;background:var(--foam);color:var(--ink);font:400 16px/1.5 var(--sa
 
 /* Mode admin (Clé Admin active) : petit repère en haut à droite de chaque page */
 .admin-badge{position:absolute;z-index:20;top:calc(env(safe-area-inset-top,0px) + .3rem);right:max(.55rem,calc(50vw - var(--wrap-w,860px) / 2 + 1.25rem));display:inline-flex;align-items:center;gap:.25rem;
-  padding:.12rem .5rem;border-radius:999px;background:var(--ocean);color:var(--foam);font:600 .68rem/1.3 var(--sans);letter-spacing:.02em;pointer-events:none}
+  padding:.12rem .5rem;border-radius:999px;background:var(--ocean);color:var(--foam);font:600 .68rem/1.3 var(--sans);letter-spacing:.02em;border:0;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.admin-badge:hover{background:var(--ocean-2)}
+.admin-badge:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
 .admin-badge[hidden]{display:none}

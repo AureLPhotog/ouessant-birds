@@ -273,7 +273,8 @@
     } catch (_) { return false; }
   }
   // retour depuis l'éditeur (page gardée en mémoire) ou clé changée dans un autre onglet : les crayons suivent
-  const badge = document.createElement('span'); badge.className = 'admin-badge'; badge.hidden = true; document.body.appendChild(badge);
+  // repère « Mode admin » : un lien vers le panneau de la clé dans l'éditeur (la gérer ou l'oublier)
+  const badge = document.createElement('a'); badge.className = 'admin-badge'; badge.href = 'editeur.html?cle'; badge.hidden = true; document.body.appendChild(badge);
   badge.innerHTML = '🔑 <span data-t="adminMode"></span>';   // texte mis à jour avec la langue, comme les autres [data-t]
   function adminBadge(){ badge.hidden = !isAdmin(); badge.querySelector('span').textContent = T('adminMode'); badge.title = T('adminModeT'); }
   adminBadge();

@@ -953,5 +953,6 @@
   }
   window.addEventListener('beforeunload', e => { if (items.length && changes().total){ save(); } });
   if (visitMode) openFromApp();
-  else if ($('resumeBtn').hidden) openList(FICHIERS.oiseaux);   // sans brouillon à reprendre : la liste des oiseaux s'ouvre d'elle-même
+  else if ($('resumeBtn').hidden) openList(FICHIERS.oiseaux).then(() => { if (params.has('cle')) openKey(); });   // sans brouillon à reprendre : la liste des oiseaux s'ouvre d'elle-même
+  else if (params.has('cle')) openKey();   // arrivée par le repère « Mode admin » : panneau de la clé ouvert
 })();
