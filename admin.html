@@ -93,6 +93,24 @@
     </section>
   </section>
 
+  <!-- Réglages pour tout le monde (reglages.json) -->
+  <section class="panel hidden" id="lockModePanel">
+    <h2>Ce que les visiteurs peuvent modifier (oiseaux)</h2>
+    <p class="help">Ces réglages valent pour tout le monde, dans l’appli et l’éditeur. Avec ta clé, tu peux toujours tout modifier. Les lieux-dits ne sont pas concernés.</p>
+    <div class="modes">
+      <label><input type="checkbox" id="regVerrou"> <span><b>Verrouiller les espèces marquées « Verrouillée »</b> : cadenas, aucune proposition. Décoché, elles suivent la même règle que les autres (pratique au lancement de l’appli).</span></label>
+    </div>
+    <div class="modes" role="radiogroup" aria-label="Champs modifiables">
+      <p class="help" style="margin:0"><b>Sur une espèce déjà dans la liste, un visiteur peut modifier :</b></p>
+      <label><input type="radio" name="regChamps" value="canal"> <span><b>le canal seulement</b> (fonctionnement normal) ; les noms et le type sont grisés, pas de suppression.</span></label>
+      <label><input type="radio" name="regChamps" value="tous"> <span><b>tous les champs</b> (noms, type, canal), et supprimer une espèce.</span></label>
+      <p class="help" style="margin:0">Ajouter une nouvelle espèce reste toujours possible.</p>
+    </div>
+    <div class="actions"><button type="button" class="btn primary" id="regSave" disabled>Enregistrer les réglages</button></div>
+    <p class="msg" id="regMsg" role="status"></p>
+    <p class="help">Chaque proposition garde les réglages du moment de son envoi : en reverrouillant, celles faites pendant l’ouverture ne sont pas rejetées d’office.</p>
+  </section>
+
   <!-- 4. Listes des oiseaux par année -->
   <section class="panel hidden" id="yearPanel">
     <h2>Listes des oiseaux par année</h2>
