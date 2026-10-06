@@ -574,7 +574,7 @@
 
   // ---------- Réglages pour tout le monde (reglages.json) : verrou des espèces « Verrouillée », champs modifiables par les visiteurs ----------
   let reglagesSha = null;
-  const regLabel = r => `espèces verrouillées : ${r.verrou ? 'cadenas' : 'verrou levé'} · champs modifiables : ${r.champs === 'tous' ? 'tous' : 'le canal seulement'}`;
+  const regLabel = r => `statut « Verrouillée » ${r.verrou ? 'pris en compte' : 'ignoré'} · champs modifiables : ${r.champs === 'tous' ? 'tous' : 'le canal seulement'}`;
   const regForm = () => ({ verrou: $('regVerrou').checked, champs: (document.querySelector('input[name="regChamps"]:checked') || {}).value === 'tous' ? 'tous' : 'canal' });
   const regSame = (a, b) => a.verrou === b.verrou && a.champs === b.champs;
   async function loadReg(){
