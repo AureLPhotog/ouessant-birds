@@ -212,7 +212,8 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
 - **`verrou`** : `true` = les espèces marquées « Verrouillée » ont un cadenas, aucune proposition ; `false` = elles suivent la règle
   des autres (pratique au lancement de l'appli) ;
 - **`champs`** : `"canal"` (fonctionnement normal) = sur une espèce **déjà dans la liste**, un visiteur ne peut proposer **qu'un autre
-  canal** (noms et type grisés, ni suppression ni duplication ; recréer une espèce existante est refusé) ; `"tous"` = tous les champs.
+  canal** (seul ce menu est affiché, ni suppression ni duplication ; recréer une espèce existante est refusé ; une espèce verrouillée
+  n'affiche aucun champ) ; `"tous"` = tous les champs.
 
 Ajouter une nouvelle espèce reste toujours possible. Les lieux-dits ne sont pas concernés. Avec la Clé Admin, tout est modifiable.
 L'éditeur ajoute à chaque proposition d'oiseau une ligne `// réglages : verrou actif|levé, champs canal|tous` : la page de tri juge
