@@ -708,7 +708,7 @@
     const canaux = [['telegram', 'cTelegram'], ['whatsapp', 'cWhatsapp'], ['none', 'cNone']]
       .map(([k, t]) => `<li><span class="dot" style="background:${CHANNEL_COLORS[k]}"></span><span>${T(t)}</span></li>`).join('');
     $('pharePanel').innerHTML = `<div class="pp-sec"><h2 class="pp-h">${esc(T('wTitle'))}</h2>${wxHtml()}</div>
-      <div class="pp-sec"><h2 class="pp-h">${esc(T('cTitle'))}</h2><ul class="pp-canaux">${canaux}</ul></div>
+      <div class="pp-sec"><h2 class="pp-h">${esc(T('cTitle'))}</h2><ul class="pp-canaux">${canaux}</ul><button type="button" class="link pp-rule" data-ph="rule">${esc(T('ruleBtn'))}</button></div>
       <div class="pp-sec"><div class="qr">
         <div class="qr-box">${ORIOLE}${FERN}${box}</div>
         <div class="qr-txt"><h2 class="pp-h">${esc(T('shTitle'))}</h2>${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
@@ -745,6 +745,8 @@
     e.stopPropagation();
     const b = e.target.closest('[data-ph]'); if (!b) return;
     if (b.dataset.ph === 'legal'){ legalOpen = !legalOpen; renderPhare(); return; }
+    // proposer une nouvelle règle : ouvre « Une question, un retour ? » avec un message pré-rempli
+    if (b.dataset.ph === 'rule'){ openPhare(false); window.dispatchEvent(new CustomEvent('ouessant-contact', { detail: T('ruleTpl') })); return; }
     if (b.dataset.ph === 'share') navigator.share({ title: T('title'), text: T('lede').replace(/<[^>]+>/g, ''), url: APP_URL }).catch(() => {});
     else {
       const done = () => { b.textContent = T('shCopied'); setTimeout(() => { b.textContent = T('shCopy'); }, 1600); };
@@ -872,6 +874,14 @@
   (function contact(){
     const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfO5eaqQZ_NS10ChZhazXZLLach0Bm0aQYUt9yZQsi-Qdh3LA/viewform', COMMENT = 'entry.253715776';
     const btn = $('contactBtn'), panel = $('contactPanel'), msg = $('contactMsg');
+    // ouverture depuis le phare (« Proposer une nouvelle règle ») : message pré-rempli, curseur après « Telegram : »
+    window.addEventListener('ouessant-contact', e => {
+      const tpl = String(e.detail || '');
+      panel.hidden = false; btn.setAttribute('aria-expanded', 'true');
+      if (!msg.value.trim() || msg.value === msg.dataset.tpl){ msg.value = tpl; msg.dataset.tpl = tpl; }
+      panel.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      setTimeout(() => { const i = msg.value.indexOf('\n') + 1, j = msg.value.indexOf('\n', i); msg.focus({ preventScroll: true }); try { msg.setSelectionRange(j > 0 ? j : msg.value.length, j > 0 ? j : msg.value.length); } catch (_) {} }, 450);
+    });
     // à l'ouverture : on montre la zone, sans ouvrir le clavier (il s'ouvre quand on touche le champ)
     btn.addEventListener('click', () => { const open = panel.hidden; panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); if (open) panel.scrollIntoView({ block: 'center', behavior: 'smooth' }); });
     // clavier ouvert : le champ doit rester visible au-dessus. Si le clavier recouvre la page sans la réduire,
