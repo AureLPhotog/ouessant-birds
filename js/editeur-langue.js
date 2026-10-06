@@ -148,7 +148,7 @@
     // noms des champs (seul l'affichage est traduit : les fichiers gardent leurs noms de champs)
     "Nom Français": "French name", "Nom Scientifique": "Scientific name", "Nom Anglais": "English name",
     "Type de taxon": "Taxon type", "Proposition de Canal de Diffusion Ouessant": "Reporting channel (Ouessant)",
-    "Verrouillée": "Locked", "Espèce commune verrouillée": "Locked common species",
+    "Verrouillée": "Locked", "🔑 Mode admin": "🔑 Admin mode", "Clé Admin active sur cet appareil": "Admin key active on this device", "Espèce commune verrouillée": "Locked common species",
     "🔒 Espèce commune : elle est verrouillée et ne peut pas être modifiée.": "🔒 Common species: it is locked and cannot be changed.",
     "🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier. Décoche « Verrouillée » pour la rouvrir aux propositions.": "🔒 Locked species: visitors cannot change it. Untick “Locked” to open it to suggestions again.",
     "Espèce commune verrouillée : pas de modification possible.": "Locked common species: no changes possible.",

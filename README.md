@@ -195,6 +195,7 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
 - **Dans l'appli** : un **cadenas** remplace le crayon ✎ ; on ne peut pas proposer de modification. **Pour l'admin**
   (Clé Admin entrée dans l'éditeur et reconnue par GitHub, dans cet onglet, ou sur l'appareil avec « Mémoriser »), toutes les
   espèces gardent leur crayon. L'appli ne fait que constater la présence de la clé dans le navigateur, sans l'utiliser ni l'envoyer.
+- **Repère « 🔑 Mode admin »** : en haut à droite de l'appli, de l'éditeur et de la page de tri, tant que la Clé Admin est active.
 - **Dans l'éditeur, sans la Clé Admin** : l'espèce s'affiche avec 🔒, en lecture seule (pas d'Enregistrer, Supprimer ni Dupliquer),
   et on ne peut pas la recréer comme « nouvel oiseau » (même nom scientifique). La case **Verrouillée** n'est pas montrée.
 - **Dans l'éditeur, avec la Clé Admin** : tout reste modifiable, avec un rappel ; la case **Verrouillée** et le filtre du même nom

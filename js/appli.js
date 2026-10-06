@@ -273,8 +273,12 @@
     } catch (_) { return false; }
   }
   // retour depuis l'éditeur (page gardée en mémoire) ou clé changée dans un autre onglet : les crayons suivent
-  addEventListener('pageshow', e => { if (e.persisted && birds.length) render(); });
-  addEventListener('storage', e => { if (e.key && e.key.startsWith('gh-token-ouessant') && birds.length) render(); });
+  const badge = document.createElement('span'); badge.className = 'admin-badge'; badge.hidden = true; document.body.appendChild(badge);
+  badge.innerHTML = '🔑 <span data-t="adminMode"></span>';   // texte mis à jour avec la langue, comme les autres [data-t]
+  function adminBadge(){ badge.hidden = !isAdmin(); badge.querySelector('span').textContent = T('adminMode'); badge.title = T('adminModeT'); }
+  adminBadge();
+  addEventListener('pageshow', e => { adminBadge(); if (e.persisted && birds.length) render(); });
+  addEventListener('storage', e => { if (e.key && e.key.startsWith('gh-token-ouessant')){ adminBadge(); if (birds.length) render(); } });
   // ---------- Propositions : elles passent par l'éditeur (editeur.html), qui ouvre la bonne liste sur la bonne entrée ----------
   function editorLink(fichier, opts){
     const q = new URLSearchParams({ fichier });
