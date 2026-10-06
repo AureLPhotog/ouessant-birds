@@ -2,15 +2,16 @@
    À coller dans la feuille Google des réponses : Extensions → Apps Script (voir README, « Récupération automatique »).
    Le script ne répond qu'avec le code secret, rangé dans les propriétés du script (CODE) : jamais dans le code ni dans le dépôt.
    - lire (par défaut) : renvoie toutes les lignes de la feuille (la première = titres des colonnes) ;
-   - marquer : écrit la date dans la colonne « Traitée » des lignes indiquées (créée si besoin, à droite des réponses),
-     pour que la page ne les propose plus au prochain tri. Les réponses ne sont jamais effacées. */
+   - marquer : écrit dans la colonne « Traitée » des lignes indiquées (créée si besoin, à droite des réponses) la décision et la date
+     (« validée le … », « rejetée le … », « en partie validée le … », « lu le … », puis une ligne par proposition),
+     pour que la page ne les propose plus au prochain tri et les montre dans l'historique. Les réponses ne sont jamais effacées. */
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
   var attendu = PropertiesService.getScriptProperties().getProperty('CODE');
   if (!attendu || attendu.length < 16 || !p.code || p.code !== attendu) return reponse({ ok: false, erreur: 'code' });
   var feuille = feuilleDesReponses();
-  if (p.action === 'marquer') return reponse(marquer(feuille, String(p.lignes || '')));
+  if (p.action === 'marquer') return reponse(marquer(feuille, String(p.lignes || ''), String(p.etats || '')));
   return reponse({ ok: true, lignes: feuille.getDataRange().getDisplayValues() });
 }
 
@@ -21,19 +22,25 @@ function feuilleDesReponses() {
   return (nom && classeur.getSheetByName(nom)) || classeur.getSheets()[0];
 }
 
-function marquer(feuille, liste) {
+function marquer(feuille, liste, etats) {
   var verrou = LockService.getScriptLock();
   verrou.waitLock(20000);
   try {
+    var detail = {};   // numéro de ligne → décision (1re ligne : « validée », « rejetée »… ; puis une ligne par proposition)
+    try { detail = JSON.parse(etats || '{}') || {}; } catch (err) { detail = {}; }
     var derniere = feuille.getLastRow();
     var numeros = liste.split(',').map(Number).filter(function (n) { return n >= 2 && n <= derniere && Math.floor(n) === n; });
-    if (!numeros.length) return { ok: true, marquees: 0 };
+    if (!numeros.length) return { ok: true, marquees: 0, detail: true };
     var titres = feuille.getRange(1, 1, 1, feuille.getLastColumn()).getValues()[0];
     var col = titres.indexOf('Traitée') + 1;
     if (!col) { col = titres.length + 1; feuille.getRange(1, col).setValue('Traitée'); }
     var quand = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm');
-    numeros.forEach(function (n) { feuille.getRange(n, col).setValue('oui, le ' + quand); });
-    return { ok: true, marquees: numeros.length };
+    numeros.forEach(function (n) {
+      var d = String(detail[n] || '').replace(/^[=+\-@\s]+/, '').slice(0, 2000).split('\n');   // jamais de formule dans la feuille
+      var etat = /^[a-zàâçéèêëîïôûùü ]{2,30}$/i.test(d[0]) ? d[0] : 'traitée';
+      feuille.getRange(n, col).setValue([etat + ' le ' + quand].concat(d.slice(1)).join('\n'));
+    });
+    return { ok: true, marquees: numeros.length, detail: true };
   } finally {
     verrou.releaseLock();
   }
