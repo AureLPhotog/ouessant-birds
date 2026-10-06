@@ -257,7 +257,7 @@
   function keyInfo(){
     const t = getToken();
     $('ghKeyInfo').innerHTML = t ? (tokenRemembered() ? `Clé GitHub mémorisée sur cet appareil${keptUntil() ? ' jusqu’au ' + keptUntil() : ''}.` : 'Clé GitHub active dans cet onglet (oubliée à sa fermeture).') + ' <button type="button" class="btn ghost" data-key>Gérer la clé</button>'
-      : 'Lecture possible sans clé. Pour enregistrer sur GitHub, il faudra une clé d’accès. <button type="button" class="btn ghost" data-key>Ajouter une clé</button>';
+      : 'Pas besoin de clé pour corriger ou compléter : tes modifications partent en proposition, vérifiée avant d’être intégrée. La Clé Admin sert seulement à l’administrateur. <button type="button" class="btn ghost" data-key>Clé Admin</button>';
     updateSaveBtn();
   }
   keyInfo();
