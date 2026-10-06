@@ -295,3 +295,13 @@ a.sbtn{display:inline-block;text-decoration:none;text-align:center}
 .contact textarea:focus-visible{outline:3px solid var(--heather);outline-offset:1px}
 .contact .sbtn{justify-self:start}
 .contact-help{margin:0;color:var(--granite);font-size:.82rem}
+/* Alerte Telegram : bulle « l'oiseau stationne depuis plusieurs jours ? » pour l'envoyer sur WhatsApp quand même */
+.astay{position:relative;margin-top:.75rem;padding:.6rem .75rem;border-radius:12px;border:1px solid color-mix(in srgb,#25D366 45%,var(--line));
+  background:color-mix(in srgb,#25D366 10%,var(--paper));display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .75rem}
+.astay::before{content:"";position:absolute;top:-7px;left:1.4rem;width:12px;height:12px;transform:rotate(45deg);
+  background:inherit;border-left:inherit;border-top:inherit}
+.astay p{margin:0;flex:1 1 14rem;font-size:.88rem;color:var(--ink)}
+.astay a{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .8rem;border-radius:8px;font:600 .88rem var(--sans);text-decoration:none;
+  color:#fff;background:#1E8E4E;border:1px solid #1E8E4E}
+.astay a:hover{background:#17773F}
+.astay a:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
