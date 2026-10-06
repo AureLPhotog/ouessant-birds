@@ -859,7 +859,19 @@
   (function contact(){
     const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfO5eaqQZ_NS10ChZhazXZLLach0Bm0aQYUt9yZQsi-Qdh3LA/viewform', COMMENT = 'entry.253715776';
     const btn = $('contactBtn'), panel = $('contactPanel'), msg = $('contactMsg');
-    btn.addEventListener('click', () => { const open = panel.hidden; panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); if (open){ panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); msg.focus({ preventScroll: true }); } });
+    // à l'ouverture : on montre la zone, sans ouvrir le clavier (il s'ouvre quand on touche le champ)
+    btn.addEventListener('click', () => { const open = panel.hidden; panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); if (open) panel.scrollIntoView({ block: 'center', behavior: 'smooth' }); });
+    // clavier ouvert : le champ doit rester visible au-dessus. Si le clavier recouvre la page sans la réduire,
+    // on ajoute en bas la place qu'il occupe, pour pouvoir y faire défiler le champ.
+    const vv = window.visualViewport;
+    const reveal = () => {
+      if (document.activeElement !== msg) return;
+      const kb = vv ? Math.max(0, innerHeight - vv.height - vv.offsetTop) : 0;
+      document.body.style.paddingBottom = kb ? kb + 'px' : '';
+      msg.scrollIntoView({ block: 'center' });
+    };
+    msg.addEventListener('focus', () => { setTimeout(reveal, 350); if (vv) vv.addEventListener('resize', reveal); });
+    msg.addEventListener('blur', () => { if (vv) vv.removeEventListener('resize', reveal); document.body.style.paddingBottom = ''; });
     $('contactSend').addEventListener('click', () => {
       const text = msg.value.trim(); if (!text){ msg.focus(); msg.placeholder = T('contactEmpty'); return; }
       const q = new URLSearchParams({ usp: 'pp_url' }); q.set(COMMENT, text.slice(0, 1500));
