@@ -150,8 +150,9 @@
     "Type de taxon": "Taxon type", "Proposition de Canal de Diffusion Ouessant": "Reporting channel (Ouessant)",
     "Verrouillée": "Locked", "🔑 Mode admin": "🔑 Admin mode", "Clé Admin active : la gérer ou l'oublier": "Admin key active: manage or forget it", "Espèce commune verrouillée": "Locked common species",
     "🔒 Espèce commune : elle est verrouillée et ne peut pas être modifiée.": "🔒 Common species: it is locked and cannot be changed.",
-    "🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier. Décoche « Verrouillée » pour la rouvrir aux propositions.": "🔒 Locked species: visitors cannot change it. Untick “Locked” to open it to suggestions again.",
+    "🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier (selon le réglage de la page de tri). Décoche « Verrouillée » pour la rouvrir aux propositions.": "🔒 Locked species: visitors cannot change it (depending on the setting in the sorting page). Untick “Locked” to open it to suggestions again.",
     "Espèce commune verrouillée : pas de modification possible.": "Locked common species: no changes possible.",
+    "🔒 Espèce commune : pour l'instant, seul le canal de diffusion peut être modifié.": "🔒 Common species: for now, only the broadcast channel can be changed.",
     "nom": "name", "carres": "squares", "precision_m": "accuracy (m)", "verifie": "checked on site",
     // réglages d'affichage
     "Affichage": "Display", "Thème": "Theme", "Auto": "Auto", "Clair": "Light", "Sombre": "Dark",

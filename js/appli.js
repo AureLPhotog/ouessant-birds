@@ -66,6 +66,7 @@
   const T = k => I18N[lang][k];
 
   let submitted = false;
+  let lockMode = 'actif';
   let birds = [], fuse = null, channels = [], counts = {}, activeChannel = null, colorOf = {}, sourceKey = null, showingImport = false;
 
   const $ = id => document.getElementById(id);
@@ -215,7 +216,7 @@
         <span class="sci" lang="la">${highlight(b[K_SCI], raw)}</span>
         ${alt ? `<span class="en" lang="${lang === 'en' ? 'fr' : 'en'}">${highlight(alt, raw)}</span>` : ''}
         ${canalHtml}
-        ${b[K_LOCK] === true && !admin   // espèce commune verrouillée : pas de proposition de modification (cadenas à la place du crayon), sauf pour l'admin
+        ${b[K_LOCK] === true && !admin && lockMode === 'actif'   // espèce commune verrouillée : cadenas à la place du crayon (sauf pour l'admin, ou si le réglage de l'admin l'ouvre)
           ? `<span class="bedit-btn is-locked" role="img" title="${esc(T('lockedSp'))}" aria-label="${esc(T('lockedSp'))}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>`
           : `<a class="bedit-btn" href="${editorLink('oiseaux', { cherche: b[K_SCI] })}" title="${esc(T('proposeEdit'))}" aria-label="${esc(T('proposeEdit'))}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>`}
         <div class="alertbox" hidden></div>
@@ -844,6 +845,8 @@
   updatePhare();
 
   // 1) GitHub  2) copie enregistrée dans le navigateur  3) import manuel
+  // réglage de l'admin pour les espèces verrouillées (reglages.json) : 'actif', 'canal' (seul le canal peut être proposé) ou 'ouvert'
+  fetch('reglages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { if (j && ['actif', 'canal', 'ouvert'].includes(j.verrou) && j.verrou !== lockMode){ lockMode = j.verrou; if (birds.length) render(); } }).catch(() => {});
   fetch('version_listes.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()).then(v => { if (v && typeof v.rev === 'number') { listsRev = v; showVersion(); } }).catch(() => {});
   fetch(URL_DATA)
     .then(r => { if(!r.ok) throw new Error(r.status); listsDate.birds = r.headers.get('last-modified'); return r.json(); })

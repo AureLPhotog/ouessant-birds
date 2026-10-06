@@ -93,6 +93,20 @@
     </section>
   </section>
 
+  <!-- Réglage : espèces verrouillées -->
+  <section class="panel hidden" id="lockModePanel">
+    <h2>Espèces verrouillées : qui peut les modifier ?</h2>
+    <p class="help">Le réglage vaut pour tout le monde (appli, éditeur). Avec ta clé, tu peux toujours tout modifier.</p>
+    <div class="modes" role="radiogroup" aria-label="Espèces verrouillées">
+      <label><input type="radio" name="lockMode" value="actif"> <span><b>Verrouillées</b> : cadenas, personne ne peut proposer de modification.</span></label>
+      <label><input type="radio" name="lockMode" value="canal"> <span><b>Canal seulement</b> : on peut proposer un autre canal de diffusion, rien d’autre (pratique au lancement de l’appli).</span></label>
+      <label><input type="radio" name="lockMode" value="ouvert"> <span><b>Ouvertes</b> : modifiables comme les autres espèces.</span></label>
+    </div>
+    <div class="actions"><button type="button" class="btn primary" id="lockModeSave" disabled>Enregistrer le réglage</button></div>
+    <p class="msg" id="lockModeMsg" role="status"></p>
+    <p class="help">Les propositions gardent le réglage du moment où elles ont été envoyées : en reverrouillant, celles faites pendant l’ouverture ne sont pas rejetées d’office.</p>
+  </section>
+
   <!-- 4. Listes des oiseaux par année -->
   <section class="panel hidden" id="yearPanel">
     <h2>Listes des oiseaux par année</h2>

@@ -30,7 +30,8 @@
   let doneSet; try { doneSet = new Set(JSON.parse(store.get(DONE_SET) || '[]')); } catch (_) { doneSet = new Set(); }
   const saveDone = () => store.set(DONE_SET, JSON.stringify([...doneSet].slice(-20000)));
   const META = ['_action', '_cle_avant'];
-  const LOCK = 'Verrouillée';
+  const LOCK = 'Verrouillée', CANAL = 'Proposition de Canal de Diffusion Ouessant';
+  let lockModeNow = 'actif', lockModeReady = Promise.resolve();   // réglage des espèces verrouillées (reglages.json)
   let current = {};            // fichier → { entries: [...], byKey: Map }
   let proposals = [];          // toutes les propositions lues dans le fichier
   let answers = [];            // une entrée par réponse (ligne de la feuille) : { row, when, day, ids }
@@ -57,7 +58,7 @@
     if (typed) try { sessionStorage.setItem(TOKEN_KEY, t); } catch (_) {}   // gardée dans l'onglet seulement
     TOKEN = t;
     $('lockPanel').classList.add('hidden'); $('loadPanel').classList.remove('hidden'); $('yearPanel').classList.remove('hidden'); $('adminBadge').hidden = false;
-    initYears();
+    initYears(); lockModeReady = loadLockMode();
   }
   $('lockForm').addEventListener('submit', e => { e.preventDefault(); const t = $('lockKey').value.trim(); $('lockKey').value = ''; unlock(t, true); });
   unlock(savedToken(), false);
@@ -118,6 +119,7 @@
       const l = raw.trim(); if (!l) return;
       if (l.startsWith('//')){
         const f = l.match(/Modifications de\s+(\S+\.json)/i); if (f) file = f[1];
+        const v = l.match(/^\/\/\s*verrou\s*:\s*(actif|canal|ouvert)\b/i); if (v){ out.mode = v[1].toLowerCase(); return; }   // réglage des espèces verrouillées au moment de la proposition
         hint = /supprim/i.test(l) ? 'del' : /ajout/i.test(l) ? 'add' : /modifi/i.test(l) ? 'mod' : hint;
         return;
       }
@@ -148,6 +150,7 @@
   // Tableau de lignes (la première = titres des colonnes), venant du fichier .csv ou de la feuille Google
   async function processRows(rows){
     const msg = $('loadMsg');
+    await lockModeReady;
       rows = rows.map(r => r.map(c => String(c ?? '')));
       lastRows = rows;
       if (rows.filter(r => r.some(c => c.trim() !== '')).length < 2) throw new Error('Aucune réponse pour l’instant.');
@@ -163,7 +166,8 @@
         if (isDone && !withDone){ skipped++; return; }
         const when = parseDate(r[col.date], col.dayFirst), comment = col.comment >= 0 ? (r[col.comment] || '').trim() : '';
         const ans = { row: ri + 2, sig, when, day: dayOf(when), ids: [], comment }; answers.push(ans);   // row : numéro de la ligne dans la feuille (1 = titres)
-        linesOf(r[col.json]).forEach(({ o, file, hint }, li) => {
+        const lines = linesOf(r[col.json]), amode = lines.mode || lockModeNow;
+        lines.forEach(({ o, file, hint }, li) => {
           const f = fileOf(o, file); if (!f) return;
           const L = LISTS[f], data = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
           const origKey = o._cle_avant !== undefined ? o._cle_avant : o[L.key];
@@ -178,8 +182,10 @@
             if (!diffs.length) type = 'same';   // déjà comme ça dans la liste
           }
           const id = ri + '-' + li; ans.ids.push(id);
-          const locked = f === 'ouessant_birds.json' && !!cur && cur[LOCK] === true;   // espèce commune verrouillée : rejetée d'office
-          proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur, locked });
+          // espèce commune verrouillée : rejetée d'office, selon le réglage du moment de la proposition (sinon le réglage actuel)
+          const lockedSp = f === 'ouessant_birds.json' && !!cur && cur[LOCK] === true;
+          const locked = lockedSp && (amode === 'actif' || (amode === 'canal' && (type !== 'mod' || diffs.some(d => d.k !== CANAL))));
+          proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur, locked, lockedSp });
         });
         ans.msg = !ans.ids.length && !!comment;   // question ou retour sur l'appli (bouton « Une question, un retour ? ») : onglet Messages
       });
@@ -250,9 +256,10 @@
     const map = new Map();
     proposals.filter(p => p.file === LIST && inPeriod(p)).forEach(p => {
       const gk = p.file + '|' + norm(p.origKey);
-      if (!map.has(gk)) map.set(gk, { gk, file: p.file, origKey: p.origKey, cur: p.cur, locked: p.locked, variants: new Map(), same: 0, total: 0 });
+      if (!map.has(gk)) map.set(gk, { gk, file: p.file, origKey: p.origKey, cur: p.cur, locked: true, lockedSp: p.lockedSp, variants: new Map(), same: 0, total: 0 });
       const g = map.get(gk); g.total++;
       if (p.type === 'same'){ g.same++; return; }
+      g.locked = g.locked && p.locked;   // rejetée d'office seulement si toutes ses propositions le sont
       const sig = p.type + ':' + JSON.stringify(p.diffs.map(d => [d.k, d.after]).sort());
       if (!g.variants.has(sig)) g.variants.set(sig, { sig, type: p.type, diffs: p.diffs, data: p.data, props: [] });
       g.variants.get(sig).props.push(p);
@@ -304,11 +311,11 @@
         <span class="tag">${esc(LISTS[g.file].label)}</span>
         <span class="tag n">${g.total} demande${g.total > 1 ? 's' : ''}</span>
         ${many ? '<span class="tag warn">propositions différentes</span>' : ''}
-        ${g.locked ? '<span class="tag lock">🔒 verrouillée</span>' : ''}
+        ${g.lockedSp ? '<span class="tag lock">🔒 verrouillée</span>' : ''}
         ${[...g.variants.values()].some(v => v.diffs.some(d => d.k === LOCK)) ? '<span class="tag warn">change le verrou</span>' : ''}
         <span class="state">${st === 'ok' ? '✔ validée' : st === 'no' ? (g.locked && chosen === undefined ? '✖ rejetée d’office' : '✖ rejetée') : 'à décider'}</span>
       </header>
-      ${g.locked ? '<p class="help">Espèce commune verrouillée : la proposition est rejetée d’office. Tu peux quand même la valider.</p>' : ''}
+      ${g.locked ? '<p class="help">Espèce commune verrouillée : la proposition est rejetée d’office. Tu peux quand même la valider.</p>' : g.lockedSp ? '<p class="help">Espèce verrouillée, ouverte aux propositions au moment de l’envoi (réglage « canal seulement » ou « ouvertes »).</p>' : ''}
       ${g.same ? `<p class="help">${g.same} demande(s) déjà conforme(s) à la liste (rien à faire).</p>` : ''}
       ${[...g.variants.values()].sort((a, b) => b.props.length - a.props.length).map(v => variantHtml(g, v, chosen === v.sig, many)).join('')}
       <div class="actions"><button type="button" class="btn danger" data-reject>${st === 'no' ? 'Rejetée' : 'Tout rejeter'}</button>${chosen !== undefined ? '<button type="button" class="btn ghost" data-undo>Annuler la décision</button>' : ''}</div>
@@ -320,7 +327,7 @@
       : v.diffs.map(d => `<li>${esc(d.k)} : ${v.type === 'add' ? '' : `<del>${esc(show(d.before) || 'vide')}</del> → `}<ins>${esc(show(d.after) || 'vide')}</ins></li>`).join('');
     const notes = v.props.filter(p => p.comment || p.when).map(p => `<li>${p.when ? `<time>${esc(p.when.toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }))}</time>` : ''}${p.comment ? ' — ' + esc(p.comment) : ''}</li>`).join('');
     return `<div class="var${isChosen ? ' chosen' : ''}" data-sig="${esc(v.sig)}">
-      <p class="var-h"><span class="badge ${cls}">${label}</span> <b>${v.props.length} personne${v.props.length > 1 ? 's' : ''}</b></p>
+      <p class="var-h"><span class="badge ${cls}">${label}</span> <b>${v.props.length} personne${v.props.length > 1 ? 's' : ''}</b>${!g.locked && v.props.every(p => p.locked) ? ' <span class="tag warn">hors canal : pas permise</span>' : ''}</p>
       <ul class="diff">${rows}</ul>
       ${notes ? `<details><summary>Dates et commentaires</summary><ul class="notes">${notes}</ul></details>` : ''}
       <button type="button" class="btn${isChosen ? ' primary' : ''}" data-pick>${isChosen ? 'Validée' : g.locked ? 'Valider quand même' : many ? 'Valider celle-ci' : 'Valider'}</button>
@@ -561,5 +568,31 @@
       msg.className = 'msg good'; msg.textContent = 'Liste actuelle sauvegardée dans les archives.';
     } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Sauvegarde impossible : ' + (e.message || e); }
     b.disabled = false;
+  });
+
+  // ---------- Espèces verrouillées : qui peut les modifier ? (reglages.json, le même pour tout le monde) ----------
+  const MODES = { actif: 'verrouillées', canal: 'canal seulement', ouvertes: 'ouvertes', ouvert: 'ouvertes' };
+  let reglagesSha = null;
+  async function loadLockMode(){
+    try {
+      const f = await getFile('reglages.json');
+      reglagesSha = f ? f.sha : null;
+      if (f && f.list && ['actif', 'canal', 'ouvert'].includes(f.list.verrou)) lockModeNow = f.list.verrou;
+    } catch (_) {}
+    document.querySelectorAll('input[name="lockMode"]').forEach(r => { r.checked = r.value === lockModeNow; });
+    $('lockModeSave').disabled = true; $('lockModePanel').classList.remove('hidden');
+  }
+  $('lockModePanel').addEventListener('change', e => { if (e.target.name === 'lockMode') $('lockModeSave').disabled = e.target.value === lockModeNow; });
+  $('lockModeSave').addEventListener('click', async () => {
+    const r = document.querySelector('input[name="lockMode"]:checked'), msg = $('lockModeMsg'); if (!r) return;
+    const v = r.value; $('lockModeSave').disabled = true; msg.className = 'msg'; msg.textContent = 'Enregistrement…';
+    try {
+      const j = await putFile('reglages.json', btoa(JSON.stringify({ verrou: v }) + '\n'), `Réglages : espèces verrouillées → ${MODES[v]}`, reglagesSha);
+      reglagesSha = j.content && j.content.sha; lockModeNow = v;
+      msg.className = 'msg good'; msg.textContent = `Enregistré : espèces verrouillées → ${MODES[v]}. L’appli et l’éditeur suivront d’ici quelques minutes.`;
+      if (lastRows) processRows(lastRows).catch(() => {});   // le tri en cours tient compte du nouveau réglage
+    } catch (e) {
+      msg.className = 'msg bad'; msg.textContent = 'Enregistrement impossible : ' + (e.conflict ? 'le réglage a changé ailleurs, recharge la page.' : (e.message || e)); $('lockModeSave').disabled = false;
+    }
   });
 })();

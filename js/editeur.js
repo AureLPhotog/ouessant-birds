@@ -564,7 +564,14 @@
   const K_LOCK = 'Verrouillée';
   const isAdmin = () => tokenValid();
   const isLocked = it => (it.orig || it.data)[K_LOCK] === true;
-  const lockedFor = it => isLocked(it) && !isAdmin();
+  // Réglage choisi par l'admin dans la page de tri (reglages.json, le même pour tout le monde) :
+  // 'actif' = verrouillées ; 'canal' = seul le canal de diffusion peut être proposé ; 'ouvert' = modifiables comme les autres
+  let lockMode = 'actif';
+  fetch('reglages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => {
+    if (j && ['actif', 'canal', 'ouvert'].includes(j.verrou)){ lockMode = j.verrou; if (items.length) render(); }
+  }).catch(() => {});
+  const lockedFor = it => isLocked(it) && !isAdmin() && lockMode !== 'ouvert';
+  const canalOnly = it => lockedFor(it) && lockMode === 'canal';   // visiteur : seul le canal est modifiable
   const lockedSci = (sci, except) => items.find(x => x !== except && x.orig && x.orig[K_LOCK] === true && norm(show(x.orig[K_SCI], 'text')) === norm(sci));
   function shownFields(){
     if (!phone.matches) return isAdmin() ? fields : fields.filter(k => k !== K_LOCK);
@@ -697,10 +704,13 @@
   }
   function editorHtml(it){
     const fs = isAdmin() ? fields : fields.filter(k => k !== K_LOCK);   // la case « Verrouillée » n'est montrée qu'à l'admin
+    if (canalOnly(it)) return `<div class="form-wrap" data-id="${it.id}"><p class="msg lock-msg">🔒 Espèce commune : pour l’instant, seul le canal de diffusion peut être modifié.</p>
+      <div class="form">${fs.map(k => k === K_CANAL ? inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined) : inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined).replace(/<(input|select|textarea)\b/g, '<$1 disabled')).join('')}</div>
+      <div class="actions"><button type="button" class="btn primary" data-act="save">Enregistrer</button><button type="button" class="btn" data-act="cancel">Fermer</button>${it.orig && !same(it.data, it.orig) ? '<button type="button" class="btn" data-act="revert">Revenir à l\u2019original</button>' : ''}</div><p class="msg bad" data-msg></p></div>`;
     if (lockedFor(it)) return `<div class="form-wrap" data-id="${it.id}"><p class="msg lock-msg">🔒 Espèce commune : elle est verrouillée et ne peut pas être modifiée.</p>
       <fieldset class="form" disabled>${fs.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</fieldset>
       <div class="actions"><button type="button" class="btn" data-act="cancel">Fermer</button></div></div>`;
-    return `<div class="form-wrap" data-id="${it.id}">${isLocked(it) ? '<p class="help lock-msg">🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier. Décoche « Verrouillée » pour la rouvrir aux propositions.</p>' : ''}<div class="form">${fs.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
+    return `<div class="form-wrap" data-id="${it.id}">${isLocked(it) && isAdmin() ? '<p class="help lock-msg">🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier (selon le réglage de la page de tri). Décoche « Verrouillée » pour la rouvrir aux propositions.</p>' : ''}<div class="form">${fs.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
       <div class="actions">
         <button type="button" class="btn primary" data-act="save">Enregistrer</button>
         <button type="button" class="btn" data-act="cancel">Fermer</button>
@@ -740,7 +750,7 @@
   function editorAction(act, id){
     const i = items.findIndex(x => x.id === id); if (i < 0) return;
     const it = items[i], wrap = document.querySelector(`.form-wrap[data-id="${id}"]`);
-    if (act !== 'cancel' && lockedFor(it)){ toast('Espèce commune verrouillée : pas de modification possible.'); return; }
+    if (act !== 'cancel' && lockedFor(it) && !(canalOnly(it) && ['save', 'forcesave', 'revert'].includes(act))){ toast('Espèce commune verrouillée : pas de modification possible.'); return; }
     if (act === 'save' || act === 'forcesave'){
       try {
         const pb = act === 'save' && geoProblem(wrap);
@@ -751,6 +761,7 @@
           return;
         }
         const d = readForm(wrap);
+        if (canalOnly(it)) Object.keys(d).forEach(k => { if (k !== K_CANAL) delete d[k]; });   // espèce verrouillée, réglage « canal seulement » : on ne garde que le canal
         // on garde l'ordre des champs, et les champs absents du formulaire
         const isEmpty = v => v === '' || v === false || (Array.isArray(v) && !v.length);
         const merged = {}; fields.forEach(k => {
@@ -758,7 +769,7 @@
           else if (k in it.data && !(k in d)) merged[k] = it.data[k];
         });
         if (merged[K_LOCK] === false) delete merged[K_LOCK];   // case décochée : le champ disparaît
-        const fmt = formatNames(merged);
+        const fmt = !canalOnly(it) && formatNames(merged);
         const twin = !isAdmin() && typeof merged[K_SCI] === 'string' && merged[K_SCI] && lockedSci(merged[K_SCI], it);
         if (twin) throw new Error(`« ${show(twin.orig[K_FR], 'text') || merged[K_SCI]} » est déjà dans la liste, verrouillée (espèce commune) : pas de modification possible.`);
         it.data = merged; openId = null; render(); save();
@@ -925,6 +936,7 @@
     const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
     const lines = [
       `// Modifications de ${fileName}, le ${new Date().toLocaleDateString('fr-FR')}`,
+      ...(lockMode !== 'actif' && kindOf(fileName) === 'birds' ? [`// verrou : ${lockMode}`] : []),   // réglage du moment : la page de tri en tient compte
       `// ${mod.length} modifiée(s), ${add.length} ajoutée(s), ${del.length} supprimée(s). À coller dans l’éditeur : « Coller des lignes ».`
     ];
     mod.forEach(it => {
