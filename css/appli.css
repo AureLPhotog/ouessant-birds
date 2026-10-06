@@ -305,3 +305,6 @@ a.sbtn{display:inline-block;text-decoration:none;text-align:center}
   color:#fff;background:#1E8E4E;border:1px solid #1E8E4E}
 .astay a:hover{background:#17773F}
 .astay a:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
+.pp-canaux{list-style:none;margin:.3rem 0 0;padding:0;display:grid;gap:.45rem;font-size:.92rem}
+.pp-canaux li{display:flex;gap:.55rem;align-items:baseline}
+.pp-canaux .dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 auto;transform:translateY(-1px)}

@@ -701,7 +701,11 @@
   function loadQr(){}
   function renderPhare(){
     const box = qrSvg();
+    // quel canal pour quelle espèce : rappel entre la météo et le partage
+    const canaux = [['telegram', 'cTelegram'], ['whatsapp', 'cWhatsapp'], ['none', 'cNone']]
+      .map(([k, t]) => `<li><span class="dot" style="background:${CHANNEL_COLORS[k]}"></span><span>${T(t)}</span></li>`).join('');
     $('pharePanel').innerHTML = `<div class="pp-sec"><h2 class="pp-h">${esc(T('wTitle'))}</h2>${wxHtml()}</div>
+      <div class="pp-sec"><h2 class="pp-h">${esc(T('cTitle'))}</h2><ul class="pp-canaux">${canaux}</ul></div>
       <div class="pp-sec"><div class="qr">
         <div class="qr-box">${ORIOLE}${FERN}${box}</div>
         <div class="qr-txt"><h2 class="pp-h">${esc(T('shTitle'))}</h2>${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
