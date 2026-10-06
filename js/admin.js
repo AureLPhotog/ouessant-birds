@@ -326,8 +326,8 @@
         ${items.length ? `<ul class="diff">${items.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
         ${h.comment ? `<p class="msg-text">${esc(h.comment)}</p>` : ''}
         ${!h.msg && h.props.length && h.props.every(p => p.type === 'same')
-          ? '<p class="help">Déjà appliquée à la liste : rien à retrier. Pour revenir en arrière, remets l’ancienne valeur dans l’éditeur (avec ta Clé Admin) : la proposition redeviendra « à décider ».</p>'
-          : `<div class="actions"><button type="button" class="btn ghost" data-redo="${h.row}">${h.msg ? 'Remettre en non lu' : 'Remettre à trier'}</button></div>`}
+          ? '<p class="help">Déjà appliquée à la liste : rien à re-statuer. Pour revenir en arrière, remets l’ancienne valeur dans l’éditeur (avec ta Clé Admin) : la proposition redeviendra « à décider ».</p>'
+          : `<div class="actions"><button type="button" class="btn ghost" data-redo="${h.row}">${h.msg ? 'Remettre en non lu' : 'Re-statuer'}</button></div>`}
       </article>`;
     }).join('') + '</details>';
   }
@@ -393,7 +393,7 @@
       h.props.forEach(p => { if (p.type === 'same') p.wasOk = /^validée/.test(h.cell) || okLines.includes(norm(nameOfP(p))); else delete decisions[p.file + '|' + norm(p.origKey)]; });
       saveDecisions();
       buildPeriods(); render();
-      toast(h.msg ? 'Message remis en non lu.' : 'Réponse remise à trier : décide, puis marque-la de nouveau (la décision notée sera remplacée).');
+      toast(h.msg ? 'Message remis en non lu.' : 'Réponse à re-statuer : décide, puis marque-la de nouveau (la décision notée sera remplacée).');
       return;
     }
     const card = e.target.closest('.grp'); if (!card) return;
