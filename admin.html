@@ -93,18 +93,22 @@
     </section>
   </section>
 
-  <!-- Réglage : espèces verrouillées -->
+  <!-- Réglages pour tout le monde (reglages.json) -->
   <section class="panel hidden" id="lockModePanel">
-    <h2>Espèces verrouillées : qui peut les modifier ?</h2>
-    <p class="help">Le réglage vaut pour tout le monde (appli, éditeur). Avec ta clé, tu peux toujours tout modifier.</p>
-    <div class="modes" role="radiogroup" aria-label="Espèces verrouillées">
-      <label><input type="radio" name="lockMode" value="actif"> <span><b>Verrouillées</b> : cadenas, personne ne peut proposer de modification.</span></label>
-      <label><input type="radio" name="lockMode" value="canal"> <span><b>Canal seulement</b> : on peut proposer un autre canal de diffusion, rien d’autre (pratique au lancement de l’appli).</span></label>
-      <label><input type="radio" name="lockMode" value="ouvert"> <span><b>Ouvertes</b> : modifiables comme les autres espèces.</span></label>
+    <h2>Ce que les visiteurs peuvent modifier (oiseaux)</h2>
+    <p class="help">Ces réglages valent pour tout le monde, dans l’appli et l’éditeur. Avec ta clé, tu peux toujours tout modifier. Les lieux-dits ne sont pas concernés.</p>
+    <div class="modes">
+      <label><input type="checkbox" id="regVerrou"> <span><b>Verrouiller les espèces marquées « Verrouillée »</b> : cadenas, aucune proposition. Décoché, elles suivent la même règle que les autres (pratique au lancement de l’appli).</span></label>
     </div>
-    <div class="actions"><button type="button" class="btn primary" id="lockModeSave" disabled>Enregistrer le réglage</button></div>
-    <p class="msg" id="lockModeMsg" role="status"></p>
-    <p class="help">Les propositions gardent le réglage du moment où elles ont été envoyées : en reverrouillant, celles faites pendant l’ouverture ne sont pas rejetées d’office.</p>
+    <div class="modes" role="radiogroup" aria-label="Champs modifiables">
+      <p class="help" style="margin:0"><b>Sur une espèce déjà dans la liste, un visiteur peut modifier :</b></p>
+      <label><input type="radio" name="regChamps" value="canal"> <span><b>le canal seulement</b> (fonctionnement normal) ; les noms et le type sont grisés, pas de suppression.</span></label>
+      <label><input type="radio" name="regChamps" value="tous"> <span><b>tous les champs</b> (noms, type, canal), et supprimer une espèce.</span></label>
+      <p class="help" style="margin:0">Ajouter une nouvelle espèce reste toujours possible.</p>
+    </div>
+    <div class="actions"><button type="button" class="btn primary" id="regSave" disabled>Enregistrer les réglages</button></div>
+    <p class="msg" id="regMsg" role="status"></p>
+    <p class="help">Chaque proposition garde les réglages du moment de son envoi : en reverrouillant, celles faites pendant l’ouverture ne sont pas rejetées d’office.</p>
   </section>
 
   <!-- 4. Listes des oiseaux par année -->

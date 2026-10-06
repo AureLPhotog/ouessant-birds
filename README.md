@@ -24,7 +24,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
 | `archives/` | **listes des oiseaux des années passées** (`ouessant_birds_2026.json`…) et sauvegardes, gérées depuis la page de tri (voir « Listes des oiseaux par année ») |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
-| `reglages.json` | réglage de l'admin pour les espèces verrouillées (`actif`, `canal` ou `ouvert`), modifié depuis la page de tri |
+| `reglages.json` | réglages de l'admin : verrou des espèces « Verrouillée » et champs modifiables par les visiteurs (canal seulement / tous), modifiés depuis la page de tri |
 | `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
 | `css/polices.css`, `polices/` | polices Spectral et Public Sans hébergées avec l'appli (licence SIL OFL 1.1, voir `polices/LICENCES.txt`) : plus d'appel à Google Fonts |
 | `css/commun.css` | couleurs (clair, sombre, daltonisme) et bases, partagées par l'appli et l'éditeur |
@@ -207,16 +207,17 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
 - **Dans la page de tri** : une proposition sur une espèce verrouillée est **rejetée d'office** (filtre « rejetées », étiquette 🔒) ;
   « Valider quand même » reste possible. Une proposition qui touche au verrou lui-même est signalée « change le verrou ».
 
-**Réglage pour tout le monde** (page de tri, section « Espèces verrouillées : qui peut les modifier ? », enregistré dans
-`reglages.json`) :
-- **Verrouillées** (`"verrou": "actif"`, par défaut) : comme décrit ci-dessus ;
-- **Canal seulement** (`"canal"`) : pas de cadenas dans l'appli ; dans l'éditeur, seul le **canal de diffusion** d'une espèce
-  verrouillée est modifiable (les autres champs sont grisés, ni suppression ni duplication). Pratique au lancement de l'appli ;
-- **Ouvertes** (`"ouvert"`) : les espèces verrouillées se modifient comme les autres.
+**Ce que les visiteurs peuvent modifier (oiseaux)** : deux réglages pour tout le monde, dans la page de tri, enregistrés dans
+`reglages.json` (`{"verrou": true, "champs": "canal"}` par défaut) :
+- **`verrou`** : `true` = les espèces marquées « Verrouillée » ont un cadenas, aucune proposition ; `false` = elles suivent la règle
+  des autres (pratique au lancement de l'appli) ;
+- **`champs`** : `"canal"` (fonctionnement normal) = sur une espèce **déjà dans la liste**, un visiteur ne peut proposer **qu'un autre
+  canal** (noms et type grisés, ni suppression ni duplication ; recréer une espèce existante est refusé) ; `"tous"` = tous les champs.
 
-L'éditeur ajoute à chaque proposition une ligne `// verrou : canal` (ou `ouvert`) : la page de tri juge ainsi chaque proposition
-selon le réglage **du moment où elle a été envoyée**. En reverrouillant, celles faites pendant l'ouverture restent « à décider » ;
-une proposition qui change autre chose que le canal en mode « canal seulement » est marquée **hors canal**.
+Ajouter une nouvelle espèce reste toujours possible. Les lieux-dits ne sont pas concernés. Avec la Clé Admin, tout est modifiable.
+L'éditeur ajoute à chaque proposition d'oiseau une ligne `// réglages : verrou actif|levé, champs canal|tous` : la page de tri juge
+chaque proposition selon les réglages **du moment de son envoi** (« rejetée d'office » si espèce verrouillée, ou si elle change autre
+chose que le canal en mode « canal seulement » ; « Valider quand même » reste possible).
 
 Le blocage de l'éditeur n'est qu'un confort : le formulaire Google est public, quelqu'un peut y envoyer n'importe quoi. La vraie
 barrière, c'est que seule la Clé Admin enregistre sur GitHub, et que la page de tri écarte ces propositions. Comme le verrou est

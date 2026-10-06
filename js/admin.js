@@ -31,7 +31,7 @@
   const saveDone = () => store.set(DONE_SET, JSON.stringify([...doneSet].slice(-20000)));
   const META = ['_action', '_cle_avant'];
   const LOCK = 'Verrouillée', CANAL = 'Proposition de Canal de Diffusion Ouessant';
-  let lockModeNow = 'actif', lockModeReady = Promise.resolve();   // réglage des espèces verrouillées (reglages.json)
+  let regNow = { verrou: true, champs: 'canal' }, regReady = Promise.resolve();   // réglages de l'admin (reglages.json)
   let current = {};            // fichier → { entries: [...], byKey: Map }
   let proposals = [];          // toutes les propositions lues dans le fichier
   let answers = [];            // une entrée par réponse (ligne de la feuille) : { row, when, day, ids }
@@ -58,7 +58,7 @@
     if (typed) try { sessionStorage.setItem(TOKEN_KEY, t); } catch (_) {}   // gardée dans l'onglet seulement
     TOKEN = t;
     $('lockPanel').classList.add('hidden'); $('loadPanel').classList.remove('hidden'); $('yearPanel').classList.remove('hidden'); $('adminBadge').hidden = false;
-    initYears(); lockModeReady = loadLockMode();
+    initYears(); regReady = loadReg();
   }
   $('lockForm').addEventListener('submit', e => { e.preventDefault(); const t = $('lockKey').value.trim(); $('lockKey').value = ''; unlock(t, true); });
   unlock(savedToken(), false);
@@ -119,7 +119,7 @@
       const l = raw.trim(); if (!l) return;
       if (l.startsWith('//')){
         const f = l.match(/Modifications de\s+(\S+\.json)/i); if (f) file = f[1];
-        const v = l.match(/^\/\/\s*verrou\s*:\s*(actif|canal|ouvert)\b/i); if (v){ out.mode = v[1].toLowerCase(); return; }   // réglage des espèces verrouillées au moment de la proposition
+        const v = l.match(/^\/\/\s*réglages\s*:\s*verrou\s+(actif|levé),\s*champs\s+(canal|tous)/i); if (v){ out.reg = { verrou: v[1].toLowerCase() === 'actif', champs: v[2].toLowerCase() }; return; }   // réglages au moment de la proposition
         hint = /supprim/i.test(l) ? 'del' : /ajout/i.test(l) ? 'add' : /modifi/i.test(l) ? 'mod' : hint;
         return;
       }
@@ -150,7 +150,7 @@
   // Tableau de lignes (la première = titres des colonnes), venant du fichier .csv ou de la feuille Google
   async function processRows(rows){
     const msg = $('loadMsg');
-    await lockModeReady;
+    await regReady;
       rows = rows.map(r => r.map(c => String(c ?? '')));
       lastRows = rows;
       if (rows.filter(r => r.some(c => c.trim() !== '')).length < 2) throw new Error('Aucune réponse pour l’instant.');
@@ -166,7 +166,7 @@
         if (isDone && !withDone){ skipped++; return; }
         const when = parseDate(r[col.date], col.dayFirst), comment = col.comment >= 0 ? (r[col.comment] || '').trim() : '';
         const ans = { row: ri + 2, sig, when, day: dayOf(when), ids: [], comment }; answers.push(ans);   // row : numéro de la ligne dans la feuille (1 = titres)
-        const lines = linesOf(r[col.json]), amode = lines.mode || lockModeNow;
+        const lines = linesOf(r[col.json]), areg = lines.reg || regNow;
         lines.forEach(({ o, file, hint }, li) => {
           const f = fileOf(o, file); if (!f) return;
           const L = LISTS[f], data = Object.fromEntries(Object.entries(o).filter(([k]) => !META.includes(k)));
@@ -182,10 +182,12 @@
             if (!diffs.length) type = 'same';   // déjà comme ça dans la liste
           }
           const id = ri + '-' + li; ans.ids.push(id);
-          // espèce commune verrouillée : rejetée d'office, selon le réglage du moment de la proposition (sinon le réglage actuel)
           const lockedSp = f === 'ouessant_birds.json' && !!cur && cur[LOCK] === true;
-          const locked = lockedSp && (amode === 'actif' || (amode === 'canal' && (type !== 'mod' || diffs.some(d => d.k !== CANAL))));
-          proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur, locked, lockedSp });
+          // rejetée d'office selon les réglages du moment de la proposition (sinon les réglages actuels) :
+          // espèce verrouillée ('lock'), ou changement d'autre chose que le canal d'une espèce existante en mode « canal seulement » ('canal')
+          const why = f !== 'ouessant_birds.json' ? null : lockedSp && areg.verrou ? 'lock' : areg.champs === 'canal' && (type === 'del' || (type === 'mod' && diffs.some(d => d.k !== CANAL))) ? 'canal' : null;
+          const locked = !!why;
+          proposals.push({ id, row: ans.row, when, day: dayOf(when), comment, file: f, origKey, type, diffs, data, cur, locked, lockedSp, why });
         });
         ans.msg = !ans.ids.length && !!comment;   // question ou retour sur l'appli (bouton « Une question, un retour ? ») : onglet Messages
       });
@@ -292,7 +294,7 @@
     const nIn = f => proposals.filter(p => p.file === f && inPeriod(p) && p.type !== 'same').length;
     $('nBirds').textContent = `(${nIn('ouessant_birds.json')})`; $('nPlaces').textContent = `(${nIn('lieux_ouessant.json')})`;
     const conflicts = all.filter(g => g.variants.size > 1).length, nLocked = all.filter(g => g.locked && decisions[g.gk] === undefined).length;
-    $('summary').textContent = `${all.length} espèce(s) ou lieu(x) concerné(s) : ${counts.todo} à décider, ${counts.ok} validé(s), ${counts.no} rejeté(s)` + (conflicts ? ` · ${conflicts} avec des propositions différentes` : '') + (nLocked ? ` · ${nLocked} espèce(s) verrouillée(s), rejetée(s) d’office (filtre « rejetées »)` : '') + (groups.alreadyOk ? ` · ${groups.alreadyOk} demande(s) déjà conforme(s) à la liste, ignorée(s)` : '');
+    $('summary').textContent = `${all.length} espèce(s) ou lieu(x) concerné(s) : ${counts.todo} à décider, ${counts.ok} validé(s), ${counts.no} rejeté(s)` + (conflicts ? ` · ${conflicts} avec des propositions différentes` : '') + (nLocked ? ` · ${nLocked} rejetée(s) d’office : espèce verrouillée ou changement hors canal (filtre « rejetées »)` : '') + (groups.alreadyOk ? ` · ${groups.alreadyOk} demande(s) déjà conforme(s) à la liste, ignorée(s)` : '');
     const rank = { del: 0, add: 1, mod: 2 };
     const list = all.filter(g => showV === 'all' || stateOf(g) === showV).sort((a, b) => {
       if (sortBy === 'name') return nameOf(a).main.localeCompare(nameOf(b).main, 'fr');
@@ -315,7 +317,7 @@
         ${[...g.variants.values()].some(v => v.diffs.some(d => d.k === LOCK)) ? '<span class="tag warn">change le verrou</span>' : ''}
         <span class="state">${st === 'ok' ? '✔ validée' : st === 'no' ? (g.locked && chosen === undefined ? '✖ rejetée d’office' : '✖ rejetée') : 'à décider'}</span>
       </header>
-      ${g.locked ? '<p class="help">Espèce commune verrouillée : la proposition est rejetée d’office. Tu peux quand même la valider.</p>' : g.lockedSp ? '<p class="help">Espèce verrouillée, ouverte aux propositions au moment de l’envoi (réglage « canal seulement » ou « ouvertes »).</p>' : ''}
+      ${g.locked ? `<p class="help">${[...g.variants.values()].some(v => v.props.some(p => p.why === 'lock')) ? 'Espèce commune verrouillée' : 'Changement d’autre chose que le canal (réglage « canal seulement »)'} : la proposition est rejetée d’office. Tu peux quand même la valider.</p>` : g.lockedSp ? '<p class="help">Espèce verrouillée, mais le verrou était levé au moment de l’envoi.</p>' : ''}
       ${g.same ? `<p class="help">${g.same} demande(s) déjà conforme(s) à la liste (rien à faire).</p>` : ''}
       ${[...g.variants.values()].sort((a, b) => b.props.length - a.props.length).map(v => variantHtml(g, v, chosen === v.sig, many)).join('')}
       <div class="actions"><button type="button" class="btn danger" data-reject>${st === 'no' ? 'Rejetée' : 'Tout rejeter'}</button>${chosen !== undefined ? '<button type="button" class="btn ghost" data-undo>Annuler la décision</button>' : ''}</div>
@@ -327,7 +329,7 @@
       : v.diffs.map(d => `<li>${esc(d.k)} : ${v.type === 'add' ? '' : `<del>${esc(show(d.before) || 'vide')}</del> → `}<ins>${esc(show(d.after) || 'vide')}</ins></li>`).join('');
     const notes = v.props.filter(p => p.comment || p.when).map(p => `<li>${p.when ? `<time>${esc(p.when.toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }))}</time>` : ''}${p.comment ? ' — ' + esc(p.comment) : ''}</li>`).join('');
     return `<div class="var${isChosen ? ' chosen' : ''}" data-sig="${esc(v.sig)}">
-      <p class="var-h"><span class="badge ${cls}">${label}</span> <b>${v.props.length} personne${v.props.length > 1 ? 's' : ''}</b>${!g.locked && v.props.every(p => p.locked) ? ' <span class="tag warn">hors canal : pas permise</span>' : ''}</p>
+      <p class="var-h"><span class="badge ${cls}">${label}</span> <b>${v.props.length} personne${v.props.length > 1 ? 's' : ''}</b>${!g.locked && v.props.every(p => p.locked) ? ` <span class="tag warn">${v.props.some(p => p.why === 'lock') ? 'verrouillée à l’envoi' : 'hors canal : pas permise'}</span>` : ''}</p>
       <ul class="diff">${rows}</ul>
       ${notes ? `<details><summary>Dates et commentaires</summary><ul class="notes">${notes}</ul></details>` : ''}
       <button type="button" class="btn${isChosen ? ' primary' : ''}" data-pick>${isChosen ? 'Validée' : g.locked ? 'Valider quand même' : many ? 'Valider celle-ci' : 'Valider'}</button>
@@ -570,29 +572,31 @@
     b.disabled = false;
   });
 
-  // ---------- Espèces verrouillées : qui peut les modifier ? (reglages.json, le même pour tout le monde) ----------
-  const MODES = { actif: 'verrouillées', canal: 'canal seulement', ouvertes: 'ouvertes', ouvert: 'ouvertes' };
+  // ---------- Réglages pour tout le monde (reglages.json) : verrou des espèces « Verrouillée », champs modifiables par les visiteurs ----------
   let reglagesSha = null;
-  async function loadLockMode(){
+  const regLabel = r => `espèces verrouillées : ${r.verrou ? 'cadenas' : 'verrou levé'} · champs modifiables : ${r.champs === 'tous' ? 'tous' : 'le canal seulement'}`;
+  const regForm = () => ({ verrou: $('regVerrou').checked, champs: (document.querySelector('input[name="regChamps"]:checked') || {}).value === 'tous' ? 'tous' : 'canal' });
+  const regSame = (a, b) => a.verrou === b.verrou && a.champs === b.champs;
+  async function loadReg(){
     try {
       const f = await getFile('reglages.json');
       reglagesSha = f ? f.sha : null;
-      if (f && f.list && ['actif', 'canal', 'ouvert'].includes(f.list.verrou)) lockModeNow = f.list.verrou;
+      if (f && f.list && typeof f.list === 'object') regNow = { verrou: f.list.verrou !== false, champs: f.list.champs === 'tous' ? 'tous' : 'canal' };
     } catch (_) {}
-    document.querySelectorAll('input[name="lockMode"]').forEach(r => { r.checked = r.value === lockModeNow; });
-    $('lockModeSave').disabled = true; $('lockModePanel').classList.remove('hidden');
+    $('regVerrou').checked = regNow.verrou;
+    document.querySelectorAll('input[name="regChamps"]').forEach(r => { r.checked = r.value === regNow.champs; });
+    $('regSave').disabled = true; $('lockModePanel').classList.remove('hidden');
   }
-  $('lockModePanel').addEventListener('change', e => { if (e.target.name === 'lockMode') $('lockModeSave').disabled = e.target.value === lockModeNow; });
-  $('lockModeSave').addEventListener('click', async () => {
-    const r = document.querySelector('input[name="lockMode"]:checked'), msg = $('lockModeMsg'); if (!r) return;
-    const v = r.value; $('lockModeSave').disabled = true; msg.className = 'msg'; msg.textContent = 'Enregistrement…';
+  $('lockModePanel').addEventListener('change', () => { $('regSave').disabled = regSame(regForm(), regNow); });
+  $('regSave').addEventListener('click', async () => {
+    const v = regForm(), msg = $('regMsg'); $('regSave').disabled = true; msg.className = 'msg'; msg.textContent = 'Enregistrement…';
     try {
-      const j = await putFile('reglages.json', btoa(JSON.stringify({ verrou: v }) + '\n'), `Réglages : espèces verrouillées → ${MODES[v]}`, reglagesSha);
-      reglagesSha = j.content && j.content.sha; lockModeNow = v;
-      msg.className = 'msg good'; msg.textContent = `Enregistré : espèces verrouillées → ${MODES[v]}. L’appli et l’éditeur suivront d’ici quelques minutes.`;
-      if (lastRows) processRows(lastRows).catch(() => {});   // le tri en cours tient compte du nouveau réglage
+      const j = await putFile('reglages.json', btoa(JSON.stringify(v) + '\n'), `Réglages : ${regLabel(v)}`, reglagesSha);
+      reglagesSha = j.content && j.content.sha; regNow = v;
+      msg.className = 'msg good'; msg.textContent = `Enregistré (${regLabel(v)}). L’appli et l’éditeur suivront d’ici quelques minutes.`;
+      if (lastRows) processRows(lastRows).catch(() => {});   // le tri en cours tient compte des nouveaux réglages
     } catch (e) {
-      msg.className = 'msg bad'; msg.textContent = 'Enregistrement impossible : ' + (e.conflict ? 'le réglage a changé ailleurs, recharge la page.' : (e.message || e)); $('lockModeSave').disabled = false;
+      msg.className = 'msg bad'; msg.textContent = 'Enregistrement impossible : ' + (e.conflict ? 'les réglages ont changé ailleurs, recharge la page.' : (e.message || e)); $('regSave').disabled = false;
     }
   });
 })();

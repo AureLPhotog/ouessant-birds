@@ -564,15 +564,18 @@
   const K_LOCK = 'Verrouillée';
   const isAdmin = () => tokenValid();
   const isLocked = it => (it.orig || it.data)[K_LOCK] === true;
-  // Réglage choisi par l'admin dans la page de tri (reglages.json, le même pour tout le monde) :
-  // 'actif' = verrouillées ; 'canal' = seul le canal de diffusion peut être proposé ; 'ouvert' = modifiables comme les autres
-  let lockMode = 'actif';
+  // Réglages de l'admin (page de tri → reglages.json, les mêmes pour tout le monde) :
+  //   verrou : true = les espèces « Verrouillée » ne sont pas modifiables (cadenas) ; false = elles suivent la règle des autres ;
+  //   champs : 'canal' = sur une espèce existante, un visiteur ne peut proposer qu'un autre canal ; 'tous' = tous les champs.
+  // Ne concerne que la liste des oiseaux. Avec la Clé Admin, tout reste modifiable.
+  let reg = { verrou: true, champs: 'canal' };
   fetch('reglages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => {
-    if (j && ['actif', 'canal', 'ouvert'].includes(j.verrou)){ lockMode = j.verrou; if (items.length) render(); }
+    if (j && typeof j === 'object'){ reg = { verrou: j.verrou !== false, champs: j.champs === 'tous' ? 'tous' : 'canal' }; if (items.length) render(); }
   }).catch(() => {});
-  const lockedFor = it => isLocked(it) && !isAdmin() && lockMode !== 'ouvert';
-  const canalOnly = it => lockedFor(it) && lockMode === 'canal';   // visiteur : seul le canal est modifiable
-  const lockedSci = (sci, except) => items.find(x => x !== except && x.orig && x.orig[K_LOCK] === true && norm(show(x.orig[K_SCI], 'text')) === norm(sci));
+  const birdsList = () => kindOf(gh ? gh.path : fileName) === 'birds';
+  const lockedFor = it => isLocked(it) && !isAdmin() && reg.verrou && birdsList();                            // rien de modifiable
+  const canalOnly = it => !isAdmin() && birdsList() && !!it.orig && !lockedFor(it) && reg.champs === 'canal';   // seul le canal est modifiable
+  const sameSci = (sci, except, onlyLocked) => items.find(x => x !== except && x.orig && (!onlyLocked || x.orig[K_LOCK] === true) && norm(show(x.orig[K_SCI], 'text')) === norm(sci));
   function shownFields(){
     if (!phone.matches) return isAdmin() ? fields : fields.filter(k => k !== K_LOCK);
     if ([K_FR, K_SCI, K_CANAL].every(k => fields.includes(k))){
@@ -704,7 +707,7 @@
   }
   function editorHtml(it){
     const fs = isAdmin() ? fields : fields.filter(k => k !== K_LOCK);   // la case « Verrouillée » n'est montrée qu'à l'admin
-    if (canalOnly(it)) return `<div class="form-wrap" data-id="${it.id}"><p class="msg lock-msg">🔒 Espèce commune : pour l’instant, seul le canal de diffusion peut être modifié.</p>
+    if (canalOnly(it)) return `<div class="form-wrap" data-id="${it.id}">${isLocked(it) ? '<p class="msg lock-msg">🔒 Espèce commune : pour l’instant, seul le canal de diffusion peut être modifié.</p>' : '<p class="help lock-msg">Tu peux proposer un autre canal de diffusion. Une erreur dans un nom ? Signale-la avec « Une question, un retour ? » en bas de l’appli.</p>'}
       <div class="form">${fs.map(k => k === K_CANAL ? inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined) : inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined).replace(/<(input|select|textarea)\b/g, '<$1 disabled')).join('')}</div>
       <div class="actions"><button type="button" class="btn primary" data-act="save">Enregistrer</button><button type="button" class="btn" data-act="cancel">Fermer</button>${it.orig && !same(it.data, it.orig) ? '<button type="button" class="btn" data-act="revert">Revenir à l\u2019original</button>' : ''}</div><p class="msg bad" data-msg></p></div>`;
     if (lockedFor(it)) return `<div class="form-wrap" data-id="${it.id}"><p class="msg lock-msg">🔒 Espèce commune : elle est verrouillée et ne peut pas être modifiée.</p>
@@ -750,7 +753,8 @@
   function editorAction(act, id){
     const i = items.findIndex(x => x.id === id); if (i < 0) return;
     const it = items[i], wrap = document.querySelector(`.form-wrap[data-id="${id}"]`);
-    if (act !== 'cancel' && lockedFor(it) && !(canalOnly(it) && ['save', 'forcesave', 'revert'].includes(act))){ toast('Espèce commune verrouillée : pas de modification possible.'); return; }
+    if (act !== 'cancel' && lockedFor(it)){ toast('Espèce commune verrouillée : pas de modification possible.'); return; }
+    if (canalOnly(it) && !['save', 'forcesave', 'revert', 'cancel'].includes(act)){ toast('Seul le canal de diffusion peut être modifié.'); return; }
     if (act === 'save' || act === 'forcesave'){
       try {
         const pb = act === 'save' && geoProblem(wrap);
@@ -770,8 +774,11 @@
         });
         if (merged[K_LOCK] === false) delete merged[K_LOCK];   // case décochée : le champ disparaît
         const fmt = !canalOnly(it) && formatNames(merged);
-        const twin = !isAdmin() && typeof merged[K_SCI] === 'string' && merged[K_SCI] && lockedSci(merged[K_SCI], it);
-        if (twin) throw new Error(`« ${show(twin.orig[K_FR], 'text') || merged[K_SCI]} » est déjà dans la liste, verrouillée (espèce commune) : pas de modification possible.`);
+        // un visiteur ne recrée pas une espèce déjà dans la liste (verrouillée, ou dont seul le canal peut changer)
+        const sci = !isAdmin() && birdsList() && typeof merged[K_SCI] === 'string' && merged[K_SCI];
+        const twinL = sci && reg.verrou && sameSci(sci, it, true), twinA = sci && !twinL && reg.champs === 'canal' && sameSci(sci, it, false);
+        if (twinL) throw new Error(`« ${show(twinL.orig[K_FR], 'text') || merged[K_SCI]} » est déjà dans la liste, verrouillée (espèce commune) : pas de modification possible.`);
+        if (twinA) throw new Error(`« ${show(twinA.orig[K_FR], 'text') || merged[K_SCI]} » est déjà dans la liste : ouvre-la pour proposer un autre canal.`);
         it.data = merged; openId = null; render(); save();
         window.scrollTo({ top: 0, behavior: 'smooth' });   // retour en haut : le bouton « Envoyer ma proposition » (en jaune) est là
         toast(getToken() ? (fmt ? 'Entrée enregistrée. Noms mis en forme.' : 'Entrée enregistrée.')
@@ -936,7 +943,7 @@
     const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
     const lines = [
       `// Modifications de ${fileName}, le ${new Date().toLocaleDateString('fr-FR')}`,
-      ...(lockMode !== 'actif' && kindOf(fileName) === 'birds' ? [`// verrou : ${lockMode}`] : []),   // réglage du moment : la page de tri en tient compte
+      ...(kindOf(fileName) === 'birds' ? [`// réglages : verrou ${reg.verrou ? 'actif' : 'levé'}, champs ${reg.champs}`] : []),   // réglages du moment : la page de tri en tient compte
       `// ${mod.length} modifiée(s), ${add.length} ajoutée(s), ${del.length} supprimée(s). À coller dans l’éditeur : « Coller des lignes ».`
     ];
     mod.forEach(it => {
