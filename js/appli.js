@@ -558,11 +558,14 @@
     if (fix && fix.acc > 500){ box.innerHTML = `<p class="astat bad" role="alert">${esc(T('alertImprecise')(Math.round(fix.acc)))}</p><div class="actions"><button type="button" data-aretry>${esc(T('retry'))}</button></div>`; return; }
     if (fix && !onIsland(fix)){ box.innerHTML = `<p class="astat bad" role="alert">${esc(T('alertOff'))}</p>`; return; }
     const { head, url, text } = alertParts(b, fix);
-    const open = kind === 'whatsapp' ? 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text)
+    const wa = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
+    const open = kind === 'whatsapp' ? wa
       : url ? 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(head) : 'https://t.me/';
+    // Telegram = espèces rares ; mais un oiseau qui stationne depuis plusieurs jours s'annonce sur WhatsApp : bulle pour l'y envoyer quand même
+    const stay = kind === 'telegram' ? `<div class="astay" role="note"><p>${esc(T('stayQ'))}</p><a href="${esc(wa)}" target="_blank" rel="noopener">${esc(T('stayWa'))}</a></div>` : '';
     box.innerHTML = `<p class="astat" aria-live="polite"></p>
       <textarea class="atext" readonly rows="${text.split('\n').length + 1}" aria-label="${esc(T('alertHint'))}">${esc(text)}</textarea>
-      <div class="actions"><a href="${esc(open)}" target="_blank" rel="noopener">${esc(T(kind === 'whatsapp' ? 'openWhatsapp' : 'openTelegram'))}</a><button type="button" data-acopy>${esc(T('copy'))}</button></div>`;
+      <div class="actions"><a href="${esc(open)}" target="_blank" rel="noopener">${esc(T(kind === 'whatsapp' ? 'openWhatsapp' : 'openTelegram'))}</a><button type="button" data-acopy>${esc(T('copy'))}</button></div>${stay}`;
     const st = box.querySelector('.astat');
     const done = () => { st.textContent = T('alertCopied'); };
     const bad = () => { st.textContent = T('alertCopyFail'); };

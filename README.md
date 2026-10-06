@@ -94,6 +94,8 @@ Sur une espèce « Alerte Telegram » ou « Alerte WhatsApp », toucher le canal
    https://www.google.com/maps?q=48.450200,-5.139000
    ```
 3. un bouton « Ouvrir WhatsApp » ou « Ouvrir Telegram » ouvre l'appli de messagerie : l'utilisateur choisit lui-même le groupe et colle le message. **Aucun lien de groupe n'est publié dans l'appli.**
+4. pour une espèce « Alerte Telegram », une **bulle** rappelle qu'un oiseau qui **stationne depuis plusieurs jours** s'annonce plutôt
+   sur WhatsApp, même s'il est très rare, avec un bouton **Envoyer sur WhatsApp** (même message).
 
 Cas particuliers : hors de l'île, l'appli prévient qu'on ne peut pas signaler l'oiseau ; si le GPS est indisponible, le
 message ne contient que l'espèce ; si la précision dépasse 1900 m, l'appli explique que la position exacte n'est pas
