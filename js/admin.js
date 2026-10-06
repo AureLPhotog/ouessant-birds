@@ -309,12 +309,14 @@
     if (p.type === 'same') return 'déjà comme ça dans la liste' + (show(p.data[CANAL]) ? ` (Canal : ${show(p.data[CANAL])})` : '');
     return p.diffs.map(d => `${SHORT[d.k] || d.k} : ${show(d.before) || '(vide)'} → ${show(d.after) || '(vide)'}`).join(' ; ');
   }
+  let pastOpen = false;   // l'historique reste ouvert d'un affichage à l'autre
+  $('groups').addEventListener('toggle', e => { if (e.target.classList && e.target.classList.contains('past')) pastOpen = e.target.open; }, true);
   const pastState = h => /^validée/.test(h.cell) ? 'ok' : /^(rejetée|en partie)/.test(h.cell) ? 'no' : 'past';
   function pastHtml(){
     const isMsg = LIST === 'messages';
     const list = history.filter(h => inPeriod(h) && (isMsg ? h.msg : h.props.some(p => p.file === LIST))).sort((a, b) => (b.when || 0) - (a.when || 0));
     if (!list.length) return '';
-    return `<details class="past"><summary>${isMsg ? 'Messages déjà lus' : 'Réponses déjà traitées'} (${list.length})</summary>` + list.map(h => {
+    return `<details class="past"${pastOpen ? ' open' : ''}><summary>${isMsg ? 'Messages déjà lus' : 'Réponses déjà traitées'} (${list.length})</summary>` + list.map(h => {
       const [head, ...lines] = h.cell.split(/\r?\n/).filter(l => l.trim());
       // marquage ancien (« oui, le … ») : la décision n'était pas notée ; on montre ce que la réponse proposait, comparé à la liste actuelle
       const items = lines.length ? lines : h.props.filter(p => p.file === LIST).map(p => `${nameOfP(p)} : ${descOf(p)}`);
@@ -323,7 +325,9 @@
         <p class="past-st"><b>${esc(/^oui\b/i.test(head) ? 'traitée' + head.slice(3) + ' (décision non notée)' : head)}</b></p>
         ${items.length ? `<ul class="diff">${items.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
         ${h.comment ? `<p class="msg-text">${esc(h.comment)}</p>` : ''}
-        <div class="actions"><button type="button" class="btn ghost" data-redo="${h.row}">${h.msg ? 'Remettre en non lu' : 'Remettre à trier'}</button></div>
+        ${!h.msg && h.props.length && h.props.every(p => p.type === 'same')
+          ? '<p class="help">Déjà appliquée à la liste : rien à re-statuer. Pour revenir en arrière, remets l’ancienne valeur dans l’éditeur (avec ta Clé Admin) : la proposition redeviendra « à décider ».</p>'
+          : `<div class="actions"><button type="button" class="btn ghost" data-redo="${h.row}">${h.msg ? 'Remettre en non lu' : 'Re-statuer'}</button></div>`}
       </article>`;
     }).join('') + '</details>';
   }
@@ -384,9 +388,12 @@
       const i = history.findIndex(h => String(h.row) === redo.dataset.redo); if (i < 0) return;
       const [h] = history.splice(i, 1);
       answers.push({ row: h.row, sig: h.sig, when: h.when, day: h.day, ids: h.props.map(p => p.id), comment: h.comment, msg: h.msg }); proposals.push(...h.props);
-      h.props.forEach(p => delete decisions[p.file + '|' + norm(p.origKey)]); saveDecisions();   // de nouveau « à décider »
+      // de nouveau « à décider » ; une proposition déjà appliquée à la liste garde sa validation (notée ✓ dans la case « Traitée »)
+      const okLines = h.cell.split(/\r?\n/).filter(l => /^✓/.test(l.trim())).map(l => norm(l.trim().slice(1).split(' : ')[0]));
+      h.props.forEach(p => { if (p.type === 'same') p.wasOk = /^validée/.test(h.cell) || okLines.includes(norm(nameOfP(p))); else delete decisions[p.file + '|' + norm(p.origKey)]; });
+      saveDecisions();
       buildPeriods(); render();
-      toast(h.msg ? 'Message remis en non lu.' : 'Réponse remise à trier : décide, puis marque-la de nouveau (la décision notée sera remplacée).');
+      toast(h.msg ? 'Message remis en non lu.' : 'Réponse à re-statuer : décide, puis marque-la de nouveau (la décision notée sera remplacée).');
       return;
     }
     const card = e.target.closest('.grp'); if (!card) return;
@@ -513,7 +520,7 @@
       let mark, note = '';
       if (p.type === 'same'){
         // déjà dans la liste : soit enregistrée après ta validation (puis réponses récupérées à nouveau), soit déjà comme ça
-        if (d !== undefined && d !== 'reject'){ mark = '✓'; ok++; note = ' (enregistrée)'; } else mark = '○';
+        if (d !== undefined && d !== 'reject' || p.wasOk){ mark = '✓'; ok++; note = ' (enregistrée)'; } else mark = '○';
       } else if (d === undefined ? p.locked : d === 'reject'){
         mark = '✗'; no++; if (d === undefined) note = p.why === 'lock' ? ' (rejetée d’office : espèce verrouillée)' : ' (rejetée d’office : hors canal)';
       } else if (d === sigOf(p)){ mark = '✓'; ok++; }
