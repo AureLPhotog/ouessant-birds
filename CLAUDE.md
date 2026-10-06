@@ -18,12 +18,14 @@ Après le 31 octobre, la règle tombe : reprendre le fonctionnement normal.
 Exigence absolue du propriétaire : ce fichier existe sur Pre-prod et test, **jamais sur `main`** (ni dans un commit de `main`).
 Une fusion normale le ferait passer d'une branche à l'autre, donc :
 
-- **Pre-prod → main** : `git checkout -B release origin/main && git merge --no-ff --no-commit Pre-prod`,
-  puis `git rm -q --cached CLAUDE.md && rm -f CLAUDE.md`, puis `git commit --no-edit`.
-  Vérifier avant de pousser : `git ls-tree --name-only release CLAUDE.md` ne renvoie **rien**,
+- **Pre-prod → main** : toujours un commit unique (squash), pour que l'historique de `main` ne contienne aucun commit de Pre-prod
+  (ceux-ci montreraient CLAUDE.md) : `git checkout -B release origin/main && git merge --squash Pre-prod`,
+  puis `git rm -q --cached CLAUDE.md; rm -f CLAUDE.md`, puis `git commit` (message : version et résumé).
+  Vérifier avant de pousser : `git ls-tree --name-only release CLAUDE.md` et `git log --oneline release -- CLAUDE.md` ne renvoient **rien**,
   et `git diff --quiet Pre-prod release -- . ':!CLAUDE.md'` ne signale aucune différence. Puis `git push origin release:main`.
-- **main → Pre-prod** (récupérer les enregistrements faits en ligne) : `git merge --no-commit origin/main`,
-  puis, si CLAUDE.md a été supprimé par la fusion, le remettre : `git checkout ORIG_HEAD -- CLAUDE.md` ; puis `git commit --no-edit`.
+- **Juste après chaque mise en ligne**, fusionner `origin/main` dans Pre-prod (sinon les squashs suivants feront des conflits).
+- **main → Pre-prod** (aussi pour récupérer les enregistrements faits en ligne) : `git merge --no-commit origin/main` ;
+  si la fusion a supprimé CLAUDE.md, le remettre (`git checkout ORIG_HEAD -- CLAUDE.md`) ; puis `git commit --no-edit`.
   Vérifier que CLAUDE.md est toujours là avant de pousser.
 
 ## Fonctionnement habituel
