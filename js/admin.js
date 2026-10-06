@@ -200,7 +200,7 @@
         });
         ans.msg = !ans.ids.length && !!comment;   // question ou retour sur l'appli (bouton « Une question, un retour ? ») : onglet Messages
         // déjà traitée : plus à trier, mais gardée dans l'historique avec la décision notée
-        if (isDone){ skipped++; history.push({ row: ans.row, when, day: ans.day, comment, msg: ans.msg, props: mine, cell: cell || doneDetail[sig] || 'traitée' }); return; }
+        if (isDone){ skipped++; history.push({ row: ans.row, sig, when, day: ans.day, comment, msg: ans.msg, props: mine, cell: cell || doneDetail[sig] || 'traitée' }); return; }
         answers.push(ans); proposals.push(...mine);
       });
       if (!answers.length && !history.length) throw new Error('Aucune réponse pour l’instant.');
@@ -323,6 +323,7 @@
         <p class="past-st"><b>${esc(/^oui\b/i.test(head) ? 'traitée' + head.slice(3) + ' (décision non notée)' : head)}</b></p>
         ${items.length ? `<ul class="diff">${items.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
         ${h.comment ? `<p class="msg-text">${esc(h.comment)}</p>` : ''}
+        <div class="actions"><button type="button" class="btn ghost" data-redo="${h.row}">${h.msg ? 'Remettre en non lu' : 'Remettre à trier'}</button></div>
       </article>`;
     }).join('') + '</details>';
   }
@@ -377,6 +378,17 @@
     </div>`;
   }
   $('groups').addEventListener('click', e => {
+    // historique : la réponse repasse dans le tri ; sa case « Traitée » sera réécrite au prochain marquage
+    const redo = e.target.closest('[data-redo]');
+    if (redo){
+      const i = history.findIndex(h => String(h.row) === redo.dataset.redo); if (i < 0) return;
+      const [h] = history.splice(i, 1);
+      answers.push({ row: h.row, sig: h.sig, when: h.when, day: h.day, ids: h.props.map(p => p.id), comment: h.comment, msg: h.msg }); proposals.push(...h.props);
+      h.props.forEach(p => delete decisions[p.file + '|' + norm(p.origKey)]); saveDecisions();   // de nouveau « à décider »
+      buildPeriods(); render();
+      toast(h.msg ? 'Message remis en non lu.' : 'Réponse remise à trier : décide, puis marque-la de nouveau (la décision notée sera remplacée).');
+      return;
+    }
     const card = e.target.closest('.grp'); if (!card) return;
     const gk = card.dataset.gk;
     if (e.target.closest('[data-pick]')) decisions[gk] = e.target.closest('.var').dataset.sig;
@@ -538,7 +550,7 @@
         out.className = 'msg good'; out.textContent = `${rows.length} réponse(s) notée(s) « traitée(s) » dans ce navigateur, avec la décision (tu as chargé un fichier .csv : la feuille Google n’est pas modifiée). Avec « Récupérer les réponses » (script Google), le marquage s’écrit dans la feuille, colonne « Traitée ».`;
       }
       const marked = new Set(rows.map(a => a.row));
-      rows.forEach(a => history.push({ row: a.row, when: a.when, day: a.day, comment: a.comment, msg: a.msg, props: proposals.filter(p => p.row === a.row), cell: withDate(texts.get(a.row), quand) }));
+      rows.forEach(a => history.push({ row: a.row, sig: a.sig, when: a.when, day: a.day, comment: a.comment, msg: a.msg, props: proposals.filter(p => p.row === a.row), cell: withDate(texts.get(a.row), quand) }));
       answers = answers.filter(a => !marked.has(a.row)); proposals = proposals.filter(p => !marked.has(p.row));
       buildPeriods(); render();
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Marquage impossible : ' + (e.message || e); }

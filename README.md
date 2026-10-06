@@ -138,8 +138,9 @@ Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce
    avec le fichier .csv seul, la feuille n'est pas modifiée : c'est noté dans le navigateur. Une réponse qui contient encore une proposition
    « à décider » n'est pas marquée. Les réponses traitées ne sont plus proposées au tri, mais rien n'est effacé : elles restent visibles,
    avec leur décision, dans **« Réponses déjà traitées »** (ou **« Messages déjà lus »**) en bas de chaque onglet. Les réponses marquées
-   avant la version 5.28 n'ont que la date : elles y apparaissent avec « décision non notée ». Pour remettre une réponse à trier,
-   vider sa case « Traitée » dans la feuille.
+   avant la version 5.28 n'ont que la date : elles y apparaissent avec « décision non notée ». Pour revenir sur une décision :
+   bouton **Remettre à trier** (ou **Remettre en non lu**) sur sa carte ; elle redevient « à décider », et sa case « Traitée »
+   est réécrite au prochain marquage (on peut aussi vider la case dans la feuille).
 
 ### Récupération automatique des réponses (à installer une fois)
 
