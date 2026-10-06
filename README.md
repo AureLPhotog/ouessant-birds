@@ -6,7 +6,7 @@ Petite appli web pour les observateurs d'oiseaux à Ouessant :
 - **Lieux** : coordonnées GPS indicatives des lieux-dits de l'île, avec un aperçu de la carte ;
 - **Où suis-je ?** : les lieux-dits les plus proches de sa position (de 3 à 10, au choix avec le curseur). Toucher un lieu-dit ouvre Google Maps sur son point GPS. Un bouton **Partager ma position** prépare un message (coordonnées, lien Google Maps, lieu-dit le plus proche) ;
 - **le phare** (en haut à gauche) : météo du jour à Ouessant, QR code pour partager l'appli, numéro de version et informations légales.
-- **en bas de page** : le guide d'utilisation (PDF) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
+- **en bas de page** : le guide d'utilisation (PDF), **« Une question, un retour ? »** (message anonyme, envoyé par le formulaire Google des propositions, dans le seul champ commentaire ; la page de tri le range dans l'onglet **Messages**) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
 
 En ligne : <https://aurelphotog.github.io/ouessant-birds/>
 
@@ -123,7 +123,7 @@ Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce
 1. Ouvrir l'éditeur avec la Clé Admin → bouton **Trier les propositions** (ou directement `admin.html`, qui demande la clé).
 2. Dans Google Forms : **Réponses → Afficher dans Sheets**, puis **Fichier → Télécharger → .csv**, et choisir ce fichier dans la page.
    Le fichier est lu sur l'appareil : rien n'est mis en ligne.
-3. Choisir l'onglet **Oiseaux** ou **Lieux** (les deux listes ne sont jamais mélangées : tri, lignes JSON et marquage se font
+3. Choisir l'onglet **Oiseaux**, **Lieux** ou **Messages** (questions et retours envoyés depuis l'appli : à lire, puis « Marquer ces messages comme lus »). Pour Oiseaux et Lieux (les deux listes ne sont jamais mélangées : tri, lignes JSON et marquage se font
    onglet par onglet), puis la période (tous les jours ou un jour). Chaque espèce / lieu-dit a sa carte : la valeur actuelle, chaque proposition
    différente (avec le nombre de personnes, les dates et les commentaires), et les boutons **Valider** / **Tout rejeter**.
    Les propositions déjà conformes à la liste sont signalées et ignorées. Les décisions sont gardées dans le navigateur.

@@ -853,6 +853,20 @@
       showImport();
     });
 
+  // ---------- Contact : une question ou un retour sur l'appli ----------
+  // Le message part par le même formulaire Google que les propositions, dans le seul champ « commentaire » (aucune ligne JSON) :
+  // la page de tri les range dans l'onglet « Messages ».
+  (function contact(){
+    const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfO5eaqQZ_NS10ChZhazXZLLach0Bm0aQYUt9yZQsi-Qdh3LA/viewform', COMMENT = 'entry.253715776';
+    const btn = $('contactBtn'), panel = $('contactPanel'), msg = $('contactMsg');
+    btn.addEventListener('click', () => { const open = panel.hidden; panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); if (open){ panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); msg.focus({ preventScroll: true }); } });
+    $('contactSend').addEventListener('click', () => {
+      const text = msg.value.trim(); if (!text){ msg.focus(); msg.placeholder = T('contactEmpty'); return; }
+      const q = new URLSearchParams({ usp: 'pp_url' }); q.set(COMMENT, text.slice(0, 1500));
+      window.open(FORM + '?' + q.toString(), '_blank', 'noopener');
+    });
+  })();
+
   // ---------- Accès rapide par lettre : rail A–Z à droite des listes (Oiseaux, Lieux) ----------
   // Doigt maintenu sur le rail : on glisse d'une lettre à l'autre, la liste suit (comme les contacts d'un téléphone).
   // Seulement sur la liste complète (sans recherche) et assez longue ; seules les lettres présentes sont proposées.
