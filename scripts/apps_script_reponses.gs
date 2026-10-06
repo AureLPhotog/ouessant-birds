@@ -1,4 +1,4 @@
-/* Oiseaux d'Ouessant — relie la feuille des réponses du formulaire à la page « Tri des propositions » (admin.html).
+/* Oiseaux d'Ouessant — relie la feuille des réponses du formulaire à la page « Administration » (admin.html).
    À coller dans la feuille Google des réponses : Extensions → Apps Script (voir README, « Récupération automatique »).
    Le script ne répond qu'avec le code secret, rangé dans les propriétés du script (CODE) : jamais dans le code ni dans le dépôt.
    - lire (par défaut) : renvoie toutes les lignes de la feuille (la première = titres des colonnes) ;
@@ -48,7 +48,7 @@ function reponse(objet) {
    - ALERTE_NB    : Y → un mail toutes les Y nouvelles réponses reçues (comptées depuis le dernier mail de ce type) ;
    - ALERTE_JOURS : X → chaque matin, un rappel si la plus ancienne réponse non traitée a plus de X jours ;
    - ALERTE_MAIL  : adresse qui reçoit les mails (facultatif ; par défaut, le compte Google du script).
-   Vide ou 0 = alerte coupée. « Non traitée » = colonne « Traitée » vide (bouton « Marquer… » de la page de tri, en mode automatique).
+   Vide ou 0 = alerte coupée. « Non traitée » = colonne « Traitée » vide (bouton « Marquer… » de la page Administration, en mode automatique).
    À activer une fois : dans la barre d'Apps Script, choisir la fonction installerAlertes → Exécuter → autoriser.
    Pour tout arrêter : exécuter couperAlertes. */
 var PAGE_TRI = 'https://aurelphotog.github.io/ouessant-birds/admin.html';
