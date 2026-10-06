@@ -132,10 +132,14 @@ Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce
    Les propositions déjà conformes à la liste sont signalées et ignorées. Les décisions sont gardées dans le navigateur.
 4. **Générer les lignes JSON des oiseaux** (ou **des lieux**) → les coller dans le **même onglet** de l'éditeur (l'éditeur refuse
    des lignes de lieux dans les oiseaux et inversement) (**Coller des lignes → Vérifier → Appliquer →
-   Enregistrer sur GitHub**). Puis **Marquer les réponses décidées comme traitées** : avec le script Google, la date est écrite dans une
-   colonne **« Traitée »** de la feuille (ajoutée à droite des réponses) et ces réponses ne sont plus proposées au tri suivant ;
-   avec le fichier .csv seul, la feuille n'est pas modifiée : c'est noté dans le navigateur, et ces réponses sont écartées à la lecture. Une réponse qui contient encore une proposition
-   « à décider » n'est pas marquée. Rien n'est effacé : la case **Inclure les réponses déjà marquées « traitées »** les fait réapparaître.
+   Enregistrer sur GitHub**). Puis **Marquer les réponses décidées comme traitées** : avec le script Google, la décision est écrite dans une
+   colonne **« Traitée »** de la feuille (ajoutée à droite des réponses) : « validée le … », « rejetée le … », « en partie validée le … »
+   ou « lu le … » pour un message, puis une ligne par proposition (✓ validée, ✗ rejetée, ○ déjà comme ça dans la liste) ;
+   avec le fichier .csv seul, la feuille n'est pas modifiée : c'est noté dans le navigateur. Une réponse qui contient encore une proposition
+   « à décider » n'est pas marquée. Les réponses traitées ne sont plus proposées au tri, mais rien n'est effacé : elles restent visibles,
+   avec leur décision, dans **« Réponses déjà traitées »** (ou **« Messages déjà lus »**) en bas de chaque onglet. Les réponses marquées
+   avant la version 5.28 n'ont que la date : elles y apparaissent avec « décision non notée ». Pour remettre une réponse à trier,
+   vider sa case « Traitée » dans la feuille.
 
 ### Récupération automatique des réponses (à installer une fois)
 
