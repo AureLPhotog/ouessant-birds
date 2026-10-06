@@ -28,7 +28,7 @@
     "Ajouter une clé": "Add a key",
     "Clé GitHub mémorisée sur cet appareil.": "GitHub key remembered on this device.",
     "Clé GitHub active dans cet onglet (oubliée à sa fermeture).": "GitHub key active in this tab (forgotten when it closes).",
-    "Pas besoin de clé pour corriger ou compléter : tes modifications partent en proposition, vérifiée avant d'être intégrée. La Clé Admin sert seulement à l'administrateur.": "No key needed to correct or add entries: your changes are sent as a suggestion, checked before being included. The Admin key is only for the administrator.",
+    "Tu peux corriger ou compléter les informations sans clé : chaque modification sera simplement soumise à validation avant d'être intégrée. La Clé Admin est réservée à l'administrateur.": "You can correct or add information without a key: each change will simply be reviewed before being included. The Admin key is reserved for the administrator.",
     "Chargement depuis GitHub…": "Loading from GitHub…",
     "Chargement de la liste…": "Loading the list…",
     // barre d'outils
