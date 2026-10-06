@@ -92,6 +92,17 @@
     </section>
   </section>
 
+  <!-- 4. Listes des oiseaux par année -->
+  <section class="panel hidden" id="yearPanel">
+    <h2>Listes des oiseaux par année</h2>
+    <p class="help">Au 1er janvier, la liste de l’année qui se termine est archivée automatiquement : c’est fait à la première ouverture de cette page dans la nouvelle année, à partir de l’historique GitHub, donc c’est bien la liste du 31 décembre. La nouvelle année démarre avec la même liste. Tu peux ensuite la modifier dans l’éditeur, ou reprendre une liste archivée comme référence de l’année.</p>
+    <p id="yearCur"></p>
+    <div id="yearList"></div>
+    <div class="actions"><button type="button" class="btn" id="yearSnap">Sauvegarder la liste actuelle</button></div>
+    <p class="msg" id="yearMsg" role="status"></p>
+    <div id="yearDiff"></div>
+  </section>
+
   <p class="back"><a class="btn" href="editeur.html"><span aria-hidden="true">←</span> <span>Ouvrir l’éditeur</span></a> <a class="btn" href="index.html"><span>Revenir à l’appli</span></a></p>
 </div>
 <div class="toast hidden" id="toast" role="status"></div>

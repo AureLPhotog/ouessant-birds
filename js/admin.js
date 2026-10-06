@@ -42,6 +42,7 @@
   // ---------- Verrou : la page ne s'ouvre qu'avec la Clé Admin, vérifiée auprès de GitHub ----------
   // (le code de la page est public comme tout le dépôt, mais il ne contient aucune donnée : les réponses restent dans le fichier sur l'appareil)
   const TOKEN_KEY = 'gh-token-ouessant';   // même clé que l'éditeur : si elle y est déjà entrée, la page s'ouvre directement
+  let TOKEN = '';   // clé vérifiée, pour les listes annuelles (écriture dans le dépôt)
   const savedToken = () => { try { return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; } };
   async function isOwner(t){
     const r = await fetch('https://api.github.com/repos/AureLPhotog/ouessant-birds', { cache: 'no-store', headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + t } });
@@ -53,7 +54,9 @@
     let ok = false; try { ok = !!t && await isOwner(t); } catch (_) {}
     if (!ok){ msg.className = 'msg bad'; msg.textContent = typed ? 'Clé refusée : elle ne donne pas accès au dépôt (ou GitHub est injoignable).' : ''; return; }
     if (typed) try { sessionStorage.setItem(TOKEN_KEY, t); } catch (_) {}   // gardée dans l'onglet seulement
-    $('lockPanel').classList.add('hidden'); $('loadPanel').classList.remove('hidden');
+    TOKEN = t;
+    $('lockPanel').classList.add('hidden'); $('loadPanel').classList.remove('hidden'); $('yearPanel').classList.remove('hidden');
+    initYears();
   }
   $('lockForm').addEventListener('submit', e => { e.preventDefault(); const t = $('lockKey').value.trim(); $('lockKey').value = ''; unlock(t, true); });
   unlock(savedToken(), false);
@@ -386,5 +389,154 @@
       answers = answers.filter(a => !marked.has(a.row)); proposals = proposals.filter(p => !marked.has(p.row));
       buildPeriods(); render();
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Marquage impossible : ' + (e.message || e); }
+  });
+
+  // ---------- Listes des oiseaux par année ----------
+  // ouessant_birds.json reste la liste de l'année en cours (l'appli et l'éditeur la lisent sous ce nom).
+  // Les années passées et les sauvegardes sont copiées dans archives/ : ouessant_birds_2026.json, ouessant_birds_2026_sauvegarde_2026-10-06_143005.json
+  const BIRDS = 'ouessant_birds.json', ARCH = 'archives', FIRST_YEAR = 2026;   // première année de l'appli
+  const ARCH_RE = /^ouessant_birds_(\d{4})(?:_sauvegarde_(\d{4})-(\d{2})-(\d{2})_(\d{2})(\d{2})(\d{2})?)?\.json$/;
+  const gh = (path, opts = {}) => {
+    const h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Authorization': 'Bearer ' + TOKEN };
+    if (opts.body) h['Content-Type'] = 'application/json';
+    return fetch('https://api.github.com/repos/AureLPhotog/ouessant-birds' + path, Object.assign({ cache: 'no-store' }, opts, { headers: h }));
+  };
+  const b64dec = b64 => new TextDecoder('utf-8').decode(Uint8Array.from(atob(b64.replace(/\s/g, '')), c => c.charCodeAt(0)));
+  const thisYear = () => new Date().getFullYear();
+  const pad = n => String(n).padStart(2, '0');
+  let archives = [];   // { name, path, year, snap: Date|null, sha }
+
+  async function getFile(path, ref){
+    const r = await gh(`/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(ref || 'main')}`);
+    if (r.status === 404) return null;
+    if (!r.ok) throw new Error('GitHub a répondu ' + r.status);
+    const j = await r.json(), b64 = String(j.content || '').replace(/\s/g, ''), text = b64dec(b64);
+    return { sha: j.sha, b64, text, list: JSON.parse(text) };
+  }
+  async function putFile(path, b64, message, sha){
+    const r = await gh(`/contents/${path.split('/').map(encodeURIComponent).join('/')}`, { method: 'PUT', body: JSON.stringify(Object.assign({ message, content: b64, branch: 'main' }, sha ? { sha } : {})) });
+    if (r.status === 409 || r.status === 422) { const e = new Error('conflit'); e.conflict = true; throw e; }
+    if (r.status === 401 || r.status === 403 || r.status === 404) throw new Error('la clé n’a pas le droit d’écrire dans le dépôt');
+    if (!r.ok) throw new Error('GitHub a répondu ' + r.status);
+    return r.json();
+  }
+  // même numéro de version des listes que l'éditeur (version_listes.json), pour que l'appli voie le changement
+  async function bumpListsVersion(){
+    try {
+      const app = window.OUESSANT_APP_VERSION; if (!app) return;
+      const r0 = await gh('/contents/version_listes.json?ref=main'); let cur = {}, sha;
+      if (r0.ok){ const j0 = await r0.json(); sha = j0.sha; try { cur = JSON.parse(b64dec(j0.content)); } catch (_) {} }
+      const rev = (cur.app === app && Number.isInteger(cur.rev) ? cur.rev : 0) + 1;
+      const txt = JSON.stringify({ app, rev }) + '\n', by = new TextEncoder().encode(txt);
+      await putFile('version_listes.json', btoa(String.fromCharCode(...by)), `Version des listes : ${app}.${rev}`, sha);
+    } catch (_) {}
+  }
+  const archLabel = a => a.snap ? `Sauvegarde du ${a.snap.toLocaleDateString('fr-FR')} à ${a.snap.toLocaleTimeString('fr-FR')}` : `Liste ${a.year}`;
+  async function listArchives(){
+    const r = await gh(`/contents/${ARCH}?ref=main`);
+    if (r.status === 404) return [];
+    if (!r.ok) throw new Error('GitHub a répondu ' + r.status);
+    return (await r.json()).map(f => { const m = f.type === 'file' && f.name.match(ARCH_RE); return m && { name: f.name, path: f.path, sha: f.sha, year: +m[1], snap: m[2] ? new Date(+m[2], +m[3] - 1, +m[4], +m[5], +m[6], +(m[7] || 0)) : null }; })
+      .filter(Boolean).sort((a, b) => (b.year - a.year) || ((a.snap ? 1 : 0) - (b.snap ? 1 : 0)) || ((b.snap || 0) - (a.snap || 0)));
+  }
+  // Archive de l'année y : la liste telle qu'elle était au 31 décembre à minuit (heure de Paris), retrouvée dans l'historique
+  async function archiveYear(y){
+    const r = await gh(`/commits?sha=main&path=${BIRDS}&per_page=1&until=${y}-12-31T23:00:00Z`);
+    if (!r.ok) throw new Error('GitHub a répondu ' + r.status);
+    const c = (await r.json())[0]; if (!c) return false;   // la liste n'existait pas encore
+    const f = await getFile(BIRDS, c.sha); if (!f || !Array.isArray(f.list)) return false;
+    try { await putFile(`${ARCH}/ouessant_birds_${y}.json`, f.b64, `Archive de la liste des oiseaux ${y} (au 31/12/${y})`); }
+    catch (e) { if (!e.conflict) throw e; }   // déjà archivée (depuis un autre appareil)
+    return true;
+  }
+  async function initYears(){
+    const msg = $('yearMsg'); msg.className = 'msg'; msg.textContent = 'Lecture des listes archivées…';
+    try {
+      archives = await listArchives();
+      const made = [];
+      for (let y = FIRST_YEAR; y < thisYear(); y++) if (!archives.some(a => a.year === y && !a.snap) && await archiveYear(y)) made.push(y);
+      if (made.length) archives = await listArchives();
+      msg.className = made.length ? 'msg good' : 'msg';
+      msg.textContent = made.length ? `Nouvelle année : la liste ${made.join(', ')} vient d’être archivée.` : '';
+      await renderYears();
+    } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Listes archivées illisibles : ' + (e.message || e); }
+  }
+  async function renderYears(){
+    const cur = await getFile(BIRDS);
+    $('yearCur').innerHTML = `<b>Liste ${thisYear()} (en cours)</b> : ${cur ? cur.list.length : '?'} espèces — c’est celle de l’appli.`;
+    $('yearList').innerHTML = archives.length ? `<ul class="years">${archives.map((a, i) => `<li data-i="${i}"><span class="y-name">${esc(archLabel(a))}</span>
+        <span class="actions"><button type="button" class="btn ghost" data-diff>Différences avec la liste en cours</button><button type="button" class="btn ghost" data-dl>Télécharger</button><button type="button" class="btn" data-use>Reprendre comme liste ${thisYear()}</button></span></li>`).join('')}</ul>`
+      : `<p class="help">Aucune liste archivée pour l’instant : la première (${FIRST_YEAR}) le sera au 1er janvier ${FIRST_YEAR + 1}.</p>`;
+  }
+  // différences entre deux listes, par nom scientifique
+  function diffLists(from, to){
+    const k = e => norm(e['Nom Scientifique']), A = new Map(from.map(e => [k(e), e])), B = new Map(to.map(e => [k(e), e]));
+    const added = to.filter(e => !A.has(k(e))), removed = from.filter(e => !B.has(k(e))), changed = [];
+    to.forEach(e => { const o = A.get(k(e)); if (!o) return; const f = Object.keys(Object.assign({}, o, e)).filter(x => !same(o[x], e[x])); if (f.length) changed.push({ e, o, f }); });
+    return { added, removed, changed };
+  }
+  const bName = e => show(e['Nom Français']) || show(e['Nom Scientifique']);
+  async function showDiff(a){
+    const box = $('yearDiff'); box.innerHTML = '<p class="help">Comparaison…</p>';
+    const [arc, cur] = await Promise.all([getFile(a.path), getFile(BIRDS)]);
+    const d = diffLists(arc.list, cur.list), CH = 'Proposition de Canal de Diffusion Ouessant';
+    const li = (arr, f) => arr.length ? `<ul class="diff">${arr.map(f).join('')}</ul>` : '<p class="help">aucune</p>';
+    box.innerHTML = `<div class="out"><h3>${esc(archLabel(a))} → liste en cours</h3>
+      <p class="help">${d.changed.length} espèce(s) modifiée(s), ${d.added.length} ajoutée(s), ${d.removed.length} retirée(s) depuis.</p>
+      <details${d.changed.length ? ' open' : ''}><summary>Modifiées (${d.changed.length})</summary>${li(d.changed, c => `<li><b>${esc(bName(c.e))}</b> : ${c.f.map(x => `${x === CH ? 'canal' : esc(x)} <del>${esc(show(c.o[x]) || 'vide')}</del> → <ins>${esc(show(c.e[x]) || 'vide')}</ins>`).join(' ; ')}</li>`)}</details>
+      <details><summary>Ajoutées depuis (${d.added.length})</summary>${li(d.added, e => `<li>${esc(bName(e))} <i>${esc(show(e['Nom Scientifique']))}</i></li>`)}</details>
+      <details><summary>Retirées depuis (${d.removed.length})</summary>${li(d.removed, e => `<li>${esc(bName(e))} <i>${esc(show(e['Nom Scientifique']))}</i></li>`)}</details></div>`;
+  }
+  async function download(a){
+    const f = await getFile(a.path), url = URL.createObjectURL(new Blob([f.text], { type: 'application/json' }));
+    const l = document.createElement('a'); l.href = url; l.download = a.name; document.body.appendChild(l); l.click(); l.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+  const snapName = () => { const n = new Date(); return `${ARCH}/ouessant_birds_${n.getFullYear()}_sauvegarde_${n.getFullYear()}-${pad(n.getMonth() + 1)}-${pad(n.getDate())}_${pad(n.getHours())}${pad(n.getMinutes())}${pad(n.getSeconds())}.json`; };
+  async function snapshot(cur, why){
+    const path = snapName();
+    try { await putFile(path, cur.b64, `Sauvegarde de la liste des oiseaux ${thisYear()}${why ? ' (' + why + ')' : ''}`); }
+    catch (e) { throw e.conflict ? new Error('une sauvegarde vient d’être faite à la même seconde, réessaie') : e; }
+    return path;
+  }
+  async function useArchive(a){
+    const msg = $('yearMsg');
+    const [arc, cur] = await Promise.all([getFile(a.path), getFile(BIRDS)]);
+    if (!Array.isArray(arc.list) || !arc.list.length || !arc.list.every(e => e && 'Nom Scientifique' in e)) throw new Error('cette archive ne ressemble pas à une liste d’oiseaux');
+    if (cur && cur.text === arc.text){ msg.className = 'msg good'; msg.textContent = 'La liste en cours est déjà identique à celle-ci : rien à faire.'; return; }
+    const d = cur ? diffLists(cur.list, arc.list) : null;
+    if (!confirm(`Remplacer la liste ${thisYear()} de l’appli (${cur ? cur.list.length : 0} espèces) par « ${archLabel(a)} » (${arc.list.length} espèces) ?` +
+      (d ? `\n\n${d.changed.length} espèce(s) changeront, ${d.added.length} seront ajoutée(s), ${d.removed.length} retirée(s).` : '') +
+      '\n\nLa liste actuelle est d’abord sauvegardée dans les archives : tu pourras la reprendre.')) return;
+    msg.className = 'msg'; msg.textContent = 'Sauvegarde de la liste actuelle…';
+    if (cur) await snapshot(cur, 'avant reprise de « ' + archLabel(a) + ' »');
+    msg.textContent = 'Remplacement de la liste…';
+    try { await putFile(BIRDS, arc.b64, `Liste des oiseaux ${thisYear()} : reprise de « ${archLabel(a)} »`, cur && cur.sha); }
+    catch (e) { if (e.conflict) throw new Error('la liste vient d’être modifiée ailleurs (éditeur ?) : recharge la page et recommence'); throw e; }
+    await bumpListsVersion();
+    archives = await listArchives(); await renderYears(); $('yearDiff').innerHTML = '';
+    msg.className = 'msg good'; msg.textContent = `C’est fait : la liste ${thisYear()} est maintenant « ${archLabel(a)} ». L’appli sera à jour d’ici quelques minutes. Pense à rouvrir l’éditeur (la liste a changé).`;
+  }
+  $('yearList').addEventListener('click', async e => {
+    const b = e.target.closest('button'), li = e.target.closest('li[data-i]'); if (!b || !li) return;
+    const a = archives[+li.dataset.i], msg = $('yearMsg');
+    document.querySelectorAll('#yearList button, #yearSnap').forEach(x => { x.disabled = true; });
+    try {
+      if (b.hasAttribute('data-diff')) await showDiff(a);
+      else if (b.hasAttribute('data-dl')) await download(a);
+      else if (b.hasAttribute('data-use')) await useArchive(a);
+    } catch (err) { msg.className = 'msg bad'; msg.textContent = 'Impossible : ' + (err.message || err); }
+    document.querySelectorAll('#yearList button, #yearSnap').forEach(x => { x.disabled = false; });
+  });
+  $('yearSnap').addEventListener('click', async () => {
+    const msg = $('yearMsg'), b = $('yearSnap'); b.disabled = true;
+    try {
+      msg.className = 'msg'; msg.textContent = 'Sauvegarde…';
+      const cur = await getFile(BIRDS); if (!cur) throw new Error('liste introuvable');
+      await snapshot(cur, 'à la main');
+      archives = await listArchives(); await renderYears();
+      msg.className = 'msg good'; msg.textContent = 'Liste actuelle sauvegardée dans les archives.';
+    } catch (e) { msg.className = 'msg bad'; msg.textContent = 'Sauvegarde impossible : ' + (e.message || e); }
+    b.disabled = false;
   });
 })();

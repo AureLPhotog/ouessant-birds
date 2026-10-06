@@ -21,6 +21,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `editeur.html` | l'éditeur des listes (onglets Oiseaux / Lieux ; enregistrement direct sur GitHub avec la « Clé Admin » ; sans clé, envoi d'une proposition) |
 | `admin.html`, `js/admin.js`, `css/admin.css` | **tri des propositions** reçues par le formulaire (page réservée : verrouillée par la Clé Admin, voir « Trier les propositions ») |
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
+| `archives/` | **listes des oiseaux des années passées** (`ouessant_birds_2026.json`…) et sauvegardes, gérées depuis la page de tri (voir « Listes des oiseaux par année ») |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
 | `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
 | `css/polices.css`, `polices/` | polices Spectral et Public Sans hébergées avec l'appli (licence SIL OFL 1.1, voir `polices/LICENCES.txt`) : plus d'appel à Google Fonts |
@@ -168,6 +169,22 @@ Documentation Google : <https://developers.google.com/apps-script/guides/trigger
 
 Confidentialité : la page est verrouillée (la clé est vérifiée auprès de GitHub : seul le propriétaire du dépôt l'ouvre) et ne contient
 aucune donnée. Son code reste visible, comme tout le dépôt public ; les réponses, elles, ne quittent jamais la feuille Google et ton appareil.
+
+## Listes des oiseaux par année
+
+Une espèce à annoncer sur WhatsApp une année peut ne plus l'être l'année suivante : la page de tri (`admin.html`, section
+**Listes des oiseaux par année**) garde une liste par année.
+
+- `ouessant_birds.json` reste **la liste de l'année en cours** : c'est toujours elle que l'appli et l'éditeur utilisent.
+- **Archivage automatique** : à la première ouverture de la page de tri dans une nouvelle année, la liste de l'année écoulée est
+  copiée dans `archives/ouessant_birds_<année>.json`. Elle est retrouvée dans l'historique GitHub telle qu'elle était le
+  31 décembre à minuit (heure de Paris), même si la page n'est ouverte qu'en février. La nouvelle année démarre avec la même liste.
+- Pour chaque liste archivée : **Différences avec la liste en cours** (canaux changés, espèces ajoutées ou retirées),
+  **Télécharger**, et **Reprendre comme liste <année>** : elle remplace `ouessant_birds.json`, après une sauvegarde automatique
+  de la liste remplacée (`archives/ouessant_birds_<année>_sauvegarde_<date>_<heure>.json`), que l'on peut reprendre de la même façon.
+- **Sauvegarder la liste actuelle** fait une sauvegarde à la main, à tout moment.
+
+La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, ne sont pas concernés.
 
 ## Sécurité
 
