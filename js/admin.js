@@ -1,4 +1,4 @@
-/* Oiseaux d'Ouessant — tri des propositions (page admin.html).
+/* Oiseaux d'Ouessant — page Administration (admin.html) : tri des propositions, messages, réglages des visiteurs, listes par année.
    Lit le fichier .csv des réponses du formulaire Google, regroupe les propositions par espèce / lieu-dit,
    compare chacune à la liste en ligne, puis produit les lignes JSON validées (à coller dans l'éditeur, « Coller des lignes »).
    Rien n'est envoyé : le fichier est lu sur l'appareil, les décisions sont gardées dans le navigateur. */

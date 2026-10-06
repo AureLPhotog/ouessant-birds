@@ -6,7 +6,7 @@ Petite appli web pour les observateurs d'oiseaux à Ouessant :
 - **Lieux** : coordonnées GPS indicatives des lieux-dits de l'île, avec un aperçu de la carte ;
 - **Où suis-je ?** : les lieux-dits les plus proches de sa position (de 3 à 10, au choix avec le curseur). Toucher un lieu-dit ouvre Google Maps sur son point GPS. Un bouton **Partager ma position** prépare un message (coordonnées, lien Google Maps, lieu-dit le plus proche) ;
 - **le phare** (en haut à gauche) : météo du jour à Ouessant, QR code pour partager l'appli, numéro de version et informations légales.
-- **en bas de page** : le guide d'utilisation (PDF), **« Une question, un retour ? »** (message anonyme, envoyé par le formulaire Google des propositions, dans le seul champ commentaire ; la page de tri le range dans l'onglet **Messages**) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
+- **en bas de page** : le guide d'utilisation (PDF), **« Une question, un retour ? »** (message anonyme, envoyé par le formulaire Google des propositions, dans le seul champ commentaire ; la page Administration le range dans l'onglet **Messages**) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
 
 En ligne : <https://aurelphotog.github.io/ouessant-birds/>
 
@@ -20,11 +20,11 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 |---|---|
 | `index.html` | l'appli (structure de la page) |
 | `editeur.html` | l'éditeur des listes (onglets Oiseaux / Lieux ; enregistrement direct sur GitHub avec la « Clé Admin » ; sans clé, envoi d'une proposition) |
-| `admin.html`, `js/admin.js`, `css/admin.css` | **tri des propositions** reçues par le formulaire (page réservée : verrouillée par la Clé Admin, voir « Trier les propositions ») |
+| `admin.html`, `js/admin.js`, `css/admin.css` | **page Administration** : tri des propositions et messages reçus, réglages des visiteurs, listes par année (page réservée : verrouillée par la Clé Admin, voir « Page Administration ») |
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
-| `archives/` | **listes des oiseaux des années passées** (`ouessant_birds_2026.json`…) et sauvegardes, gérées depuis la page de tri (voir « Listes des oiseaux par année ») |
+| `archives/` | **listes des oiseaux des années passées** (`ouessant_birds_2026.json`…) et sauvegardes, gérées depuis la page Administration (voir « Listes des oiseaux par année ») |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
-| `reglages.json` | réglages de l'admin : verrou des espèces « Verrouillée » et champs modifiables par les visiteurs (canal seulement / tous), modifiés depuis la page de tri |
+| `reglages.json` | réglages de l'admin : verrou des espèces « Verrouillée » et champs modifiables par les visiteurs (canal seulement / tous), modifiés depuis la page Administration |
 | `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
 | `css/polices.css`, `polices/` | polices Spectral et Public Sans hébergées avec l'appli (licence SIL OFL 1.1, voir `polices/LICENCES.txt`) : plus d'appel à Google Fonts |
 | `css/commun.css` | couleurs (clair, sombre, daltonisme) et bases, partagées par l'appli et l'éditeur |
@@ -119,11 +119,11 @@ partagée (sur Chrome Android : menu ⋮ → Paramètres → Paramètres des sit
 *Contents : Read and write*, avec une date d'expiration. Ne jamais la partager ni l'écrire dans un fichier.
 Cochée « Mémoriser la clé sur cet appareil », elle est oubliée automatiquement au bout de **30 jours** ; sinon elle disparaît à la fermeture de l'onglet.
 
-## Trier les propositions
+## Page Administration : trier les propositions
 
 Quand beaucoup de propositions arrivent (parfois plusieurs pour la même espèce), la page **`admin.html`** les regroupe :
 
-1. Ouvrir l'éditeur avec la Clé Admin → bouton **Trier les propositions** (ou directement `admin.html`, qui demande la clé).
+1. Ouvrir l'éditeur avec la Clé Admin → bouton **Administration** (ou directement `admin.html`, qui demande la clé).
 2. Dans Google Forms : **Réponses → Afficher dans Sheets**, puis **Fichier → Télécharger → .csv**, et choisir ce fichier dans la page.
    Le fichier est lu sur l'appareil : rien n'est mis en ligne.
 3. Choisir l'onglet **Oiseaux**, **Lieux** ou **Messages** (questions et retours envoyés depuis l'appli : à lire, puis « Marquer ces messages comme lus »). Pour Oiseaux et Lieux (les deux listes ne sont jamais mélangées : tri, lignes JSON et marquage se font
@@ -144,13 +144,13 @@ feuille des réponses (`scripts/apps_script_reponses.gs`). Le script ne répond 
 
 1. Ouvrir la feuille Google des réponses → **Extensions → Apps Script**. Effacer le contenu, coller celui de
    `scripts/apps_script_reponses.gs`, enregistrer (icône disquette).
-2. Dans la page de tri : **Réglages de la récupération automatique → Créer un code**, et copier ce code.
+2. Dans la page Administration : **Réglages de la récupération automatique → Créer un code**, et copier ce code.
 3. Dans Apps Script : **Paramètres du projet** (roue dentée) → **Propriétés du script → Ajouter une propriété** :
    nom `CODE`, valeur = le code copié → Enregistrer.
 4. **Déployer → Nouveau déploiement** → type **Application Web** → *Exécuter en tant que* : **Moi** ;
    *Qui a accès* : **Tout le monde** → Déployer → autoriser l'accès (compte Google) → copier l'**URL de l'application Web** (finit par `/exec`).
    (« Tout le monde » est nécessaire pour que la page puisse l'appeler ; sans le code secret, le script ne renvoie rien.)
-5. Dans la page de tri : coller l'adresse et le code → **Enregistrer les réglages** → **Récupérer les réponses**.
+5. Dans la page Administration : coller l'adresse et le code → **Enregistrer les réglages** → **Récupérer les réponses**.
 
 Après une mise à jour du script (nouveau contenu de `scripts/apps_script_reponses.gs`) : le recoller dans Apps Script, puis
 **Déployer → Gérer les déploiements → ✏️ → Version : Nouvelle version → Déployer** (l'adresse `/exec` ne change pas).
@@ -179,11 +179,11 @@ aucune donnée. Son code reste visible, comme tout le dépôt public ; les répo
 
 ## Listes des oiseaux par année
 
-Une espèce à annoncer sur WhatsApp une année peut ne plus l'être l'année suivante : la page de tri (`admin.html`, section
+Une espèce à annoncer sur WhatsApp une année peut ne plus l'être l'année suivante : la page Administration (`admin.html`, section
 **Listes des oiseaux par année**) garde une liste par année.
 
 - `ouessant_birds.json` reste **la liste de l'année en cours** : c'est toujours elle que l'appli et l'éditeur utilisent.
-- **Archivage automatique** : à la première ouverture de la page de tri dans une nouvelle année, la liste de l'année écoulée est
+- **Archivage automatique** : à la première ouverture de la page Administration dans une nouvelle année, la liste de l'année écoulée est
   copiée dans `archives/ouessant_birds_<année>.json`. Elle est retrouvée dans l'historique GitHub telle qu'elle était le
   31 décembre à minuit (heure de Paris), même si la page n'est ouverte qu'en février. La nouvelle année démarre avec la même liste.
 - Pour chaque liste archivée : **Différences avec la liste en cours** (canaux changés, espèces ajoutées ou retirées),
@@ -198,16 +198,16 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
 - **Dans l'appli** : un **cadenas** remplace le crayon ✎ ; on ne peut pas proposer de modification. **Pour l'admin**
   (Clé Admin entrée dans l'éditeur et reconnue par GitHub, dans cet onglet, ou sur l'appareil avec « Mémoriser »), toutes les
   espèces gardent leur crayon. L'appli ne fait que constater la présence de la clé dans le navigateur, sans l'utiliser ni l'envoyer.
-- **Bouton « 🔑 Mode admin »** : en haut à droite de l'appli, de l'éditeur et de la page de tri, tant que la Clé Admin est active (rien sinon).
+- **Bouton « 🔑 Mode admin »** : en haut à droite de l'appli, de l'éditeur et de la page Administration, tant que la Clé Admin est active (rien sinon).
   Il ouvre le panneau de la clé dans l'éditeur (`editeur.html?cle`) : la changer ou l'oublier.
 - **Dans l'éditeur, sans la Clé Admin** : l'espèce s'affiche avec 🔒, en lecture seule (pas d'Enregistrer, Supprimer ni Dupliquer),
   et on ne peut pas la recréer comme « nouvel oiseau » (même nom scientifique). La case **Verrouillée** n'est pas montrée.
 - **Dans l'éditeur, avec la Clé Admin** : tout reste modifiable, avec un rappel ; la case **Verrouillée** et le filtre du même nom
   servent à gérer la liste.
-- **Dans la page de tri** : une proposition sur une espèce verrouillée est **rejetée d'office** (filtre « rejetées », étiquette 🔒) ;
+- **Dans la page Administration** : une proposition sur une espèce verrouillée est **rejetée d'office** (filtre « rejetées », étiquette 🔒) ;
   « Valider quand même » reste possible. Une proposition qui touche au verrou lui-même est signalée « change le verrou ».
 
-**Ce que les visiteurs peuvent modifier (oiseaux)** : deux réglages pour tout le monde, dans la page de tri, enregistrés dans
+**Ce que les visiteurs peuvent modifier (oiseaux)** : deux réglages pour tout le monde, dans la page Administration, enregistrés dans
 `reglages.json` (`{"verrou": true, "champs": "canal"}` par défaut) :
 - **`verrou`** : `true` = les espèces marquées « Verrouillée » ont un cadenas, aucune proposition ; `false` = elles suivent la règle
   des autres (pratique au lancement de l'appli) ;
@@ -216,12 +216,12 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
   n'affiche aucun champ) ; `"tous"` = tous les champs.
 
 Ajouter une nouvelle espèce reste toujours possible. Les lieux-dits ne sont pas concernés. Avec la Clé Admin, tout est modifiable.
-L'éditeur ajoute à chaque proposition d'oiseau une ligne `// réglages : verrou actif|levé, champs canal|tous` : la page de tri juge
+L'éditeur ajoute à chaque proposition d'oiseau une ligne `// réglages : verrou actif|levé, champs canal|tous` : la page Administration juge
 chaque proposition selon les réglages **du moment de son envoi** (« rejetée d'office » si espèce verrouillée, ou si elle change autre
 chose que le canal en mode « canal seulement » ; « Valider quand même » reste possible).
 
 Le blocage de l'éditeur n'est qu'un confort : le formulaire Google est public, quelqu'un peut y envoyer n'importe quoi. La vraie
-barrière, c'est que seule la Clé Admin enregistre sur GitHub, et que la page de tri écarte ces propositions. Comme le verrou est
+barrière, c'est que seule la Clé Admin enregistre sur GitHub, et que la page Administration écarte ces propositions. Comme le verrou est
 dans `ouessant_birds.json`, il suit les **listes par année** (archivé chaque 1er janvier).
 
 ## Sécurité

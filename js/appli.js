@@ -861,7 +861,7 @@
 
   // ---------- Contact : une question ou un retour sur l'appli ----------
   // Le message part par le même formulaire Google que les propositions, dans le seul champ « commentaire » (aucune ligne JSON) :
-  // la page de tri les range dans l'onglet « Messages ».
+  // la page Administration les range dans l'onglet « Messages ».
   (function contact(){
     const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfO5eaqQZ_NS10ChZhazXZLLach0Bm0aQYUt9yZQsi-Qdh3LA/viewform', COMMENT = 'entry.253715776';
     const btn = $('contactBtn'), panel = $('contactPanel'), msg = $('contactMsg');

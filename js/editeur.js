@@ -478,7 +478,7 @@
     // « Coller des lignes » : seulement avec une clé GitHub entrée ET reconnue par GitHub
     const ok = tokenValid();
     $('pasteLinesBtn').classList.toggle('hidden', !ok);
-    $('adminLink').classList.toggle('hidden', !ok);   // page de tri des propositions : seulement pour l'administrateur
+    $('adminLink').classList.toggle('hidden', !ok);   // page Administration : seulement pour l'administrateur
     $('adminBadge').hidden = !ok;   // repère « Mode admin » en haut à droite
     if (!ok) $('pastePanel').classList.add('hidden');
     if (ok !== updateSaveBtn.was){ const first = updateSaveBtn.was === undefined; updateSaveBtn.was = ok; if (!first && items.length) render(); }   // clé validée ou retirée : espèces verrouillées modifiables ou non
@@ -560,11 +560,11 @@
   const phone = matchMedia('(max-width:640px)');
   const K_FR = 'Nom Français', K_EN = 'Nom Anglais', K_SCI = 'Nom Scientifique', K_CANAL = 'Proposition de Canal de Diffusion Ouessant';
   // Espèces communes verrouillées (« Verrouillée » : true) : sans la Clé Admin, on peut les voir mais pas les modifier, les supprimer ou les recréer.
-  // (Ce n'est qu'un confort : la vraie barrière reste que seule la clé enregistre sur GitHub, et la page de tri rejette d'office ces propositions.)
+  // (Ce n'est qu'un confort : la vraie barrière reste que seule la clé enregistre sur GitHub, et la page Administration rejette d'office ces propositions.)
   const K_LOCK = 'Verrouillée';
   const isAdmin = () => tokenValid();
   const isLocked = it => (it.orig || it.data)[K_LOCK] === true;
-  // Réglages de l'admin (page de tri → reglages.json, les mêmes pour tout le monde) :
+  // Réglages de l'admin (page Administration → reglages.json, les mêmes pour tout le monde) :
   //   verrou : true = les espèces « Verrouillée » ne sont pas modifiables (cadenas) ; false = elles suivent la règle des autres ;
   //   champs : 'canal' = sur une espèce existante, un visiteur ne peut proposer qu'un autre canal ; 'tous' = tous les champs.
   // Ne concerne que la liste des oiseaux. Avec la Clé Admin, tout reste modifiable.
@@ -714,7 +714,7 @@
       <div class="actions"><button type="button" class="btn primary" data-act="save">Enregistrer</button><button type="button" class="btn" data-act="cancel">Fermer</button>${it.orig && !same(it.data, it.orig) ? '<button type="button" class="btn" data-act="revert">Revenir à l\u2019original</button>' : ''}</div><p class="msg bad" data-msg></p></div>`;
     if (lockedFor(it)) return `<div class="form-wrap" data-id="${it.id}"><p class="msg lock-msg">🔒 Espèce commune : elle est verrouillée et ne peut pas être modifiée.</p>
       <div class="actions"><button type="button" class="btn" data-act="cancel">Fermer</button></div></div>`;
-    return `<div class="form-wrap" data-id="${it.id}">${isLocked(it) && isAdmin() ? '<p class="help lock-msg">🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier (selon le réglage de la page de tri). Décoche « Verrouillée » pour la rouvrir aux propositions.</p>' : ''}<div class="form">${fs.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
+    return `<div class="form-wrap" data-id="${it.id}">${isLocked(it) && isAdmin() ? '<p class="help lock-msg">🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier (selon les réglages de la page Administration). Décoche « Verrouillée » pour la rouvrir aux propositions.</p>' : ''}<div class="form">${fs.map(k => inputHtml(k, it.data[k], it.orig ? it.orig[k] : undefined)).join('')}</div>
       <div class="actions">
         <button type="button" class="btn primary" data-act="save">Enregistrer</button>
         <button type="button" class="btn" data-act="cancel">Fermer</button>
@@ -944,7 +944,7 @@
     const mod = items.filter(it => it.orig && !same(it.data, it.orig)), add = items.filter(it => !it.orig), del = deleted.filter(it => it.orig);
     const lines = [
       `// Modifications de ${fileName}, le ${new Date().toLocaleDateString('fr-FR')}`,
-      ...(kindOf(fileName) === 'birds' ? [`// réglages : verrou ${reg.verrou ? 'actif' : 'levé'}, champs ${reg.champs}`] : []),   // réglages du moment : la page de tri en tient compte
+      ...(kindOf(fileName) === 'birds' ? [`// réglages : verrou ${reg.verrou ? 'actif' : 'levé'}, champs ${reg.champs}`] : []),   // réglages du moment : la page Administration en tient compte
       `// ${mod.length} modifiée(s), ${add.length} ajoutée(s), ${del.length} supprimée(s). À coller dans l’éditeur : « Coller des lignes ».`
     ];
     mod.forEach(it => {
