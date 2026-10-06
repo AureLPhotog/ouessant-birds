@@ -833,6 +833,66 @@
       showImport();
     });
 
+  // ---------- Accès rapide par lettre : rail A–Z à droite des listes (Oiseaux, Lieux) ----------
+  // Doigt maintenu sur le rail : on glisse d'une lettre à l'autre, la liste suit (comme les contacts d'un téléphone).
+  // Seulement sur la liste complète (sans recherche) et assez longue ; seules les lettres présentes sont proposées.
+  (function alphaRail(){
+    const rail = document.createElement('nav'), bubble = document.createElement('div');
+    rail.className = 'az'; rail.hidden = true; bubble.className = 'az-bubble'; bubble.hidden = true; bubble.setAttribute('aria-hidden', 'true');
+    document.body.append(rail, bubble);
+    let targets = [], cur = '', dragging = false, ul = null;
+    const MIN = 40;
+    const letterOf = name => { const c = norm(name).charAt(0).toUpperCase(); return /[A-Z]/.test(c) ? c : '#'; };
+    function build(){
+      const birdsTab = tab === 'birds', box = birdsTab ? results : tab === 'places' ? presults : null;
+      ul = box && box.querySelector('.list');
+      const searching = birdsTab ? !!q.value.trim() : !!pq.value.trim();
+      const rows = ul && !searching ? [...ul.children] : [];
+      targets = [];
+      if (rows.length >= MIN){
+        const seen = new Set();
+        rows.forEach(li => { const n = li.querySelector(birdsTab ? '.fr' : '.ptitle'); const l = n && letterOf(n.textContent); if (l && !seen.has(l)){ seen.add(l); targets.push([l, li]); } });
+      }
+      rail.setAttribute('aria-label', T('azLabel'));
+      rail.style.setProperty('--n', targets.length);
+      rail.innerHTML = targets.map(([l]) => `<button type="button" data-l="${l}" tabindex="-1">${l}</button>`).join('');
+      place();
+    }
+    // visible seulement quand la liste occupe l'écran
+    function place(){
+      if (!targets.length || !ul){ rail.hidden = true; return; }
+      const r = ul.getBoundingClientRect(), vh = innerHeight;
+      rail.hidden = !(r.top < vh * 0.55 && r.bottom > vh * 0.45);
+    }
+    function jump(l){
+      const t = targets.find(x => x[0] === l); if (!t) return;
+      const bar = document.querySelector(tab === 'birds' ? '#tab-birds .search' : '#tab-places .search');
+      const y = t[1].getBoundingClientRect().top + scrollY - (bar ? bar.offsetHeight : 0) - 6;
+      window.scrollTo({ top: Math.max(0, y), behavior: dragging ? 'auto' : 'smooth' });
+    }
+    function pick(e){
+      const btns = rail.children; if (!btns.length) return;
+      const r = rail.getBoundingClientRect(), i = Math.max(0, Math.min(btns.length - 1, Math.floor((e.clientY - r.top) / r.height * btns.length)));
+      const l = btns[i].dataset.l; if (l === cur) return;
+      cur = l; bubble.textContent = l; bubble.hidden = false;
+      [...btns].forEach(b => b.classList.toggle('on', b.dataset.l === l));
+      if (navigator.vibrate) try { navigator.vibrate(4); } catch (_) {}
+      jump(l);
+    }
+    rail.addEventListener('pointerdown', e => { e.preventDefault(); dragging = true; cur = ''; rail.classList.add('active'); try { rail.setPointerCapture(e.pointerId); } catch (_) {} pick(e); });
+    rail.addEventListener('pointermove', e => { if (dragging) pick(e); });
+    const end = () => { if (!dragging) return; dragging = false; cur = ''; rail.classList.remove('active'); bubble.hidden = true; [...rail.children].forEach(b => b.classList.remove('on')); };
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => rail.addEventListener(ev, end));
+    rail.addEventListener('keydown', e => { const b = e.target.closest('[data-l]'); if (b && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); jump(b.dataset.l); } });
+    // la liste change (recherche, filtre, langue, onglet) : on refait le rail
+    const mo = new MutationObserver(() => requestAnimationFrame(build));
+    [results, presults].forEach(el => mo.observe(el, { childList: true }));
+    document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => requestAnimationFrame(build)));
+    let tk = 0; addEventListener('scroll', () => { if (!tk) tk = requestAnimationFrame(() => { tk = 0; place(); }); }, { passive: true });
+    addEventListener('resize', place);
+    build();
+  })();
+
   // ---------- Mode hors ligne : le service worker garde l'appli, les listes et la carte en mémoire ----------
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));

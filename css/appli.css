@@ -275,3 +275,13 @@ section[hidden]{display:none}
 a.sbtn{display:inline-block;text-decoration:none;text-align:center}
 .suggest{display:flex;flex-wrap:wrap;gap:.5rem}
 .phare-btn.off .phare{opacity:.9}
+/* Accès rapide par lettre : rail à droite des listes, dans la marge (doigt maintenu = on glisse d'une lettre à l'autre) */
+.az{position:fixed;z-index:6;top:50%;transform:translateY(-50%);right:max(1px,calc(50vw - 430px + 1px));display:flex;flex-direction:column;align-items:center;
+  height:min(72vh,calc(var(--n,20) * 1.15rem));padding:.3rem 0;border-radius:10px;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.az[hidden]{display:none}
+.az button{all:unset;display:flex;align-items:center;justify-content:center;flex:1 1 0;min-height:0;width:1.15rem;font:600 .68rem/1 var(--sans);color:var(--ocean-2);padding:.08rem 0;cursor:pointer}
+.az.active{background:color-mix(in srgb,var(--ocean) 12%,transparent)}
+.az button.on{color:var(--paper);background:var(--ocean);border-radius:4px}
+.az-bubble{position:fixed;z-index:7;top:50%;left:50%;transform:translate(-50%,-50%);width:4.2rem;height:4.2rem;display:grid;place-items:center;border-radius:16px;
+  background:color-mix(in srgb,var(--ink) 82%,transparent);color:var(--paper);font:700 2.2rem/1 var(--sans);pointer-events:none}
+.az-bubble[hidden]{display:none}
