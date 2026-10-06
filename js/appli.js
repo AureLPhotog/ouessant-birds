@@ -930,8 +930,10 @@
     // visible seulement quand la liste occupe l'écran
     function place(){
       if (!targets.length || !ul){ rail.hidden = true; return; }
+      // seulement une fois qu'on fait défiler la liste : son début est passé sous la barre de recherche (collée en haut)
       const r = ul.getBoundingClientRect(), vh = innerHeight;
-      rail.hidden = !(r.top < vh * 0.55 && r.bottom > vh * 0.45);
+      const bar = document.querySelector(tab === 'birds' ? '#tab-birds .search' : '#tab-places .search'), barBottom = bar ? bar.getBoundingClientRect().bottom : 0;
+      rail.hidden = !(r.top < barBottom + 8 && r.bottom > vh * 0.45);
     }
     function jump(l){
       const t = targets.find(x => x[0] === l); if (!t) return;
