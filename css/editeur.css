@@ -114,6 +114,12 @@ tr.item.is-open td{background:color-mix(in srgb,var(--ocean) 22%,var(--paper));f
 .picking .cells{cursor:crosshair}
 .picking .cells button{pointer-events:none}
 [data-pick][aria-pressed="true"]{background:var(--ocean);color:var(--foam);border-color:var(--ocean)}
+.pick-mode{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .7rem;margin:.45rem 0 .2rem}
+.seg{display:inline-flex}
+.seg .btn{border-radius:0}
+.seg .btn:first-child{border-radius:8px 0 0 8px}
+.seg .btn:last-child{border-radius:0 8px 8px 0;margin-left:-1px}
+.pick-mode .help{margin:0;font-size:.85rem}
 .geo-hint{margin:0;font-size:.85rem;min-height:1.2em}
 .geo-hint.good{color:var(--ok);font-weight:600}
 .geo-hint.bad{color:var(--warn);font-weight:600}
