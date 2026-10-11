@@ -1,5 +1,16 @@
 [
   {
+    "nom": "Château sur la côte",
+    "carres": [
+      "J3"
+    ],
+    "lat": 48.473,
+    "lon": -5.08532,
+    "precision_m": 100,
+    "verifie": true,
+    "source": ""
+  },
+  {
     "nom": "Locqueltas",
     "carres": [
       "D8",
