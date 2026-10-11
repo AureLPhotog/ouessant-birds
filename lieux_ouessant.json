@@ -1,5 +1,18 @@
 [
   {
+    "nom": "Locqueltas",
+    "carres": [
+      "D8",
+      "E8",
+      "F8"
+    ],
+    "lat": 48.45348,
+    "lon": -5.12607,
+    "precision_m": 100,
+    "verifie": false,
+    "source": ""
+  },
+  {
     "nom": "Villa des tempêtes",
     "carres": [
       "B9"
