@@ -148,6 +148,12 @@
     // noms des champs (seul l'affichage est traduit : les fichiers gardent leurs noms de champs)
     "Nom Français": "French name", "Nom Scientifique": "Scientific name", "Nom Anglais": "English name",
     "Type de taxon": "Taxon type", "Proposition de Canal de Diffusion Ouessant": "Reporting channel (Ouessant)",
+    "Raison du canal": "Channel reason", "Origine": "Origin",
+    "Nicheur sur l'île": "Breeds on the island", "Commun sur l'île (migrateur ou hivernant)": "Common on the island (migrant or winter visitor)",
+    "Commun au large (oiseau marin)": "Common offshore (seabird)", "Peu commun sur l'île": "Scarce on the island", "Rareté locale": "Local rarity",
+    "Échappé de captivité": "Escape from captivity", "Méga pour l'île": "Island mega", "Rareté nationale": "National rarity", "Méga national": "National mega",
+    "origine américaine": "American vagrant", "origine sibérienne / asiatique": "Siberian / Asian vagrant", "origine orientale": "eastern vagrant",
+    "origine méridionale": "southern vagrant", "origine arctique / nordique": "Arctic / northern vagrant", "oiseau marin des océans lointains": "seabird from distant oceans",
     "Verrouillée": "Locked", "🔑 Mode admin": "🔑 Admin mode", "Clé Admin active : la gérer ou l'oublier": "Admin key active: manage or forget it", "Espèce commune verrouillée": "Locked common species",
     "🔒 Espèce commune : elle est verrouillée et ne peut pas être modifiée.": "🔒 Common species: it is locked and cannot be changed.",
     "🔒 Espèce verrouillée : les visiteurs ne peuvent pas la modifier (selon les réglages de la page Administration). Décoche « Verrouillée » pour la rouvrir aux propositions.": "🔒 Locked species: visitors cannot change it (depending on the settings in the Administration page). Untick “Locked” to open it to suggestions again.",

@@ -14,6 +14,25 @@
   const FIELD_CONFIG = {
     'Proposition de Canal de Diffusion Ouessant': { type: 'select', options: [['Télégram', 'Alerte Telegram'], ['Whatsapp', 'Alerte WhatsApp'], ["Pas d'annonce", "Pas d'alerte"]] },
     'Type de taxon': { type: 'select', options: [['espèce', 'espèce'], ['sous-espèce', 'sous-espèce']] },
+    // pourquoi l'espèce est sur ce canal, et d'où vient l'oiseau s'il est erratique (affichés dans l'appli quand on touche le nom) ;
+    // mêmes valeurs que la traduction anglaise de js/textes.js
+    'Raison du canal': { type: 'select', options: [
+      ["Nicheur sur l'île", "Nicheur sur l'île"],
+      ["Commun sur l'île (migrateur ou hivernant)", "Commun sur l'île (migrateur ou hivernant)"],
+      ["Commun au large (oiseau marin)", "Commun au large (oiseau marin)"],
+      ["Peu commun sur l'île", "Peu commun sur l'île"],
+      ["Rareté locale", "Rareté locale"],
+      ["Échappé de captivité", "Échappé de captivité"],
+      ["Méga pour l'île", "Méga pour l'île"],
+      ["Rareté nationale", "Rareté nationale"],
+      ["Méga national", "Méga national"] ] },
+    'Origine': { type: 'select', options: [
+      ["origine américaine", "origine américaine"],
+      ["origine sibérienne / asiatique", "origine sibérienne / asiatique"],
+      ["origine orientale", "origine orientale"],
+      ["origine méridionale", "origine méridionale"],
+      ["origine arctique / nordique", "origine arctique / nordique"],
+      ["oiseau marin des océans lointains", "oiseau marin des océans lointains"] ] },
     'carres': { type: 'cells' }
   };
   const labelOf = (k, v) => { const c = FIELD_CONFIG[k]; if (!c || c.type !== 'select') return null; const o = c.options.find(x => x[0] === v); return o ? o[1] : null; };
