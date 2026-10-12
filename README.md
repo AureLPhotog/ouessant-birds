@@ -54,6 +54,13 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 
 - **Canal** : `Télégram`, `Whatsapp` ou `Pas d'annonce` (l'appli les affiche « Alerte Telegram », « Alerte WhatsApp », « Pas d'alerte »).
 - **Type de taxon** : `espèce` ou `sous-espèce`.
+- **Raison du canal** : pourquoi l'espèce est sur ce canal, une valeur parmi `Nicheur sur l'île`, `Commun sur l'île (migrateur ou hivernant)`,
+  `Commun au large (oiseau marin)`, `Peu commun sur l'île`, `Rareté locale`, `Échappé de captivité`, `Méga pour l'île`, `Rareté nationale`, `Méga national`.
+- **Origine** (facultatif, oiseaux venus de loin) : `origine américaine`, `origine sibérienne / asiatique`, `origine orientale`, `origine méridionale`,
+  `origine arctique / nordique`, `oiseau marin des océans lointains`.
+  Dans l'appli, une petite étiquette en italique « Raison · Origine » apparaît quand on touche le nom de l'espèce. Ces deux champs sont des menus
+  dans l'éditeur ; leurs traductions anglaises sont dans `js/textes.js` (appli) et `js/editeur-langue.js` (éditeur). Valeurs de départ proposées
+  le 12/10/2026 à partir des aires de répartition, à vérifier (surtout le statut à Ouessant et le niveau rareté / méga).
 - **Verrouillée** (facultatif) : `true` pour une **espèce commune** que les visiteurs ne doivent pas modifier.
   Pré-rempli au départ avec toutes les espèces en `Pas d'annonce` (140), à ajuster dans l'éditeur avec la Clé Admin
   (case **Verrouillée** ; décochée, le champ disparaît). Voir « Espèces communes verrouillées ».

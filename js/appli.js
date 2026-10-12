@@ -37,7 +37,7 @@
   const showVersion = () => { if (!$('pharePanel').hidden) renderPhare(); };
   const URL_DATA = 'ouessant_birds.json';
 
-  const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant', K_LOCK = 'Verrouillée';
+  const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant', K_LOCK = 'Verrouillée', K_WHY = 'Raison du canal', K_ORIG = 'Origine';
   const STORE = 'ouessant-birds-data', LANG_KEY = 'ouessant-birds-lang';
   const COLORS = ['#B4532A','#2C7A6B','#8C5E83','#3E6FA8','#A3802A','#5E676B','#B03A5B','#4F7A2C'];
   // WhatsApp en vert, Telegram en bleu, pas d'annonce en gris
@@ -209,15 +209,17 @@
     if(!list.length){ results.innerHTML = ''; return; }
     const admin = isAdmin();
     results.innerHTML = '<ul class="list">' + list.map((b, i) => {
-      const c = canalOf(b), alt = altName(b), kind = canalKind(c);
+      const c = canalOf(b), alt = altName(b), kind = canalKind(c), why = [b[K_WHY], b[K_ORIG]].map(v => String(v || '').trim()).filter(Boolean).map(v => I18N[lang].reasons[v] || v).join(' · ');
       const canal = `<span class="dot" style="background:${colorOf[c]||'#5E676B'}"></span>${esc(canalLabel(c))}`;
       const canalHtml = (kind === 'telegram' || kind === 'whatsapp')
         ? `<button type="button" class="canal canal-btn" data-alert="${kind}" aria-expanded="false" title="${esc(T('alertHint'))}">${canal}<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`
         : `<span class="canal">${canal}</span>`;
-      return `<li class="row" data-bi="${i}">
-        <span class="fr" lang="${lang === 'en' && b[K_EN] ? 'en' : 'fr'}">${highlight(mainName(b), raw)}${isSsp(b) ? `<span class="tag">${esc(T('ssp'))}</span>` : ''}</span>
+      // raison du canal : étiquette discrète, montrée seulement quand on touche le nom de l'espèce
+      return `<li class="row${why ? ' has-why' : ''}" data-bi="${i}">
+        <span class="fr" lang="${lang === 'en' && b[K_EN] ? 'en' : 'fr'}"${why ? ` role="button" tabindex="0" aria-expanded="false" title="${esc(T('whyT'))}"` : ''}>${highlight(mainName(b), raw)}${isSsp(b) ? `<span class="tag">${esc(T('ssp'))}</span>` : ''}</span>
         <span class="sci" lang="la">${highlight(b[K_SCI], raw)}</span>
         ${alt ? `<span class="en" lang="${lang === 'en' ? 'fr' : 'en'}">${highlight(alt, raw)}</span>` : ''}
+        ${why ? `<span class="why" hidden>${esc(why)}</span>` : ''}
         ${canalHtml}
         ${b[K_LOCK] === true && !admin && reg.verrou   // espèce commune verrouillée : cadenas à la place du crayon (sauf pour l'admin, ou si l'admin a levé le verrou)
           ? `<span class="bedit-btn is-locked" role="img" title="${esc(T('lockedSp'))}" aria-label="${esc(T('lockedSp'))}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>`
@@ -587,12 +589,21 @@
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, () => fallbackCopy(text, ok)); else fallbackCopy(text, ok);
       return;
     }
+    const nm = e.target.closest('.has-why .fr, .has-why .sci, .has-why .en');
+    if (nm){ toggleWhy(nm.closest('.row')); return; }
     const btn = e.target.closest('.canal-btn'); if (!btn) return;
     const li = btn.closest('.row'), box = li.querySelector('.alertbox'), b = shownBirds[+li.dataset.bi]; if (!b) return;
     const show = box.hidden;
     box.hidden = !show; btn.setAttribute('aria-expanded', String(show));
     if (!show) return;
     runAlert(box, b, btn.dataset.alert);
+  });
+  function toggleWhy(li){
+    const w = li.querySelector('.why'), fr = li.querySelector('.fr'); if (!w) return;
+    w.hidden = !w.hidden; fr.setAttribute('aria-expanded', String(!w.hidden));
+  }
+  results.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.has-why .fr')){ e.preventDefault(); toggleWhy(e.target.closest('.row')); }
   });
   function runAlert(box, b, kind){
     const token = box.dataset.t = String(Date.now()), live = () => box.dataset.t === token && !box.hidden;

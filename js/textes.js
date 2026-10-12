@@ -28,6 +28,7 @@ window.OUESSANT_TEXTES = {
         <p><strong>Vie privée.</strong> Pas de compte, pas de cookies, pas de statistiques. Ta position GPS n'est utilisée que sur ton appareil et n'est envoyée nulle part, sauf si tu choisis de la partager. Ton thème et ta langue sont mémorisés dans ton navigateur. Les polices sont hébergées avec l'appli : seule la météo est demandée à un service extérieur (Open-Meteo), qui voit donc ton adresse IP. Si tu proposes un nouvel oiseau dans l’éditeur, le nom saisi est envoyé à iNaturalist pour retrouver les autres noms. Si tu envoies une proposition, elle passe par un formulaire Google.</p>`,
       badFile: "Ce fichier n'est pas lisible. Il doit contenir une liste d'espèces avec au moins les champs « Nom Français », « Nom Scientifique » et « Proposition de Canal de Diffusion Ouessant ».",
       channels: { telegram: 'Alerte Telegram', whatsapp: 'Alerte WhatsApp', none: "Pas d'alerte", unknown: 'Non renseigné' },
+      whyT: 'Pourquoi ce canal ? Touche le nom', reasons: {},   // « Raison du canal » et « Origine » de la liste, affichées telles quelles en français
       tabBirds: 'Oiseaux', tabPlaces: 'Lieux', tabWhere: 'Où suis-je ?',
       phareLabel: 'Météo et partage', phareOff: 'Hors connexion : le phare est éteint (météo indisponible)', wOffline: 'Pas de connexion : la météo reviendra avec le réseau.', wTitle: 'Météo à Ouessant', wLoading: 'Chargement de la météo…', wErr: 'Météo indisponible pour le moment (connexion ?).',
       wNow: (dir, kmh, bf) => `Vent ${dir}, ${kmh} km/h (force ${bf})`, wGust: g => `rafales ${g} km/h`, wSrc: 'Météo : Open-Meteo.com, mise à jour toutes les 15 minutes.',
@@ -147,6 +148,12 @@ window.OUESSANT_TEXTES = {
         <p><strong>Privacy.</strong> No account, no cookies, no analytics. Your GPS position is only used on your device and is sent nowhere, unless you choose to share it. Your theme and language are remembered in your browser. The fonts are hosted with the app: only the weather is requested from an outside service (Open-Meteo), which therefore sees your IP address. If you suggest a new bird in the editor, the name you type is sent to iNaturalist to find the other names. If you send a suggestion, it goes through a Google form.</p>`,
       badFile: 'This file cannot be read. It must contain a list of species with at least the fields “Nom Français”, “Nom Scientifique” and “Proposition de Canal de Diffusion Ouessant”.',
       channels: { telegram: 'Telegram alert', whatsapp: 'WhatsApp alert', none: 'No alert', unknown: 'Not specified' },
+      whyT: 'Why this channel? Tap the name', reasons: {   // traduction de « Raison du canal » et « Origine » (valeur française de la liste → anglais)
+        "Nicheur sur l'île": 'Breeds on the island', "Commun sur l'île (migrateur ou hivernant)": 'Common on the island (migrant or winter visitor)',
+        'Commun au large (oiseau marin)': 'Common offshore (seabird)', "Peu commun sur l'île": 'Scarce on the island', 'Rareté locale': 'Local rarity',
+        'Échappé de captivité': 'Escape from captivity', "Méga pour l'île": 'Island mega', 'Rareté nationale': 'National rarity', 'Méga national': 'National mega',
+        'origine américaine': 'American vagrant', 'origine sibérienne / asiatique': 'Siberian / Asian vagrant', 'origine orientale': 'eastern vagrant',
+        'origine méridionale': 'southern vagrant', 'origine arctique / nordique': 'Arctic / northern vagrant', 'oiseau marin des océans lointains': 'seabird from distant oceans' },
       tabBirds: 'Birds', tabPlaces: 'Places', tabWhere: 'Where am I?',
       phareLabel: 'Weather and sharing', phareOff: 'Offline: the lighthouse is off (no weather)', wOffline: 'No connection: the weather will be back with the network.', wTitle: 'Weather on Ouessant', wLoading: 'Loading the weather…', wErr: 'Weather unavailable right now (connection?).',
       wNow: (dir, kmh, bf) => `Wind ${dir}, ${kmh} km/h (force ${bf})`, wGust: g => `gusts ${g} km/h`, wSrc: 'Weather: Open-Meteo.com, updated every 15 minutes.',

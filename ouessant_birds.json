@@ -1,24 +1,38 @@
 [
  {
+  "Nom Français": "Mésange huppée",
+  "Nom Scientifique": "Lophophanes cristatus",
+  "Nom Anglais": "Crested Tit",
+  "Type de taxon": "espèce",
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
+ },
+ {
   "Nom Français": "Pipit de Sibérie",
   "Nom Scientifique": "Anthus japonicus",
   "Nom Anglais": "Siberian Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Engoulevent d'Amérique",
   "Nom Scientifique": "Chordeiles minor",
   "Nom Anglais": "Common Nighthawk",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Pouillot ibérique",
   "Nom Scientifique": "Phylloscopus ibericus",
   "Nom Anglais": "Iberian Chiffchaff",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale",
+  "Origine": "origine méridionale"
  },
  {
   "Nom Français": "Accenteur mouchet",
@@ -26,6 +40,7 @@
   "Nom Anglais": "Dunnock",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -33,21 +48,26 @@
   "Nom Scientifique": "Falco peregrinus calidus/tundrius",
   "Nom Anglais": "Peregrine Falcon (calidus/toundrius)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Aigle botté",
   "Nom Scientifique": "Hieraaetus pennatus",
   "Nom Anglais": "Booted Eagle",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Aigle des steppes",
   "Nom Scientifique": "Aquila nipalensis",
   "Nom Anglais": "Steppe Eagle",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Aigrette garzette",
@@ -55,6 +75,7 @@
   "Nom Anglais": "Little Egret",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -62,14 +83,17 @@
   "Nom Scientifique": "Thalassarche melanophris",
   "Nom Anglais": "Black-browed Albatross",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "oiseau marin des océans lointains"
  },
  {
   "Nom Français": "Alouette calandrelle",
   "Nom Scientifique": "Calandrella brachydactyla",
   "Nom Anglais": "Greater Short-toed Lark",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Alouette des champs",
@@ -77,6 +101,7 @@
   "Nom Anglais": "Eurasian Skylark",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -84,63 +109,73 @@
   "Nom Scientifique": "Eremophila alpestris",
   "Nom Anglais": "Horned Lark",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Alouette lulu",
   "Nom Scientifique": "Lullula arborea",
   "Nom Anglais": "Woodlark",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce"
+  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)"
  },
  {
   "Nom Français": "Autour des palombes",
   "Nom Scientifique": "Astur gentilis",
   "Nom Anglais": "Northern Goshawk",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Avocette élégante",
   "Nom Scientifique": "Recurvirostra avosetta",
   "Nom Anglais": "Pied Avocet",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Balbuzard pêcheur",
   "Nom Scientifique": "Pandion haliaetus",
   "Nom Anglais": "Western Osprey",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Barge à queue noire",
   "Nom Scientifique": "Limosa limosa",
   "Nom Anglais": "Black-tailed Godwit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Barge rousse",
   "Nom Scientifique": "Limosa lapponica",
   "Nom Anglais": "Bar-tailed Godwit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bartramie des champs",
   "Nom Scientifique": "Bartramia longicauda",
   "Nom Anglais": "Upland Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Bec-croisé des sapins",
   "Nom Scientifique": "Loxia curvirostra",
   "Nom Anglais": "Red Crossbill",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Bécasse des bois",
@@ -148,6 +183,7 @@
   "Nom Anglais": "Eurasian Woodcock",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -155,42 +191,51 @@
   "Nom Scientifique": "Calidris ferruginea",
   "Nom Anglais": "Curlew Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bécasseau de Baird",
   "Nom Scientifique": "Calidris bairdii",
   "Nom Anglais": "Baird's Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Bécasseau de Bonaparte",
   "Nom Scientifique": "Calidris fuscicollis",
   "Nom Anglais": "White-rumped Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Bécasseau maubèche",
   "Nom Scientifique": "Calidris canutus",
   "Nom Anglais": "Red Knot",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bécasseau minute",
   "Nom Scientifique": "Calidris minuta",
   "Nom Anglais": "Little Stint",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bécasseau rousset",
   "Nom Scientifique": "Calidris subruficollis",
   "Nom Anglais": "Buff-breasted Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Bécasseau sanderling",
@@ -198,6 +243,7 @@
   "Nom Anglais": "Sanderling",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -205,14 +251,18 @@
   "Nom Scientifique": "Calidris pusilla",
   "Nom Anglais": "Semipalmated Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Bécasseau tacheté",
   "Nom Scientifique": "Calidris melanotos",
   "Nom Anglais": "Pectoral Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Bécasseau variable",
@@ -220,6 +270,7 @@
   "Nom Anglais": "Dunlin",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -228,6 +279,7 @@
   "Nom Anglais": "Purple Sandpiper",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -235,7 +287,9 @@
   "Nom Scientifique": "Limnodromus scolopaceus",
   "Nom Anglais": "Long-billed Dowitcher",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Bécassine des marais",
@@ -243,6 +297,7 @@
   "Nom Anglais": "Common Snipe",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -250,7 +305,9 @@
   "Nom Scientifique": "Gallinago media",
   "Nom Anglais": "Great Snipe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Bécassine sourde",
@@ -258,6 +315,7 @@
   "Nom Anglais": "Jack Snipe",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -265,7 +323,9 @@
   "Nom Scientifique": "Motacilla citreola",
   "Nom Anglais": "Citrine Wagtail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Bergeronnette de Yarrell",
@@ -273,6 +333,7 @@
   "Nom Anglais": "Pied Wagtail (yarrellii)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -280,7 +341,9 @@
   "Nom Scientifique": "Motacilla flava feldegg",
   "Nom Anglais": "Black-headed Wagtail (feldegg)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Bergeronnette des ruisseaux",
@@ -288,6 +351,7 @@
   "Nom Anglais": "Grey Wagtail",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -295,7 +359,8 @@
   "Nom Scientifique": "Motacilla flava flavissima",
   "Nom Anglais": "Yellow Wagtail (flavissima)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bergeronnette grise",
@@ -303,6 +368,7 @@
   "Nom Anglais": "White Wagtail",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -311,6 +377,7 @@
   "Nom Anglais": "White Wagtail (alba)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -318,14 +385,17 @@
   "Nom Scientifique": "Motacilla flava thunbergi",
   "Nom Anglais": "Grey-headed Wagtail (thunbergi)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bergeronnette orientale",
   "Nom Scientifique": "Motacilla tschutschensis",
   "Nom Anglais": "Eastern Yellow Wagtail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Bergeronnette printanière",
@@ -333,6 +403,7 @@
   "Nom Anglais": "Western Yellow Wagtail",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -341,6 +412,7 @@
   "Nom Anglais": "Blue-headed Wagtail (flava)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -348,49 +420,56 @@
   "Nom Scientifique": "Branta bernicla",
   "Nom Anglais": "Brant Goose",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bernache cravant à ventre pâle",
   "Nom Scientifique": "Branta bernicla hrota",
   "Nom Anglais": "Pale-bellied Brent Goose (hrota)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Bernache cravant à ventre sombre",
   "Nom Scientifique": "Branta bernicla bernicla",
   "Nom Anglais": "Dark-bellied Brent Goose (bernicla)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bernache du Canada",
   "Nom Scientifique": "Branta canadensis",
   "Nom Anglais": "Canada Goose",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Bernache nonnette",
   "Nom Scientifique": "Branta leucopsis",
   "Nom Anglais": "Barnacle Goose",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Bihoreau gris",
   "Nom Scientifique": "Nycticorax nycticorax",
   "Nom Anglais": "Black-crowned Night Heron",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Bondrée apivore",
   "Nom Scientifique": "Pernis apivorus",
   "Nom Anglais": "European Honey Buzzard",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bouscarle de Cetti",
@@ -398,6 +477,7 @@
   "Nom Anglais": "Cetti's Warbler",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -406,6 +486,7 @@
   "Nom Anglais": "Eurasian Bullfinch",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -413,28 +494,35 @@
   "Nom Scientifique": "Pyrrhula pyrrhula pyrrhula",
   "Nom Anglais": "Northern Bullfinch (pyrrhula)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Bruant à calotte blanche",
   "Nom Scientifique": "Emberiza leucocephalos",
   "Nom Anglais": "Pine Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Bruant à gorge blanche",
   "Nom Scientifique": "Zonotrichia albicollis",
   "Nom Anglais": "White-throated Sparrow",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Bruant des neiges",
   "Nom Scientifique": "Plectrophenax nivalis",
   "Nom Anglais": "Snow Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bruant des roseaux",
@@ -442,6 +530,7 @@
   "Nom Anglais": "Common Reed Bunting",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -449,84 +538,102 @@
   "Nom Scientifique": "Emberiza citrinella",
   "Nom Anglais": "Yellowhammer",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Bruant lapon",
   "Nom Scientifique": "Calcarius lapponicus",
   "Nom Anglais": "Lapland Longspur",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bruant masqué",
   "Nom Scientifique": "Emberiza spodocephala",
   "Nom Anglais": "Black-faced Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Bruant mélanocéphale",
   "Nom Scientifique": "Emberiza melanocephala",
   "Nom Anglais": "Black-headed Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Bruant nain",
   "Nom Scientifique": "Emberiza pusilla",
   "Nom Anglais": "Little Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Bruant ortolan",
   "Nom Scientifique": "Emberiza hortulana",
   "Nom Anglais": "Ortolan Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Bruant proyer",
   "Nom Scientifique": "Emberiza calandra",
   "Nom Anglais": "Corn Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Bruant roux",
   "Nom Scientifique": "Emberiza rutila",
   "Nom Anglais": "Chestnut Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Bruant rustique",
   "Nom Scientifique": "Emberiza rustica",
   "Nom Anglais": "Rustic Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Bruant zizi",
   "Nom Scientifique": "Emberiza cirlus",
   "Nom Anglais": "Cirl Bunting",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Busard cendré",
   "Nom Scientifique": "Circus pygargus",
   "Nom Anglais": "Montagu's Harrier",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Busard d'Amérique",
   "Nom Scientifique": "Circus hudsonius",
   "Nom Anglais": "Northern Harrier",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Busard des roseaux",
@@ -534,6 +641,7 @@
   "Nom Anglais": "Western Marsh Harrier",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -541,7 +649,9 @@
   "Nom Scientifique": "Circus macrourus",
   "Nom Anglais": "Pallid Harrier",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Busard Saint-Martin",
@@ -549,6 +659,7 @@
   "Nom Anglais": "Hen Harrier",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -556,7 +667,9 @@
   "Nom Scientifique": "Buteo lagopus",
   "Nom Anglais": "Rough-legged Buzzard",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Buse variable",
@@ -564,6 +677,7 @@
   "Nom Anglais": "Common Buzzard",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -571,21 +685,25 @@
   "Nom Scientifique": "Coturnix coturnix",
   "Nom Anglais": "Common Quail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Canard à front blanc",
   "Nom Scientifique": "Mareca americana",
   "Nom Anglais": "American Wigeon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Canard chipeau",
   "Nom Scientifique": "Mareca strepera",
   "Nom Anglais": "Gadwall",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Canard colvert",
@@ -593,6 +711,7 @@
   "Nom Anglais": "Mallard",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -601,7 +720,7 @@
   "Nom Anglais": "Mandarin Duck",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
-  "Verrouillée": true
+  "Raison du canal": "Échappé de captivité"
  },
  {
   "Nom Français": "Canard musqué",
@@ -609,6 +728,7 @@
   "Nom Anglais": "Muscovy Duck",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Échappé de captivité",
   "Verrouillée": true
  },
  {
@@ -616,28 +736,33 @@
   "Nom Scientifique": "Anas rubripes",
   "Nom Anglais": "American Black Duck",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Canard pilet",
   "Nom Scientifique": "Anas acuta",
   "Nom Anglais": "Northern Pintail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Canard siffleur",
   "Nom Scientifique": "Mareca penelope",
   "Nom Anglais": "Eurasian Wigeon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Canard souchet",
   "Nom Scientifique": "Spatula clypeata",
   "Nom Anglais": "Northern Shoveler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Capucin bec-de-plomb",
@@ -645,6 +770,7 @@
   "Nom Anglais": "Indian Silverbill",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Échappé de captivité",
   "Verrouillée": true
  },
  {
@@ -652,7 +778,9 @@
   "Nom Scientifique": "Pheucticus ludovicianus",
   "Nom Anglais": "Rose-breasted Grosbeak",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Chardonneret élégant",
@@ -660,6 +788,7 @@
   "Nom Anglais": "European Goldfinch",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -667,29 +796,33 @@
   "Nom Scientifique": "Tringa flavipes",
   "Nom Anglais": "Lesser Yellowlegs",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Chevalier aboyeur",
   "Nom Scientifique": "Tringa nebularia",
   "Nom Anglais": "Common Greenshank",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Chevalier arlequin",
   "Nom Scientifique": "Tringa erythropus",
   "Nom Anglais": "Spotted Redshank",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Chevalier culblanc",
   "Nom Scientifique": "Tringa ochropus",
   "Nom Anglais": "Green Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
-  "Verrouillée": true
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Chevalier gambette",
@@ -697,6 +830,7 @@
   "Nom Anglais": "Common Redshank",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -704,7 +838,9 @@
   "Nom Scientifique": "Actitis macularius",
   "Nom Anglais": "Spotted Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Chevalier guignette",
@@ -712,6 +848,7 @@
   "Nom Anglais": "Common Sandpiper",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -719,28 +856,34 @@
   "Nom Scientifique": "Tringa solitaria",
   "Nom Anglais": "Solitary Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Chevalier stagnatile",
   "Nom Scientifique": "Tringa stagnatilis",
   "Nom Anglais": "Marsh Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Chevalier sylvain",
   "Nom Scientifique": "Tringa glareola",
   "Nom Anglais": "Wood Sandpiper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Choucas des tours",
   "Nom Scientifique": "Coloeus monedula",
   "Nom Anglais": "Western Jackdaw",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Choucas des tours (ssp. spermologus)",
@@ -748,6 +891,7 @@
   "Nom Anglais": "Western Jackdaw (spermologus)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -755,28 +899,33 @@
   "Nom Scientifique": "Coloeus monedula soemmerringii",
   "Nom Anglais": "Eastern Jackdaw (soemmerringii)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Cigogne blanche",
   "Nom Scientifique": "Ciconia ciconia",
   "Nom Anglais": "White Stork",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Cigogne noire",
   "Nom Scientifique": "Ciconia nigra",
   "Nom Anglais": "Black Stork",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Circaète Jean-le-Blanc",
   "Nom Scientifique": "Circaetus gallicus",
   "Nom Anglais": "Short-toed Snake Eagle",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Cisticole des joncs",
@@ -784,6 +933,7 @@
   "Nom Anglais": "Zitting Cisticola",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -791,28 +941,33 @@
   "Nom Scientifique": "Galerida cristata",
   "Nom Anglais": "Crested Lark",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Combattant varié",
   "Nom Scientifique": "Calidris pugnax",
   "Nom Anglais": "Ruff",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Corbeau freux",
   "Nom Scientifique": "Corvus frugilegus",
   "Nom Anglais": "Rook",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Cormoran à aigrettes",
   "Nom Scientifique": "Nannopterum auritum",
   "Nom Anglais": "Double-crested Cormorant",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Cormoran huppé",
@@ -820,6 +975,7 @@
   "Nom Anglais": "European Shag",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -827,7 +983,8 @@
   "Nom Scientifique": "Corvus cornix",
   "Nom Anglais": "Hooded Crow",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Corneille noire",
@@ -835,6 +992,7 @@
   "Nom Anglais": "Carrion Crow",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -842,21 +1000,25 @@
   "Nom Scientifique": "Clamator glandarius",
   "Nom Anglais": "Great Spotted Cuckoo",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Coucou gris",
   "Nom Scientifique": "Cuculus canorus",
   "Nom Anglais": "Common Cuckoo",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Coulicou à bec jaune",
   "Nom Scientifique": "Coccyzus americanus",
   "Nom Anglais": "Yellow-billed Cuckoo",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Courlis cendré",
@@ -864,6 +1026,7 @@
   "Nom Anglais": "Eurasian Curlew",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -872,6 +1035,7 @@
   "Nom Anglais": "Eurasian Whimbrel",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -879,7 +1043,8 @@
   "Nom Scientifique": "Ardeola ralloides",
   "Nom Anglais": "Squacco Heron",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Crave à bec rouge",
@@ -887,6 +1052,7 @@
   "Nom Anglais": "Red-billed Chough",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -894,70 +1060,80 @@
   "Nom Scientifique": "Cygnus cygnus",
   "Nom Anglais": "Whooper Swan",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Cygne noir",
   "Nom Scientifique": "Cygnus atratus",
   "Nom Anglais": "Black Swan",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Échappé de captivité"
  },
  {
   "Nom Français": "Cygne tuberculé",
   "Nom Scientifique": "Cygnus olor",
   "Nom Anglais": "Mute Swan",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Diamant mandarin",
   "Nom Scientifique": "Taeniopygia guttata",
   "Nom Anglais": "Zebra Finch",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Échappé de captivité"
  },
  {
   "Nom Français": "Échasse blanche",
   "Nom Scientifique": "Himantopus himantopus",
   "Nom Anglais": "Black-winged Stilt",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Effraie des clochers",
   "Nom Scientifique": "Tyto alba",
   "Nom Anglais": "Western Barn Owl",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Effraie des clochers (ssp. alba)",
   "Nom Scientifique": "Tyto alba alba",
   "Nom Anglais": "Western Barn Owl (alba)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Eider à duvet",
   "Nom Scientifique": "Somateria mollissima",
   "Nom Anglais": "Common Eider",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Élanion blanc",
   "Nom Scientifique": "Elanus caeruleus",
   "Nom Anglais": "Black-winged Kite",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Engoulevent d'Europe",
   "Nom Scientifique": "Caprimulgus europaeus",
   "Nom Anglais": "European Nightjar",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Épervier d'Europe",
@@ -965,6 +1141,7 @@
   "Nom Anglais": "Eurasian Sparrowhawk",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -972,7 +1149,8 @@
   "Nom Scientifique": "Pastor roseus",
   "Nom Anglais": "Rosy Starling",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Étourneau sansonnet",
@@ -980,6 +1158,7 @@
   "Nom Anglais": "Common Starling",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -987,7 +1166,9 @@
   "Nom Scientifique": "Sturnus unicolor",
   "Nom Anglais": "Spotless Starling",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga pour l'île",
+  "Origine": "origine méridionale"
  },
  {
   "Nom Français": "Faisan de Colchide",
@@ -995,6 +1176,7 @@
   "Nom Anglais": "Common Pheasant",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1003,6 +1185,7 @@
   "Nom Anglais": "Common Kestrel",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1010,7 +1193,8 @@
   "Nom Scientifique": "Falco naumanni",
   "Nom Anglais": "Lesser Kestrel",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Faucon émerillon",
@@ -1018,6 +1202,7 @@
   "Nom Anglais": "Merlin",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1025,21 +1210,25 @@
   "Nom Scientifique": "Falco rusticolus",
   "Nom Anglais": "Gyrfalcon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Faucon hobereau",
   "Nom Scientifique": "Falco subbuteo",
   "Nom Anglais": "Eurasian Hobby",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Faucon kobez",
   "Nom Scientifique": "Falco vespertinus",
   "Nom Anglais": "Red-footed Falcon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Faucon pèlerin",
@@ -1047,6 +1236,7 @@
   "Nom Anglais": "Peregrine Falcon",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1055,6 +1245,7 @@
   "Nom Anglais": "Eurasian Blackcap",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1063,6 +1254,7 @@
   "Nom Anglais": "Lesser Whitethroat",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1070,21 +1262,27 @@
   "Nom Scientifique": "Curruca curruca blythi",
   "Nom Anglais": "Lesser Whitethroat (blythi)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Fauvette babillarde d'Asie centrale",
   "Nom Scientifique": "Curruca curruca minula",
   "Nom Anglais": "Lesser Whitethroat (minula, 'Desert')",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Fauvette des Balkans (ssp. albistriata)",
   "Nom Scientifique": "Curruca cantillans albistriata",
   "Nom Anglais": "Eastern Subalpine Warbler (albistriata)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Fauvette des jardins",
@@ -1092,6 +1290,7 @@
   "Nom Anglais": "Garden Warbler",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1099,7 +1298,9 @@
   "Nom Scientifique": "Curruca nisoria",
   "Nom Anglais": "Barred Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Fauvette grisette",
@@ -1107,6 +1308,7 @@
   "Nom Anglais": "Common Whitethroat",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1114,14 +1316,16 @@
   "Nom Scientifique": "Curruca melanocephala",
   "Nom Anglais": "Sardinian Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Fauvette passerinette",
   "Nom Scientifique": "Curruca iberiae",
   "Nom Anglais": "Western Subalpine Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Fauvette pitchou",
@@ -1129,6 +1333,7 @@
   "Nom Anglais": "Dartford Warbler",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1136,7 +1341,9 @@
   "Nom Scientifique": "Sula leucogaster",
   "Nom Anglais": "Brown Booby",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "oiseau marin des océans lointains"
  },
  {
   "Nom Français": "Fou de Bassan",
@@ -1144,6 +1351,7 @@
   "Nom Anglais": "Northern Gannet",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -1152,6 +1360,7 @@
   "Nom Anglais": "Eurasian Coot",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1159,28 +1368,32 @@
   "Nom Scientifique": "Aythya ferina",
   "Nom Anglais": "Common Pochard",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Fuligule milouinan",
   "Nom Scientifique": "Aythya marila",
   "Nom Anglais": "Greater Scaup",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga pour l'île"
  },
  {
   "Nom Français": "Fuligule morillon",
   "Nom Scientifique": "Aythya fuligula",
   "Nom Anglais": "Tufted Duck",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Fulmar boréal",
   "Nom Scientifique": "Fulmarus glacialis",
   "Nom Anglais": "Northern Fulmar",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Gallinule poule-d'eau",
@@ -1188,6 +1401,7 @@
   "Nom Anglais": "Common Moorhen",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1195,28 +1409,32 @@
   "Nom Scientifique": "Bucephala clangula",
   "Nom Anglais": "Common Goldeneye",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Geai des chênes",
   "Nom Scientifique": "Garrulus glandarius",
   "Nom Anglais": "Eurasian Jay",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Glaréole à collier",
   "Nom Scientifique": "Glareola pratincola",
   "Nom Anglais": "Collared Pratincole",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Gobemouche à collier",
   "Nom Scientifique": "Ficedula albicollis",
   "Nom Anglais": "Collared Flycatcher",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Gobemouche gris",
@@ -1224,6 +1442,7 @@
   "Nom Anglais": "Spotted Flycatcher",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1231,7 +1450,9 @@
   "Nom Scientifique": "Ficedula parva",
   "Nom Anglais": "Red-breasted Flycatcher",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Gobemouche noir",
@@ -1239,6 +1460,7 @@
   "Nom Anglais": "European Pied Flycatcher",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1246,7 +1468,9 @@
   "Nom Scientifique": "Larus glaucoides",
   "Nom Anglais": "Iceland Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Goéland argenté",
@@ -1254,6 +1478,7 @@
   "Nom Anglais": "European Herring Gull",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1262,6 +1487,7 @@
   "Nom Anglais": "European Herring Gull (argentatus)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1270,6 +1496,7 @@
   "Nom Anglais": "European Herring Gull (argenteus)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1277,7 +1504,9 @@
   "Nom Scientifique": "Larus hyperboreus",
   "Nom Anglais": "Glaucous Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Goéland brun",
@@ -1285,6 +1514,7 @@
   "Nom Anglais": "Lesser Black-backed Gull",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1292,42 +1522,50 @@
   "Nom Scientifique": "Larus fuscus graellsii",
   "Nom Anglais": "Lesser Black-backed Gull (graellsii)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Goéland brun (ssp. intermedius)",
   "Nom Scientifique": "Larus fuscus intermedius",
   "Nom Anglais": "Lesser Black-backed Gull (intermedius)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Goéland cendré",
   "Nom Scientifique": "Larus canus",
   "Nom Anglais": "Common Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Goéland d'Amérique",
   "Nom Scientifique": "Larus smithsonianus",
   "Nom Anglais": "American Herring Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Goéland de Kumlien",
   "Nom Scientifique": "Larus glaucoides kumlieni",
   "Nom Anglais": "Kumlien's Gull (Iceland Gull kumlieni)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Goéland leucophée",
   "Nom Scientifique": "Larus michahellis",
   "Nom Anglais": "Yellow-legged Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Goéland marin",
@@ -1335,6 +1573,7 @@
   "Nom Anglais": "Great Black-backed Gull",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1342,21 +1581,26 @@
   "Nom Scientifique": "Larus cachinnans",
   "Nom Anglais": "Caspian Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga pour l'île",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Goglu des prés",
   "Nom Scientifique": "Dolichonyx oryzivorus",
   "Nom Anglais": "Bobolink",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Gorgebleue à miroir",
   "Nom Scientifique": "Luscinia svecica",
   "Nom Anglais": "Bluethroat",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Grand corbeau",
@@ -1364,6 +1608,7 @@
   "Nom Anglais": "Northern Raven",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1372,6 +1617,7 @@
   "Nom Anglais": "Great Cormorant",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1380,6 +1626,7 @@
   "Nom Anglais": "Great Cormorant (carbo)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1388,6 +1635,7 @@
   "Nom Anglais": "Common Ringed Plover",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1396,6 +1644,7 @@
   "Nom Anglais": "Great Skua",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -1403,98 +1652,117 @@
   "Nom Scientifique": "Ardea alba",
   "Nom Anglais": "Great Egret",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Gravelot à collier interrompu",
   "Nom Scientifique": "Anarhynchus alexandrinus",
   "Nom Anglais": "Kentish Plover",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Gravelot semipalmé",
   "Nom Scientifique": "Charadrius semipalmatus",
   "Nom Anglais": "Semipalmated Plover",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Grèbe à cou noir",
   "Nom Scientifique": "Podiceps nigricollis",
   "Nom Anglais": "Black-necked Grebe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Grèbe castagneux",
   "Nom Scientifique": "Tachybaptus ruficollis",
   "Nom Anglais": "Little Grebe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Grèbe esclavon",
   "Nom Scientifique": "Podiceps auritus",
   "Nom Anglais": "Horned Grebe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Grèbe huppé",
   "Nom Scientifique": "Podiceps cristatus",
   "Nom Anglais": "Great Crested Grebe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Grèbe jougris",
   "Nom Scientifique": "Podiceps grisegena",
   "Nom Anglais": "Red-necked Grebe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Grimpereau des bois",
   "Nom Scientifique": "Certhia familiaris",
   "Nom Anglais": "Eurasian Treecreeper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Grimpereau des jardins",
   "Nom Scientifique": "Certhia brachydactyla",
   "Nom Anglais": "Short-toed Treecreeper",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Grive à dos olive",
   "Nom Scientifique": "Catharus ustulatus",
   "Nom Anglais": "Swainson's Thrush",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Grive à gorge noire",
   "Nom Scientifique": "Turdus atrogularis",
   "Nom Anglais": "Black-throated Thrush",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Grive à joues grises",
   "Nom Scientifique": "Catharus minimus",
   "Nom Anglais": "Grey-cheeked Thrush",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Grive dorée",
   "Nom Scientifique": "Zoothera aurea",
   "Nom Anglais": "White's Thrush",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Grive draine",
@@ -1502,6 +1770,7 @@
   "Nom Anglais": "Mistle Thrush",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1510,6 +1779,7 @@
   "Nom Anglais": "Fieldfare",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1518,6 +1788,7 @@
   "Nom Anglais": "Redwing",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1525,7 +1796,9 @@
   "Nom Scientifique": "Turdus iliacus coburni",
   "Nom Anglais": "Redwing (coburni)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Grive musicienne",
@@ -1533,6 +1806,7 @@
   "Nom Anglais": "Song Thrush",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1540,7 +1814,9 @@
   "Nom Scientifique": "Turdus obscurus",
   "Nom Anglais": "Eyebrowed Thrush",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Grosbec casse-noyaux",
@@ -1548,6 +1824,7 @@
   "Nom Anglais": "Hawfinch",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1555,35 +1832,41 @@
   "Nom Scientifique": "Grus grus",
   "Nom Anglais": "Common Crane",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Guêpier d'Europe",
   "Nom Scientifique": "Merops apiaster",
   "Nom Anglais": "European Bee-eater",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Guifette moustac",
   "Nom Scientifique": "Chlidonias hybrida",
   "Nom Anglais": "Whiskered Tern",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Guifette noire",
   "Nom Scientifique": "Chlidonias niger",
   "Nom Anglais": "Black Tern",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Guillemot à miroir",
   "Nom Scientifique": "Cepphus grylle",
   "Nom Anglais": "Black Guillemot",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Guillemot de Troïl",
@@ -1591,6 +1874,7 @@
   "Nom Anglais": "Common Murre",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1598,28 +1882,33 @@
   "Nom Scientifique": "Clangula hyemalis",
   "Nom Anglais": "Long-tailed Duck",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Harfang des neiges",
   "Nom Scientifique": "Bubo scandiacus",
   "Nom Anglais": "Snowy Owl",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Harle bièvre",
   "Nom Scientifique": "Mergus merganser",
   "Nom Anglais": "Common Merganser",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Harle huppé",
   "Nom Scientifique": "Mergus serrator",
   "Nom Anglais": "Red-breasted Merganser",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Héron cendré",
@@ -1627,6 +1916,7 @@
   "Nom Anglais": "Grey Heron",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1634,14 +1924,16 @@
   "Nom Scientifique": "Ardea ibis",
   "Nom Anglais": "Western Cattle Egret",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Héron pourpré",
   "Nom Scientifique": "Ardea purpurea",
   "Nom Anglais": "Purple Heron",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Hibou des marais",
@@ -1649,6 +1941,7 @@
   "Nom Anglais": "Short-eared Owl",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1656,14 +1949,17 @@
   "Nom Scientifique": "Asio otus",
   "Nom Anglais": "Long-eared Owl",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Hirondelle à front blanc",
   "Nom Scientifique": "Petrochelidon pyrrhonota",
   "Nom Anglais": "American Cliff Swallow",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Hirondelle de fenêtre",
@@ -1671,6 +1967,7 @@
   "Nom Anglais": "Western House Martin",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1679,6 +1976,7 @@
   "Nom Anglais": "Sand Martin",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1686,7 +1984,8 @@
   "Nom Scientifique": "Cecropis rufula",
   "Nom Anglais": "European Red-rumped Swallow",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Hirondelle rustique",
@@ -1694,6 +1993,7 @@
   "Nom Anglais": "Barn Swallow",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1702,6 +2002,7 @@
   "Nom Anglais": "Eurasian Oystercatcher",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1709,70 +2010,86 @@
   "Nom Scientifique": "Upupa epops",
   "Nom Anglais": "Eurasian Hoopoe",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Hypolaïs bottée",
   "Nom Scientifique": "Iduna caligata",
   "Nom Anglais": "Booted Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Hypolaïs ictérine",
   "Nom Scientifique": "Hippolais icterina",
   "Nom Anglais": "Icterine Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Hypolaïs pâle",
   "Nom Scientifique": "Iduna pallida",
   "Nom Anglais": "Eastern Olivaceous Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Hypolaïs polyglotte",
   "Nom Scientifique": "Hippolais polyglotta",
   "Nom Anglais": "Melodious Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Hypolaïs rama",
   "Nom Scientifique": "Iduna rama",
   "Nom Anglais": "Sykes's Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Ibis falcinelle",
   "Nom Scientifique": "Plegadis falcinellus",
   "Nom Anglais": "Glossy Ibis",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Jaseur boréal",
   "Nom Scientifique": "Bombycilla garrulus",
   "Nom Anglais": "Bohemian Waxwing",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Labbe à longue queue",
   "Nom Scientifique": "Stercorarius longicaudus",
   "Nom Anglais": "Long-tailed Jaeger",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Labbe de McCormick",
   "Nom Scientifique": "Stercorarius maccormicki",
   "Nom Anglais": "South Polar Skua",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "oiseau marin des océans lointains"
  },
  {
   "Nom Français": "Labbe parasite",
@@ -1780,6 +2097,7 @@
   "Nom Anglais": "Parasitic Jaeger",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -1787,7 +2105,8 @@
   "Nom Scientifique": "Stercorarius pomarinus",
   "Nom Anglais": "Pomarine Jaeger",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Linotte mélodieuse",
@@ -1795,6 +2114,7 @@
   "Nom Anglais": "Common Linnet",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1802,21 +2122,24 @@
   "Nom Scientifique": "Locustella luscinioides",
   "Nom Anglais": "Savi's Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Locustelle tachetée",
   "Nom Scientifique": "Locustella naevia",
   "Nom Anglais": "Common Grasshopper Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Loriot d'Europe",
   "Nom Scientifique": "Oriolus oriolus",
   "Nom Anglais": "Eurasian Golden Oriole",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Macareux moine",
@@ -1824,6 +2147,7 @@
   "Nom Anglais": "Atlantic Puffin",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -1831,14 +2155,17 @@
   "Nom Scientifique": "Melanitta perspicillata",
   "Nom Anglais": "Surf Scoter",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Macreuse brune",
   "Nom Scientifique": "Melanitta fusca",
   "Nom Anglais": "Velvet Scoter",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Macreuse noire",
@@ -1846,6 +2173,7 @@
   "Nom Anglais": "Common Scoter",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -1853,14 +2181,17 @@
   "Nom Scientifique": "Porzana carolina",
   "Nom Anglais": "Sora",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Marouette ponctuée",
   "Nom Scientifique": "Porzana porzana",
   "Nom Anglais": "Spotted Crake",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Martin-pêcheur d'Europe",
@@ -1868,6 +2199,7 @@
   "Nom Anglais": "Common Kingfisher",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1875,14 +2207,17 @@
   "Nom Scientifique": "Tachymarptis melba",
   "Nom Anglais": "Alpine Swift",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Martinet des maisons",
   "Nom Scientifique": "Apus affinis",
   "Nom Anglais": "Little Swift",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine méridionale"
  },
  {
   "Nom Français": "Martinet noir",
@@ -1890,6 +2225,7 @@
   "Nom Anglais": "Common Swift",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1897,14 +2233,16 @@
   "Nom Scientifique": "Apus pallidus",
   "Nom Anglais": "Pallid Swift",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Mergule nain",
   "Nom Scientifique": "Alle alle",
   "Nom Anglais": "Little Auk",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Merle à plastron",
@@ -1912,6 +2250,7 @@
   "Nom Anglais": "Ring Ouzel",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1919,7 +2258,8 @@
   "Nom Scientifique": "Turdus torquatus torquatus",
   "Nom Anglais": "Ring Ouzel (torquatus)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Merle noir",
@@ -1927,6 +2267,7 @@
   "Nom Anglais": "Common Blackbird",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1935,6 +2276,7 @@
   "Nom Anglais": "Long-tailed Tit",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -1943,6 +2285,7 @@
   "Nom Anglais": "Eurasian Blue Tit",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1951,6 +2294,7 @@
   "Nom Anglais": "Great Tit",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1958,22 +2302,24 @@
   "Nom Scientifique": "Periparus ater",
   "Nom Anglais": "Coal Tit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
-  "Verrouillée": true
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Milan noir",
   "Nom Scientifique": "Milvus migrans",
   "Nom Anglais": "Black Kite",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Milan royal",
   "Nom Scientifique": "Milvus milvus",
   "Nom Anglais": "Red Kite",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Moineau domestique",
@@ -1981,6 +2327,7 @@
   "Nom Anglais": "House Sparrow",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -1988,35 +2335,44 @@
   "Nom Scientifique": "Passer montanus",
   "Nom Anglais": "Eurasian Tree Sparrow",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Mouette atricille",
   "Nom Scientifique": "Leucophaeus atricilla",
   "Nom Anglais": "Laughing Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Mouette de Bonaparte",
   "Nom Scientifique": "Chroicocephalus philadelphia",
   "Nom Anglais": "Bonaparte's Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Mouette de Franklin",
   "Nom Scientifique": "Leucophaeus pipixcan",
   "Nom Anglais": "Franklin's Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Mouette de Sabine",
   "Nom Scientifique": "Xema sabini",
   "Nom Anglais": "Sabine's Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Mouette mélanocéphale",
@@ -2024,6 +2380,7 @@
   "Nom Anglais": "Mediterranean Gull",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2031,7 +2388,8 @@
   "Nom Scientifique": "Hydrocoloeus minutus",
   "Nom Anglais": "Little Gull",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Mouette rieuse",
@@ -2039,6 +2397,7 @@
   "Nom Anglais": "Black-headed Gull",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2047,6 +2406,7 @@
   "Nom Anglais": "Black-legged Kittiwake",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2054,112 +2414,137 @@
   "Nom Scientifique": "Hydrobates leucorhous",
   "Nom Anglais": "Leach's Storm Petrel",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Océanite de Wilson",
   "Nom Scientifique": "Oceanites oceanicus",
   "Nom Anglais": "Wilson's Storm Petrel",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Océanite tempête",
   "Nom Scientifique": "Hydrobates pelagicus",
   "Nom Anglais": "European Storm Petrel",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Oie à bec court",
   "Nom Scientifique": "Anser brachyrhynchus",
   "Nom Anglais": "Pink-footed Goose",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Oie cendrée",
   "Nom Scientifique": "Anser anser",
   "Nom Anglais": "Greylag Goose",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Oie des neiges",
   "Nom Scientifique": "Anser caerulescens",
   "Nom Anglais": "Snow Goose",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Oie rieuse",
   "Nom Scientifique": "Anser albifrons",
   "Nom Anglais": "Greater White-fronted Goose",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Oie rieuse du Groenland",
   "Nom Scientifique": "Anser albifrons flavirostris",
   "Nom Anglais": "Greenland White-fronted Goose (flavirostris)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Oriole de Baltimore",
   "Nom Scientifique": "Icterus galbula",
   "Nom Anglais": "Baltimore Oriole",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Panure à moustaches",
   "Nom Scientifique": "Panurus biarmicus",
   "Nom Anglais": "Bearded Reedling",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Paruline à collier",
   "Nom Scientifique": "Setophaga americana",
   "Nom Anglais": "Northern Parula",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Paruline couronnée",
   "Nom Scientifique": "Seiurus aurocapilla",
   "Nom Anglais": "Ovenbird",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Paruline jaune",
   "Nom Scientifique": "Setophaga aestiva",
   "Nom Anglais": "American Yellow Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Paruline masquée",
   "Nom Scientifique": "Geothlypis trichas",
   "Nom Anglais": "Common Yellowthroat",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Paruline rayée",
   "Nom Scientifique": "Setophaga striata",
   "Nom Anglais": "Blackpoll Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Perdrix grise",
   "Nom Scientifique": "Perdix perdix",
   "Nom Anglais": "Grey Partridge",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Perdrix rouge",
@@ -2167,6 +2552,7 @@
   "Nom Anglais": "Red-legged Partridge",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2174,21 +2560,25 @@
   "Nom Scientifique": "Charadrius dubius",
   "Nom Anglais": "Little Ringed Plover",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Phalarope à bec large",
   "Nom Scientifique": "Phalaropus fulicarius",
   "Nom Anglais": "Red Phalarope",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Phragmite aquatique",
   "Nom Scientifique": "Acrocephalus paludicola",
   "Nom Anglais": "Aquatic Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Phragmite des joncs",
@@ -2196,6 +2586,7 @@
   "Nom Anglais": "Sedge Warbler",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2203,70 +2594,84 @@
   "Nom Scientifique": "Dendrocopos major",
   "Nom Anglais": "Great Spotted Woodpecker",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Pie bavarde",
   "Nom Scientifique": "Pica pica",
   "Nom Anglais": "Eurasian Magpie",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Pie-grièche à poitrine rose",
   "Nom Scientifique": "Lanius minor",
   "Nom Anglais": "Lesser Grey Shrike",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Pie-grièche à tête rousse",
   "Nom Scientifique": "Lanius senator",
   "Nom Anglais": "Woodchat Shrike",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Pie-grièche à tête rousse (ssp. senator)",
   "Nom Scientifique": "Lanius senator senator",
   "Nom Anglais": "Woodchat Shrike (senator)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Pie-grièche brune",
   "Nom Scientifique": "Lanius cristatus",
   "Nom Anglais": "Brown Shrike",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pie-grièche des steppes",
   "Nom Scientifique": "Lanius excubitor pallidirostris",
   "Nom Anglais": "Steppe Grey Shrike (pallidirostris)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pie-grièche écorcheur",
   "Nom Scientifique": "Lanius collurio",
   "Nom Anglais": "Red-backed Shrike",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Pie-grièche grise",
   "Nom Scientifique": "Lanius excubitor",
   "Nom Anglais": "Great Grey Shrike",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Pie-grièche isabelle",
   "Nom Scientifique": "Lanius isabellinus",
   "Nom Anglais": "Isabelline Shrike",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pigeon colombin",
@@ -2274,6 +2679,7 @@
   "Nom Anglais": "Stock Dove",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2282,6 +2688,7 @@
   "Nom Anglais": "Common Wood Pigeon",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2290,6 +2697,7 @@
   "Nom Anglais": "Razorbill",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -2298,6 +2706,7 @@
   "Nom Anglais": "Common Chaffinch",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2306,6 +2715,7 @@
   "Nom Anglais": "Brambling",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2313,50 +2723,61 @@
   "Nom Scientifique": "Anthus hodgsoni",
   "Nom Anglais": "Olive-backed Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pipit à gorge rousse",
   "Nom Scientifique": "Anthus cervinus",
   "Nom Anglais": "Red-throated Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Pipit d'Amérique",
   "Nom Scientifique": "Anthus rubescens",
   "Nom Anglais": "Buff-bellied Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Pipit de Godlewski",
   "Nom Scientifique": "Anthus godlewskii",
   "Nom Anglais": "Blyth's Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pipit de la Petchora",
   "Nom Scientifique": "Anthus gustavi",
   "Nom Anglais": "Pechora Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pipit de Richard",
   "Nom Scientifique": "Anthus richardi",
   "Nom Anglais": "Richard's Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
-  "Verrouillée": true
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Pipit des arbres",
   "Nom Scientifique": "Anthus trivialis",
   "Nom Anglais": "Tree Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Pipit farlouse",
@@ -2364,6 +2785,7 @@
   "Nom Anglais": "Meadow Pipit",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2372,6 +2794,7 @@
   "Nom Anglais": "Eurasian Rock Pipit",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2380,6 +2803,7 @@
   "Nom Anglais": "Eurasian Rock Pipit (littoralis)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2388,6 +2812,7 @@
   "Nom Anglais": "Eurasian Rock Pipit (petrosus)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2395,35 +2820,40 @@
   "Nom Scientifique": "Anthus campestris",
   "Nom Anglais": "Tawny Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Pipit spioncelle",
   "Nom Scientifique": "Anthus spinoletta",
   "Nom Anglais": "Water Pipit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Plongeon arctique",
   "Nom Scientifique": "Gavia arctica",
   "Nom Anglais": "Black-throated Loon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Plongeon catmarin",
   "Nom Scientifique": "Gavia stellata",
   "Nom Anglais": "Red-throated Loon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Plongeon imbrin",
   "Nom Scientifique": "Gavia immer",
   "Nom Anglais": "Common Loon",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Pluvier argenté",
@@ -2431,6 +2861,7 @@
   "Nom Anglais": "Grey Plover",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2438,7 +2869,9 @@
   "Nom Scientifique": "Pluvialis dominica",
   "Nom Anglais": "American Golden Plover",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Pluvier doré",
@@ -2446,6 +2879,7 @@
   "Nom Anglais": "European Golden Plover",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2453,7 +2887,8 @@
   "Nom Scientifique": "Eudromias morinellus",
   "Nom Anglais": "Eurasian Dotterel",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Pouillot à grands sourcils",
@@ -2461,6 +2896,8 @@
   "Nom Anglais": "Yellow-browed Warbler",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
+  "Origine": "origine sibérienne / asiatique",
   "Verrouillée": true
  },
  {
@@ -2468,63 +2905,80 @@
   "Nom Scientifique": "Phylloscopus plumbeitarsus",
   "Nom Anglais": "Two-barred Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pouillot boréal",
   "Nom Scientifique": "Phylloscopus borealis",
   "Nom Anglais": "Arctic Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pouillot brun",
   "Nom Scientifique": "Phylloscopus fuscatus",
   "Nom Anglais": "Dusky Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pouillot de Bonelli",
   "Nom Scientifique": "Phylloscopus bonelli",
   "Nom Anglais": "Western Bonelli's Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Pouillot de Hume",
   "Nom Scientifique": "Phylloscopus humei",
   "Nom Anglais": "Hume's Leaf Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pouillot de Pallas",
   "Nom Scientifique": "Phylloscopus proregulus",
   "Nom Anglais": "Pallas's Leaf Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pouillot de Schwarz",
   "Nom Scientifique": "Phylloscopus schwarzi",
   "Nom Anglais": "Radde's Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pouillot de Sibérie",
   "Nom Scientifique": "Phylloscopus collybita tristis",
   "Nom Anglais": "Siberian Chiffchaff (tristis)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pouillot de Temminck",
   "Nom Scientifique": "Phylloscopus coronatus",
   "Nom Anglais": "Eastern Crowned Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Pouillot fitis",
@@ -2532,6 +2986,7 @@
   "Nom Anglais": "Willow Warbler",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2540,6 +2995,7 @@
   "Nom Anglais": "Willow Warbler (acredula)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2547,14 +3003,17 @@
   "Nom Scientifique": "Phylloscopus orientalis",
   "Nom Anglais": "Eastern Bonelli's Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Pouillot siffleur",
   "Nom Scientifique": "Phylloscopus sibilatrix",
   "Nom Anglais": "Wood Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Pouillot véloce",
@@ -2562,6 +3021,7 @@
   "Nom Anglais": "Common Chiffchaff",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2570,6 +3030,7 @@
   "Nom Anglais": "Common Chiffchaff (abietinus)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2578,6 +3039,7 @@
   "Nom Anglais": "Common Chiffchaff (collybita)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2585,7 +3047,9 @@
   "Nom Scientifique": "Phylloscopus trochiloides",
   "Nom Anglais": "Greenish Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Puffin cendré",
@@ -2593,6 +3057,7 @@
   "Nom Anglais": "Cory's Shearwater",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -2600,14 +3065,17 @@
   "Nom Scientifique": "Puffinus baroli",
   "Nom Anglais": "Barolo Shearwater",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine méridionale"
  },
  {
   "Nom Français": "Puffin de Scopoli",
   "Nom Scientifique": "Calonectris diomedea",
   "Nom Anglais": "Scopoli's Shearwater",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Puffin des Anglais",
@@ -2615,6 +3083,7 @@
   "Nom Anglais": "Manx Shearwater",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2623,6 +3092,7 @@
   "Nom Anglais": "Balearic Shearwater",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -2631,6 +3101,7 @@
   "Nom Anglais": "Sooty Shearwater",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -2639,6 +3110,7 @@
   "Nom Anglais": "Great Shearwater",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -2646,7 +3118,8 @@
   "Nom Scientifique": "Haliaeetus albicilla",
   "Nom Anglais": "White-tailed Eagle",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Râle d'eau",
@@ -2654,6 +3127,7 @@
   "Nom Anglais": "Water Rail",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2661,21 +3135,25 @@
   "Nom Scientifique": "Crex crex",
   "Nom Anglais": "Corn Crake",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Rémiz penduline",
   "Nom Scientifique": "Remiz pendulinus",
   "Nom Anglais": "Eurasian Penduline Tit",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Robin à flancs roux",
   "Nom Scientifique": "Tarsiger cyanurus",
   "Nom Anglais": "Red-flanked Bluetail",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Roitelet à triple bandeau",
@@ -2683,6 +3161,7 @@
   "Nom Anglais": "Common Firecrest",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2691,6 +3170,7 @@
   "Nom Anglais": "Goldcrest",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2698,28 +3178,34 @@
   "Nom Scientifique": "Coracias garrulus",
   "Nom Anglais": "European Roller",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Roselin cramoisi",
   "Nom Scientifique": "Carpodacus erythrinus",
   "Nom Anglais": "Common Rosefinch",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Roselin githagine",
   "Nom Scientifique": "Bucanetes githagineus",
   "Nom Anglais": "Trumpeter Finch",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine méridionale"
  },
  {
   "Nom Français": "Rossignol philomèle",
   "Nom Scientifique": "Luscinia megarhynchos",
   "Nom Anglais": "Common Nightingale",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Rougegorge familier",
@@ -2727,6 +3213,7 @@
   "Nom Anglais": "European Robin",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2735,6 +3222,7 @@
   "Nom Anglais": "Common Redstart",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2743,6 +3231,7 @@
   "Nom Anglais": "Black Redstart",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2750,7 +3239,9 @@
   "Nom Scientifique": "Acrocephalus dumetorum",
   "Nom Anglais": "Blyth's Reed Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Rousserolle effarvatte",
@@ -2758,6 +3249,7 @@
   "Nom Anglais": "Common Reed Warbler",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2765,21 +3257,25 @@
   "Nom Scientifique": "Acrocephalus agricola",
   "Nom Anglais": "Paddyfield Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Rousserolle verderolle",
   "Nom Scientifique": "Acrocephalus palustris",
   "Nom Anglais": "Marsh Warbler",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Sarcelle d'été",
   "Nom Scientifique": "Spatula querquedula",
   "Nom Anglais": "Garganey",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Sarcelle d'hiver",
@@ -2787,6 +3283,7 @@
   "Nom Anglais": "Eurasian Teal",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2795,6 +3292,7 @@
   "Nom Anglais": "European Serin",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2802,14 +3300,17 @@
   "Nom Scientifique": "Acanthis hornemanni",
   "Nom Anglais": "Arctic Redpoll",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine arctique / nordique"
  },
  {
   "Nom Français": "Sizerin cabaret",
   "Nom Scientifique": "Acanthis flammea cabaret",
   "Nom Anglais": "Lesser Redpoll",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Sizerin flammé (ssp. flammea)",
@@ -2817,6 +3318,7 @@
   "Nom Anglais": "Mealy Redpoll (flammea)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2825,6 +3327,7 @@
   "Nom Anglais": "Greenland Redpoll (rostrata)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2832,14 +3335,16 @@
   "Nom Scientifique": "Platalea leucorodia",
   "Nom Anglais": "Eurasian Spoonbill",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Sterne arctique",
   "Nom Scientifique": "Sterna paradisaea",
   "Nom Anglais": "Arctic Tern",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Sterne caugek",
@@ -2847,6 +3352,7 @@
   "Nom Anglais": "Sandwich Tern",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun au large (oiseau marin)",
   "Verrouillée": true
  },
  {
@@ -2854,56 +3360,68 @@
   "Nom Scientifique": "Sterna dougallii",
   "Nom Anglais": "Roseate Tern",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Sterne naine",
   "Nom Scientifique": "Sternula albifrons",
   "Nom Anglais": "Little Tern",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Sterne pierregarin",
   "Nom Scientifique": "Sterna hirundo",
   "Nom Anglais": "Common Tern",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Tadorne de Belon",
   "Nom Scientifique": "Tadorna tadorna",
   "Nom Anglais": "Common Shelduck",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Tangara écarlate",
   "Nom Scientifique": "Piranga olivacea",
   "Nom Anglais": "Scarlet Tanager",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine américaine"
  },
  {
   "Nom Français": "Tarier de Sibérie",
   "Nom Scientifique": "Saxicola maurus",
   "Nom Anglais": "Siberian Stonechat",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Tarier de Sibérie (ssp. hemprichii)",
   "Nom Scientifique": "Saxicola maurus hemprichii",
   "Nom Anglais": "Siberian Stonechat (hemprichii)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Tarier de Sibérie (ssp. variegatus)",
   "Nom Scientifique": "Saxicola maurus variegatus",
   "Nom Anglais": "Siberian Stonechat (variegatus)",
   "Type de taxon": "sous-espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Tarier des prés",
@@ -2911,6 +3429,7 @@
   "Nom Anglais": "Whinchat",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2919,6 +3438,7 @@
   "Nom Anglais": "European Stonechat",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2927,6 +3447,7 @@
   "Nom Anglais": "Eurasian Siskin",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2935,6 +3456,7 @@
   "Nom Anglais": "Eurasian Wryneck",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2943,6 +3465,7 @@
   "Nom Anglais": "Ruddy Turnstone",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2950,14 +3473,17 @@
   "Nom Scientifique": "Streptopelia turtur",
   "Nom Anglais": "European Turtle Dove",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Peu commun sur l'île"
  },
  {
   "Nom Français": "Tourterelle orientale",
   "Nom Scientifique": "Streptopelia orientalis",
   "Nom Anglais": "Oriental Turtle Dove",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Méga national",
+  "Origine": "origine sibérienne / asiatique"
  },
  {
   "Nom Français": "Tourterelle turque",
@@ -2965,6 +3491,7 @@
   "Nom Anglais": "Eurasian Collared Dove",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -2972,7 +3499,9 @@
   "Nom Scientifique": "Oenanthe deserti",
   "Nom Anglais": "Desert Wheatear",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine méridionale"
  },
  {
   "Nom Français": "Traquet du Groenland",
@@ -2980,6 +3509,7 @@
   "Nom Anglais": "Greenland Wheatear (leucorhoa)",
   "Type de taxon": "sous-espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -2987,7 +3517,9 @@
   "Nom Scientifique": "Oenanthe isabellina",
   "Nom Anglais": "Isabelline Wheatear",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Traquet motteux",
@@ -2995,6 +3527,7 @@
   "Nom Anglais": "Northern Wheatear",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -3002,14 +3535,17 @@
   "Nom Scientifique": "Oenanthe hispanica",
   "Nom Anglais": "Western Black-eared Wheatear",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Whatsapp"
+  "Proposition de Canal de Diffusion Ouessant": "Whatsapp",
+  "Raison du canal": "Rareté locale"
  },
  {
   "Nom Français": "Traquet pie",
   "Nom Scientifique": "Oenanthe pleschanka",
   "Nom Anglais": "Pied Wheatear",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine orientale"
  },
  {
   "Nom Français": "Troglodyte mignon",
@@ -3017,6 +3553,7 @@
   "Nom Anglais": "Eurasian Wren",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -3025,6 +3562,7 @@
   "Nom Anglais": "Northern Lapwing",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Commun sur l'île (migrateur ou hivernant)",
   "Verrouillée": true
  },
  {
@@ -3033,6 +3571,7 @@
   "Nom Anglais": "European Greenfinch",
   "Type de taxon": "espèce",
   "Proposition de Canal de Diffusion Ouessant": "Pas d'annonce",
+  "Raison du canal": "Nicheur sur l'île",
   "Verrouillée": true
  },
  {
@@ -3040,6 +3579,8 @@
   "Nom Scientifique": "Vireo olivaceus",
   "Nom Anglais": "Red-eyed Vireo",
   "Type de taxon": "espèce",
-  "Proposition de Canal de Diffusion Ouessant": "Télégram"
+  "Proposition de Canal de Diffusion Ouessant": "Télégram",
+  "Raison du canal": "Rareté nationale",
+  "Origine": "origine américaine"
  }
 ]
