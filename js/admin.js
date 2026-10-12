@@ -301,7 +301,7 @@
     $('doneBtn').disabled = !doneRows().length;
   }
   // ---------- Historique : réponses déjà traitées, avec la décision notée (colonne « Traitée ») ----------
-  const SHORT = { 'Proposition de Canal de Diffusion Ouessant': 'Canal', 'Nom Scientifique': 'Nom sci.', 'precision_m': 'précision' };
+  const SHORT = { 'Proposition de Canal de Diffusion Ouessant': 'Canal', 'Raison du canal': 'Raison', 'Nom Scientifique': 'Nom sci.', 'precision_m': 'précision' };
   const nameOfP = p => show((p.cur || p.data)[LISTS[p.file].name]) || show(p.origKey);
   function descOf(p){
     if (p.type === 'del') return 'suppression';
