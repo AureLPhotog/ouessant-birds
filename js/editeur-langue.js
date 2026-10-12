@@ -149,6 +149,7 @@
     "Nom Français": "French name", "Nom Scientifique": "Scientific name", "Nom Anglais": "English name",
     "Type de taxon": "Taxon type", "Proposition de Canal de Diffusion Ouessant": "Reporting channel (Ouessant)",
     "Raison du canal": "Channel reason", "Origine": "Origin",
+    "Informations légales": "Legal information",
     "Nicheur sur l'île": "Breeds on the island", "Commun sur l'île (migrateur ou hivernant)": "Common on the island (migrant or winter visitor)",
     "Commun au large (oiseau marin)": "Common offshore (seabird)", "Peu commun sur l'île": "Scarce on the island", "Rareté locale": "Local rarity",
     "Échappé de captivité": "Escape from captivity", "Méga pour l'île": "Island mega", "Rareté nationale": "National rarity", "Méga national": "National mega",
@@ -289,7 +290,17 @@
     document.title = lang === 'en' ? 'List editor · Birds of Ouessant' : 'Éditeur de listes · Oiseaux d\u2019Ouessant';
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     walk(document.body);
+    showLegal();
   }
+  // Informations légales : même texte que dans l'appli (js/textes.js), affiché dans la langue choisie (l'encart n'est pas traduit à la volée : data-notr)
+  function showLegal(){
+    const box = document.getElementById('legalBox'), T = window.OUESSANT_TEXTES; if (!box || !T || box.hidden) return;
+    box.innerHTML = T[lang].legalHtml;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('#legalBtn'); if (!b) return;
+    const box = document.getElementById('legalBox'); box.hidden = !box.hidden; b.setAttribute('aria-expanded', String(!box.hidden)); showLegal();
+  });
   applyPrefs();
   function init(){
     const tools = document.querySelector('header .tools');
