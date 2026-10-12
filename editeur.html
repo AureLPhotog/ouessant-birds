@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!-- Sécurité : scripts de l'éditeur uniquement (les deux scripts intégrés sont autorisés par leur empreinte : à recalculer s'ils changent, voir README) ; connexions limitées à GitHub et iNaturalist -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-6v26MpxMBIZoiMpGUM14toNbRLeE5vGMSC7c61XvzZo=' 'sha256-qcJLScUig6XBb4R6MvLeLpBQm2USq0BlBXuiIJjpS6Y=' https://aurelphotog.github.io; style-src 'self' 'unsafe-inline' https://aurelphotog.github.io; img-src 'self' data: blob: https://aurelphotog.github.io; font-src 'self' https://aurelphotog.github.io; connect-src 'self' https://api.github.com https://api.inaturalist.org; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-6v26MpxMBIZoiMpGUM14toNbRLeE5vGMSC7c61XvzZo=' 'sha256-dFQlWYXucFIOTEToDstqTwctzGPckcV9OEDzJQGGuPI=' https://aurelphotog.github.io; style-src 'self' 'unsafe-inline' https://aurelphotog.github.io; img-src 'self' data: blob: https://aurelphotog.github.io; font-src 'self' https://aurelphotog.github.io; connect-src 'self' https://api.github.com https://api.inaturalist.org; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Éditeur de listes · Oiseaux d'Ouessant</title>
 <meta name="robots" content="noindex">
@@ -110,6 +110,8 @@ document.addEventListener('error', function (e) { var t = e.target, f = t && t.g
     <div class="tablewrap"><table id="table"><thead></thead><tbody></tbody></table></div>
   </section>
   <p class="back"><a class="btn" href="index.html"><span aria-hidden="true">←</span> <span>Revenir à l’appli</span></a> <a class="btn" href="docs/Guide_utilisation.pdf" target="_blank" rel="noopener"><span>Guide d’utilisation (PDF)</span></a></p>
+  <p class="foot-legal"><button type="button" class="linkbtn" id="legalBtn" aria-expanded="false" aria-controls="legalBox">Informations légales</button></p>
+  <div class="legal" id="legalBox" data-notr hidden></div>
 </div>
 <button type="button" class="admin-badge" id="adminBadge" data-key title="Clé Admin active : la gérer ou l’oublier" hidden>🔑 Mode admin</button>
 <div class="toast hidden" id="toast" role="status"></div>
@@ -117,7 +119,7 @@ document.addEventListener('error', function (e) { var t = e.target, f = t && t.g
 <script>
 // Charge les scripts partagés depuis le dossier de l'éditeur, ou depuis le site en ligne s'il est ouvert seul
 (function(){
-  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/version.js', 'js/noms.js', 'js/carte.js', 'js/editeur-langue.js', 'js/editeur.js'];
+  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/version.js', 'js/textes.js', 'js/noms.js', 'js/carte.js', 'js/editeur-langue.js', 'js/editeur.js'];
   (function next(i, web){
     if (i >= files.length) return;
     const s = document.createElement('script'); s.src = (web ? SITE : '') + files[i] + '?t=' + Math.floor(Date.now() / 60000);   // ?t= : une nouvelle version de l'éditeur est prise en compte en moins d'une minute (sans lui, le navigateur peut garder l'ancienne ~10 min)
