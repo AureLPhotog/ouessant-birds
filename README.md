@@ -56,6 +56,8 @@ d'un coup, un simple résumé (« 416 espèces modifiées d'un coup : Raison du 
   **page Administration** (propositions enregistrées, reprise d'une liste archivée), dans un commit « Historique des listes : … ».
   Format : `{date, app, listes, fichier, source, changements: [{t: add|mod|del, nom, cle, champs: [[champ, avant, après]]}]}` (ou `resume`).
   Calcul partagé : `js/historique.js`.
+- Onglet **Versions de l'appli** (`historique.html#versions`) : `versions_appli.json`, les modifications majeures de chaque version,
+  en français et en anglais (`{version, date, fr: [...], en: [...]}`), écrit à la main ; les nouveautés de la page Administration n'y figurent pas.
 - Un changement fait directement sur GitHub (ou lors d'une mise à jour de l'appli) n'est pas noté tout seul : on régénère tout le fichier
   à partir des commits de `main` avec `node scripts/historique_depuis_git.js origin/main > historique.json` (même calcul ; l'historique
   part du 3 octobre 2026, quelques états de la liste des lieux du 3-4 octobre, illisibles, sont sautés).

@@ -16,6 +16,13 @@ header{position:relative}
 .hist-lang{position:absolute;top:2.25rem;right:0;display:flex;flex:0 0 auto;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
 .hist-lang button{border:0;background:none;color:var(--granite);font:600 .82rem var(--sans);padding:.35rem .75rem;cursor:pointer}
 .hist-lang button[aria-pressed="true"]{background:var(--ocean);color:var(--foam)}
+.hist-views{display:flex;gap:.25rem;border-bottom:1px solid var(--line);margin:0 0 .8rem}
+.hist-views button{border:0;background:none;color:var(--granite);font:600 1rem var(--sans);padding:.6rem .9rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.hist-views button[aria-selected="true"]{color:var(--ocean);border-bottom-color:var(--ocean)}
+.hist-views button:focus-visible{outline:3px solid var(--heather);outline-offset:-3px}
+.hist-bar[hidden],.hist-note[hidden]{display:none}
+.hver h2{font-family:var(--sans);font-size:1.05rem}
+.hc.is-ver{border-left-color:var(--ocean-2);font-size:.95rem}
 .hist-bar{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:.2rem 0 .4rem}
 .hist-tabs{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
 .hist-tabs button{border:0;background:none;color:var(--granite);font:600 .88rem var(--sans);padding:.45rem .9rem;cursor:pointer}

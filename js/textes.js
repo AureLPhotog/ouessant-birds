@@ -30,7 +30,7 @@ window.OUESSANT_TEXTES = {
       badFile: "Ce fichier n'est pas lisible. Il doit contenir une liste d'espèces avec au moins les champs « Nom Français », « Nom Scientifique » et « Proposition de Canal de Diffusion Ouessant ».",
       channels: { telegram: 'Alerte Telegram', whatsapp: 'Alerte WhatsApp', none: "Pas d'alerte", unknown: 'Non renseigné' },
       // page historique.html
-      hist: { title: 'Historique des listes', sub: 'Tous les changements apportés aux espèces et aux lieux-dits, jour par jour, avec la version de l’appli.',
+      hist: { tabLists: 'Listes', tabVersions: 'Versions de l’appli', versNote: 'Les modifications majeures de chaque version de l’appli.', title: 'Historique', sub: 'Les changements apportés aux espèces et aux lieux-dits, jour par jour, et les nouveautés de chaque version de l’appli.',
         all: 'Tout', birds: 'Oiseaux', places: 'Lieux-dits', search: 'Chercher une espèce ou un lieu-dit…', back: 'Revenir à l’appli',
         note: 'Plusieurs changements d’un même champ dans la journée : seuls l’état du début et celui de la fin de journée sont montrés.',
         empty: 'Aucun changement à afficher.', error: 'L’historique n’a pas pu être chargé.', app: v => `appli v${v}`, lists: v => `listes ${v}`,
@@ -160,7 +160,7 @@ window.OUESSANT_TEXTES = {
         <p><strong>Privacy.</strong> No account, no cookies, no analytics. Your GPS position is only used on your device and is sent nowhere, unless you choose to share it. Your theme and language are remembered in your browser. The fonts are hosted with the app: only the weather is requested from an outside service (Open-Meteo), which therefore sees your IP address. If you suggest a new bird in the editor, the name you type is sent to iNaturalist to find the other names. If you send a suggestion, it goes through a Google form.</p>`,
       badFile: 'This file cannot be read. It must contain a list of species with at least the fields “Nom Français”, “Nom Scientifique” and “Proposition de Canal de Diffusion Ouessant”.',
       channels: { telegram: 'Telegram alert', whatsapp: 'WhatsApp alert', none: 'No alert', unknown: 'Not specified' },
-      hist: { title: 'List history', sub: 'Every change made to the species and places, day by day, with the app version.',
+      hist: { tabLists: 'Lists', tabVersions: 'App versions', versNote: 'The major changes in each version of the app.', title: 'History', sub: 'The changes made to the species and places, day by day, and what is new in each version of the app.',
         all: 'All', birds: 'Birds', places: 'Places', search: 'Search a species or a place…', back: 'Back to the app',
         note: 'Several changes to the same field on one day: only the state at the start and at the end of the day are shown.',
         empty: 'No change to show.', error: 'The history could not be loaded.', app: v => `app v${v}`, lists: v => `lists ${v}`,

@@ -20,6 +20,7 @@
   const CANAL = 'Proposition de Canal de Diffusion Ouessant';
 
   let entries = [], filter = '', query = '', failed = false;
+  let view = location.hash === '#versions' ? 'versions' : 'listes', versions = null, versFailed = false;   // onglet : listes ou versions de l'appli
 
   // ---------- valeurs lisibles ----------
   function canalLabel(v){
@@ -84,8 +85,23 @@
     const fields = Object.entries(r.champs).sort((a, b) => b[1] - a[1]).map(([f, x]) => `${fieldName(f)} (${x})`).join(', ');
     return `<li class="hc is-bulk"><p class="hc-h">${esc(T().bulk(n, what, fields))}</p></li>`;
   }
+  // onglet « Versions de l'appli » : versions_appli.json (modifications majeures, en français et en anglais)
+  function renderVersions(){
+    const out = $('histList');
+    if (versFailed){ out.innerHTML = `<p class="help">${esc(T().error)}</p>`; return; }
+    if (!versions){ out.innerHTML = ''; return; }
+    const loc = lang === 'en' ? 'en-GB' : 'fr-FR';
+    out.innerHTML = `<p class="hist-note">${esc(T().versNote)}</p>` + versions.map(v => {
+      const d = new Date(v.date + 'T12:00:00'), items = (v[lang] || v.fr || []);
+      return `<section class="hday hver"><h2>v${esc(v.version)}</h2><p class="hmeta"><time datetime="${esc(v.date)}">${esc(isNaN(d) ? v.date : d.toLocaleDateString(loc, { day: 'numeric', month: 'long', year: 'numeric' }))}</time></p>
+        <ul class="hlist">${items.map(t => `<li class="hc is-ver">${esc(t)}</li>`).join('')}</ul></section>`;
+    }).join('');
+  }
   function render(){
     const out = $('histList');
+    document.querySelectorAll('.hist-views [data-view]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === view)));
+    document.querySelector('.hist-bar').hidden = view !== 'listes'; document.querySelector('.hist-note').hidden = view !== 'listes';
+    if (view === 'versions'){ renderVersions(); return; }
     if (failed){ out.innerHTML = `<p class="help">${esc(T().error)}</p>`; return; }
     const q = norm(query);
     const days = byDay().map(d => {
@@ -121,6 +137,17 @@
     filter = b.dataset.f; document.querySelectorAll('.hist-tabs button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); render();
   });
   $('histQ').addEventListener('input', e => { query = e.target.value; render(); });
+  document.querySelector('.hist-views').addEventListener('click', e => {
+    const b = e.target.closest('[data-view]'); if (!b) return;
+    view = b.dataset.view; history.replaceState(null, '', view === 'versions' ? '#versions' : location.pathname + location.search); render();
+    if (view === 'versions') loadVersions();
+  });
+  function loadVersions(){
+    if (versions || versFailed) return;
+    fetch('versions_appli.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
+      .then(list => { versions = Array.isArray(list) ? list : []; render(); }).catch(() => { versFailed = true; render(); });
+  }
+  if (view === 'versions') loadVersions();
 
   applyLang();
   fetch(H.FILE, { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject())
