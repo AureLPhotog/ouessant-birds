@@ -40,14 +40,25 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
 | `oriole_baltimore.webp` | oriole de Baltimore posé sur le cadre du QR code (panneau du phare) : photo d'Aurélien, détourée et légèrement stylisée. Seule cette version retouchée est dans le dépôt, pas la photo d'origine ; pour la remplacer, garder le même nom et la même taille (≈ 158 × 270 px, fond transparent). L'oiseau en vol de l'easter egg (5 clics sur le phare) est un dessin dans `js/appli.js` (`BIRD_SVG`) |
 | `manifest.webmanifest` | raccourci sur l'écran d'accueil du téléphone |
-| `docs/Guide_utilisation.pdf` | guide d'utilisation (l'appli, puis l'éditeur pour proposer une correction) : à partager, et lié en bas de l'appli et de l'éditeur |
+| `docs/Guide_utilisation.pdf` | guide d'utilisation (l'appli, puis l'éditeur pour proposer une correction) : à partager, et lié dans le menu ☰ de l'appli et en bas de l'éditeur |
 | `scripts/verifier_listes.py` | vérification des listes (voir « Vérifier les listes ») |
 
 ## Les listes
 
+### En-tête de l'appli : menu ☰, phare et pastille de vent (depuis la version 6.0)
+
+- **Menu ☰** (en haut à gauche) : « Météo, canaux et partage » (ouvre le panneau du phare), Historique des listes, Éditeur des listes,
+  Guide d'utilisation, « Une question, un retour ? », réglages d'affichage (thème, couleurs), informations légales et version.
+  Se ferme avec ✕, un toucher à côté ou Échap. FR / EN reste visible en haut à droite ; le bas de page n'a plus de liens.
+- **Phare** : son panneau ne change pas (météo, « Quel canal ? », partage, version, informations légales, et la surprise des cinq touchers).
+  Sous le phare, une **pastille de vent** (flèche de direction et vitesse en km/h, Open-Meteo, mise à jour au plus toutes les 15 minutes) ;
+  la toucher ouvre le panneau. Sans météo (hors ligne, service indisponible), pas de pastille.
+- **Bulle « Touche le phare »** : une seule fois, à la toute première visite sur un appareil et un navigateur (marque `ouessant-astuce-phare`
+  dans le navigateur) ; jamais si une préférence ou la copie de la liste sont déjà enregistrées (habitués), ni sans stockage possible.
+
 ### `historique.json` et la page `historique.html` (historique des listes)
 
-Page publique (lien « Historique des listes » en bas de l'appli et de l'éditeur) : tous les changements des espèces et des lieux-dits,
+Page publique (lien « Historique des listes » dans le menu ☰ de l'appli et en bas de l'éditeur) : tous les changements des espèces et des lieux-dits,
 jour par jour, avec la version de l'appli et celle des listes. Pour une même entrée et un même champ, plusieurs changements dans la
 journée ne montrent que l'état du début et celui de la fin (rien si la valeur est revenue à son état du matin) ; au-delà de 40 changements
 d'un coup, un simple résumé (« 416 espèces modifiées d'un coup : Raison du canal (416)… »).
