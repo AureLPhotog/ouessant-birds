@@ -6,6 +6,7 @@
    Le même calcul a servi à reconstituer l'historique passé à partir des commits de main (scripts/historique_depuis_git.py). */
 (function(){
   const FILE = 'historique.json', MAX = 40;
+  const HIDE = ['Verrouillée'];   // réglage interne de l'administrateur : pas dans l'historique public
   const CLE = { 'ouessant_birds.json': 'Nom Scientifique', 'lieux_ouessant.json': 'nom' };
   const NOM = { 'ouessant_birds.json': 'Nom Français', 'lieux_ouessant.json': 'nom' };
   const norm = s => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
@@ -13,7 +14,7 @@
   const empty = v => v === undefined || v === null || v === '' || v === false || (Array.isArray(v) && !v.length);
   // champs qui changent entre deux versions d'une entrée (un champ vide et un champ absent comptent pareil)
   const fieldsDiff = (a, b) => [...new Set([...Object.keys(a), ...Object.keys(b)])]
-    .filter(k => !same(a[k], b[k]) && !(empty(a[k]) && empty(b[k]))).map(k => [k, empty(a[k]) ? null : a[k], empty(b[k]) ? null : b[k]]);
+    .filter(k => !HIDE.includes(k) && !same(a[k], b[k]) && !(empty(a[k]) && empty(b[k]))).map(k => [k, empty(a[k]) ? null : a[k], empty(b[k]) ? null : b[k]]);
 
   function diff(file, before, after){
     const K = CLE[file], N = NOM[file]; if (!K) return [];
