@@ -5,7 +5,7 @@ Petite appli web pour les observateurs d'oiseaux à Ouessant :
 - **Oiseaux** : sur quel canal annoncer une observation (Alerte Telegram, Alerte WhatsApp, Pas d'alerte). Toucher le canal prépare le **message d'alerte** (voir plus bas). Un filtre de canal (Telegram, WhatsApp, Pas d'alerte) affiche en dessous un rappel discret de son usage habituel (rien pour « Toutes »). Sur la liste complète, un **rail de lettres** à droite permet d'y glisser le doigt pour passer directement d'une lettre à l'autre (aussi dans **Lieux**) ;
 - **Lieux** : coordonnées GPS indicatives des lieux-dits de l'île, avec un aperçu de la carte ;
 - **Où suis-je ?** : les lieux-dits les plus proches de sa position (de 3 à 10, au choix avec le curseur). Toucher un lieu-dit ouvre Google Maps sur son point GPS. Un bouton **Partager ma position** prépare un message (coordonnées, lien Google Maps, lieu-dit le plus proche) ;
-- **le phare** (en haut à gauche) : météo du jour à Ouessant, rappel « Quel canal ? » (Telegram : raretés à l'échelle nationale ; WhatsApp : raretés locales, espèces peu communes sur l'île et suivi des raretés déjà annoncées ; rien : espèces communes ou nicheuses), QR code pour partager l'appli, numéro de version et informations légales.
+- **le phare** (en haut à gauche) : météo du jour à Ouessant, rappel « Quel canal ? » (Telegram : raretés à l'échelle nationale ; WhatsApp : raretés locales, espèces peu communes sur l'île et suivi des raretés déjà annoncées ; rien : espèces communes ou nicheuses), QR code pour partager l'appli et numéro de version (les informations légales sont dans le menu ☰).
 - **en bas de page** : le guide d'utilisation (PDF), **« Une question, un retour ? »** (message anonyme, envoyé par le formulaire Google des propositions, dans le seul champ commentaire ; la page Administration le range dans l'onglet **Messages**) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
 
 En ligne : <https://aurelphotog.github.io/ouessant-birds/>
@@ -48,9 +48,10 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 ### En-tête de l'appli : menu ☰, phare et pastille de vent (depuis la version 6.0)
 
 - **Menu ☰** (en haut à gauche) : « Météo, canaux et partage » (ouvre le panneau du phare), Historique des listes, Éditeur des listes,
-  Guide d'utilisation, « Une question, un retour ? », réglages d'affichage (thème, couleurs), informations légales et version.
+  Guide d'utilisation, « Une question, un retour ? », réglages d'affichage (thème, couleurs), informations légales (dépliées en bas du menu, depuis la 6.2) et version.
   Se ferme avec ✕, un toucher à côté ou Échap. FR / EN reste visible en haut à droite ; le bas de page n'a plus de liens.
-- **Phare** : son panneau ne change pas (météo, « Quel canal ? », partage, version, informations légales, et la surprise des cinq touchers).
+- **Phare** : son panneau montre la météo, « Quel canal ? », le partage, la version et la surprise des cinq touchers ; depuis la 6.2,
+  plus les informations légales (seulement dans le menu ☰).
   Sous le phare, une **pastille de vent** (flèche de direction et vitesse en km/h, Open-Meteo, mise à jour au plus toutes les 15 minutes) ;
   la toucher ouvre le panneau. Sans météo (hors ligne, service indisponible), pas de pastille.
   Depuis la version 6.1, le panneau s'ouvre juste sous le phare, avec une **pointe** qui part de la pastille, et la pastille
@@ -330,4 +331,4 @@ au pire 95 m. Les coefficients sont dans `js/carte.js` (`AFF`) et, à l'identiqu
 Projet libre et gratuit. L'auteur ne revendique aucune paternité ni aucun droit sur le code et les listes : ils peuvent
 être copiés, modifiés et réutilisés librement (dédicace au domaine public,
 [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.fr)). Exception : la carte de l'île, qui reste l'œuvre de
-Gaëtan Mineau et de l'Association Naturaliste d'Ouessant. Les mêmes informations sont dans l'appli (phare → « Informations légales »).
+Gaëtan Mineau et de l'Association Naturaliste d'Ouessant. Les mêmes informations sont dans l'appli (menu ☰ → « Informations légales »).

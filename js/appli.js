@@ -131,6 +131,7 @@
     if (!$('windPill').hidden) windPill();
     $('phareBtn').setAttribute('aria-label', T('phareLabel')); $('phareBtn').title = navigator.onLine === false ? T('phareOff') : T('phareLabel');
     if (!$('pharePanel').hidden) renderPhare();
+    if (!$('menuLegalBox').hidden) $('menuLegalBox').innerHTML = T('legalHtml');
     q.placeholder = T('placeholder');
     q.setAttribute('aria-label', T('searchLabel'));
     chips.setAttribute('aria-label', T('channelsLabel'));
@@ -732,11 +733,8 @@
         <div class="qr-box">${ORIOLE}${FERN}${box}</div>
         <div class="qr-txt"><h2 class="pp-h">${esc(T('shTitle'))}</h2>${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
       </div></div>
-      <div class="pp-sec pp-foot"><p class="pp-ver">${esc(versionText())}</p>
-        <button type="button" class="link" data-ph="legal" aria-expanded="${legalOpen}">${esc(T('legalBtn'))}</button>
-        ${legalOpen ? `<div class="legal">${T('legalHtml')}</div>` : ''}</div>`;
+      <div class="pp-sec pp-foot"><p class="pp-ver">${esc(versionText())}</p></div>`;   // informations légales : dans le menu ☰ seulement
   }
-  let legalOpen = false;
   function openPhare(open){
     $('pharePanel').hidden = !open; $('phareBtn').setAttribute('aria-expanded', String(open));
     if (open){ loadWx(); loadQr(); renderPhare(); }
@@ -765,7 +763,6 @@
   $('pharePanel').addEventListener('click', e => {
     e.stopPropagation();
     const b = e.target.closest('[data-ph]'); if (!b) return;
-    if (b.dataset.ph === 'legal'){ legalOpen = !legalOpen; renderPhare(); return; }
     // proposer une nouvelle règle : ouvre « Une question, un retour ? » avec un message pré-rempli
     if (b.dataset.ph === 'rule'){ openPhare(false); window.dispatchEvent(new CustomEvent('ouessant-contact', { detail: T('ruleTpl') })); return; }
     if (b.dataset.ph === 'share') navigator.share({ title: T('title'), text: T('lede').replace(/<[^>]+>/g, ''), url: APP_URL }).catch(() => {});
@@ -781,7 +778,13 @@
     $('menu').hidden = !open; $('menuScrim').hidden = !open; $('menuBtn').setAttribute('aria-expanded', String(open));
     document.documentElement.classList.toggle('menu-open', open);
     if (open){ hideTip(); openPhare(false); $('menuVer').textContent = versionText(); $('menuClose').focus(); }
-    else if (focus) $('menuBtn').focus();
+    else { menuLegal(false); if (focus) $('menuBtn').focus(); }
+  }
+  // informations légales : se déplient en bas du menu (et plus dans le panneau du phare)
+  function menuLegal(open){
+    const box = $('menuLegalBox');
+    box.hidden = !open; $('menuLegal').setAttribute('aria-expanded', String(open));
+    if (open){ box.innerHTML = T('legalHtml'); box.scrollIntoView({ block: 'start', behavior: 'smooth' }); } else box.innerHTML = '';
   }
   $('menuBtn').addEventListener('click', e => { e.stopPropagation(); openMenu($('menu').hidden); });
   $('menuClose').addEventListener('click', () => openMenu(false));
@@ -789,7 +792,8 @@
   $('menu').addEventListener('click', e => {
     e.stopPropagation();   // un toucher dans le menu ne ferme pas le panneau du phare… qui est déjà fermé, ni rien d'autre
     if (e.target.closest('#menuPhare')){ openMenu(false, false); openPhare(true); $('phareBtn').focus({ preventScroll: true }); scrollTo({ top: 0, behavior: 'smooth' }); return; }
-    if (e.target.closest('#menuLegal')){ openMenu(false, false); legalOpen = true; openPhare(true); scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (e.target.closest('#menuLegal')){ menuLegal($('menuLegalBox').hidden); return; }
+    if (e.target.closest('#menuLegalBox')) return;   // liens des informations légales : ils s'ouvrent dans un nouvel onglet, le menu reste ouvert
     if (e.target.closest('#contactBtn')){ openMenu(false, false); return; }   // le panneau de contact s'ouvre en bas de la page (son propre gestionnaire)
     if (e.target.closest('a')) openMenu(false, false);
   });
