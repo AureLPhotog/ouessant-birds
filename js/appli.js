@@ -126,6 +126,9 @@
     renderPlaces();
     renderWhere();
     if (lastFix) $('locate').querySelector('span').textContent = T('relocateBtn');
+    $('menuBtn').setAttribute('aria-label', T('menuLabel')); $('menuBtn').title = T('menuLabel');
+    $('menuClose').setAttribute('aria-label', T('menuClose')); $('menuClose').title = T('menuClose');
+    if (!$('windPill').hidden) windPill();
     $('phareBtn').setAttribute('aria-label', T('phareLabel')); $('phareBtn').title = navigator.onLine === false ? T('phareOff') : T('phareLabel');
     if (!$('pharePanel').hidden) renderPhare();
     q.placeholder = T('placeholder');
@@ -668,17 +671,12 @@
     document.querySelectorAll('.place').forEach(li => { const box = li.querySelector('.pmap'); if (box && !box.hidden){ box.hidden = true; togglePlace(li); } });
     renderWhere();
   }
-  $('prefsBtn').addEventListener('click', e => {
-    e.stopPropagation(); const p = $('prefsPanel'); p.hidden = !p.hidden; $('prefsBtn').setAttribute('aria-expanded', String(!p.hidden));
-  });
-  $('prefsPanel').addEventListener('click', e => {
+  $('prefsPanel').addEventListener('click', e => {   // réglages d'affichage, dans le menu
     e.stopPropagation();
     const b = e.target.closest('.seg button'); if (!b) return;
     if (b.parentElement.dataset.pref === 'theme'){ theme = b.dataset.v; try { localStorage.setItem(THEME_KEY, theme); } catch(_) {} applyPrefs(); refreshColors(); }
     else { cvd = b.dataset.v === '1'; try { localStorage.setItem(CVD_KEY, cvd ? '1' : '0'); } catch(_) {} applyPrefs(); refreshColors(); }
   });
-  document.addEventListener('click', () => { if (!$('prefsPanel').hidden){ $('prefsPanel').hidden = true; $('prefsBtn').setAttribute('aria-expanded', 'false'); } });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('prefsPanel').hidden){ $('prefsPanel').hidden = true; $('prefsBtn').setAttribute('aria-expanded', 'false'); $('prefsBtn').focus(); } });
   applyPrefs();
 
   // ---------- Le phare : météo, partage (QR code) et œuf de Pâques ----------
@@ -695,8 +693,16 @@
   function loadWx(){
     if (wx && Date.now() - wxAt < 15 * 60000) return;
     wxState = 'loading';
-    fetch(WX_URL).then(r => r.ok ? r.json() : Promise.reject()).then(d => { wx = d; wxAt = Date.now(); wxState = 'ok'; renderPhare(); })
-      .catch(() => { wxState = wx ? 'ok' : 'err'; renderPhare(); });
+    fetch(WX_URL).then(r => r.ok ? r.json() : Promise.reject()).then(d => { wx = d; wxAt = Date.now(); wxState = 'ok'; renderPhare(); windPill(); })
+      .catch(() => { wxState = wx ? 'ok' : 'err'; renderPhare(); windPill(); });
+  }
+  // pastille de vent au pied du phare : montre que le phare s'ouvre (météo), et donne le vent d'un coup d'œil
+  function windPill(){
+    const el = $('windPill'), c = wx && wx.current;
+    if (!c || navigator.onLine === false || typeof c.wind_speed_10m !== 'number'){ el.hidden = true; return; }
+    const kmh = Math.round(c.wind_speed_10m);
+    el.innerHTML = `${arrow(c.wind_direction_10m, 13)}${kmh} km/h`; el.hidden = false;
+    el.title = T('windT')(T('dirs16')[dir16(c.wind_direction_10m)], kmh);
   }
   function wxHtml(){
     if (navigator.onLine === false && !wx) return `<p class="wind-sub">${esc(T('wOffline'))}</p>`;
@@ -736,16 +742,18 @@
   // hors connexion, le phare s'éteint (pas de faisceau ni de lanterne allumée)
   function updatePhare(){
     const off = navigator.onLine === false, img = $('phareBtn').querySelector('img');
+    if (off) $('windPill').hidden = true; else if (wx) windPill(); else loadWx();
     img.src = off ? 'phare_creach_eteint.svg' : 'phare_creach.svg';
     $('phareBtn').classList.toggle('off', off);
     $('phareBtn').title = off ? T('phareOff') : T('phareLabel');
     if (!$('pharePanel').hidden) renderPhare();
   }
   window.addEventListener('online', updatePhare); window.addEventListener('offline', updatePhare);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && navigator.onLine !== false) loadWx(); });   // retour sur l'appli : vent à jour (au plus toutes les 15 min)
   // un clic ouvre le panneau ; cinq clics rapides font passer un oiseau
   let clicks = [], eggLock = 0;
   $('phareBtn').addEventListener('click', e => {
-    e.stopPropagation();
+    e.stopPropagation(); hideTip();
     const now = Date.now();
     if (now < eggLock) return;                                   // juste après l'oiseau, on ignore les clics en trop
     clicks = clicks.filter(t => now - t < 2000); clicks.push(now);
@@ -766,6 +774,39 @@
   });
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
+  // ---------- Menu ☰ : historique, éditeur, guide, contact, affichage, informations légales ----------
+  function openMenu(open, focus = true){
+    $('menu').hidden = !open; $('menuScrim').hidden = !open; $('menuBtn').setAttribute('aria-expanded', String(open));
+    document.documentElement.classList.toggle('menu-open', open);
+    if (open){ hideTip(); openPhare(false); $('menuVer').textContent = versionText(); $('menuClose').focus(); }
+    else if (focus) $('menuBtn').focus();
+  }
+  $('menuBtn').addEventListener('click', e => { e.stopPropagation(); openMenu($('menu').hidden); });
+  $('menuClose').addEventListener('click', () => openMenu(false));
+  $('menuScrim').addEventListener('click', () => openMenu(false));
+  $('menu').addEventListener('click', e => {
+    e.stopPropagation();   // un toucher dans le menu ne ferme pas le panneau du phare… qui est déjà fermé, ni rien d'autre
+    if (e.target.closest('#menuPhare')){ openMenu(false, false); openPhare(true); $('phareBtn').focus({ preventScroll: true }); scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (e.target.closest('#menuLegal')){ openMenu(false, false); legalOpen = true; openPhare(true); scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (e.target.closest('#contactBtn')){ openMenu(false, false); return; }   // le panneau de contact s'ouvre en bas de la page (son propre gestionnaire)
+    if (e.target.closest('a')) openMenu(false, false);
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('menu').hidden) openMenu(false); });
+  // ---------- Bulle « Touche le phare » : une seule fois, à la toute première visite (sur cet appareil et ce navigateur) ----------
+  // Déjà venu (une préférence ou la copie de la liste sont enregistrées) : pas de bulle. Sans stockage possible : pas de bulle non plus.
+  const TIP_KEY = 'ouessant-astuce-phare';
+  function hideTip(){ $('phareTip').hidden = true; }
+  (function phareTip(){
+    let first = false;
+    try {
+      first = localStorage.getItem(TIP_KEY) === null && [STORE, LANG_KEY, THEME_KEY, CVD_KEY, NEAR_KEY].every(k => localStorage.getItem(k) === null);
+      localStorage.setItem(TIP_KEY, '1');   // vue ou non, elle ne reviendra plus
+    } catch (_) { return; }
+    if (!first) return;
+    $('phareTip').hidden = false;
+    $('phareTipOk').addEventListener('click', e => { e.stopPropagation(); hideTip(); });
+    document.addEventListener('click', e => { if (!e.target.closest('#phareTip')) hideTip(); });
+  })();
   // L'oiseau sort de derrière les fougères, fait un tour du phare (devant puis derrière la tour) et s'envole vers la droite
   const BIRD_SVG = '<svg class="egg-flyer" viewBox="0 0 60 34" aria-hidden="true">'
     + '<defs>'
