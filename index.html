@@ -40,12 +40,13 @@
     <div class="phare-wrap">
       <button type="button" class="phare-btn" id="phareBtn" aria-expanded="false" aria-controls="pharePanel" aria-label="Météo et partage" title="Météo et partage"><img class="phare" src="phare_creach.svg" alt="" width="56" height="131"><span class="wind-pill" id="windPill" hidden></span></button>
       <div class="phare-tip" id="phareTip" role="note" hidden><p data-t="tipPhare">Touche le phare : météo, canaux et partage</p><button type="button" id="phareTipOk" data-t="tipOk">OK</button></div>
+      <!-- panneau du phare : accroché sous le phare, avec une pointe qui part de la pastille de vent -->
+      <div id="pharePanel" class="phare-panel" hidden></div>
     </div>
     <div class="intro">
       <h1 data-t="title">Oiseaux d'Ouessant</h1>
       <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation.</p>
     </div>
-    <div id="pharePanel" class="phare-panel" hidden></div>
     <div class="tools">
       <div class="lang" role="group" aria-label="Langue / Language">
         <button type="button" data-lang="fr" aria-pressed="true">FR</button>

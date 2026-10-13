@@ -53,6 +53,8 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 - **Phare** : son panneau ne change pas (météo, « Quel canal ? », partage, version, informations légales, et la surprise des cinq touchers).
   Sous le phare, une **pastille de vent** (flèche de direction et vitesse en km/h, Open-Meteo, mise à jour au plus toutes les 15 minutes) ;
   la toucher ouvre le panneau. Sans météo (hors ligne, service indisponible), pas de pastille.
+  Depuis la version 6.1, le panneau s'ouvre juste sous le phare, avec une **pointe** qui part de la pastille, et la pastille
+  s'allume tant que le panneau est ouvert : on voit que c'est le phare qui l'a ouvert.
 - **Bulle « Touche le phare »** : une seule fois, à la toute première visite sur un appareil et un navigateur (marque `ouessant-astuce-phare`
   dans le navigateur) ; jamais si une préférence ou la copie de la liste sont déjà enregistrées (habitués), ni sans stockage possible.
 

@@ -54,9 +54,22 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
 .menu-foot{margin:.9rem 1rem 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.4rem 1rem;font-size:.82rem;color:var(--granite)}
 .menu-foot .link{font-size:.82rem}
 /* Panneau du phare : météo + partage */
-.phare-panel{position:absolute;left:0;top:calc(100% - .6rem);z-index:20;width:min(23rem,calc(100vw - 2.5rem));max-height:calc(100vh - 7rem);overflow-y:auto;background:var(--paper);
+/* accroché sous le phare (dans .phare-wrap) : sa pointe part de la pastille de vent, pour qu'on voie que c'est le phare qui l'ouvre */
+.phare-panel{position:absolute;left:0;top:calc(100% + 1.35rem + 13px);z-index:20;transform-origin:28px 0;width:min(23rem,calc(100vw - 2.5rem));max-height:calc(100vh - 7rem);overflow-y:auto;background:var(--paper);
   border:1px solid var(--line);border-radius:14px;padding:1rem;box-shadow:0 12px 32px rgba(0,0,0,.2)}
 .phare-panel[hidden]{display:none}
+/* pointe du panneau (hors du panneau, qui défile et la couperait), centrée sous le phare et la pastille */
+.phare-wrap:has(.phare-btn[aria-expanded="true"])::after{content:"";position:absolute;z-index:21;left:calc(50% - 8px);top:calc(100% + 1.35rem + 13px - 8px);width:16px;height:16px;
+  background:var(--paper);border:1px solid var(--line);border-right:0;border-bottom:0;border-radius:3px 0 0 0;transform:rotate(45deg);pointer-events:none}
+/* phare ouvert : la pastille de vent s'allume, comme un onglet sélectionné */
+.phare-btn[aria-expanded="true"] .wind-pill{background:var(--ocean);border-color:var(--ocean);color:var(--foam)}
+.phare-btn[aria-expanded="true"] .wind-pill svg{color:var(--foam)}
+@media (prefers-reduced-motion:no-preference){
+  .phare-panel:not([hidden]){animation:phare-in .16s ease-out}
+  .phare-wrap:has(.phare-btn[aria-expanded="true"])::after{animation:phare-pointe .16s ease-out}
+  @keyframes phare-in{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+  @keyframes phare-pointe{from{opacity:0}to{opacity:1}}
+}
 .pp-h{margin:0 0 .5rem;font:700 1.05rem var(--serif);color:var(--ocean)}
 .pp-sec+.pp-sec{border-top:1px solid var(--line);margin-top:.9rem;padding-top:.9rem}
 .wind{display:flex;gap:.9rem;align-items:center}
