@@ -52,12 +52,12 @@
       // une entrée (espèce ou lieu-dit) : état au début de la journée → état à la fin, champ par champ
       const items = new Map(), bulks = [];
       day.list.forEach(e => {
-        if (e.resume){ bulks.push(e); return; }
+        if (e.resume){ if (Object.keys(e.resume.champs || {}).some(f => f !== 'Verrouillée')) bulks.push(e); return; }
         (e.changements || []).forEach(c => {
           const k = e.fichier + '|' + norm(c.cle);
           if (!items.has(k)) items.set(k, { fichier: e.fichier, nom: c.nom, cle: c.cle, start: c.t !== 'add', end: true, before: {}, after: {} });
           const it = items.get(k); it.nom = c.nom || it.nom; it.cle = c.cle; it.end = c.t !== 'del';
-          c.champs.forEach(([f, a, b]) => { if (!(f in it.before)) it.before[f] = a; it.after[f] = b; });
+          c.champs.filter(([f]) => f !== 'Verrouillée').forEach(([f, a, b]) => { if (!(f in it.before)) it.before[f] = a; it.after[f] = b; });
         });
       });
       const changes = [...items.values()].map(it => {
@@ -82,7 +82,7 @@
   }
   function bulkHtml(e){
     const r = e.resume, n = r.mod + r.add + r.del, what = e.fichier === 'ouessant_birds.json' ? T().bulkBirds : T().bulkPlaces;
-    const fields = Object.entries(r.champs).sort((a, b) => b[1] - a[1]).map(([f, x]) => `${fieldName(f)} (${x})`).join(', ');
+    const fields = Object.entries(r.champs).filter(([f]) => f !== 'Verrouillée').sort((a, b) => b[1] - a[1]).map(([f, x]) => `${fieldName(f)} (${x})`).join(', ');
     return `<li class="hc is-bulk"><p class="hc-h">${esc(T().bulk(n, what, fields))}</p></li>`;
   }
   // onglet « Versions de l'appli » : versions_appli.json (modifications majeures, en français et en anglais)
