@@ -5,8 +5,8 @@ Petite appli web pour les observateurs d'oiseaux à Ouessant :
 - **Oiseaux** : sur quel canal annoncer une observation (Alerte Telegram, Alerte WhatsApp, Pas d'alerte). Toucher le canal prépare le **message d'alerte** (voir plus bas). Un filtre de canal (Telegram, WhatsApp, Pas d'alerte) affiche en dessous un rappel discret de son usage habituel (rien pour « Toutes »). Sur la liste complète, un **rail de lettres** à droite permet d'y glisser le doigt pour passer directement d'une lettre à l'autre (aussi dans **Lieux**) ;
 - **Lieux** : coordonnées GPS indicatives des lieux-dits de l'île, avec un aperçu de la carte ;
 - **Où suis-je ?** : les lieux-dits les plus proches de sa position (de 3 à 10, au choix avec le curseur). Toucher un lieu-dit ouvre Google Maps sur son point GPS. Un bouton **Partager ma position** prépare un message (coordonnées, lien Google Maps, lieu-dit le plus proche) ;
-- **le phare** (en haut à gauche) : météo du jour à Ouessant, rappel « Quel canal ? » (Telegram : raretés à l'échelle nationale ; WhatsApp : raretés locales, espèces peu communes sur l'île et suivi des raretés déjà annoncées ; rien : espèces communes ou nicheuses), QR code pour partager l'appli, numéro de version et informations légales.
-- **en bas de page** : le guide d'utilisation (PDF), **« Une question, un retour ? »** (message anonyme, envoyé par le formulaire Google des propositions, dans le seul champ commentaire ; la page Administration le range dans l'onglet **Messages**) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
+- **le phare** (en haut à gauche) : météo du jour à Ouessant et rappel « Quel canal ? » (Telegram : raretés à l'échelle nationale ; WhatsApp : raretés locales, espèces peu communes sur l'île et suivi des raretés déjà annoncées ; WhatsApp après 20 h : objets perdus et discussions hors oiseaux ; rien : espèces communes ou nicheuses). Le partage (QR code), la version et les informations légales sont dans le menu ☰.
+- **dans le menu ☰** : le guide d'utilisation (PDF), **« Une question, un retour ? »** (le formulaire se déplie dans le menu, depuis la 6.3 ; message anonyme, envoyé par le formulaire Google des propositions, dans le seul champ commentaire ; la page Administration le range dans l'onglet **Messages**) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
 
 En ligne : <https://aurelphotog.github.io/ouessant-birds/>
 
@@ -38,7 +38,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `sw.js` | mode hors connexion |
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
 | `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
-| `oriole_baltimore.webp` | oriole de Baltimore posé sur le cadre du QR code (panneau du phare) : photo d'Aurélien, détourée et légèrement stylisée. Seule cette version retouchée est dans le dépôt, pas la photo d'origine ; pour la remplacer, garder le même nom et la même taille (≈ 158 × 270 px, fond transparent). L'oiseau en vol de l'easter egg (5 clics sur le phare) est un dessin dans `js/appli.js` (`BIRD_SVG`) |
+| `oriole_baltimore.webp` | oriole de Baltimore posé sur le cadre du QR code (menu ☰, « Partager l'appli ») : photo d'Aurélien, détourée et légèrement stylisée. Seule cette version retouchée est dans le dépôt, pas la photo d'origine ; pour la remplacer, garder le même nom et la même taille (≈ 158 × 270 px, fond transparent). L'oiseau en vol de l'easter egg (5 clics sur le phare) est un dessin dans `js/appli.js` (`BIRD_SVG`) |
 | `manifest.webmanifest` | raccourci sur l'écran d'accueil du téléphone |
 | `docs/Guide_utilisation.pdf` | guide d'utilisation (l'appli, puis l'éditeur pour proposer une correction) : à partager, et lié dans le menu ☰ de l'appli et en bas de l'éditeur |
 | `scripts/verifier_listes.py` | vérification des listes (voir « Vérifier les listes ») |
@@ -47,12 +47,15 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 
 ### En-tête de l'appli : menu ☰, phare et pastille de vent (depuis la version 6.0)
 
-- **Menu ☰** (en haut à gauche) : « Météo, canaux et partage » (ouvre le panneau du phare), Historique des listes, Éditeur des listes,
-  Guide d'utilisation, « Une question, un retour ? », réglages d'affichage (thème, couleurs), informations légales et version.
+- **Menu ☰** (en haut à gauche) : « Météo et canaux » (ouvre le panneau du phare), Historique des listes, Éditeur des listes,
+  Guide d'utilisation, « Une question, un retour ? » (se déplie dans le menu ; « Proposer une nouvelle règle » du phare l'y ouvre aussi), « Partager l'appli » (QR code, Partager…, Copier le lien ; depuis la 6.4), réglages d'affichage (thème, couleurs), informations légales (dépliées en bas du menu, depuis la 6.2) et version.
   Se ferme avec ✕, un toucher à côté ou Échap. FR / EN reste visible en haut à droite ; le bas de page n'a plus de liens.
-- **Phare** : son panneau ne change pas (météo, « Quel canal ? », partage, version, informations légales, et la surprise des cinq touchers).
+- **Phare** : depuis la 6.4, son panneau ne montre plus que la météo et « Quel canal ? » (avec « Proposer une nouvelle règle ») ;
+  le partage, la version et les informations légales sont dans le menu ☰. Les cinq touchers rapides font toujours passer l'oiseau.
   Sous le phare, une **pastille de vent** (flèche de direction et vitesse en km/h, Open-Meteo, mise à jour au plus toutes les 15 minutes) ;
   la toucher ouvre le panneau. Sans météo (hors ligne, service indisponible), pas de pastille.
+  Depuis la version 6.1, le panneau s'ouvre juste sous le phare, avec une **pointe** qui part de la pastille, et la pastille
+  s'allume tant que le panneau est ouvert : on voit que c'est le phare qui l'a ouvert.
 - **Bulle « Touche le phare »** : une seule fois, à la toute première visite sur un appareil et un navigateur (marque `ouessant-astuce-phare`
   dans le navigateur) ; jamais si une préférence ou la copie de la liste sont déjà enregistrées (habitués), ni sans stockage possible.
 
@@ -241,6 +244,7 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
   (Clé Admin entrée dans l'éditeur et reconnue par GitHub, dans cet onglet, ou sur l'appareil avec « Mémoriser »), toutes les
   espèces gardent leur crayon. L'appli ne fait que constater la présence de la clé dans le navigateur, sans l'utiliser ni l'envoyer.
 - **Bouton « 🔑 Mode admin »** : en haut à droite de l'appli, de l'éditeur et de la page Administration, tant que la Clé Admin est active (rien sinon).
+  Dans l'appli (depuis la 6.1), il est sur la même ligne que FR / EN, à leur gauche : l'en-tête garde la même hauteur.
   Il ouvre le panneau de la clé dans l'éditeur (`editeur.html?cle`) : la changer ou l'oublier.
 - **Dans l'éditeur, sans la Clé Admin** : l'espèce s'affiche avec 🔒, en lecture seule (pas d'Enregistrer, Supprimer ni Dupliquer),
   et on ne peut pas la recréer comme « nouvel oiseau » (même nom scientifique). La case **Verrouillée** n'est pas montrée.
@@ -327,4 +331,4 @@ au pire 95 m. Les coefficients sont dans `js/carte.js` (`AFF`) et, à l'identiqu
 Projet libre et gratuit. L'auteur ne revendique aucune paternité ni aucun droit sur le code et les listes : ils peuvent
 être copiés, modifiés et réutilisés librement (dédicace au domaine public,
 [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.fr)). Exception : la carte de l'île, qui reste l'œuvre de
-Gaëtan Mineau et de l'Association Naturaliste d'Ouessant. Les mêmes informations sont dans l'appli (phare → « Informations légales »).
+Gaëtan Mineau et de l'Association Naturaliste d'Ouessant. Les mêmes informations sont dans l'appli (menu ☰ → « Informations légales »).
