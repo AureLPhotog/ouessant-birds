@@ -1,0 +1,53 @@
+/* Page historique.html : les changements des listes, jour par jour. Couleurs et bases : css/commun.css
+   (mise en page reprise de l'éditeur, sans charger editeur.css, que le cache hors ligne ne garde pas) */
+.wrap{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem}
+header{display:flex;align-items:flex-start;gap:1rem;padding:2.25rem 0 1.25rem}
+.intro{align-self:stretch;min-height:131px;display:flex;flex-direction:column;justify-content:flex-end}
+header img{width:56px;height:auto;overflow:visible;display:block}
+h1{font:700 clamp(2rem,6vw,3.1rem)/1.02 var(--serif);color:var(--ocean);margin:0;letter-spacing:-.01em}
+.sub{margin:.6rem 0 0;color:var(--granite);max-width:52ch}
+button,input{font:inherit;color:inherit}
+.btn{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-weight:600;font-size:.9rem;padding:.5rem .85rem;border-radius:9px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:focus-visible,#histQ:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
+.back{margin:2rem 0 0;text-align:center}
+.help{color:var(--granite)}
+header{position:relative}
+.intro h1{padding-right:6rem}
+.hist-lang{position:absolute;top:2.25rem;right:0;display:flex;flex:0 0 auto;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.hist-lang button{border:0;background:none;color:var(--granite);font:600 .82rem var(--sans);padding:.35rem .75rem;cursor:pointer}
+.hist-lang button[aria-pressed="true"]{background:var(--ocean);color:var(--foam)}
+.hist-views{display:flex;gap:.25rem;border-bottom:1px solid var(--line);margin:0 0 .8rem}
+.hist-views button{border:0;background:none;color:var(--granite);font:600 1rem var(--sans);padding:.6rem .9rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.hist-views button[aria-selected="true"]{color:var(--ocean);border-bottom-color:var(--ocean)}
+.hist-views button:focus-visible{outline:3px solid var(--heather);outline-offset:-3px}
+.hist-bar[hidden],.hist-note[hidden]{display:none}
+.hver h2{font-family:var(--sans);font-size:1.05rem}
+.hc.is-ver{border-left-color:var(--ocean-2);font-size:.95rem}
+.hist-bar{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:.2rem 0 .4rem}
+.hist-tabs{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.hist-tabs button{border:0;background:none;color:var(--granite);font:600 .88rem var(--sans);padding:.45rem .9rem;cursor:pointer}
+.hist-tabs button[aria-pressed="true"]{background:var(--ocean);color:var(--foam)}
+.hist-lang button:focus-visible,.hist-tabs button:focus-visible{outline:3px solid var(--heather);outline-offset:-3px}
+#histQ{flex:1 1 220px;min-width:0;font:400 1rem var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:.55rem .75rem}
+.hist-note{margin:.2rem 0 1rem;font-size:.82rem;color:var(--granite)}
+.hday{margin:0 0 1.4rem}
+.hday h2{margin:0;font:700 1.12rem var(--serif);color:var(--ocean)}
+.hday h2 time{display:inline-block}
+.hday h2 time::first-letter{text-transform:uppercase}
+.hmeta{margin:.1rem 0 .5rem;font-size:.82rem;color:var(--granite)}
+.hlist{list-style:none;margin:0;padding:0;background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.hc{padding:.65rem .9rem;border-top:1px solid var(--line);border-left:4px solid var(--line)}
+.hc:first-child{border-top:0}
+.hc.is-add{border-left-color:var(--ok)}
+.hc.is-del{border-left-color:var(--warn)}
+.hc.is-mod{border-left-color:var(--new)}
+.hc.is-bulk{border-left-color:var(--heather);font-size:.9rem;color:var(--granite)}
+.hc-h{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:.15rem .45rem}
+.hc-h i{font-family:var(--serif);color:var(--granite)}
+.hc .badge{font:500 .72rem/1.5 var(--sans);color:var(--granite);border:1px solid var(--line);border-radius:6px;padding:0 .4rem}
+.hc ul{margin:.3rem 0 0;padding-left:1.1rem;font-size:.9rem}
+.hc li{margin:.1rem 0}
+.hc .f{color:var(--granite)}
+.hc del{color:var(--granite)}
+.hc ins{text-decoration:none;font-weight:600;color:var(--ink)}
+@media (max-width:520px){ .intro h1{padding-right:0} .hist-lang{position:static;align-self:flex-start;margin-left:auto} }

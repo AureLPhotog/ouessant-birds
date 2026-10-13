@@ -3,7 +3,7 @@
    ⚠️ À chaque mise en ligne d'une nouvelle version des fichiers de l'appli (HTML, CSS, JS, images),
    augmente le numéro ci-dessous (v3.2 → v3.3…) : c'est ce qui déclenche la mise à jour chez les utilisateurs.
    Les listes (JSON) n'ont pas besoin de ce changement : elles sont toujours vérifiées en ligne en premier. */
-const VERSION = 'v5.32';
+const VERSION = 'v5.34';
 const CACHE = 'ouessant-' + VERSION;
 
 // Fichiers gardés dès la première visite
@@ -13,6 +13,7 @@ const SHELL = [
   'polices/public-sans-latin-400-normal.woff2', 'polices/public-sans-latin-500-normal.woff2', 'polices/public-sans-latin-600-normal.woff2', 'polices/spectral-latin-400-italic.woff2', 'polices/spectral-latin-500-italic.woff2', 'polices/spectral-latin-500-normal.woff2', 'polices/spectral-latin-700-normal.woff2',
   'js/version.js', 'js/textes.js', 'js/carte.js', 'js/recherche.js', 'js/appli.js',
   'ouessant_birds.json', 'lieux_ouessant.json', 'version_listes.json', 'reglages.json',
+  'historique.html', 'historique.json', 'versions_appli.json', 'css/historique.css', 'js/historique.js', 'js/historique-page.js',
   'phare_creach.svg', 'phare_creach_eteint.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png',
   'carte_ouessant.webp', 'oriole_baltimore.webp'
 ];
