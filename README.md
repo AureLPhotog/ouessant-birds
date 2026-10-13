@@ -243,6 +243,7 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
   (Clé Admin entrée dans l'éditeur et reconnue par GitHub, dans cet onglet, ou sur l'appareil avec « Mémoriser »), toutes les
   espèces gardent leur crayon. L'appli ne fait que constater la présence de la clé dans le navigateur, sans l'utiliser ni l'envoyer.
 - **Bouton « 🔑 Mode admin »** : en haut à droite de l'appli, de l'éditeur et de la page Administration, tant que la Clé Admin est active (rien sinon).
+  Dans l'appli (depuis la 6.1), il est sur la même ligne que FR / EN, à leur gauche : l'en-tête garde la même hauteur.
   Il ouvre le panneau de la clé dans l'éditeur (`editeur.html?cle`) : la changer ou l'oublier.
 - **Dans l'éditeur, sans la Clé Admin** : l'espèce s'affiche avec 🔒, en lecture seule (pas d'Enregistrer, Supprimer ni Dupliquer),
   et on ne peut pas la recréer comme « nouvel oiseau » (même nom scientifique). La case **Verrouillée** n'est pas montrée.

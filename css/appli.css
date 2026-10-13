@@ -17,8 +17,7 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
 .menu-btn{position:absolute;left:0;top:.8rem;width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .menu-btn:hover{background:color-mix(in srgb,var(--ocean) 10%,var(--paper))}
 .menu-btn:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
-:root:has(.admin-badge:not([hidden])) header{padding-top:5.6rem}
-:root:has(.admin-badge:not([hidden])) .menu-btn,:root:has(.admin-badge:not([hidden])) .tools{top:2.3rem}
+/* « Mode admin » : dans la rangée de FR / EN (voir .tools .admin-badge), l'en-tête ne bouge plus */
 /* Phare : pastille de vent au pied (la toucher ouvre le panneau), bulle de première visite */
 .phare-wrap{position:relative;flex:0 0 auto;align-self:flex-start}
 .wind-pill{position:absolute;left:50%;bottom:-1.35rem;transform:translateX(-50%);display:inline-flex;align-items:center;gap:.25rem;white-space:nowrap;
@@ -129,6 +128,7 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
 header{position:relative}
 .tools{position:absolute;top:.8rem;right:0;display:flex;gap:.4rem;align-items:center}
 .lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.tools .admin-badge{position:static;padding:.3rem .6rem;font-size:.74rem;white-space:nowrap}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .prefs-t{margin:.2rem 0 .35rem;font:600 .8rem var(--sans);color:var(--granite);text-transform:uppercase;letter-spacing:.04em}
 .prefs-n{margin:.6rem 0 0;font-size:.78rem;color:var(--granite)}
