@@ -35,7 +35,8 @@ Une fusion normale le ferait passer d'une branche à l'autre, donc :
   sauvegardes faits depuis l'éditeur ou la page Administration) et les **fusionner dans Pre-prod sans les écraser**
   (jamais `-X theirs`, jamais de réécriture d'historique) ; puis rendre `main` identique à Pre-prod, **sauf CLAUDE.md** (voir plus haut).
 - **`test` ne doit jamais être fusionnée dans `main` ni dans Pre-prod** : elle contient `js/test-gps.js` (faux GPS),
-  sa balise `<script>` dans `index.html`, et une CSP qui autorise les images de `raw.githubusercontent.com` (aperçu raw.githack).
+  sa balise `<script>` dans `index.html`, et une CSP qui autorise les images de `raw.githubusercontent.com` (aperçu raw.githack) dans `index.html`, `editeur.html` et `historique.html`
+  (en cas de conflit sur la CSP de l'éditeur : garder la ligne de test, avec les empreintes `sha256` de Pre-prod).
   À chaque fusion dans `test`, le conflit sur `sw.js` se résout en `const VERSION = 'vX.Y-test';`.
 - Toute modification de l'appli (HTML, CSS, JS) augmente la version : `js/version.js` et `sw.js` (5.9 → 5.10…).
   README, script Google ou guide seuls : pas de changement de version.
