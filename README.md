@@ -53,6 +53,8 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 - **Phare** : son panneau ne change pas (météo, « Quel canal ? », partage, version, informations légales, et la surprise des cinq touchers).
   Sous le phare, une **pastille de vent** (flèche de direction et vitesse en km/h, Open-Meteo, mise à jour au plus toutes les 15 minutes) ;
   la toucher ouvre le panneau. Sans météo (hors ligne, service indisponible), pas de pastille.
+  Depuis la version 6.1, le panneau s'ouvre juste sous le phare, avec une **pointe** qui part de la pastille, et la pastille
+  s'allume tant que le panneau est ouvert : on voit que c'est le phare qui l'a ouvert.
 - **Bulle « Touche le phare »** : une seule fois, à la toute première visite sur un appareil et un navigateur (marque `ouessant-astuce-phare`
   dans le navigateur) ; jamais si une préférence ou la copie de la liste sont déjà enregistrées (habitués), ni sans stockage possible.
 
@@ -241,6 +243,7 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
   (Clé Admin entrée dans l'éditeur et reconnue par GitHub, dans cet onglet, ou sur l'appareil avec « Mémoriser »), toutes les
   espèces gardent leur crayon. L'appli ne fait que constater la présence de la clé dans le navigateur, sans l'utiliser ni l'envoyer.
 - **Bouton « 🔑 Mode admin »** : en haut à droite de l'appli, de l'éditeur et de la page Administration, tant que la Clé Admin est active (rien sinon).
+  Dans l'appli (depuis la 6.1), il est sur la même ligne que FR / EN, à leur gauche : l'en-tête garde la même hauteur.
   Il ouvre le panneau de la clé dans l'éditeur (`editeur.html?cle`) : la changer ou l'oublier.
 - **Dans l'éditeur, sans la Clé Admin** : l'espèce s'affiche avec 🔒, en lecture seule (pas d'Enregistrer, Supprimer ni Dupliquer),
   et on ne peut pas la recréer comme « nouvel oiseau » (même nom scientifique). La case **Verrouillée** n'est pas montrée.
