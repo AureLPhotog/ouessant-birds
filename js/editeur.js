@@ -390,7 +390,8 @@
       let sha = gh && gh.sha;
       const br = gh ? gh.branch || branch : branch;
       if (!sha){ const r0 = await api(`/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(br)}`); if (r0.ok) sha = (await r0.json()).sha; }
-      const text = exportText(); JSON.parse(text);
+      const text = exportText(), after = JSON.parse(text);
+      const before = [...items, ...deleted].filter(it => it.orig).map(it => it.orig);   // la liste telle qu'elle était à l'ouverture
       const r = await api(`/contents/${encodeURIComponent(path)}`, { method: 'PUT', body: JSON.stringify({ message: msg, content: b64enc(text), sha, branch: br }) });
       if (!r.ok){ const em = ((await r.clone().json().catch(() => ({}))).message || '').toLowerCase();
         if (/rule|protected/.test(em)) throw new Error(`la branche ${br} est protégée par une règle du dépôt, et cette clé n’a pas le droit d’y écrire directement. Choisis une autre branche (ou « + Nouvelle branche… ») et ouvre ensuite une pull request.`); }
@@ -400,11 +401,17 @@
       if (!r.ok) throw new Error('erreur ' + r.status);
       const j = await r.json();
       const ver = await bumpListsVersion(br);
+      // historique des listes (page historique.html) : seulement pour main, la branche de l'appli en ligne
+      let histOk = true;
+      if (br === 'main' && window.OuessantHistorique){
+        const H = window.OuessantHistorique;
+        try { histOk = await H.record(api, H.entry({ file: path, before, after, app: window.OUESSANT_APP_VERSION, listes: ver, source: 'éditeur' })); } catch (_) { histOk = false; }
+      }
       gh = { path, sha: j.content.sha, branch: br };
       items.forEach(it => { it.orig = clone(it.data); }); deleted = [];   // l'état enregistré devient la nouvelle référence
       save(); render();
       out.className = 'msg good';
-      out.innerHTML = `Enregistré sur <b>${esc(br)}</b> ! <a href="${esc(/^https:\/\/github\.com\//.test(j.commit.html_url) ? j.commit.html_url : 'https://github.com/' + GH.owner + '/' + GH.repo + '/commits')}" target="_blank" rel="noopener">Voir le commit</a>. <span>${esc(ver ? 'Version des listes : ' + ver + '.' : 'Le numéro de version des listes n’a pas pu être mis à jour.')}</span> ` + (br === 'main'
+      out.innerHTML = `Enregistré sur <b>${esc(br)}</b> ! <a href="${esc(/^https:\/\/github\.com\//.test(j.commit.html_url) ? j.commit.html_url : 'https://github.com/' + GH.owner + '/' + GH.repo + '/commits')}" target="_blank" rel="noopener">Voir le commit</a>. <span>${esc(ver ? 'Version des listes : ' + ver + '.' : 'Le numéro de version des listes n’a pas pu être mis à jour.')}</span> ${histOk ? '' : '<span>L’historique des listes n’a pas pu être mis à jour.</span> '}` + (br === 'main'
         ? 'L’appli en ligne sera à jour d’ici quelques minutes.'
         : `L’appli en ligne ne change pas tant que cette branche n’est pas fusionnée : <a href="https://github.com/${GH.owner}/${GH.repo}/compare/main...${encodeURIComponent(br)}?expand=1" target="_blank" rel="noopener">ouvrir une pull request vers main</a>.`);
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Échec : ' + e.message; $('ghCommit').disabled = false; }

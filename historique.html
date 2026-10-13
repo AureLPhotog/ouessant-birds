@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<!-- Page publique, en lecture seule : lit historique.json sur le site, rien n'est envoyé -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Historique des listes · Oiseaux d'Ouessant</title>
+<meta name="description" content="Tous les changements apportés aux espèces et aux lieux-dits de l'appli Oiseaux d'Ouessant, jour par jour.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/polices.css">
+<link rel="stylesheet" href="css/commun.css">
+<link rel="stylesheet" href="css/historique.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="index.html" class="home" data-t-title="back" title="Revenir à l’appli" aria-label="Revenir à l’appli"><img src="phare_creach.svg" alt=""></a>
+    <div class="intro">
+      <h1 data-t="title">Historique des listes</h1>
+      <p class="sub" data-t="sub">Tous les changements apportés aux espèces et aux lieux-dits, jour par jour, avec la version de l’appli.</p>
+    </div>
+    <div class="hist-lang" role="group" aria-label="Langue / Language">
+      <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <div class="hist-bar">
+    <div class="hist-tabs" role="group" aria-label="Liste">
+      <button type="button" data-f="" aria-pressed="true" data-t="all">Tout</button>
+      <button type="button" data-f="ouessant_birds.json" aria-pressed="false" data-t="birds">Oiseaux</button>
+      <button type="button" data-f="lieux_ouessant.json" aria-pressed="false" data-t="places">Lieux-dits</button>
+    </div>
+    <input type="search" id="histQ" autocomplete="off" spellcheck="false" data-t-ph="search" placeholder="Chercher une espèce ou un lieu-dit…" aria-label="Chercher une espèce ou un lieu-dit">
+  </div>
+  <p class="hist-note" data-t="note">Plusieurs changements d’un même champ dans la journée : seuls l’état du début et celui de la fin de journée sont montrés.</p>
+  <div id="histList" aria-live="polite"></div>
+
+  <p class="back"><a class="btn" href="index.html"><span aria-hidden="true">←</span> <span data-t="back">Revenir à l’appli</span></a></p>
+</div>
+<script src="js/textes.js"></script>
+<script src="js/historique.js"></script>
+<script src="js/historique-page.js"></script>
+</body>
+</html>
