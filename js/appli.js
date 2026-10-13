@@ -34,7 +34,7 @@
     const rev = listsRev && listsRev.app === APP_VERSION && listsRev.rev > 0 ? '.' + listsRev.rev : '';   // autre version d'appli : on repart de zéro
     return 'v' + APP_VERSION + rev + (dates ? ' · ' + dates : '');
   }
-  const showVersion = () => { if (!$('pharePanel').hidden) renderPhare(); };
+  const showVersion = () => { if (!$('menu').hidden) $('menuVer').textContent = versionText(); };   // la version est dans le menu ☰
   const URL_DATA = 'ouessant_birds.json';
 
   const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant', K_LOCK = 'Verrouillée', K_WHY = 'Raison du canal', K_ORIG = 'Origine';
@@ -132,6 +132,7 @@
     $('phareBtn').setAttribute('aria-label', T('phareLabel')); $('phareBtn').title = navigator.onLine === false ? T('phareOff') : T('phareLabel');
     if (!$('pharePanel').hidden) renderPhare();
     if (!$('menuLegalBox').hidden) $('menuLegalBox').innerHTML = T('legalHtml');
+    if (!$('menu').hidden){ renderShare(); $('menuVer').textContent = versionText(); }
     q.placeholder = T('placeholder');
     q.setAttribute('aria-label', T('searchLabel'));
     chips.setAttribute('aria-label', T('channelsLabel'));
@@ -682,7 +683,7 @@
   });
   applyPrefs();
 
-  // ---------- Le phare : météo, partage (QR code) et œuf de Pâques ----------
+  // ---------- Le phare : météo, règles de canal et œuf de Pâques (le partage est dans le menu ☰) ----------
   const APP_URL = 'https://aurelphotog.github.io/ouessant-birds/';
   const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=48.4568&longitude=-5.0975'
     + '&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m'
@@ -721,23 +722,23 @@
       <div class="days">${days}</div><p class="pp-src">${esc(T('wSrc'))}</p>`;
   }
   function qrSvg(){ return `<img src="qr_ouessant.svg" alt="QR code : ${esc(APP_URL)}" width="116" height="116" style="display:block;width:100%;height:100%">`; }
-  function loadQr(){}
+  // le panneau du phare ne sert qu'à la météo et aux règles de canal (partage, version et informations légales : menu ☰)
   function renderPhare(){
-    const box = qrSvg();
-    // quel canal pour quelle espèce : rappel entre la météo et le partage
-    const canaux = [['telegram', 'cTelegram'], ['whatsapp', 'cWhatsapp'], ['none', 'cNone']]
+    const canaux = [['telegram', 'cTelegram'], ['whatsapp', 'cWhatsapp'], ['whatsapp', 'cChat'], ['none', 'cNone']]
       .map(([k, t]) => `<li><span class="dot" style="background:${CHANNEL_COLORS[k]}"></span><span>${T(t)}</span></li>`).join('');
     $('pharePanel').innerHTML = `<div class="pp-sec"><h2 class="pp-h">${esc(T('wTitle'))}</h2>${wxHtml()}</div>
-      <div class="pp-sec"><h2 class="pp-h">${esc(T('cTitle'))}</h2><ul class="pp-canaux">${canaux}</ul><button type="button" class="link pp-rule" data-ph="rule">${esc(T('ruleBtn'))}</button></div>
-      <div class="pp-sec"><div class="qr">
-        <div class="qr-box">${ORIOLE}${FERN}${box}</div>
-        <div class="qr-txt"><h2 class="pp-h">${esc(T('shTitle'))}</h2>${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
-      </div></div>
-      <div class="pp-sec pp-foot"><p class="pp-ver">${esc(versionText())}</p></div>`;   // informations légales : dans le menu ☰ seulement
+      <div class="pp-sec"><h2 class="pp-h">${esc(T('cTitle'))}</h2><ul class="pp-canaux">${canaux}</ul><button type="button" class="link pp-rule" data-ph="rule">${esc(T('ruleBtn'))}</button></div>`;
+  }
+  // « Partager l'appli » : dans le menu ☰ (QR code avec l'oriole et la fougère, Partager…, Copier le lien)
+  function renderShare(){
+    $('menuShare').innerHTML = `<h2>${esc(T('shTitle'))}</h2><div class="qr">
+        <div class="qr-box">${ORIOLE}${FERN}${qrSvg()}</div>
+        <div class="qr-txt">${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
+      </div>`;
   }
   function openPhare(open){
     $('pharePanel').hidden = !open; $('phareBtn').setAttribute('aria-expanded', String(open));
-    if (open){ loadWx(); loadQr(); renderPhare(); }
+    if (open){ loadWx(); renderPhare(); }
   }
   // hors connexion, le phare s'éteint (pas de faisceau ni de lanterne allumée)
   function updatePhare(){
@@ -764,20 +765,23 @@
     e.stopPropagation();
     const b = e.target.closest('[data-ph]'); if (!b) return;
     // proposer une nouvelle règle : ouvre « Une question, un retour ? » avec un message pré-rempli
-    if (b.dataset.ph === 'rule'){ openPhare(false); window.dispatchEvent(new CustomEvent('ouessant-contact', { detail: T('ruleTpl') })); return; }
+    if (b.dataset.ph === 'rule'){ openPhare(false); window.dispatchEvent(new CustomEvent('ouessant-contact', { detail: T('ruleTpl') })); }
+  });
+  // boutons « Partager… » et « Copier le lien » (dans le menu ☰)
+  function shareAction(b){
     if (b.dataset.ph === 'share') navigator.share({ title: T('title'), text: T('lede').replace(/<[^>]+>/g, ''), url: APP_URL }).catch(() => {});
     else {
       const done = () => { b.textContent = T('shCopied'); setTimeout(() => { b.textContent = T('shCopy'); }, 1600); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(APP_URL).then(done, () => fallbackCopy(APP_URL, done)); else fallbackCopy(APP_URL, done);
     }
-  });
+  }
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
   // ---------- Menu ☰ : historique, éditeur, guide, contact, affichage, informations légales ----------
   function openMenu(open, focus = true){
     $('menu').hidden = !open; $('menuScrim').hidden = !open; $('menuBtn').setAttribute('aria-expanded', String(open));
     document.documentElement.classList.toggle('menu-open', open);
-    if (open){ hideTip(); openPhare(false); $('menuVer').textContent = versionText(); $('menuClose').focus(); }
+    if (open){ hideTip(); openPhare(false); renderShare(); $('menuVer').textContent = versionText(); $('menuClose').focus(); }
     else { menuLegal(false); $('contactPanel').hidden = true; $('contactBtn').setAttribute('aria-expanded', 'false'); if (focus) $('menuBtn').focus(); }   // le message tapé est gardé
   }
   // informations légales : se déplient en bas du menu (et plus dans le panneau du phare)
@@ -794,6 +798,7 @@
     if (e.target.closest('#menuPhare')){ openMenu(false, false); openPhare(true); $('phareBtn').focus({ preventScroll: true }); scrollTo({ top: 0, behavior: 'smooth' }); return; }
     if (e.target.closest('#menuLegal')){ menuLegal($('menuLegalBox').hidden); return; }
     if (e.target.closest('#menuLegalBox')) return;   // liens des informations légales : ils s'ouvrent dans un nouvel onglet, le menu reste ouvert
+    const sh = e.target.closest('#menuShare [data-ph]'); if (sh){ shareAction(sh); return; }
     if (e.target.closest('#contactBtn, #contactPanel')) return;   // « Une question, un retour ? » se déplie dans le menu (son propre gestionnaire)
     if (e.target.closest('a')) openMenu(false, false);
   });

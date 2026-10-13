@@ -82,7 +82,6 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
 .day{background:var(--foam);border-radius:10px;padding:.45rem .35rem;text-align:center;font-size:.76rem;line-height:1.35}
 .day b{display:block;font-size:.82rem}
 .day .dw{display:flex;justify-content:center;align-items:center;gap:.2rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.76rem}
-.pp-ver{margin:0 0 .3rem;font-size:.8rem;color:var(--granite);font-variant-numeric:tabular-nums}
 /* informations légales dépliées en bas du menu ☰ */
 .menu-legal{margin:.7rem 1rem 0;padding:.8rem .9rem;max-width:none;font-size:.82rem;scroll-margin-top:calc(5rem + env(safe-area-inset-top,0px))}
 .pp-src{margin:.6rem 0 0;font-size:.75rem;color:var(--granite)}
@@ -102,6 +101,9 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
 .qr-box svg{display:block;width:100%;height:100%}
 .qr-box>img{border-radius:9px}
 .qr-txt{font-size:.88rem;color:var(--granite)}
+/* « Partager l'appli » dans le menu ☰ : le QR code garde sa place pour l'oriole posé dessus */
+.menu-share .qr{margin-top:-.4rem}
+.menu-share .qr-box{margin:43px 0 10px 10px}
 .qr-txt .btns{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
 .qr-txt button{border:1px solid var(--line);background:var(--foam);color:var(--ink);font:600 .85rem var(--sans);padding:.4rem .7rem;border-radius:8px;cursor:pointer}
 .qr-txt button.main{background:var(--ocean);border-color:var(--ocean);color:var(--foam)}
