@@ -45,4 +45,6 @@ Une fusion normale le ferait passer d'une branche à l'autre, donc :
   À chaque mise en ligne, juste avant le squash, régénérer le fichier depuis main : `node scripts/historique_depuis_git.js origin/main > historique.json`
   (capte les changements faits ailleurs) ; si la mise en ligne elle-même modifie une liste, le régénérer à nouveau après le push sur main
   et pousser ce seul fichier (commit « Historique des listes : mise à jour de l'appli »).
+- **Versions de l'appli** (`versions_appli.json`, 2e onglet de `historique.html`) : pour une modification majeure visible des utilisateurs,
+  ajouter (ou compléter) l'entrée de la version, en français et en anglais. Jamais les nouveautés de la page Administration (page invisible au public).
 - Ne jamais écrire de clé, de jeton ou de code secret dans le dépôt.
