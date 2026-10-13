@@ -150,6 +150,7 @@
     "Type de taxon": "Taxon type", "Proposition de Canal de Diffusion Ouessant": "Reporting channel (Ouessant)",
     "Raison du canal": "Channel reason", "Origine": "Origin",
     "Informations légales": "Legal information",
+    "Historique des listes": "List history", "L’historique des listes n’a pas pu être mis à jour.": "The list history could not be updated.",
     "Nicheur sur l'île": "Breeds on the island", "Commun sur l'île (migrateur ou hivernant)": "Common on the island (migrant or winter visitor)",
     "Commun au large (oiseau marin)": "Common offshore (seabird)", "Peu commun sur l'île": "Scarce on the island", "Rareté locale": "Local rarity",
     "Échappé de captivité": "Escape from captivity", "Méga pour l'île": "Island mega", "Rareté nationale": "National rarity", "Méga national": "National mega",

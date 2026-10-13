@@ -45,6 +45,21 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 
 ## Les listes
 
+### `historique.json` et la page `historique.html` (historique des listes)
+
+Page publique (lien « Historique des listes » en bas de l'appli et de l'éditeur) : tous les changements des espèces et des lieux-dits,
+jour par jour, avec la version de l'appli et celle des listes. Pour une même entrée et un même champ, plusieurs changements dans la
+journée ne montrent que l'état du début et celui de la fin (rien si la valeur est revenue à son état du matin) ; au-delà de 40 changements
+d'un coup, un simple résumé (« 416 espèces modifiées d'un coup : Raison du canal (416)… »).
+
+- `historique.json` : une entrée par enregistrement, ajoutée automatiquement par l'**éditeur** (enregistrement sur `main`) et par la
+  **page Administration** (propositions enregistrées, reprise d'une liste archivée), dans un commit « Historique des listes : … ».
+  Format : `{date, app, listes, fichier, source, changements: [{t: add|mod|del, nom, cle, champs: [[champ, avant, après]]}]}` (ou `resume`).
+  Calcul partagé : `js/historique.js`.
+- Un changement fait directement sur GitHub (ou lors d'une mise à jour de l'appli) n'est pas noté tout seul : on régénère tout le fichier
+  à partir des commits de `main` avec `node scripts/historique_depuis_git.js origin/main > historique.json` (même calcul ; l'historique
+  part du 3 octobre 2026, quelques états de la liste des lieux du 3-4 octobre, illisibles, sont sautés).
+
 ### `ouessant_birds.json`
 
 ```json

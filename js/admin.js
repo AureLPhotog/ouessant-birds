@@ -488,11 +488,12 @@
       try { await putFile(f, b64enc(formatLike(file.text, list)), title + '\n\n' + body.join('\n'), file.sha); }
       catch (e) { throw e.conflict ? new Error('la liste vient d’être modifiée ailleurs : recommence') : e; }
       const ver = await bumpListsVersion();
+      const histOk = await addHistory(f, file.list, list, ver);
       // la liste en mémoire devient celle enregistrée : les propositions appliquées apparaissent « déjà conformes »
       current[f] = { entries: list, byKey: new Map(list.map(e => [norm(e[L.key]), e])) };
       out.className = 'msg good';
       out.textContent = `Enregistré sur GitHub : ${n} changement(s) dans la liste ${LIST_NAME[f][1]}${ver ? ' (version des listes ' + ver + ')' : ''}. L’appli sera à jour d’ici quelques minutes.` +
-        (skipped.length ? ` Non appliquées : ${skipped.join(', ')}.` : '') + ' Tu peux maintenant marquer ces réponses comme traitées.';
+        (skipped.length ? ` Non appliquées : ${skipped.join(', ')}.` : '') + (histOk ? '' : ' (L’historique des listes n’a pas pu être mis à jour.)') + ' Tu peux maintenant marquer ces réponses comme traitées.';
     } catch (e) { out.className = 'msg bad'; out.textContent = 'Enregistrement impossible : ' + (e.message || e); }
     $('saveGhBtn').disabled = false;
   });
@@ -592,6 +593,12 @@
     if (!r.ok) throw new Error('GitHub a répondu ' + r.status);
     return r.json();
   }
+  // historique des listes (historique.json, page historique.html) : ce qui a changé, avec la date et la version
+  async function addHistory(file, before, after, ver){
+    const H = window.OuessantHistorique; if (!H) return false;
+    try { return await H.record(gh, H.entry({ file, before, after, app: window.OUESSANT_APP_VERSION, listes: ver, source: 'administration' })); }
+    catch (_) { return false; }
+  }
   // même numéro de version des listes que l'éditeur (version_listes.json), pour que l'appli voie le changement
   async function bumpListsVersion(){
     try {
@@ -686,7 +693,8 @@
     msg.textContent = 'Remplacement de la liste…';
     try { await putFile(BIRDS, arc.b64, `Liste des oiseaux ${thisYear()} : reprise de « ${archLabel(a)} »`, cur && cur.sha); }
     catch (e) { if (e.conflict) throw new Error('la liste vient d’être modifiée ailleurs (éditeur ?) : recharge la page et recommence'); throw e; }
-    await bumpListsVersion();
+    const ver = await bumpListsVersion();
+    if (cur) await addHistory(BIRDS, cur.list, arc.list, ver);
     archives = await listArchives(); await renderYears(); $('yearDiff').innerHTML = '';
     msg.className = 'msg good'; msg.textContent = `C’est fait : la liste ${thisYear()} est maintenant « ${archLabel(a)} ». L’appli sera à jour d’ici quelques minutes. Pense à rouvrir l’éditeur (la liste a changé).`;
   }

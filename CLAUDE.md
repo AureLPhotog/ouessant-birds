@@ -40,4 +40,8 @@ Une fusion normale le ferait passer d'une branche à l'autre, donc :
 - Toute modification de l'appli (HTML, CSS, JS) augmente la version : `js/version.js` et `sw.js` (5.9 → 5.10…).
   README, script Google ou guide seuls : pas de changement de version.
 - Le guide PDF (`docs/Guide_utilisation.pdf`) indique la version de l'appli : le régénérer quand elle change.
+- **Historique des listes** (`historique.json`, page `historique.html`) : l'éditeur et la page Administration y ajoutent leurs changements.
+  À chaque mise en ligne, juste avant le squash, régénérer le fichier depuis main : `node scripts/historique_depuis_git.js origin/main > historique.json`
+  (capte les changements faits ailleurs) ; si la mise en ligne elle-même modifie une liste, le régénérer à nouveau après le push sur main
+  et pousser ce seul fichier (commit « Historique des listes : mise à jour de l'appli »).
 - Ne jamais écrire de clé, de jeton ou de code secret dans le dépôt.
