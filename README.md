@@ -6,7 +6,7 @@ Petite appli web pour les observateurs d'oiseaux à Ouessant :
 - **Lieux** : coordonnées GPS indicatives des lieux-dits de l'île, avec un aperçu de la carte ;
 - **Où suis-je ?** : les lieux-dits les plus proches de sa position (de 3 à 10, au choix avec le curseur). Toucher un lieu-dit ouvre Google Maps sur son point GPS. Un bouton **Partager ma position** prépare un message (coordonnées, lien Google Maps, lieu-dit le plus proche) ;
 - **le phare** (en haut à gauche) : météo du jour à Ouessant, rappel « Quel canal ? » (Telegram : raretés à l'échelle nationale ; WhatsApp : raretés locales, espèces peu communes sur l'île et suivi des raretés déjà annoncées ; rien : espèces communes ou nicheuses), QR code pour partager l'appli et numéro de version (les informations légales sont dans le menu ☰).
-- **en bas de page** : le guide d'utilisation (PDF), **« Une question, un retour ? »** (message anonyme, envoyé par le formulaire Google des propositions, dans le seul champ commentaire ; la page Administration le range dans l'onglet **Messages**) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
+- **dans le menu ☰** : le guide d'utilisation (PDF), **« Une question, un retour ? »** (le formulaire se déplie dans le menu, depuis la 6.3 ; message anonyme, envoyé par le formulaire Google des propositions, dans le seul champ commentaire ; la page Administration le range dans l'onglet **Messages**) et l'**éditeur des listes** (ouvert aussi par le crayon ✎ d'une espèce, « Proposer une meilleure position » d'un lieu-dit, ou « Proposer un nouvel oiseau / lieu-dit »).
 
 En ligne : <https://aurelphotog.github.io/ouessant-birds/>
 
@@ -48,7 +48,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 ### En-tête de l'appli : menu ☰, phare et pastille de vent (depuis la version 6.0)
 
 - **Menu ☰** (en haut à gauche) : « Météo, canaux et partage » (ouvre le panneau du phare), Historique des listes, Éditeur des listes,
-  Guide d'utilisation, « Une question, un retour ? », réglages d'affichage (thème, couleurs), informations légales (dépliées en bas du menu, depuis la 6.2) et version.
+  Guide d'utilisation, « Une question, un retour ? » (se déplie dans le menu ; « Proposer une nouvelle règle » du phare l'y ouvre aussi), réglages d'affichage (thème, couleurs), informations légales (dépliées en bas du menu, depuis la 6.2) et version.
   Se ferme avec ✕, un toucher à côté ou Échap. FR / EN reste visible en haut à droite ; le bas de page n'a plus de liens.
 - **Phare** : son panneau montre la météo, « Quel canal ? », le partage, la version et la surprise des cinq touchers ; depuis la 6.2,
   plus les informations légales (seulement dans le menu ☰).

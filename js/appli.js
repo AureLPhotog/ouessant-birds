@@ -778,7 +778,7 @@
     $('menu').hidden = !open; $('menuScrim').hidden = !open; $('menuBtn').setAttribute('aria-expanded', String(open));
     document.documentElement.classList.toggle('menu-open', open);
     if (open){ hideTip(); openPhare(false); $('menuVer').textContent = versionText(); $('menuClose').focus(); }
-    else { menuLegal(false); if (focus) $('menuBtn').focus(); }
+    else { menuLegal(false); $('contactPanel').hidden = true; $('contactBtn').setAttribute('aria-expanded', 'false'); if (focus) $('menuBtn').focus(); }   // le message tapé est gardé
   }
   // informations légales : se déplient en bas du menu (et plus dans le panneau du phare)
   function menuLegal(open){
@@ -794,7 +794,7 @@
     if (e.target.closest('#menuPhare')){ openMenu(false, false); openPhare(true); $('phareBtn').focus({ preventScroll: true }); scrollTo({ top: 0, behavior: 'smooth' }); return; }
     if (e.target.closest('#menuLegal')){ menuLegal($('menuLegalBox').hidden); return; }
     if (e.target.closest('#menuLegalBox')) return;   // liens des informations légales : ils s'ouvrent dans un nouvel onglet, le menu reste ouvert
-    if (e.target.closest('#contactBtn')){ openMenu(false, false); return; }   // le panneau de contact s'ouvre en bas de la page (son propre gestionnaire)
+    if (e.target.closest('#contactBtn, #contactPanel')) return;   // « Une question, un retour ? » se déplie dans le menu (son propre gestionnaire)
     if (e.target.closest('a')) openMenu(false, false);
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('menu').hidden) openMenu(false); });
@@ -926,7 +926,7 @@
       showImport();
     });
 
-  // ---------- Contact : une question ou un retour sur l'appli ----------
+  // ---------- Contact : une question ou un retour sur l'appli (dans le menu ☰) ----------
   // Le message part par le même formulaire Google que les propositions, dans le seul champ « commentaire » (aucune ligne JSON) :
   // la page Administration les range dans l'onglet « Messages ».
   (function contact(){
@@ -935,6 +935,7 @@
     // ouverture depuis le phare (« Proposer une nouvelle règle ») : message pré-rempli, curseur après « Telegram : »
     window.addEventListener('ouessant-contact', e => {
       const tpl = String(e.detail || '');
+      openMenu(true, false);   // le formulaire est dans le menu ☰
       panel.hidden = false; btn.setAttribute('aria-expanded', 'true');
       if (!msg.value.trim() || msg.value === msg.dataset.tpl){ msg.value = tpl; msg.dataset.tpl = tpl; }
       panel.scrollIntoView({ block: 'center', behavior: 'smooth' });
@@ -948,11 +949,11 @@
     const reveal = () => {
       if (document.activeElement !== msg) return;
       const kb = vv ? Math.max(0, innerHeight - vv.height - vv.offsetTop) : 0;
-      document.body.style.paddingBottom = kb ? kb + 'px' : '';
+      $('menu').style.paddingBottom = kb ? `calc(1.5rem + ${kb}px)` : '';   // le formulaire est dans le menu, qui défile seul
       msg.scrollIntoView({ block: 'center' });
     };
     msg.addEventListener('focus', () => { setTimeout(reveal, 350); if (vv) vv.addEventListener('resize', reveal); });
-    msg.addEventListener('blur', () => { if (vv) vv.removeEventListener('resize', reveal); document.body.style.paddingBottom = ''; });
+    msg.addEventListener('blur', () => { if (vv) vv.removeEventListener('resize', reveal); $('menu').style.paddingBottom = ''; });
     $('contactSend').addEventListener('click', () => {
       const text = msg.value.trim(); if (!text){ msg.focus(); msg.placeholder = T('contactEmpty'); return; }
       const q = new URLSearchParams({ usp: 'pp_url' }); q.set(COMMENT, text.slice(0, 1500));
