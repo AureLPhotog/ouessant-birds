@@ -50,6 +50,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 ### Un seul menu ☰ pour toutes les pages (depuis la version 6.7)
 
 Le menu est construit par `js/menu.js` (styles : `css/menu.css`), le même dans l'appli, l'éditeur et l'historique ;
+seul le bouton ☰ est écrit dans chaque page (avec la classe `has-menu` sur `<html>` de l'éditeur et de l'historique), pour qu'il soit là dès l'affichage, sans saut ;
 seul le lien vers la page où l'on se trouve n'y est pas (« L'appli : espèces, lieux, où suis-je ? », Historique ou Éditeur).
 Partage (QR code avec l'oriole), « Une question, un retour ? » (se déplie sur place), thème et couleurs, informations légales
 et version (avec la date des listes) fonctionnent partout. « Météo et canaux » ouvre le panneau du phare, sur place.
@@ -58,7 +59,8 @@ L'appli s'y branche par `OuessantMenu` (`onOpen`, `listDate`) et l'événement `
 
 ### Un seul phare pour toutes les pages (depuis la version 6.7)
 
-Le phare de l'en-tête est construit par `js/phare.js` (styles : `css/phare.css`), le même dans l'appli, l'éditeur et l'historique
+Le phare de l'en-tête fonctionne avec `js/phare.js` (styles : `css/phare.css`), le même dans l'appli, l'éditeur et l'historique ;
+son bouton (image, pastille, panneau vide) est écrit dans chaque page, juste après le bouton ☰, pour être là dès l'affichage
 (il y remplace l'ancien phare « retour à l'appli » ; on revient à l'appli par le menu ☰) : pastille de vent, panneau météo et
 « Quel canal ? », phare éteint hors connexion, œuf de Pâques (l'oiseau est pris dans la liste de l'appli, ailleurs dans
 `ouessant_birds.json`). La bulle « Touche le phare » de première visite reste propre à l'appli. Les couleurs des canaux

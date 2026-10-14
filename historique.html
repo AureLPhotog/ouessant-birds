@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="has-menu">
 <head>
 <meta charset="utf-8">
 <!-- Page publique, en lecture seule : lit historique.json sur le site, rien n'est envoyé -->
@@ -17,6 +17,12 @@
 <body>
 <div class="wrap">
   <header>
+    <!-- bouton ☰ et phare : écrits ici pour être là dès l'affichage (js/menu.js et js/phare.js les font fonctionner) -->
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu" aria-label="Menu" title="Menu" data-notr><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="phare-wrap" data-notr>
+      <button type="button" class="phare-btn" id="phareBtn" aria-expanded="false" aria-controls="pharePanel" aria-label="Météo et canaux" title="Météo et canaux"><img class="phare" src="phare_creach.svg" alt="" width="56" height="131"><span class="wind-pill" id="windPill" hidden></span></button>
+      <div id="pharePanel" class="phare-panel" hidden></div>
+    </div>
     <div class="intro">
       <h1 data-t="title">Historique</h1>
       <p class="sub" data-t="sub">Les changements apportés aux espèces et aux lieux-dits, jour par jour, et les nouveautés de chaque version de l’appli.</p>
