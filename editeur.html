@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!-- Sécurité : scripts de l'éditeur uniquement (les deux scripts intégrés sont autorisés par leur empreinte : à recalculer s'ils changent, voir README) ; connexions limitées à GitHub et iNaturalist -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-6v26MpxMBIZoiMpGUM14toNbRLeE5vGMSC7c61XvzZo=' 'sha256-fmXA4ZLdFTxQUEwgvW4Y+nR+Cu8UwiJmMtOfc3OOdZY=' https://aurelphotog.github.io; style-src 'self' 'unsafe-inline' https://aurelphotog.github.io; img-src 'self' data: blob: https://aurelphotog.github.io; font-src 'self' https://aurelphotog.github.io; connect-src 'self' https://api.github.com https://api.inaturalist.org; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-6v26MpxMBIZoiMpGUM14toNbRLeE5vGMSC7c61XvzZo=' 'sha256-YuB4l6KsTFyfJxjCrgftFsrC1SR9yP4fg6X+lzs9NiE=' https://aurelphotog.github.io; style-src 'self' 'unsafe-inline' https://aurelphotog.github.io; img-src 'self' data: blob: https://aurelphotog.github.io; font-src 'self' https://aurelphotog.github.io; connect-src 'self' https://api.github.com https://api.inaturalist.org; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Éditeur de listes · Oiseaux d'Ouessant</title>
 <meta name="robots" content="noindex">
@@ -13,6 +13,7 @@ if (window.top !== window.self) { document.documentElement.style.display = 'none
 document.addEventListener('error', function (e) { var t = e.target, f = t && t.getAttribute && t.getAttribute('data-secours'); if (!f) { if (t && t.hasAttribute && t.hasAttribute('data-retirer')) t.remove(); return; } t.removeAttribute('data-secours'); if (t.tagName === 'LINK') t.href = f; else t.src = f; }, true);</script>
 <link rel="stylesheet" href="css/polices.css" data-secours="https://aurelphotog.github.io/ouessant-birds/css/polices.css">
 <link rel="stylesheet" href="css/commun.css" data-secours="https://aurelphotog.github.io/ouessant-birds/css/commun.css">
+<link rel="stylesheet" href="css/menu.css" data-secours="https://aurelphotog.github.io/ouessant-birds/css/menu.css">
 <link rel="stylesheet" href="css/editeur.css" data-secours="https://aurelphotog.github.io/ouessant-birds/css/editeur.css">
 
 </head>
@@ -25,19 +26,9 @@ document.addEventListener('error', function (e) { var t = e.target, f = t && t.g
       <p class="sub">Cherche un oiseau ou un lieu-dit, corrige-le ou ajoutes-en un, puis envoie ta proposition.</p>
     </div>
     <div class="tools">
-      <button type="button" id="prefsBtn" class="prefs-btn" aria-expanded="false" aria-controls="prefsPanel" title="Affichage" aria-label="Affichage">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>
-      </button>
       <div class="lang" role="group" aria-label="Langue / Language">
         <button type="button" data-lang="fr" aria-pressed="true">FR</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
-      </div>
-      <div id="prefsPanel" class="prefs" hidden>
-        <p class="prefs-t">Thème</p>
-        <div class="seg" role="group" data-pref="theme"><button type="button" data-v="auto">Auto</button><button type="button" data-v="light">Clair</button><button type="button" data-v="dark">Sombre</button></div>
-        <p class="prefs-t">Couleurs</p>
-        <div class="seg" role="group" data-pref="cvd"><button type="button" data-v="0">Standard</button><button type="button" data-v="1">Daltonisme</button></div>
-        <p class="prefs-n">« Daltonisme » utilise des couleurs distinguables par la plupart des personnes daltoniennes. « Auto » suit le réglage du téléphone.</p>
       </div>
     </div>
   </header>
@@ -109,9 +100,7 @@ document.addEventListener('error', function (e) { var t = e.target, f = t && t.g
 
     <div class="tablewrap"><table id="table"><thead></thead><tbody></tbody></table></div>
   </section>
-  <p class="back"><a class="btn" href="index.html"><span aria-hidden="true">←</span> <span>Revenir à l’appli</span></a> <a class="btn" href="docs/Guide_utilisation.pdf" target="_blank" rel="noopener"><span>Guide d’utilisation (PDF)</span></a> <a class="btn" href="historique.html"><span>Historique des listes</span></a></p>
-  <p class="foot-legal"><button type="button" class="linkbtn" id="legalBtn" aria-expanded="false" aria-controls="legalBox">Informations légales</button></p>
-  <div class="legal" id="legalBox" data-notr hidden></div>
+  <p class="back"><a class="btn" href="index.html"><span aria-hidden="true">←</span> <span>Revenir à l’appli</span></a></p>
 </div>
 <button type="button" class="admin-badge" id="adminBadge" data-key title="Clé Admin active : la gérer ou l’oublier" hidden>🔑 Mode admin</button>
 <div class="toast hidden" id="toast" role="status"></div>
@@ -119,7 +108,7 @@ document.addEventListener('error', function (e) { var t = e.target, f = t && t.g
 <script>
 // Charge les scripts partagés depuis le dossier de l'éditeur, ou depuis le site en ligne s'il est ouvert seul
 (function(){
-  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/version.js', 'js/textes.js', 'js/noms.js', 'js/carte.js', 'js/historique.js', 'js/editeur-langue.js', 'js/editeur.js'];
+  const SITE = 'https://aurelphotog.github.io/ouessant-birds/', files = ['js/version.js', 'js/textes.js', 'js/noms.js', 'js/carte.js', 'js/historique.js', 'js/editeur-langue.js', 'js/menu-pages.js', 'js/editeur.js'];
   (function next(i, web){
     if (i >= files.length) return;
     const s = document.createElement('script'); s.src = (web ? SITE : '') + files[i] + '?t=' + Math.floor(Date.now() / 60000);   // ?t= : une nouvelle version de l'éditeur est prise en compte en moins d'une minute (sans lui, le navigateur peut garder l'ancienne ~10 min)

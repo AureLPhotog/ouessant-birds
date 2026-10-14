@@ -291,33 +291,16 @@
     document.title = lang === 'en' ? 'List editor · Birds of Ouessant' : 'Éditeur de listes · Oiseaux d\u2019Ouessant';
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     walk(document.body);
-    showLegal();
+    if (window.OuessantMenu) window.OuessantMenu.refresh();   // menu ☰ (js/menu-pages.js) dans la langue choisie
   }
-  // Informations légales : même texte que dans l'appli (js/textes.js), affiché dans la langue choisie (l'encart n'est pas traduit à la volée : data-notr)
-  function showLegal(){
-    const box = document.getElementById('legalBox'), T = window.OUESSANT_TEXTES; if (!box || !T || box.hidden) return;
-    box.innerHTML = T[lang].legalHtml;
-  }
-  document.addEventListener('click', e => {
-    const b = e.target.closest('#legalBtn'); if (!b) return;
-    const box = document.getElementById('legalBox'); box.hidden = !box.hidden; b.setAttribute('aria-expanded', String(!box.hidden)); showLegal();
-  });
   applyPrefs();
   function init(){
     const tools = document.querySelector('header .tools');
     if (tools){
-      tools.addEventListener('click', e => {
+      tools.addEventListener('click', e => {   // le thème et les couleurs se règlent dans le menu ☰ (js/menu-pages.js)
         const lb = e.target.closest('.lang button');
-        if (lb){ lang = lb.dataset.lang; store.set(LANG_KEY, lang); applyLang(); return; }
-        if (e.target.closest('#prefsBtn')){ e.stopPropagation(); const p = document.getElementById('prefsPanel'); p.hidden = !p.hidden; document.getElementById('prefsBtn').setAttribute('aria-expanded', String(!p.hidden)); return; }
-        const sb = e.target.closest('.seg button');
-        if (sb){ e.stopPropagation();
-          if (sb.parentElement.dataset.pref === 'theme'){ theme = sb.dataset.v; store.set(THEME_KEY, theme); }
-          else { cvd = sb.dataset.v === '1'; store.set(CVD_KEY, cvd ? '1' : '0'); }
-          applyPrefs(); }
+        if (lb){ lang = lb.dataset.lang; store.set(LANG_KEY, lang); applyLang(); }
       });
-      document.addEventListener('click', e => { const p = document.getElementById('prefsPanel'); if (p && !p.hidden && !e.target.closest('header .tools')){ p.hidden = true; document.getElementById('prefsBtn').setAttribute('aria-expanded', 'false'); } });
-      document.addEventListener('keydown', e => { const p = document.getElementById('prefsPanel'); if (e.key === 'Escape' && p && !p.hidden){ p.hidden = true; document.getElementById('prefsBtn').focus(); } });
     }
     applyPrefs(); applyLang();
     mo.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
