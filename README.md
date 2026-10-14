@@ -40,10 +40,17 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `phare_creach.svg` (et `phare_creach_eteint.svg`, affiché hors connexion), `favicon*`, `icon-*.png`, `apple-touch-icon.png`, `apercu.png`, `qr_ouessant.svg` | images, icônes, aperçu de lien, QR code |
 | `oriole_baltimore.webp` | oriole de Baltimore posé sur le cadre du QR code (menu ☰, « Partager l'appli ») : photo d'Aurélien, détourée et légèrement stylisée. Seule cette version retouchée est dans le dépôt, pas la photo d'origine ; pour la remplacer, garder le même nom et la même taille (≈ 158 × 270 px, fond transparent). L'oiseau en vol de l'easter egg (5 clics sur le phare) est un dessin dans `js/appli.js` (`BIRD_SVG`) |
 | `manifest.webmanifest` | raccourci sur l'écran d'accueil du téléphone |
-| `docs/Guide_utilisation.pdf` | guide d'utilisation (l'appli, puis l'éditeur pour proposer une correction) : à partager, et lié dans le menu ☰ de l'appli et en bas de l'éditeur |
+| `docs/Guide_utilisation.pdf` | guide d'utilisation (l'appli, puis l'éditeur pour proposer une correction) : à partager, et lié dans le menu ☰ (appli, éditeur, historique) |
 | `scripts/verifier_listes.py` | vérification des listes (voir « Vérifier les listes ») |
 
 ## Les listes
+
+### Menu ☰ de l'éditeur et de l'historique (depuis la version 6.6)
+
+Le même menu que l'appli, ajouté par `js/menu-pages.js` (styles communs : `css/menu.css`) : l'appli, « Météo et canaux »
+(`index.html#meteo`, ouvre le panneau du phare), Historique ou Éditeur (pas la page où l'on est), Guide, « Une question, un retour ? »
+(`index.html#contact`, ouvre le formulaire dans le menu de l'appli), partage (QR code, copier le lien), thème et couleurs,
+informations légales et version. Textes : `js/textes.js`, dans la langue choisie sur la page.
 
 ### En-tête de l'appli : menu ☰, phare et pastille de vent (depuis la version 6.0)
 
@@ -61,7 +68,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 
 ### `historique.json` et la page `historique.html` (historique des listes)
 
-Page publique (lien « Historique des listes » dans le menu ☰ de l'appli et en bas de l'éditeur) : tous les changements des espèces et des lieux-dits,
+Page publique (lien « Historique des listes » dans le menu ☰ de l'appli et de l'éditeur) : tous les changements des espèces et des lieux-dits,
 jour par jour, avec la version de l'appli et celle des listes. Pour une même entrée et un même champ, plusieurs changements dans la
 journée ne montrent que l'état du début et celui de la fin (rien si la valeur est revenue à son état du matin) ; au-delà de 40 changements
 d'un coup, un simple résumé (« 416 espèces modifiées d'un coup : Raison du canal (416)… »).
