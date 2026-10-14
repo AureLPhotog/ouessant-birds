@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!-- Page publique, en lecture seule : lit historique.json sur le site, rien n'est envoyé -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.open-meteo.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Historique · Oiseaux d'Ouessant</title>
 <meta name="description" content="Tous les changements apportés aux espèces et aux lieux-dits de l'appli Oiseaux d'Ouessant, jour par jour.">
@@ -11,12 +11,12 @@
 <link rel="stylesheet" href="css/polices.css">
 <link rel="stylesheet" href="css/commun.css">
 <link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/phare.css">
 <link rel="stylesheet" href="css/historique.css">
 </head>
 <body>
 <div class="wrap">
   <header>
-    <a href="index.html" class="home" data-t-title="back" title="Revenir à l’appli" aria-label="Revenir à l’appli"><img src="phare_creach.svg" alt=""></a>
     <div class="intro">
       <h1 data-t="title">Historique</h1>
       <p class="sub" data-t="sub">Les changements apportés aux espèces et aux lieux-dits, jour par jour, et les nouveautés de chaque version de l’appli.</p>
@@ -48,6 +48,7 @@
 <script src="js/textes.js"></script>
 <script src="js/historique.js"></script>
 <script src="js/historique-page.js"></script>
-<script src="js/menu-pages.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/phare.js"></script>
 </body>
 </html>
