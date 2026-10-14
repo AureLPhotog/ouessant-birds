@@ -38,9 +38,16 @@
 <body>
 <div class="wrap">
   <header>
+    <!-- bouton ☰ et phare : écrits ici pour être là dès l'affichage (js/menu.js et js/phare.js les font fonctionner) -->
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu" aria-label="Menu" title="Menu" data-notr><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="phare-wrap" data-notr>
+      <button type="button" class="phare-btn" id="phareBtn" aria-expanded="false" aria-controls="pharePanel" aria-label="Météo et canaux" title="Météo et canaux"><img class="phare" src="phare_creach.svg" alt="" width="56" height="131"><span class="wind-pill" id="windPill" hidden></span></button>
+      <div class="phare-tip" id="phareTip" role="note" hidden><p data-t="tipPhare">Touche le phare : météo et canaux</p><button type="button" id="phareTipOk" data-t="tipOk">OK</button></div>
+      <div id="pharePanel" class="phare-panel" hidden></div>
+    </div>
     <div class="intro">
       <h1 data-t="title">Oiseaux d'Ouessant</h1>
-      <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation.</p>
+      <p class="lede">Tape le nom d'une espèce pour savoir sur quel canal annoncer ton observation, puis touche le canal pour préparer ton message.</p>
     </div>
     <div class="tools">
       <div class="lang" role="group" aria-label="Langue / Language">

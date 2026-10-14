@@ -33,13 +33,9 @@
   const ORIOLE = `<span class="oriole" aria-hidden="true"><img class="o-sh" src="${BASE}oriole_baltimore.webp" alt="" width="47" height="69"><img class="o-bd" src="${BASE}oriole_baltimore.webp" alt="" width="47" height="69"></span>`;
   const FERN = '<span class="fern" aria-hidden="true">🌿</span>';
 
-  // ---------- bouton ☰ en tête de l'en-tête, panneau et voile en fin de page ----------
-  const header = document.querySelector('header'); if (!header) return;
-  if (PAGE !== 'app') document.documentElement.classList.add('has-menu');   // éditeur, historique : rangée du haut comme l'appli
-  const btn = document.createElement('button');
-  btn.type = 'button'; btn.className = 'menu-btn'; btn.id = 'menuBtn'; btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', 'menu');
-  btn.setAttribute('data-notr', ''); btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
-  header.prepend(btn);
+  // ---------- bouton ☰ (écrit dans la page, pour être là dès l'affichage), panneau et voile en fin de page ----------
+  const btn = $('menuBtn'); if (!btn) return;
+  if (PAGE !== 'app') document.documentElement.classList.add('has-menu');   // éditeur, historique : rangée du haut comme l'appli (aussi écrit dans la page)
   const scrim = document.createElement('div'); scrim.className = 'menu-scrim'; scrim.id = 'menuScrim'; scrim.hidden = true;
   const menu = document.createElement('aside'); menu.className = 'menu'; menu.id = 'menu'; menu.hidden = true; menu.setAttribute('aria-labelledby', 'menuTitle');
   menu.setAttribute('data-notr', '');   // l'éditeur traduit ses textes à la volée : le menu, lui, est déjà dans la bonne langue
