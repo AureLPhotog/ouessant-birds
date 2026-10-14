@@ -3,7 +3,7 @@ body{font-size:15px}
 :root{--wrap-w:1180px}
 .wrap{max-width:1180px;margin:0 auto;padding:0 1.25rem 5rem}
 header{display:flex;align-items:flex-start;gap:1rem;padding:2.25rem 0 1.5rem}
-.intro{align-self:stretch;min-height:131px;display:flex;flex-direction:column;justify-content:flex-end}
+.intro{align-self:stretch;min-height:131px;display:flex;flex-direction:column;justify-content:flex-start}
 header img{width:56px;height:auto;overflow:visible;display:block}
 h1{font:700 clamp(2rem,6vw,3.1rem)/1.02 var(--serif);color:var(--ocean);margin:0;letter-spacing:-.01em}
 .sub{margin:.6rem 0 0;color:var(--granite);max-width:52ch}
