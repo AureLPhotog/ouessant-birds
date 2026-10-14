@@ -80,6 +80,10 @@
 .menu-contact{margin:.1rem 0 .7rem;max-width:none}
 .menu .sbtn{border:1px dashed var(--line);background:none;color:var(--ocean-2);font:600 .88rem var(--sans);padding:.45rem .8rem;border-radius:8px;cursor:pointer}
 .menu .sbtn:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
-/* pages annexes : même rangée du haut que l'appli (☰ à gauche, FR / EN à droite) */
-:root.has-menu header{padding-top:4.1rem}
+/* pages annexes (éditeur, historique) : même en-tête que l'appli — rangée du haut (☰ à gauche, FR / EN à droite),
+   titre et sous-titre sur toute la largeur à côté du phare, même marge sous l'en-tête (la pastille de vent y dépasse) */
+:root.has-menu header{padding:4.1rem 0 2.1rem}
+:root.has-menu header .intro{flex:1 1 auto;min-width:0}
+:root.has-menu header h1{padding-right:0}
+:root.has-menu header .sub{font-size:1rem}
 :root.has-menu header .tools,:root.has-menu .hist-lang{top:.8rem}
