@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="has-menu">
 <head>
 <meta charset="utf-8">
 <!-- Sécurité : scripts de l'éditeur uniquement (les deux scripts intégrés sont autorisés par leur empreinte : à recalculer s'ils changent, voir README) ; connexions limitées à GitHub et iNaturalist -->
@@ -21,6 +21,12 @@ document.addEventListener('error', function (e) { var t = e.target, f = t && t.g
 <body>
 <div class="wrap">
   <header>
+    <!-- bouton ☰ et phare : écrits ici pour être là dès l'affichage (js/menu.js et js/phare.js les font fonctionner) -->
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu" aria-label="Menu" title="Menu" data-notr><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="phare-wrap" data-notr>
+      <button type="button" class="phare-btn" id="phareBtn" aria-expanded="false" aria-controls="pharePanel" aria-label="Météo et canaux" title="Météo et canaux"><img class="phare" src="phare_creach.svg" alt="" width="56" height="131" data-secours="https://aurelphotog.github.io/ouessant-birds/phare_creach.svg"><span class="wind-pill" id="windPill" hidden></span></button>
+      <div id="pharePanel" class="phare-panel" hidden></div>
+    </div>
     <div class="intro">
       <h1>Éditeur de listes</h1>
       <p class="sub">Cherche un oiseau ou un lieu-dit, corrige-le ou ajoutes-en un, puis envoie ta proposition.</p>
