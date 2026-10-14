@@ -34,6 +34,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `js/recherche.js` | recherche tolérante aux fautes de frappe |
 | `js/version.js` | **numéro de version de l'appli** (à augmenter à chaque modification de l'appli) |
 | `js/appli.js`, `js/editeur.js` | fonctionnement de l'appli et de l'éditeur |
+| `js/menu.js`, `css/menu.css` | menu ☰, le même sur toutes les pages |
 | `js/editeur-langue.js` | éditeur : version anglaise (tables de traduction), thème clair / sombre, couleurs pour daltonisme |
 | `sw.js` | mode hors connexion |
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
@@ -45,12 +46,14 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 
 ## Les listes
 
-### Menu ☰ de l'éditeur et de l'historique (depuis la version 6.6)
+### Un seul menu ☰ pour toutes les pages (depuis la version 6.7)
 
-Le même menu que l'appli, ajouté par `js/menu-pages.js` (styles communs : `css/menu.css`) : l'appli, « Météo et canaux »
-(`index.html#meteo`, ouvre le panneau du phare), Historique ou Éditeur (pas la page où l'on est), Guide, « Une question, un retour ? »
-(`index.html#contact`, ouvre le formulaire dans le menu de l'appli), partage (QR code, copier le lien), thème et couleurs,
-informations légales et version. Textes : `js/textes.js`, dans la langue choisie sur la page.
+Le menu est construit par `js/menu.js` (styles : `css/menu.css`), le même dans l'appli, l'éditeur et l'historique ;
+seul le lien vers la page où l'on se trouve n'y est pas (« L'appli : espèces, lieux, où suis-je ? », Historique ou Éditeur).
+Partage (QR code avec l'oriole), « Une question, un retour ? » (se déplie sur place), thème et couleurs, informations légales
+et version (avec la date des listes) fonctionnent partout. « Météo et canaux » ouvre le panneau du phare : sur place dans l'appli,
+ailleurs en revenant à l'appli (`index.html#meteo`). Textes : `js/textes.js`, dans la langue choisie sur la page.
+L'appli s'y branche par `OuessantMenu` (`onOpen`, `onPhare`, `listDate`) et l'événement `ouessant-prefs` (thème ou couleurs changés).
 
 ### En-tête de l'appli : menu ☰, phare et pastille de vent (depuis la version 6.0)
 

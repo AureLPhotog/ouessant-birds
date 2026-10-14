@@ -291,13 +291,13 @@
     document.title = lang === 'en' ? 'List editor · Birds of Ouessant' : 'Éditeur de listes · Oiseaux d\u2019Ouessant';
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     walk(document.body);
-    if (window.OuessantMenu) window.OuessantMenu.refresh();   // menu ☰ (js/menu-pages.js) dans la langue choisie
+    if (window.OuessantMenu) window.OuessantMenu.refresh(lang);   // menu ☰ (js/menu.js) dans la langue choisie
   }
   applyPrefs();
   function init(){
     const tools = document.querySelector('header .tools');
     if (tools){
-      tools.addEventListener('click', e => {   // le thème et les couleurs se règlent dans le menu ☰ (js/menu-pages.js)
+      tools.addEventListener('click', e => {   // le thème et les couleurs se règlent dans le menu ☰ (js/menu.js)
         const lb = e.target.closest('.lang button');
         if (lb){ lang = lb.dataset.lang; store.set(LANG_KEY, lang); applyLang(); }
       });

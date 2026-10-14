@@ -54,6 +54,6 @@ header{position:relative}
 .hc del{color:var(--granite)}
 .hc ins{text-decoration:none;font-weight:600;color:var(--ink)}
 @media (max-width:520px){ .intro h1{padding-right:0} .hist-lang{position:static;align-self:flex-start;margin-left:auto} }
-/* avec le menu ☰ (js/menu-pages.js) : FR / EN dans la rangée du haut, comme dans l'appli, sur téléphone aussi */
+/* avec le menu ☰ (js/menu.js) : FR / EN dans la rangée du haut, comme dans l'appli, sur téléphone aussi */
 :root.has-menu .hist-lang{position:absolute;top:.8rem;right:0;margin:0}
 :root.has-menu .intro h1{padding-right:0}
