@@ -1,9 +1,9 @@
 /* Oiseaux d'Ouessant — le menu ☰, le même sur toutes les pages (appli, éditeur, historique).
    La page où l'on se trouve n'y figure pas. Le reste est identique partout : météo et canaux, historique, éditeur, guide,
    « Une question, un retour ? » (qui se déplie dans le menu), partage, affichage, informations légales et version.
-   « Météo et canaux » ouvre le panneau du phare : sur place dans l'appli, ailleurs en revenant à l'appli (index.html#meteo).
+   « Météo et canaux » ouvre le panneau du phare (js/phare.js, le même sur toutes les pages).
    Textes : js/textes.js (chargé avant). La page donne sa langue avec OuessantMenu.refresh(lang).
-   L'appli s'y branche avec OuessantMenu.onOpen (avant l'ouverture), onPhare (« Météo et canaux ») et listDate (dates des listes) ;
+   L'appli s'y branche avec OuessantMenu.onOpen (avant l'ouverture) et listDate (dates des listes) ;
    un changement d'affichage (thème, couleurs) envoie l'événement « ouessant-prefs ». */
 (function(){
   'use strict';
@@ -72,7 +72,7 @@
     <p class="menu-foot"><button type="button" class="link" id="menuLegal" data-m="legalBtn" aria-expanded="false" aria-controls="menuLegalBox"></button><span id="menuVer"></span></p>
     <div class="legal menu-legal" id="menuLegalBox" hidden></div>`;
   document.body.append(scrim, menu);
-  const API = window.OuessantMenu = { onOpen: null, onPhare: null };
+  const API = window.OuessantMenu = { onOpen: null };
 
   // ---------- version : appli, révision des listes (version_listes.json) et date des listes ----------
   let listsRev = null, infoAsked = false;
@@ -130,7 +130,7 @@
     if (o){ box.innerHTML = T('legalHtml'); box.scrollIntoView({ block: 'start', behavior: 'smooth' }); } else box.innerHTML = '';
   }
   function open(o, focus = true){
-    if (o && API.onOpen) API.onOpen();
+    if (o){ if (API.onOpen) API.onOpen(); if (window.OuessantPhare) window.OuessantPhare.open(false); }
     menu.hidden = !o; scrim.hidden = !o; btn.setAttribute('aria-expanded', String(o));
     document.documentElement.classList.toggle('menu-open', o);
     if (o){ loadInfo(); renderShare(); showVer(); $('menuClose').focus(); }
@@ -143,7 +143,9 @@
   menu.addEventListener('click', e => {
     e.stopPropagation();   // un toucher dans le menu ne ferme rien d'autre
     if (e.target.closest('#menuPhare')){
-      if (API.onPhare){ open(false, false); API.onPhare(); } else location.href = BASE + 'index.html#meteo';
+      const P = window.OuessantPhare;
+      if (!P){ location.href = BASE + 'index.html#meteo'; return; }   // pas de phare sur la page (ne devrait pas arriver)
+      open(false, false); P.open(true); $('phareBtn').focus({ preventScroll: true }); scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     if (e.target.closest('#menuLegal')){ legal($('menuLegalBox').hidden); return; }

@@ -127,6 +127,7 @@
     document.querySelectorAll('[data-t-title]').forEach(el => { const v = T()[el.dataset.tTitle]; el.title = v; el.setAttribute('aria-label', v); });
     document.querySelectorAll('.hist-lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     if (window.OuessantMenu) window.OuessantMenu.refresh(lang);
+    if (window.OuessantPhare) window.OuessantPhare.refresh(lang);
     render();
   }
   document.querySelector('.hist-lang').addEventListener('click', e => {
