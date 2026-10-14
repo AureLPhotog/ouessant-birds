@@ -13,7 +13,7 @@ const SHELL = [
   'polices/public-sans-latin-400-normal.woff2', 'polices/public-sans-latin-500-normal.woff2', 'polices/public-sans-latin-600-normal.woff2', 'polices/spectral-latin-400-italic.woff2', 'polices/spectral-latin-500-italic.woff2', 'polices/spectral-latin-500-normal.woff2', 'polices/spectral-latin-700-normal.woff2',
   'js/version.js', 'js/textes.js', 'js/carte.js', 'js/recherche.js', 'js/appli.js',
   'ouessant_birds.json', 'lieux_ouessant.json', 'version_listes.json', 'reglages.json',
-  'historique.html', 'historique.json', 'versions_appli.json', 'css/historique.css', 'js/historique.js', 'js/historique-page.js', 'css/menu.css', 'js/menu.js',
+  'historique.html', 'historique.json', 'versions_appli.json', 'css/historique.css', 'js/historique.js', 'js/historique-page.js', 'css/menu.css', 'js/menu.js', 'css/phare.css', 'js/phare.js',
   'phare_creach.svg', 'phare_creach_eteint.svg', 'qr_ouessant.svg', 'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png',
   'carte_ouessant.webp', 'oriole_baltimore.webp'
 ];

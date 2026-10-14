@@ -291,7 +291,8 @@
     document.title = lang === 'en' ? 'List editor · Birds of Ouessant' : 'Éditeur de listes · Oiseaux d\u2019Ouessant';
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     walk(document.body);
-    if (window.OuessantMenu) window.OuessantMenu.refresh(lang);   // menu ☰ (js/menu.js) dans la langue choisie
+    if (window.OuessantMenu) window.OuessantMenu.refresh(lang);   // menu ☰ (js/menu.js) et phare (js/phare.js) dans la langue choisie
+    if (window.OuessantPhare) window.OuessantPhare.refresh(lang);
   }
   applyPrefs();
   function init(){

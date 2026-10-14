@@ -35,6 +35,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `js/version.js` | **numéro de version de l'appli** (à augmenter à chaque modification de l'appli) |
 | `js/appli.js`, `js/editeur.js` | fonctionnement de l'appli et de l'éditeur |
 | `js/menu.js`, `css/menu.css` | menu ☰, le même sur toutes les pages |
+| `js/phare.js`, `css/phare.css` | phare de l'en-tête (météo, canaux, œuf de Pâques), le même sur toutes les pages |
 | `js/editeur-langue.js` | éditeur : version anglaise (tables de traduction), thème clair / sombre, couleurs pour daltonisme |
 | `sw.js` | mode hors connexion |
 | `carte_ouessant.webp` (et `.jpg` en secours), `Map_Ouessant.pdf` | carte de l'île, de l'Association Naturaliste d'Ouessant |
@@ -51,9 +52,18 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 Le menu est construit par `js/menu.js` (styles : `css/menu.css`), le même dans l'appli, l'éditeur et l'historique ;
 seul le lien vers la page où l'on se trouve n'y est pas (« L'appli : espèces, lieux, où suis-je ? », Historique ou Éditeur).
 Partage (QR code avec l'oriole), « Une question, un retour ? » (se déplie sur place), thème et couleurs, informations légales
-et version (avec la date des listes) fonctionnent partout. « Météo et canaux » ouvre le panneau du phare : sur place dans l'appli,
-ailleurs en revenant à l'appli (`index.html#meteo`). Textes : `js/textes.js`, dans la langue choisie sur la page.
-L'appli s'y branche par `OuessantMenu` (`onOpen`, `onPhare`, `listDate`) et l'événement `ouessant-prefs` (thème ou couleurs changés).
+et version (avec la date des listes) fonctionnent partout. « Météo et canaux » ouvre le panneau du phare, sur place.
+Textes : `js/textes.js`, dans la langue choisie sur la page.
+L'appli s'y branche par `OuessantMenu` (`onOpen`, `listDate`) et l'événement `ouessant-prefs` (thème ou couleurs changés).
+
+### Un seul phare pour toutes les pages (depuis la version 6.7)
+
+Le phare de l'en-tête est construit par `js/phare.js` (styles : `css/phare.css`), le même dans l'appli, l'éditeur et l'historique
+(il y remplace l'ancien phare « retour à l'appli » ; on revient à l'appli par le menu ☰) : pastille de vent, panneau météo et
+« Quel canal ? », phare éteint hors connexion, œuf de Pâques (l'oiseau est pris dans la liste de l'appli, ailleurs dans
+`ouessant_birds.json`). La bulle « Touche le phare » de première visite reste propre à l'appli. Les couleurs des canaux
+(standard et daltonisme) sont dans `js/phare.js` (`OuessantPhare.PALETTES`), l'appli s'en sert aussi.
+Les CSP de l'éditeur et de l'historique autorisent donc `https://api.open-meteo.com`.
 
 ### En-tête de l'appli : menu ☰, phare et pastille de vent (depuis la version 6.0)
 
@@ -161,7 +171,7 @@ partagée (sur Chrome Android : menu ⋮ → Paramètres → Paramètres des sit
    trois champs (Modifications, Commentaire, Lignes JSON). Dans le Google Sheet des réponses, copier la colonne
    « Lignes JSON » dans l'éditeur, bouton **Coller des lignes** (visible seulement avec une clé valide).
    Le lien prérempli du formulaire est dans `js/editeur.js` (`PROPOSAL_FORM`), avec les mots MODIFS, COMMENTAIRE et JSON.
-4. Pour revenir de l'éditeur à l'appli : le bouton « Revenir à l'appli » en bas de page, ou le phare.
+4. Pour revenir de l'éditeur à l'appli : le menu ☰, ou le bouton « Revenir à l'appli » en bas de page (le phare, comme dans l'appli, donne la météo).
 
 **Clé Admin** : jeton GitHub « à granularité fine », limité au dépôt `ouessant-birds`, permission
 *Contents : Read and write*, avec une date d'expiration. Ne jamais la partager ni l'écrire dans un fichier.
