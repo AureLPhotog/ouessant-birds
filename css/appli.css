@@ -3,8 +3,8 @@
 
 /* En-tête : illustration du phare du Créac'h (phare_creach.svg) */
 header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
-/* bloc de texte : au moins la hauteur du phare, texte calé en bas quand il est court */
-.intro{align-self:stretch;min-height:131px;min-width:0;flex:1 1 auto;display:flex;flex-direction:column;justify-content:flex-end}
+/* bloc de texte : au moins la hauteur du phare, titre calé en haut (à la même hauteur sur toutes les pages, quelle que soit la longueur du texte) */
+.intro{align-self:stretch;min-height:131px;min-width:0;flex:1 1 auto;display:flex;flex-direction:column;justify-content:flex-start}
 /* Rangée du haut : bouton ☰ à gauche, FR / EN à droite (plus bas quand le repère « Mode admin » est affiché) */
 /* « Mode admin » : dans la rangée de FR / EN (voir .tools .admin-badge), l'en-tête ne bouge plus */
 header{position:relative}
