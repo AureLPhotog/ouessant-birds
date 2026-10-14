@@ -6,8 +6,6 @@
   // Silhouette de l'île (tracée depuis la carte), affichée en fond de la boussole du vent
   const ILE = '<svg class="ile" viewBox="0 0 100 67.6" aria-hidden="true"><path d="M62.5 0.0L64.0 0.2L62.7 2.0L64.5 3.4L67.4 2.7L68.1 3.4L68.9 3.2L69.9 4.7L71.1 4.7L71.3 5.4L70.3 6.6L73.3 8.1L73.5 10.3L74.8 11.8L79.9 9.1L81.6 9.1L83.3 10.8L83.3 12.7L77.0 17.9L77.7 19.1L78.7 19.4L81.1 18.6L81.1 19.9L81.9 20.3L81.1 20.8L80.4 19.9L80.1 21.6L79.2 20.8L78.2 21.1L76.2 23.0L76.7 24.0L78.9 24.3L79.7 27.0L82.4 25.5L82.8 24.5L83.8 24.5L85.0 26.2L83.6 28.2L85.0 28.7L85.5 30.4L89.0 26.5L92.2 27.0L92.9 26.2L93.9 27.7L95.8 27.7L97.3 28.7L98.3 27.7L100.0 28.2L99.5 28.7L100.0 29.4L98.0 30.1L97.3 32.8L96.1 33.6L96.1 35.0L95.3 35.8L93.1 35.5L92.2 37.0L89.7 37.0L88.2 35.5L84.3 35.0L81.9 39.0L80.1 39.2L78.9 40.4L79.2 42.2L78.4 43.4L76.5 43.4L75.7 44.1L75.5 45.1L76.2 46.1L75.7 47.3L76.7 48.0L76.2 49.3L75.2 47.5L73.3 48.0L72.5 49.0L71.8 48.8L71.3 46.6L69.9 46.8L68.9 48.5L68.1 48.5L66.2 44.6L65.0 45.8L63.2 45.6L62.3 46.6L62.5 47.8L60.8 48.0L59.3 49.8L57.8 49.0L57.6 47.1L56.1 46.1L55.1 48.3L53.2 49.8L53.2 51.7L52.2 52.2L52.2 52.9L51.5 53.4L50.7 52.2L49.8 52.9L49.0 55.4L49.8 56.9L48.5 57.8L48.8 59.1L47.8 60.5L49.0 61.5L48.0 64.2L47.3 64.0L47.5 62.7L46.3 60.8L42.9 61.5L43.1 60.3L42.2 59.6L41.9 60.8L39.5 62.7L38.2 62.0L37.7 63.2L36.8 63.5L35.5 66.4L34.6 66.7L33.3 65.4L31.9 66.7L31.1 65.9L28.9 65.9L27.2 67.6L26.0 66.2L24.5 65.9L23.3 67.4L24.0 66.2L23.3 65.4L23.5 64.0L21.3 63.7L21.3 63.2L22.5 62.3L23.8 62.5L24.5 61.3L26.0 63.2L28.7 62.7L29.7 61.8L29.9 59.8L29.2 58.8L27.5 59.1L27.2 57.6L27.9 58.1L32.1 54.9L35.3 55.1L37.3 53.7L38.0 54.4L38.7 54.2L40.0 50.5L42.9 50.0L45.1 47.5L43.6 44.1L41.7 43.1L41.4 41.7L39.7 42.6L39.0 41.2L39.2 39.2L38.5 38.5L32.6 40.2L31.1 41.4L26.0 42.4L25.0 43.9L24.0 43.4L21.8 45.6L19.4 43.9L18.6 45.3L17.2 46.1L16.4 44.6L15.7 45.8L15.9 47.1L14.7 47.5L13.7 47.1L13.2 48.0L11.5 47.8L11.0 48.5L9.8 48.3L9.1 49.3L9.3 50.5L7.8 49.3L6.1 49.5L4.7 47.3L3.4 48.0L2.5 50.0L1.0 50.0L0.2 49.3L0.0 48.0L1.2 47.1L0.7 44.6L3.2 44.9L4.2 43.6L3.4 40.7L4.9 41.4L7.4 39.2L7.1 38.0L7.8 37.3L6.9 36.8L7.4 35.8L6.1 35.5L6.6 33.8L8.6 34.3L9.6 33.1L10.8 32.8L13.0 33.3L14.0 31.9L13.5 30.6L15.0 31.6L16.2 30.1L17.6 29.9L18.6 30.6L19.4 29.9L18.9 28.9L20.6 29.2L21.3 27.2L23.8 27.0L24.3 26.2L26.7 27.0L27.7 25.7L28.9 26.2L31.9 25.0L30.1 22.8L29.2 22.5L29.2 21.6L30.4 21.1L31.4 19.4L30.4 18.4L29.4 19.1L28.2 18.9L28.9 17.4L30.1 17.2L30.1 16.4L37.0 16.2L39.7 15.2L42.2 15.7L42.6 15.2L42.2 13.0L43.6 13.0L45.8 11.0L46.6 11.0L46.6 11.8L45.3 13.2L46.1 14.0L46.8 13.7L46.3 14.7L48.3 15.7L50.5 14.5L52.5 16.2L53.9 16.4L54.9 15.0L59.8 14.0L61.0 12.3L61.3 10.0L62.5 10.3L64.2 7.4L63.2 5.9L60.5 6.9L59.6 6.4L58.8 4.7L57.8 4.4L58.8 4.2L59.1 3.2L60.0 3.2L61.0 1.5L62.3 1.7ZM36.0 1.7L37.3 2.2L36.5 3.2L37.3 4.4L38.2 3.7L41.7 3.9L42.9 2.9L44.6 3.4L44.4 5.1L45.6 6.1L47.3 5.9L47.1 7.4L45.1 8.6L43.4 8.3L41.7 9.1L40.2 8.3L38.7 8.6L38.2 7.4L36.0 6.9L35.3 4.7L34.1 4.7L34.1 3.2Z"/></svg>';
   // Oriole de Baltimore (photo détourée et légèrement stylisée) posé sur l'angle du cadre du QR code, et petite fougère (émoji) au pied
-  const ORIOLE = '<span class="oriole" aria-hidden="true"><img class="o-sh" src="oriole_baltimore.webp" alt="" width="47" height="69"><img class="o-bd" src="oriole_baltimore.webp" alt="" width="47" height="69"></span>';
-  const FERN = '<span class="fern" aria-hidden="true">🌿</span>';
   // Rideau de fougères (easter egg) : 3 rangées de 3 émojis cachent le pied du phare, puis s'ouvrent de part et d'autre
   const HUES = [-55, 0, 25, -40, 0, -70, 15, -25, 10, -60, 0, -35];
   const RIDEAU = [];
@@ -24,17 +22,7 @@
   }
   const rideauHtml = () => '<span class="egg-ferns" aria-hidden="true">' + RIDEAU.map(e =>
     `<span class="ef" style="--cx:${e.cx}px;--cr:${e.cr}deg;--ox:${e.ox}px;--or:${e.or}deg;--hue:${e.hue}deg;--f:${e.f};bottom:${e.b}px;animation-delay:${e.d}s">🌿</span>`).join('') + '</span>';
-  const APP_VERSION = window.OUESSANT_APP_VERSION || '?';
-  let listsRev = null;   // { app, rev } lu dans version_listes.json
-  const listsDate = { birds: null, places: null };   // en-têtes « Last-Modified » des deux listes
-  function versionText(){
-    const fmt = h => { const d = h ? new Date(h) : null; return d && !isNaN(d) ? d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB') : null; };
-    const b = fmt(listsDate.birds), p = fmt(listsDate.places);
-    const dates = b && p && b !== p ? T('listsOfBoth')(b, p) : (b || p) ? T('listsOf')(b || p) : '';
-    const rev = listsRev && listsRev.app === APP_VERSION && listsRev.rev > 0 ? '.' + listsRev.rev : '';   // autre version d'appli : on repart de zéro
-    return 'v' + APP_VERSION + rev + (dates ? ' · ' + dates : '');
-  }
-  const showVersion = () => { if (!$('menu').hidden) $('menuVer').textContent = versionText(); };   // la version est dans le menu ☰
+  const MENU = window.OuessantMenu;   // menu ☰ commun à toutes les pages (js/menu.js) : partage, contact, affichage, version
   const URL_DATA = 'ouessant_birds.json';
 
   const K_FR = 'Nom Français', K_SCI = 'Nom Scientifique', K_EN = 'Nom Anglais', K_TYPE = 'Type de taxon', K_CANAL = 'Proposition de Canal de Diffusion Ouessant', K_LOCK = 'Verrouillée', K_WHY = 'Raison du canal', K_ORIG = 'Origine';
@@ -126,13 +114,10 @@
     renderPlaces();
     renderWhere();
     if (lastFix) $('locate').querySelector('span').textContent = T('relocateBtn');
-    $('menuBtn').setAttribute('aria-label', T('menuLabel')); $('menuBtn').title = T('menuLabel');
-    $('menuClose').setAttribute('aria-label', T('menuClose')); $('menuClose').title = T('menuClose');
+    MENU.refresh(lang);
     if (!$('windPill').hidden) windPill();
     $('phareBtn').setAttribute('aria-label', T('phareLabel')); $('phareBtn').title = navigator.onLine === false ? T('phareOff') : T('phareLabel');
     if (!$('pharePanel').hidden) renderPhare();
-    if (!$('menuLegalBox').hidden) $('menuLegalBox').innerHTML = T('legalHtml');
-    if (!$('menu').hidden){ renderShare(); $('menuVer').textContent = versionText(); }
     q.placeholder = T('placeholder');
     q.setAttribute('aria-label', T('searchLabel'));
     chips.setAttribute('aria-label', T('channelsLabel'));
@@ -157,7 +142,6 @@
   }
 
   function updateSource(){
-    showVersion();
     const nSsp = birds.filter(isSsp).length;
     $('source').textContent = (sourceKey ? T(sourceKey) + ' · ' : '') + T('sourceCount')(birds.length - nSsp, nSsp);
     sspBox.closest('.opts').hidden = !nSsp;
@@ -307,9 +291,9 @@
     return arr.filter(e => e && e.nom && Array.isArray(e.carres) && e.carres.length && isFinite(e.lat) && isFinite(e.lon))
       .map(e => [String(e.nom), e.carres.map(String), +e.lat, +e.lon, +(e.precision_m || 550), !!e.verifie]);
   }
-  fetch(PLACES_URL).then(r => { if (!r.ok) return Promise.reject(); listsDate.places = r.headers.get('last-modified'); return r.json(); }).then(d => {
+  fetch(PLACES_URL).then(r => { if (!r.ok) return Promise.reject(); MENU.listDate('places', r.headers.get('last-modified')); return r.json(); }).then(d => {
     const l = placesFromJson(d); if (!l.length) return;
-    PLACES = l.map(fixPlace); buildPfuse(); renderPlaces(); renderWhere(); showVersion();
+    PLACES = l.map(fixPlace); buildPfuse(); renderPlaces(); renderWhere();
   }).catch(() => {});
   let tab = 'birds';
 
@@ -675,16 +659,13 @@
     document.querySelectorAll('.place').forEach(li => { const box = li.querySelector('.pmap'); if (box && !box.hidden){ box.hidden = true; togglePlace(li); } });
     renderWhere();
   }
-  $('prefsPanel').addEventListener('click', e => {   // réglages d'affichage, dans le menu
-    e.stopPropagation();
-    const b = e.target.closest('.seg button'); if (!b) return;
-    if (b.parentElement.dataset.pref === 'theme'){ theme = b.dataset.v; try { localStorage.setItem(THEME_KEY, theme); } catch(_) {} applyPrefs(); refreshColors(); }
-    else { cvd = b.dataset.v === '1'; try { localStorage.setItem(CVD_KEY, cvd ? '1' : '0'); } catch(_) {} applyPrefs(); refreshColors(); }
+  window.addEventListener('ouessant-prefs', () => {   // thème ou couleurs changés dans le menu ☰ (qui les a enregistrés)
+    try { theme = localStorage.getItem(THEME_KEY) || 'auto'; cvd = localStorage.getItem(CVD_KEY) === '1'; } catch(_) {}
+    applyPrefs(); refreshColors();
   });
   applyPrefs();
 
   // ---------- Le phare : météo, règles de canal et œuf de Pâques (le partage est dans le menu ☰) ----------
-  const APP_URL = 'https://aurelphotog.github.io/ouessant-birds/';
   const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=48.4568&longitude=-5.0975'
     + '&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m'
     + '&daily=weather_code,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,temperature_2m_max'
@@ -721,20 +702,12 @@
       <div class="wind-sub">${esc(T('wGust')(Math.round(c.wind_gusts_10m)))}, ${esc(T('wx')[c.weather_code] || '')}, ${Math.round(c.temperature_2m)} °C</div></div></div>
       <div class="days">${days}</div><p class="pp-src">${esc(T('wSrc'))}</p>`;
   }
-  function qrSvg(){ return `<img src="qr_ouessant.svg" alt="QR code : ${esc(APP_URL)}" width="116" height="116" style="display:block;width:100%;height:100%">`; }
   // le panneau du phare ne sert qu'à la météo et aux règles de canal (partage, version et informations légales : menu ☰)
   function renderPhare(){
     const canaux = [['telegram', 'cTelegram'], ['whatsapp', 'cWhatsapp'], ['whatsapp', 'cChat'], ['none', 'cNone']]
       .map(([k, t]) => `<li><span class="dot" style="background:${CHANNEL_COLORS[k]}"></span><span>${T(t)}</span></li>`).join('');
     $('pharePanel').innerHTML = `<div class="pp-sec"><h2 class="pp-h">${esc(T('wTitle'))}</h2>${wxHtml()}</div>
       <div class="pp-sec"><h2 class="pp-h">${esc(T('cTitle'))}</h2><ul class="pp-canaux">${canaux}</ul><button type="button" class="link pp-rule" data-ph="rule">${esc(T('ruleBtn'))}</button></div>`;
-  }
-  // « Partager l'appli » : dans le menu ☰ (QR code avec l'oriole et la fougère, Partager…, Copier le lien)
-  function renderShare(){
-    $('menuShare').innerHTML = `<h2>${esc(T('shTitle'))}</h2><div class="qr">
-        <div class="qr-box">${ORIOLE}${FERN}${qrSvg()}</div>
-        <div class="qr-txt">${esc(T('shText'))}<div class="btns">${navigator.share ? `<button type="button" class="main" data-ph="share">${esc(T('shBtn'))}</button>` : ''}<button type="button" data-ph="copy">${esc(T('shCopy'))}</button></div></div>
-      </div>`;
   }
   function openPhare(open){
     $('pharePanel').hidden = !open; $('phareBtn').setAttribute('aria-expanded', String(open));
@@ -767,42 +740,11 @@
     // proposer une nouvelle règle : ouvre « Une question, un retour ? » avec un message pré-rempli
     if (b.dataset.ph === 'rule'){ openPhare(false); window.dispatchEvent(new CustomEvent('ouessant-contact', { detail: T('ruleTpl') })); }
   });
-  // boutons « Partager… » et « Copier le lien » (dans le menu ☰)
-  function shareAction(b){
-    if (b.dataset.ph === 'share') navigator.share({ title: T('title'), text: T('lede').replace(/<[^>]+>/g, ''), url: APP_URL }).catch(() => {});
-    else {
-      const done = () => { b.textContent = T('shCopied'); setTimeout(() => { b.textContent = T('shCopy'); }, 1600); };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(APP_URL).then(done, () => fallbackCopy(APP_URL, done)); else fallbackCopy(APP_URL, done);
-    }
-  }
   document.addEventListener('click', () => { if (!$('pharePanel').hidden) openPhare(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('pharePanel').hidden){ openPhare(false); $('phareBtn').focus(); } });
-  // ---------- Menu ☰ : historique, éditeur, guide, contact, affichage, informations légales ----------
-  function openMenu(open, focus = true){
-    $('menu').hidden = !open; $('menuScrim').hidden = !open; $('menuBtn').setAttribute('aria-expanded', String(open));
-    document.documentElement.classList.toggle('menu-open', open);
-    if (open){ hideTip(); openPhare(false); renderShare(); $('menuVer').textContent = versionText(); $('menuClose').focus(); }
-    else { menuLegal(false); $('contactPanel').hidden = true; $('contactBtn').setAttribute('aria-expanded', 'false'); if (focus) $('menuBtn').focus(); }   // le message tapé est gardé
-  }
-  // informations légales : se déplient en bas du menu (et plus dans le panneau du phare)
-  function menuLegal(open){
-    const box = $('menuLegalBox');
-    box.hidden = !open; $('menuLegal').setAttribute('aria-expanded', String(open));
-    if (open){ box.innerHTML = T('legalHtml'); box.scrollIntoView({ block: 'start', behavior: 'smooth' }); } else box.innerHTML = '';
-  }
-  $('menuBtn').addEventListener('click', e => { e.stopPropagation(); openMenu($('menu').hidden); });
-  $('menuClose').addEventListener('click', () => openMenu(false));
-  $('menuScrim').addEventListener('click', () => openMenu(false));
-  $('menu').addEventListener('click', e => {
-    e.stopPropagation();   // un toucher dans le menu ne ferme pas le panneau du phare… qui est déjà fermé, ni rien d'autre
-    if (e.target.closest('#menuPhare')){ openMenu(false, false); openPhare(true); $('phareBtn').focus({ preventScroll: true }); scrollTo({ top: 0, behavior: 'smooth' }); return; }
-    if (e.target.closest('#menuLegal')){ menuLegal($('menuLegalBox').hidden); return; }
-    if (e.target.closest('#menuLegalBox')) return;   // liens des informations légales : ils s'ouvrent dans un nouvel onglet, le menu reste ouvert
-    const sh = e.target.closest('#menuShare [data-ph]'); if (sh){ shareAction(sh); return; }
-    if (e.target.closest('#contactBtn, #contactPanel')) return;   // « Une question, un retour ? » se déplie dans le menu (son propre gestionnaire)
-    if (e.target.closest('a')) openMenu(false, false);
-  });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('menu').hidden) openMenu(false); });
+  // ---------- Menu ☰ (js/menu.js) : « Météo et canaux » ouvre le panneau du phare sur place ----------
+  MENU.onOpen = () => { hideTip(); openPhare(false); };
+  MENU.onPhare = () => { openPhare(true); $('phareBtn').focus({ preventScroll: true }); scrollTo({ top: 0, behavior: 'smooth' }); };
   // ---------- Bulle « Touche le phare » : une seule fois, à la toute première visite (sur cet appareil et ce navigateur) ----------
   // Déjà venu (une préférence ou la copie de la liste sont enregistrées) : pas de bulle. Sans stockage possible : pas de bulle non plus.
   const TIP_KEY = 'ouessant-astuce-phare';
@@ -913,26 +855,27 @@
   bindFiles();
   const arrivalHash = location.hash;   // lu avant que l'onglet ne réécrive l'adresse (#oiseaux)
   showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds');
-  window.addEventListener('hashchange', () => showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds'));
   // depuis le menu ☰ de l'éditeur ou de l'historique : « Météo et canaux » (#meteo) ouvre le panneau du phare,
   // « Une question, un retour ? » (#contact) ouvre le menu sur le formulaire
   function fromOtherPage(h){
     if (h === '#meteo') openPhare(true);
-    else if (h === '#contact'){ openMenu(true, false); if ($('contactPanel').hidden) $('contactBtn').click(); }
+    else if (h === '#contact') MENU.contact();
     else return;
     history.replaceState(null, '', location.pathname + location.search + '#oiseaux');
   }
-  setTimeout(() => fromOtherPage(arrivalHash), 0); window.addEventListener('hashchange', () => fromOtherPage(location.hash));
+  setTimeout(() => fromOtherPage(arrivalHash), 0);
+  window.addEventListener('hashchange', () => {   // adresse lue une seule fois : l'onglet la réécrit (#oiseaux)
+    const h = location.hash; showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[h] || 'birds'); fromOtherPage(h);
+  });
   applyLang();
   updatePhare();
 
   // 1) GitHub  2) copie enregistrée dans le navigateur  3) import manuel
   // réglages de l'admin (reglages.json) : verrou des espèces « Verrouillée », champs modifiables par les visiteurs ('canal' ou 'tous')
   fetch('reglages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { if (j && typeof j === 'object'){ reg = { verrou: j.verrou !== false, champs: j.champs === 'tous' ? 'tous' : 'canal' }; if (birds.length) render(); } }).catch(() => {});
-  fetch('version_listes.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()).then(v => { if (v && typeof v.rev === 'number') { listsRev = v; showVersion(); } }).catch(() => {});
   fetch(URL_DATA)
-    .then(r => { if(!r.ok) throw new Error(r.status); listsDate.birds = r.headers.get('last-modified'); return r.json(); })
-    .then(data => { setData(data, 'sourceGithub'); showVersion(); })
+    .then(r => { if(!r.ok) throw new Error(r.status); MENU.listDate('birds', r.headers.get('last-modified')); return r.json(); })
+    .then(data => { setData(data, 'sourceGithub'); })
     .catch(() => {
       try{
         const saved = localStorage.getItem(STORE);
@@ -940,41 +883,6 @@
       }catch(_){}
       showImport();
     });
-
-  // ---------- Contact : une question ou un retour sur l'appli (dans le menu ☰) ----------
-  // Le message part par le même formulaire Google que les propositions, dans le seul champ « commentaire » (aucune ligne JSON) :
-  // la page Administration les range dans l'onglet « Messages ».
-  (function contact(){
-    const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfO5eaqQZ_NS10ChZhazXZLLach0Bm0aQYUt9yZQsi-Qdh3LA/viewform', COMMENT = 'entry.253715776';
-    const btn = $('contactBtn'), panel = $('contactPanel'), msg = $('contactMsg');
-    // ouverture depuis le phare (« Proposer une nouvelle règle ») : message pré-rempli, curseur après « Telegram : »
-    window.addEventListener('ouessant-contact', e => {
-      const tpl = String(e.detail || '');
-      openMenu(true, false);   // le formulaire est dans le menu ☰
-      panel.hidden = false; btn.setAttribute('aria-expanded', 'true');
-      if (!msg.value.trim() || msg.value === msg.dataset.tpl){ msg.value = tpl; msg.dataset.tpl = tpl; }
-      panel.scrollIntoView({ block: 'center', behavior: 'smooth' });
-      setTimeout(() => { const i = msg.value.indexOf('\n') + 1, j = msg.value.indexOf('\n', i); msg.focus({ preventScroll: true }); try { msg.setSelectionRange(j > 0 ? j : msg.value.length, j > 0 ? j : msg.value.length); } catch (_) {} }, 450);
-    });
-    // à l'ouverture : on montre la zone, sans ouvrir le clavier (il s'ouvre quand on touche le champ)
-    btn.addEventListener('click', () => { const open = panel.hidden; panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); if (open) panel.scrollIntoView({ block: 'center', behavior: 'smooth' }); });
-    // clavier ouvert : le champ doit rester visible au-dessus. Si le clavier recouvre la page sans la réduire,
-    // on ajoute en bas la place qu'il occupe, pour pouvoir y faire défiler le champ.
-    const vv = window.visualViewport;
-    const reveal = () => {
-      if (document.activeElement !== msg) return;
-      const kb = vv ? Math.max(0, innerHeight - vv.height - vv.offsetTop) : 0;
-      $('menu').style.paddingBottom = kb ? `calc(1.5rem + ${kb}px)` : '';   // le formulaire est dans le menu, qui défile seul
-      msg.scrollIntoView({ block: 'center' });
-    };
-    msg.addEventListener('focus', () => { setTimeout(reveal, 350); if (vv) vv.addEventListener('resize', reveal); });
-    msg.addEventListener('blur', () => { if (vv) vv.removeEventListener('resize', reveal); $('menu').style.paddingBottom = ''; });
-    $('contactSend').addEventListener('click', () => {
-      const text = msg.value.trim(); if (!text){ msg.focus(); msg.placeholder = T('contactEmpty'); return; }
-      const q = new URLSearchParams({ usp: 'pp_url' }); q.set(COMMENT, text.slice(0, 1500));
-      window.open(FORM + '?' + q.toString(), '_blank', 'noopener');
-    });
-  })();
 
   // ---------- Accès rapide par lettre : rail A–Z à droite des listes (Oiseaux, Lieux) ----------
   // Doigt maintenu sur le rail : on glisse d'une lettre à l'autre, la liste suit (comme les contacts d'un téléphone).
