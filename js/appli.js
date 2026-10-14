@@ -911,8 +911,18 @@
   }
 
   bindFiles();
+  const arrivalHash = location.hash;   // lu avant que l'onglet ne réécrive l'adresse (#oiseaux)
   showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds');
   window.addEventListener('hashchange', () => showTab({ '#lieux': 'places', '#ou-suis-je': 'where' }[location.hash] || 'birds'));
+  // depuis le menu ☰ de l'éditeur ou de l'historique : « Météo et canaux » (#meteo) ouvre le panneau du phare,
+  // « Une question, un retour ? » (#contact) ouvre le menu sur le formulaire
+  function fromOtherPage(h){
+    if (h === '#meteo') openPhare(true);
+    else if (h === '#contact'){ openMenu(true, false); if ($('contactPanel').hidden) $('contactBtn').click(); }
+    else return;
+    history.replaceState(null, '', location.pathname + location.search + '#oiseaux');
+  }
+  setTimeout(() => fromOtherPage(arrivalHash), 0); window.addEventListener('hashchange', () => fromOtherPage(location.hash));
   applyLang();
   updatePhare();
 

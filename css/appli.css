@@ -14,9 +14,6 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
 .phare-btn[aria-expanded="true"] .phare{transform:translateY(-2px)}
 @media (prefers-reduced-motion:reduce){.phare-btn .phare{transition:none}}
 /* Rangée du haut : bouton ☰ à gauche, FR / EN à droite (plus bas quand le repère « Mode admin » est affiché) */
-.menu-btn{position:absolute;left:0;top:.8rem;width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.menu-btn:hover{background:color-mix(in srgb,var(--ocean) 10%,var(--paper))}
-.menu-btn:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
 /* « Mode admin » : dans la rangée de FR / EN (voir .tools .admin-badge), l'en-tête ne bouge plus */
 /* Phare : pastille de vent au pied (la toucher ouvre le panneau), bulle de première visite */
 .phare-wrap{position:relative;flex:0 0 auto;align-self:flex-start}
@@ -31,27 +28,6 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
 .phare-tip p{margin:0}
 .phare-tip button{flex:0 0 auto;border:0;border-radius:8px;background:var(--foam);color:var(--ocean);font:700 .85rem var(--sans);padding:.35rem .7rem;cursor:pointer}
 .phare-tip button:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
-/* Menu ☰ : panneau qui glisse depuis la gauche */
-.menu-scrim{position:fixed;inset:0;z-index:60;background:rgba(10,20,26,.42)}
-.menu-scrim[hidden],.menu[hidden]{display:none}
-.menu{position:fixed;top:0;bottom:0;left:0;z-index:61;width:min(88vw,22rem);overflow-y:auto;overscroll-behavior:contain;background:var(--foam);box-shadow:6px 0 24px rgba(0,0,0,.25);padding:0 0 calc(1.5rem + env(safe-area-inset-bottom,0px))}
-@media (prefers-reduced-motion:no-preference){ .menu:not([hidden]){animation:menu-in .18s ease-out} @keyframes menu-in{from{transform:translateX(-100%)}to{transform:none}} }
-:root.menu-open{overflow:hidden}
-.menu-top{position:sticky;top:0;z-index:1;display:flex;align-items:center;gap:.6rem;padding:calc(.9rem + env(safe-area-inset-top,0px)) 1rem .9rem;background:var(--foam);border-bottom:1px solid var(--line)}
-.menu-top img{width:22px;height:auto}
-.menu-top b{flex:1;font:700 1.12rem var(--serif);color:var(--ocean)}
-.menu-x{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);cursor:pointer}
-.menu-x:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
-.menu-links{list-style:none;margin:0 1rem;padding:.35rem 0;border-bottom:1px solid var(--line)}
-.menu-links>li>a,.menu-links>li>button{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:.75rem;padding:.7rem .2rem;color:var(--ink);font:500 1rem var(--sans);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.menu-links>li>a:hover,.menu-links>li>button:hover{color:var(--ocean-2)}
-.menu-links>li>a:focus-visible,.menu-links>li>button:focus-visible{outline:3px solid var(--heather);outline-offset:2px;border-radius:6px}
-.menu-links>li>a svg,.menu-links>li>button svg{color:var(--granite);flex:0 0 auto}
-.menu-sec{margin:0 1rem;padding:1rem 0;border-bottom:1px solid var(--line)}
-.menu-sec h2{margin:0 0 .5rem;font:700 1rem var(--serif);color:var(--ocean)}
-.menu-sec .seg{max-width:17rem}
-.menu-foot{margin:.9rem 1rem 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.4rem 1rem;font-size:.82rem;color:var(--granite)}
-.menu-foot .link{font-size:.82rem}
 /* Panneau du phare : météo + partage */
 /* fond légèrement teinté et bordure marquée : le panneau se détache des fiches d'espèces (même blanc / même bleu nuit sinon) */
 :root{--pp-bg:color-mix(in srgb,var(--ocean) 7%,var(--paper));--pp-line:color-mix(in srgb,var(--ocean) 40%,var(--line));--pp-shadow:0 12px 32px rgba(0,0,0,.24);--pp-day:var(--paper)}
@@ -86,8 +62,6 @@ header{display:flex;gap:1rem;align-items:flex-start;padding:4.1rem 0 2.1rem}
 .day{background:var(--pp-day,var(--foam));border-radius:10px;padding:.45rem .35rem;text-align:center;font-size:.76rem;line-height:1.35}
 .day b{display:block;font-size:.82rem}
 .day .dw{display:flex;justify-content:center;align-items:center;gap:.2rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.76rem}
-/* informations légales dépliées en bas du menu ☰ */
-.menu-legal{margin:.7rem 1rem 0;padding:.8rem .9rem;max-width:none;font-size:.82rem;scroll-margin-top:calc(5rem + env(safe-area-inset-top,0px))}
 .pp-src{margin:.6rem 0 0;font-size:.75rem;color:var(--granite)}
 @media (max-width:420px){ .day .dw svg{display:none} }
 .pp-src a{color:inherit}
