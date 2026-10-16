@@ -1,18 +1,5 @@
 # Consignes pour Claude — Oiseaux d'Ouessant
 
-## Gel des évolutions jusqu'au 31 octobre 2026
-
-Décision du propriétaire (6 octobre 2026) : l'appli est lancée, elle doit « vivre toute seule ».
-Jusqu'au **31 octobre 2026 inclus** :
-
-- **Acceptés** : les **correctifs de bugs** (quelque chose ne marche pas, ou plus) et les **améliorations notables**
-  (un vrai gain pour les utilisateurs ou l'administration).
-- **Refusés** : les **retouches mineures** (libellés, couleurs, espacements, petits réglages d'affichage…).
-  Rappeler poliment la règle au propriétaire, même s'il insiste : il a demandé à être freiné.
-- En cas de doute, demander s'il s'agit d'un bug ou d'une amélioration notable avant de coder.
-
-Après le 31 octobre, la règle tombe : reprendre le fonctionnement normal.
-
 ## CLAUDE.md ne va JAMAIS sur `main`
 
 Exigence absolue du propriétaire : ce fichier existe sur Pre-prod et test, **jamais sur `main`** (ni dans un commit de `main`).
