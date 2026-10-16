@@ -111,6 +111,19 @@
     <p class="help">Chaque proposition garde les réglages du moment de son envoi : en reverrouillant, celles faites pendant l’ouverture ne sont pas rejetées d’office.</p>
   </section>
 
+  <!-- Œuf de Pâques du phare : invitation au groupe WhatsApp (reglages.json) -->
+  <section class="panel hidden" id="eggPanel">
+    <h2>Œuf de Pâques du phare : groupe WhatsApp</h2>
+    <p class="help">Cinq touchers rapides sur le phare font passer un oiseau. Son message peut inviter à rejoindre le groupe WhatsApp « Ouessant Outragée, Ouessant brisée mais Ouessant libérée » (bouton « Rejoindre le groupe »). Vaut pour tout le monde, sur toutes les pages.</p>
+    <div class="modes">
+      <label><input type="checkbox" id="regGroupe"> <span><b>Afficher l’invitation au groupe</b></span></label>
+      <label><span>Jusqu’au (inclus)</span> <input type="date" id="regGroupeFin"></label>
+      <p class="help" style="margin:0">Après cette date, l’invitation disparaît d’elle-même. Sans date : affichée tant qu’elle est cochée.</p>
+    </div>
+    <div class="actions"><button type="button" class="btn primary" id="eggSave" disabled>Enregistrer</button></div>
+    <p class="msg" id="eggMsg" role="status"></p>
+  </section>
+
   <!-- 4. Listes des oiseaux par année -->
   <section class="panel hidden" id="yearPanel">
     <h2>Listes des oiseaux par année</h2>

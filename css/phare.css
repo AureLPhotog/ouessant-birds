@@ -72,8 +72,16 @@
 64%{opacity:1;transform:translate(var(--ox),2px) rotate(var(--or)) scale(var(--f),1)}
 88%{opacity:1;transform:translate(var(--ox),2px) rotate(var(--or)) scale(var(--f),1)}
 100%{opacity:0;transform:translate(var(--ox),6px) rotate(var(--or)) scale(calc(.9 * var(--f)),.9)}}
-.egg-toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;max-width:calc(100% - 2rem);
-  background:var(--ink);color:var(--foam);padding:.7rem 1rem;border-radius:12px;font-size:.92rem;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.egg-toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;width:max-content;max-width:min(26rem,calc(100% - 2rem));
+  background:var(--ink);color:var(--foam);padding:.8rem 2.6rem .9rem 1rem;border-radius:12px;font-size:.92rem;line-height:1.4;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.egg-toast p{margin:0}
+.egg-toast .egg-join-t{margin-top:.45rem;font-weight:600}
+/* « Rejoindre le groupe » : vert WhatsApp, comme la bulle « l'oiseau stationne… » de l'appli */
+.egg-join{display:inline-block;margin-top:.65rem;padding:.45rem .85rem;border-radius:8px;background:#1E8E4E;border:1px solid #1E8E4E;color:#fff;font:600 .88rem var(--sans);text-decoration:none}
+.egg-join:hover{background:#17773F}
+.egg-join:focus-visible,.egg-x:focus-visible{outline:3px solid var(--heather);outline-offset:2px}
+.egg-x{position:absolute;top:.45rem;right:.45rem;width:30px;height:30px;display:grid;place-items:center;border:0;border-radius:8px;background:transparent;color:inherit;cursor:pointer;opacity:.85}
+.egg-x:hover{opacity:1;background:rgba(255,255,255,.12)}
 /* mode sombre : liseré clair pour que les bandes noires se détachent du fond */
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .phare{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))} }
 :root[data-theme="dark"] .phare{filter:drop-shadow(0 0 .7px rgba(220,230,234,.95)) drop-shadow(0 0 .7px rgba(220,230,234,.95))}

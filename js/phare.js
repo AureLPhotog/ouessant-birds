@@ -126,6 +126,16 @@
       if (P.x < exitX + 10 && t < T1 + T2 + 0.5) requestAnimationFrame(frame); else bird.remove();
     })(performance.now());
   }
+  const GROUP_URL = 'https://chat.whatsapp.com/Dev158f45VTCriqkYm2igt';   // groupe WhatsApp « Ouessant Outragée, Ouessant brisée mais Ouessant libérée » (lien d'invitation public, voulu par le propriétaire)
+  // invitation affichée ou non : page Administration → reglages.json (groupe : oui / non ; groupeFin : dernier jour, '' = sans fin)
+  const GROUPE_FIN = '2026-11-01';   // par défaut, si reglages.json ne dit rien (la même date que dans js/admin.js)
+  let groupeReg = null;
+  function groupeOn(){
+    if (!groupeReg) groupeReg = (location.protocol === 'file:' ? Promise.reject() : fetch('reglages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()))
+      .then(j => ({ on: j.groupe !== false, fin: typeof j.groupeFin === 'string' ? j.groupeFin : GROUPE_FIN }), () => ({ on: true, fin: GROUPE_FIN }));
+    return groupeReg.then(g => { if (!g.on) return false; if (!g.fin) return true;
+      const d = new Date(), today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; return today <= g.fin; });
+  }
   // l'oiseau annoncé : une espèce au hasard parmi celles à annoncer sur Telegram (pas les sous-espèces)
   let eggList = null;
   function eggPick(){
@@ -144,9 +154,19 @@
       const ferns = btn.querySelector('.egg-ferns'); setTimeout(() => ferns.remove(), 4300);
       flyBird(btn);
     }
-    eggPick().then(name => {
-      const t = document.createElement('div'); t.className = 'egg-toast'; t.setAttribute('role', 'status');
-      t.textContent = name ? T('egg')(name) : T('eggNone'); document.body.appendChild(t); setTimeout(() => t.remove(), 4500);
+    Promise.all([eggPick(), groupeOn()]).then(([name, groupe]) => {
+      // avec l'invitation au groupe WhatsApp, le message reste affiché jusqu'à ✕ ou Échap ; sans, il part seul au bout de 4,5 s
+      document.querySelectorAll('.egg-toast').forEach(o => o.remove());
+      const t = document.createElement('div'); t.className = 'egg-toast'; t.setAttribute('role', 'status'); t.setAttribute('data-notr', '');
+      t.innerHTML = `<button type="button" class="egg-x" aria-label="${esc(T('eggClose'))}" title="${esc(T('eggClose'))}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`
+        + `<p>${esc(name ? T('egg')(name) : T('eggNone'))}</p>`
+        + (groupe ? `<p class="egg-join-t">${esc(T('eggJoin'))}</p><a class="egg-join" href="${GROUP_URL}" target="_blank" rel="noopener">${esc(T('eggJoinBtn'))}</a>` : '');
+      const close = () => { t.remove(); document.removeEventListener('keydown', esc_); };
+      const esc_ = e => { if (e.key === 'Escape') close(); };
+      t.addEventListener('click', e => { e.stopPropagation(); if (e.target.closest('.egg-x')) close(); });
+      document.addEventListener('keydown', esc_);
+      document.body.appendChild(t);
+      if (!groupe) setTimeout(close, 4500);
     });
   }
   const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=48.4568&longitude=-5.0975'
