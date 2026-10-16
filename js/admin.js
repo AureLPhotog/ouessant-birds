@@ -35,7 +35,8 @@
   const saveDoneDetail = () => { const k = Object.keys(doneDetail); k.slice(0, Math.max(0, k.length - 3000)).forEach(x => delete doneDetail[x]); store.set(DONE_DETAIL, JSON.stringify(doneDetail)); };
   const META = ['_action', '_cle_avant'];
   const LOCK = 'Verrouillée', CANAL = 'Proposition de Canal de Diffusion Ouessant';
-  let regNow = { verrou: true, champs: 'canal' }, regReady = Promise.resolve();   // réglages de l'admin (reglages.json)
+  const GROUPE_FIN = '2026-11-01';   // invitation au groupe WhatsApp (œuf de Pâques) : date de fin par défaut, la même que dans js/phare.js
+  let regNow = { verrou: true, champs: 'canal', groupe: true, groupeFin: GROUPE_FIN }, regReady = Promise.resolve();   // réglages de l'admin (reglages.json)
   let current = {};            // fichier → { entries: [...], byKey: Map }
   let proposals = [];          // toutes les propositions lues dans le fichier
   let answers = [];            // une entrée par réponse (ligne de la feuille) : { row, when, day, ids }
@@ -721,31 +722,44 @@
     b.disabled = false;
   });
 
-  // ---------- Réglages pour tout le monde (reglages.json) : verrou des espèces « Verrouillée », champs modifiables par les visiteurs ----------
+  // ---------- Réglages pour tout le monde (reglages.json) : verrou des espèces « Verrouillée », champs modifiables par les visiteurs,
+  //            invitation au groupe WhatsApp dans l'œuf de Pâques du phare (groupe : oui / non, groupeFin : dernier jour, '' = sans fin) ----------
   let reglagesSha = null;
+  const frDate = d => d ? d.split('-').reverse().join('/') : '';
   const regLabel = r => `statut « Verrouillée » ${r.verrou ? 'pris en compte' : 'ignoré'} · champs modifiables : ${r.champs === 'tous' ? 'tous' : 'le canal seulement'}`;
-  const regForm = () => ({ verrou: $('regVerrou').checked, champs: (document.querySelector('input[name="regChamps"]:checked') || {}).value === 'tous' ? 'tous' : 'canal' });
-  const regSame = (a, b) => a.verrou === b.verrou && a.champs === b.champs;
+  const eggLabel = r => `invitation au groupe WhatsApp ${r.groupe ? (r.groupeFin ? `affichée jusqu’au ${frDate(r.groupeFin)}` : 'affichée') : 'masquée'}`;
+  const regOf = j => ({ verrou: j.verrou !== false, champs: j.champs === 'tous' ? 'tous' : 'canal', groupe: j.groupe !== false, groupeFin: typeof j.groupeFin === 'string' ? j.groupeFin : GROUPE_FIN });
+  const regForm = () => Object.assign({}, regNow, { verrou: $('regVerrou').checked, champs: (document.querySelector('input[name="regChamps"]:checked') || {}).value === 'tous' ? 'tous' : 'canal' });
+  const eggForm = () => Object.assign({}, regNow, { groupe: $('regGroupe').checked, groupeFin: $('regGroupeFin').value || '' });
+  const regSame = (a, b) => JSON.stringify(a) === JSON.stringify(b);
   async function loadReg(){
     try {
       const f = await getFile('reglages.json');
       reglagesSha = f ? f.sha : null;
-      if (f && f.list && typeof f.list === 'object') regNow = { verrou: f.list.verrou !== false, champs: f.list.champs === 'tous' ? 'tous' : 'canal' };
+      if (f && f.list && typeof f.list === 'object') regNow = regOf(f.list);
     } catch (_) {}
     $('regVerrou').checked = regNow.verrou;
     document.querySelectorAll('input[name="regChamps"]').forEach(r => { r.checked = r.value === regNow.champs; });
+    $('regGroupe').checked = regNow.groupe; $('regGroupeFin').value = regNow.groupeFin;
     $('regSave').disabled = true; $('lockModePanel').classList.remove('hidden');
+    $('eggSave').disabled = true; $('eggPanel').classList.remove('hidden');
+  }
+  // un seul fichier pour les deux panneaux : chacun enregistre ses champs, en gardant ceux de l'autre
+  async function saveReg(v, btn, msg, label, after){
+    btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Enregistrement…';
+    try {
+      const j = await putFile('reglages.json', btoa(JSON.stringify(v) + '\n'), `Réglages : ${label(v)}`, reglagesSha);
+      reglagesSha = j.content && j.content.sha; regNow = v;
+      msg.className = 'msg good'; msg.textContent = `Enregistré (${label(v)}). L’appli et l’éditeur suivront d’ici quelques minutes.`;
+      if (after) after();
+    } catch (e) {
+      msg.className = 'msg bad'; msg.textContent = 'Enregistrement impossible : ' + (e.conflict ? 'les réglages ont changé ailleurs, recharge la page.' : (e.message || e)); btn.disabled = false;
+    }
   }
   $('lockModePanel').addEventListener('change', () => { $('regSave').disabled = regSame(regForm(), regNow); });
-  $('regSave').addEventListener('click', async () => {
-    const v = regForm(), msg = $('regMsg'); $('regSave').disabled = true; msg.className = 'msg'; msg.textContent = 'Enregistrement…';
-    try {
-      const j = await putFile('reglages.json', btoa(JSON.stringify(v) + '\n'), `Réglages : ${regLabel(v)}`, reglagesSha);
-      reglagesSha = j.content && j.content.sha; regNow = v;
-      msg.className = 'msg good'; msg.textContent = `Enregistré (${regLabel(v)}). L’appli et l’éditeur suivront d’ici quelques minutes.`;
-      if (lastRows) processRows(lastRows).catch(() => {});   // le tri en cours tient compte des nouveaux réglages
-    } catch (e) {
-      msg.className = 'msg bad'; msg.textContent = 'Enregistrement impossible : ' + (e.conflict ? 'les réglages ont changé ailleurs, recharge la page.' : (e.message || e)); $('regSave').disabled = false;
-    }
-  });
+  $('eggPanel').addEventListener('change', () => { $('eggSave').disabled = regSame(eggForm(), regNow); });
+  $('eggPanel').addEventListener('input', () => { $('eggSave').disabled = regSame(eggForm(), regNow); });
+  $('regSave').addEventListener('click', () => saveReg(regForm(), $('regSave'), $('regMsg'), regLabel,
+    () => { if (lastRows) processRows(lastRows).catch(() => {}); }));   // le tri en cours tient compte des nouveaux réglages
+  $('eggSave').addEventListener('click', () => saveReg(eggForm(), $('eggSave'), $('eggMsg'), eggLabel));
 })();
