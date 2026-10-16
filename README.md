@@ -24,7 +24,7 @@ L'appli fonctionne **hors connexion** une fois ouverte une première fois (sauf 
 | `ouessant_birds.json` | **liste des oiseaux** et canal d'annonce de chacun |
 | `archives/` | **listes des oiseaux des années passées** (`ouessant_birds_2026.json`…) et sauvegardes, gérées depuis la page Administration (voir « Listes des oiseaux par année ») |
 | `lieux_ouessant.json` | **liste des lieux-dits** et leurs coordonnées |
-| `reglages.json` | réglages de l'admin : verrou des espèces « Verrouillée », champs modifiables par les visiteurs (canal seulement / tous), invitation au groupe WhatsApp dans l'œuf de Pâques (`groupe`, `groupeFin`), modifiés depuis la page Administration |
+| `reglages.json` | réglages de l'admin : verrou des espèces « Verrouillée », champs modifiables par les visiteurs (canal seulement / tous), version « groupe WhatsApp » de l'œuf de Pâques (`groupe`, `groupeDe`, `groupeA`, `groupeOiseau`, `groupeFin`), modifiés depuis la page Administration |
 | `version_listes.json` | numéro de version des listes (`{"app": "4.0", "rev": 2}` → affiché « v4.0.2 »), mis à jour par l'éditeur à chaque enregistrement |
 | `css/polices.css`, `polices/` | polices Spectral et Public Sans hébergées avec l'appli (licence SIL OFL 1.1, voir `polices/LICENCES.txt`) : plus d'appel à Google Fonts |
 | `css/commun.css` | couleurs (clair, sombre, daltonisme) et bases, partagées par l'appli et l'éditeur |
@@ -63,11 +63,13 @@ Le phare de l'en-tête fonctionne avec `js/phare.js` (styles : `css/phare.css`),
 son bouton (image, pastille, panneau vide) est écrit dans chaque page, juste après le bouton ☰, pour être là dès l'affichage
 (il y remplace l'ancien phare « retour à l'appli » ; on revient à l'appli par le menu ☰) : pastille de vent, panneau météo et
 « Quel canal ? », phare éteint hors connexion, œuf de Pâques (l'oiseau est pris dans la liste de l'appli, ailleurs dans
-`ouessant_birds.json`). Depuis la 6.11, le message de l'œuf de Pâques invite à rejoindre le groupe WhatsApp
-« Ouessant Outragée, Ouessant brisée mais Ouessant libérée » (bouton « Rejoindre le groupe », lien d'invitation `GROUP_URL` dans `js/phare.js`) ;
-il reste affiché jusqu'à ✕ ou Échap. L'invitation s'active ou se désactive dans la page Administration
-(panneau « Œuf de Pâques du phare », `reglages.json` : `groupe` oui / non, `groupeFin` dernier jour d'affichage, `''` = sans fin ;
-par défaut affichée jusqu'au 1er novembre 2026 inclus). Sans invitation, le message part seul au bout de 4,5 s. La bulle « Touche le phare » de première visite reste propre à l'appli. Les couleurs des canaux
+`ouessant_birds.json`). Depuis la 6.11, une version « groupe WhatsApp » de l'œuf de Pâques : aux heures choisies (par défaut de 22 h à minuit, heure du
+téléphone), c'est l'oiseau choisi qui passe (par défaut « Le troglobite ») et le message invite à rejoindre le groupe WhatsApp
+« Ouessant Outragée, Ouessant brisée mais Ouessant libérée » (bouton « Rejoindre le groupe », lien `GROUP_URL` dans `js/phare.js`) ;
+il reste affiché jusqu'à ✕ ou Échap. Le reste du temps, l'œuf de Pâques habituel (une espèce Telegram au hasard, message de 4,5 s).
+Réglage dans la page Administration (panneau « Œuf de Pâques du phare »), enregistré dans `reglages.json` : `groupe` (oui / non),
+`groupeDe` / `groupeA` (plage horaire, peut passer minuit, les deux vides = toute la journée), `groupeOiseau`, `groupeFin`
+(dernier jour, `''` = sans fin ; par défaut le 1er novembre 2026). La bulle « Touche le phare » de première visite reste propre à l'appli. Les couleurs des canaux
 (standard et daltonisme) sont dans `js/phare.js` (`OuessantPhare.PALETTES`), l'appli s'en sert aussi.
 Les CSP de l'éditeur et de l'historique autorisent donc `https://api.open-meteo.com`.
 
@@ -280,7 +282,7 @@ La première archive (2026) sera créée en janvier 2027. Les lieux-dits, eux, n
   « Valider quand même » reste possible. Une proposition qui touche au verrou lui-même est signalée « change le verrou ».
 
 **Ce que les visiteurs peuvent modifier (oiseaux)** : deux réglages pour tout le monde, dans la page Administration, enregistrés dans
-`reglages.json` (`{"verrou": true, "champs": "canal", "groupe": true, "groupeFin": "2026-11-01"}` par défaut) :
+`reglages.json` (`{"verrou": true, "champs": "canal", "groupe": true, "groupeFin": "2026-11-01", "groupeDe": "22:00", "groupeA": "00:00", "groupeOiseau": "Le troglobite"}` par défaut) :
 - **`verrou`** : `true` = les espèces marquées « Verrouillée » ont un cadenas, aucune proposition ; `false` = elles suivent la règle
   des autres (pratique au lancement de l'appli) ;
 - **`champs`** : `"canal"` (fonctionnement normal) = sur une espèce **déjà dans la liste**, un visiteur ne peut proposer **qu'un autre

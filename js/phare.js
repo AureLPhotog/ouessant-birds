@@ -127,14 +127,28 @@
     })(performance.now());
   }
   const GROUP_URL = 'https://chat.whatsapp.com/Dev158f45VTCriqkYm2igt';   // groupe WhatsApp « Ouessant Outragée, Ouessant brisée mais Ouessant libérée » (lien d'invitation public, voulu par le propriétaire)
-  // invitation affichée ou non : page Administration → reglages.json (groupe : oui / non ; groupeFin : dernier jour, '' = sans fin)
-  const GROUPE_FIN = '2026-11-01';   // par défaut, si reglages.json ne dit rien (la même date que dans js/admin.js)
+  // Version « groupe WhatsApp » de l'œuf de Pâques : seulement à certaines heures (heure du téléphone), avec un oiseau choisi
+  // (« Le troglobite ») et l'invitation au groupe. Réglée dans la page Administration → reglages.json :
+  // groupe : oui / non ; groupeFin : dernier jour ('' = sans fin) ; groupeDe / groupeA : plage horaire (« 22:00 » → « 00:00 » = de 22 h à minuit,
+  // peut passer minuit ; les deux vides = toute la journée) ; groupeOiseau : l'oiseau annoncé. Hors de la plage : l'œuf de Pâques habituel.
+  const GROUPE = { fin: '2026-11-01', de: '22:00', a: '00:00', oiseau: 'Le troglobite' };   // par défaut, si reglages.json ne dit rien (les mêmes valeurs que dans js/admin.js)
+  const str = (v, d) => typeof v === 'string' ? v : d;
   let groupeReg = null;
-  function groupeOn(){
+  function groupeOn(){   // → { oiseau } si la version « groupe » est active en ce moment, sinon null
     if (!groupeReg) groupeReg = (location.protocol === 'file:' ? Promise.reject() : fetch('reglages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject()))
-      .then(j => ({ on: j.groupe !== false, fin: typeof j.groupeFin === 'string' ? j.groupeFin : GROUPE_FIN }), () => ({ on: true, fin: GROUPE_FIN }));
-    return groupeReg.then(g => { if (!g.on) return false; if (!g.fin) return true;
-      const d = new Date(), today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; return today <= g.fin; });
+      .then(j => ({ on: j.groupe !== false, fin: str(j.groupeFin, GROUPE.fin), de: str(j.groupeDe, GROUPE.de), a: str(j.groupeA, GROUPE.a), oiseau: str(j.groupeOiseau, GROUPE.oiseau).trim() || GROUPE.oiseau }),
+            () => Object.assign({ on: true }, GROUPE));
+    return groupeReg.then(g => {
+      if (!g.on) return null;
+      const d = new Date(), p2 = n => String(n).padStart(2, '0');
+      if (g.fin && `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}` > g.fin) return null;
+      if (g.de || g.a){
+        const now = `${p2(d.getHours())}:${p2(d.getMinutes())}`, de = g.de || '00:00', a = g.a || '00:00';
+        const inside = de < a ? now >= de && now < a : now >= de || now < a;   // plage qui passe minuit (22:00 → 00:00, 23:00 → 02:00…)
+        if (!inside) return null;
+      }
+      return { oiseau: g.oiseau };
+    });
   }
   // l'oiseau annoncé : une espèce au hasard parmi celles à annoncer sur Telegram (pas les sous-espèces)
   let eggList = null;
@@ -154,7 +168,7 @@
       const ferns = btn.querySelector('.egg-ferns'); setTimeout(() => ferns.remove(), 4300);
       flyBird(btn);
     }
-    Promise.all([eggPick(), groupeOn()]).then(([name, groupe]) => {
+    groupeOn().then(groupe => Promise.all([groupe ? groupe.oiseau : eggPick(), groupe])).then(([name, groupe]) => {
       // avec l'invitation au groupe WhatsApp, le message reste affiché jusqu'à ✕ ou Échap ; sans, il part seul au bout de 4,5 s
       document.querySelectorAll('.egg-toast').forEach(o => o.remove());
       const t = document.createElement('div'); t.className = 'egg-toast'; t.setAttribute('role', 'status'); t.setAttribute('data-notr', '');
