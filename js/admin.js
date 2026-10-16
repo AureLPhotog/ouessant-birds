@@ -35,8 +35,8 @@
   const saveDoneDetail = () => { const k = Object.keys(doneDetail); k.slice(0, Math.max(0, k.length - 3000)).forEach(x => delete doneDetail[x]); store.set(DONE_DETAIL, JSON.stringify(doneDetail)); };
   const META = ['_action', '_cle_avant'];
   const LOCK = 'Verrouillée', CANAL = 'Proposition de Canal de Diffusion Ouessant';
-  const GROUPE_FIN = '2026-11-01';   // invitation au groupe WhatsApp (œuf de Pâques) : date de fin par défaut, la même que dans js/phare.js
-  let regNow = { verrou: true, champs: 'canal', groupe: true, groupeFin: GROUPE_FIN }, regReady = Promise.resolve();   // réglages de l'admin (reglages.json)
+  const GROUPE = { fin: '2026-11-01', de: '22:00', a: '00:00', oiseau: 'Le troglobite' };   // version « groupe WhatsApp » de l'œuf de Pâques : valeurs par défaut, les mêmes que dans js/phare.js
+  let regNow = { verrou: true, champs: 'canal', groupe: true, groupeFin: GROUPE.fin, groupeDe: GROUPE.de, groupeA: GROUPE.a, groupeOiseau: GROUPE.oiseau }, regReady = Promise.resolve();   // réglages de l'admin (reglages.json)
   let current = {};            // fichier → { entries: [...], byKey: Map }
   let proposals = [];          // toutes les propositions lues dans le fichier
   let answers = [];            // une entrée par réponse (ligne de la feuille) : { row, when, day, ids }
@@ -727,10 +727,14 @@
   let reglagesSha = null;
   const frDate = d => d ? d.split('-').reverse().join('/') : '';
   const regLabel = r => `statut « Verrouillée » ${r.verrou ? 'pris en compte' : 'ignoré'} · champs modifiables : ${r.champs === 'tous' ? 'tous' : 'le canal seulement'}`;
-  const eggLabel = r => `invitation au groupe WhatsApp ${r.groupe ? (r.groupeFin ? `affichée jusqu’au ${frDate(r.groupeFin)}` : 'affichée') : 'masquée'}`;
-  const regOf = j => ({ verrou: j.verrou !== false, champs: j.champs === 'tous' ? 'tous' : 'canal', groupe: j.groupe !== false, groupeFin: typeof j.groupeFin === 'string' ? j.groupeFin : GROUPE_FIN });
+  const eggLabel = r => !r.groupe ? 'œuf de Pâques « groupe WhatsApp » désactivé'
+    : `œuf de Pâques « groupe WhatsApp » ${r.groupeDe || r.groupeA ? `de ${r.groupeDe || '00:00'} à ${r.groupeA || '00:00'}` : 'toute la journée'}, ${r.groupeOiseau}${r.groupeFin ? `, jusqu’au ${frDate(r.groupeFin)}` : ''}`;
+  const strOr = (v, d) => typeof v === 'string' ? v : d;
+  const regOf = j => ({ verrou: j.verrou !== false, champs: j.champs === 'tous' ? 'tous' : 'canal', groupe: j.groupe !== false, groupeFin: strOr(j.groupeFin, GROUPE.fin),
+    groupeDe: strOr(j.groupeDe, GROUPE.de), groupeA: strOr(j.groupeA, GROUPE.a), groupeOiseau: strOr(j.groupeOiseau, GROUPE.oiseau).trim() || GROUPE.oiseau });
   const regForm = () => Object.assign({}, regNow, { verrou: $('regVerrou').checked, champs: (document.querySelector('input[name="regChamps"]:checked') || {}).value === 'tous' ? 'tous' : 'canal' });
-  const eggForm = () => Object.assign({}, regNow, { groupe: $('regGroupe').checked, groupeFin: $('regGroupeFin').value || '' });
+  const eggForm = () => Object.assign({}, regNow, { groupe: $('regGroupe').checked, groupeFin: $('regGroupeFin').value || '',
+    groupeDe: $('regGroupeDe').value || '', groupeA: $('regGroupeA').value || '', groupeOiseau: $('regGroupeOiseau').value.trim() || GROUPE.oiseau });
   const regSame = (a, b) => JSON.stringify(a) === JSON.stringify(b);
   async function loadReg(){
     try {
@@ -741,6 +745,7 @@
     $('regVerrou').checked = regNow.verrou;
     document.querySelectorAll('input[name="regChamps"]').forEach(r => { r.checked = r.value === regNow.champs; });
     $('regGroupe').checked = regNow.groupe; $('regGroupeFin').value = regNow.groupeFin;
+    $('regGroupeDe').value = regNow.groupeDe; $('regGroupeA').value = regNow.groupeA; $('regGroupeOiseau').value = regNow.groupeOiseau;
     $('regSave').disabled = true; $('lockModePanel').classList.remove('hidden');
     $('eggSave').disabled = true; $('eggPanel').classList.remove('hidden');
   }
@@ -748,7 +753,7 @@
   async function saveReg(v, btn, msg, label, after){
     btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Enregistrement…';
     try {
-      const j = await putFile('reglages.json', btoa(JSON.stringify(v) + '\n'), `Réglages : ${label(v)}`, reglagesSha);
+      const j = await putFile('reglages.json', b64enc(JSON.stringify(v) + '\n'), `Réglages : ${label(v)}`, reglagesSha);
       reglagesSha = j.content && j.content.sha; regNow = v;
       msg.className = 'msg good'; msg.textContent = `Enregistré (${label(v)}). L’appli et l’éditeur suivront d’ici quelques minutes.`;
       if (after) after();
